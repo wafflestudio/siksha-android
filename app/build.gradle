@@ -21,9 +21,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL", "\"https://siksha.kr:8000\""
+            buildConfigField "String", "PREF_KEY", "\"wassub.preference\""
         }
         debug {
             buildConfigField "String", "BASE_URL", "\"https://siksha.kr:8000\""
+            buildConfigField "String", "PREF_KEY", "\"debug.wassub.preference\""
         }
     }
 }

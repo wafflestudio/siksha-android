@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
+import com.wafflestudio.siksha.preference.SikshaPreference
 import dagger.android.AndroidInjection
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,6 +16,8 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var api: SikshaApi
+    @Inject
+    lateinit var preference: SikshaPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
                 response.body()?.let {
-                    Timber.d("$it")
+                    preference.menuResponse = it
                 } ?: let {
                     Timber.d("${response.errorBody()?.string()}")
                 }
