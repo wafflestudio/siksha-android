@@ -1,9 +1,9 @@
-package com.onemonster.siksha
+package com.wafflestudio.siksha
 
 import android.app.Activity
 import android.app.Application
 import com.facebook.stetho.Stetho
-import com.onemonster.siksha.di.DaggerAppComponent
+import com.wafflestudio.siksha.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector

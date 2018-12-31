@@ -1,6 +1,6 @@
-package com.onemonster.siksha.network
+package com.wafflestudio.siksha.network
 
-import com.onemonster.siksha.model.MenuResponse
+import com.wafflestudio.siksha.model.MenuResponse
 import retrofit2.Call
 import retrofit2.http.GET
 

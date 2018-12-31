@@ -1,6 +1,6 @@
-package com.onemonster.siksha.di
+package com.wafflestudio.siksha.di
 
-import com.onemonster.siksha.view.MainActivity
+import com.wafflestudio.siksha.view.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -1,10 +1,10 @@
-package com.onemonster.siksha.view
+package com.wafflestudio.siksha.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.onemonster.siksha.R
-import com.onemonster.siksha.model.MenuResponse
-import com.onemonster.siksha.network.SikshaApi
+import com.wafflestudio.siksha.R
+import com.wafflestudio.siksha.model.MenuResponse
+import com.wafflestudio.siksha.network.SikshaApi
 import dagger.android.AndroidInjection
 import retrofit2.Call
 import retrofit2.Callback

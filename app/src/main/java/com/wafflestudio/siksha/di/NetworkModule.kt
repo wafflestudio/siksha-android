@@ -1,8 +1,8 @@
-package com.onemonster.siksha.di
+package com.wafflestudio.siksha.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.onemonster.siksha.BuildConfig
-import com.onemonster.siksha.network.SikshaApi
+import com.wafflestudio.siksha.BuildConfig
+import com.wafflestudio.siksha.network.SikshaApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

@@ -1,4 +1,4 @@
-package com.onemonster.siksha
+package com.wafflestudio.siksha
 
 import org.junit.Test
 

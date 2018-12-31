@@ -9,7 +9,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.onemonster.siksha"
+        applicationId "com.wafflestudio.siksha"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1

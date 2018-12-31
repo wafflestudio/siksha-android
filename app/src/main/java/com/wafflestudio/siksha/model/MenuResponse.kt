@@ -1,4 +1,4 @@
-package com.onemonster.siksha.model
+package com.wafflestudio.siksha.model
 
 import com.squareup.moshi.Json
 
