@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:contentInsetLeft="0dp"
-    app:contentInsetRight="0dp"
-    app:contentInsetStart="0dp"
-    app:contentInsetEnd="0dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:contentInsetEnd="-3dp"
+    app:contentInsetLeft="-3dp"
+    app:contentInsetRight="-3dp"
+    app:contentInsetStart="-3dp"
     >
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
         android:src="@drawable/top_bar"
         />
 </android.support.v7.widget.Toolbar>
