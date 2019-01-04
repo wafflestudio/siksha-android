@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Siksha</string>
+
+    <string name="today">오늘</string>
+    <string name="tomorrow">내일</string>
 </resources>

@@ -11,6 +11,6 @@ abstract class ActivityModule {
     @ContributesAndroidInjector
     abstract fun contributeSplashActivity(): SplashActivity
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [MainActivityFragmentModule::class])
     abstract fun contributeMainActivity(): MainActivity
 }

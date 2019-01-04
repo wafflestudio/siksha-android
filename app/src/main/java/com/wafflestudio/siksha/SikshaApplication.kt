@@ -2,20 +2,22 @@ package com.wafflestudio.siksha
 
 import android.app.Activity
 import android.app.Application
+import android.support.v4.app.Fragment
 import com.facebook.stetho.Stetho
 import com.wafflestudio.siksha.di.DaggerAppComponent
 import com.wafflestudio.siksha.di.PreferenceModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import dagger.android.support.HasSupportFragmentInjector
 import timber.log.Timber
 import javax.inject.Inject
 
 class SikshaApplication : Application(), HasActivityInjector {
-    override fun activityInjector(): AndroidInjector<Activity> = dispatchingActivityInjector
-
     @Inject
-    lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
+    lateinit var activityInjector: DispatchingAndroidInjector<Activity>
+
+    override fun activityInjector(): AndroidInjector<Activity> = activityInjector
 
     override fun onCreate() {
         super.onCreate()
