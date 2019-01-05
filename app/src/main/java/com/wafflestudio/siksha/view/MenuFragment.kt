@@ -3,10 +3,13 @@ package com.wafflestudio.siksha.view
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wafflestudio.siksha.R
+import com.wafflestudio.siksha.adapter.MenuAdapter
+import com.wafflestudio.siksha.model.Menu
 import com.wafflestudio.siksha.preference.SikshaPreference
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_menu.*
@@ -15,6 +18,23 @@ import javax.inject.Inject
 class MenuFragment : Fragment() {
     @Inject
     lateinit var preference: SikshaPreference
+
+    companion object {
+        const val EXTRA_IS_TODAY = "MENU_FRAGMENT_IS_TODAY"
+        const val EXTRA_TYPE = "MENU_FRAGMENT_TYPE"
+
+        fun newInstance(isToday: Boolean, menuType: Menu.Type): MenuFragment = MenuFragment().apply {
+            arguments = Bundle().apply {
+                putBoolean(EXTRA_IS_TODAY, isToday)
+                putInt(EXTRA_TYPE, menuType.ordinal)
+            }
+        }
+    }
+
+    private val isToday: Boolean by lazy { arguments?.getBoolean(EXTRA_IS_TODAY) ?: true }
+    private val menuType: Menu.Type by lazy {
+        Menu.Type.values()[arguments?.getInt(EXTRA_TYPE) ?: 0]
+    }
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -26,35 +46,13 @@ class MenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initViews()
-        initEvents()
     }
 
     private fun initViews() {
-        listOf(
-                preference.menuResponse?.today?.date ?: getString(R.string.today),
-                preference.menuResponse?.tomorrow?.date ?: getString(R.string.tomorrow)
-        ).map {
-            tab_layout_date.addTab(tab_layout_date.newTab().setText(it))
+        preference.menuResponse?.let { menuResponse ->
+            val menus = (if (isToday) menuResponse.today else menuResponse.tomorrow).menus.filter { it.type == menuType }
+            list_menu.layoutManager = LinearLayoutManager(context)
+            list_menu.adapter = MenuAdapter(menus)
         }
-    }
-
-    private fun initEvents() {
-        val tabItems = listOf(tab_item_breakfast, tab_item_lunch, tab_item_dinner)
-        tabItems.map { tab ->
-            tab.setOnClickListener {
-                tab_item_breakfast.setImageResource(R.drawable.breakfast)
-                tab_item_lunch.setImageResource(R.drawable.lunch)
-                tab_item_dinner.setImageResource(R.drawable.dinner)
-                when (it.id) {
-                    tab_item_breakfast.id -> tab_item_breakfast.setImageResource(R.drawable.breakfast_s)
-                    tab_item_lunch.id -> tab_item_lunch.setImageResource(R.drawable.lunch_s)
-                    tab_item_dinner.id -> tab_item_dinner.setImageResource(R.drawable.dinner_s)
-                }
-            }
-        }
-    }
-
-    companion object {
-        fun newInstance(): MenuFragment = MenuFragment()
     }
 }

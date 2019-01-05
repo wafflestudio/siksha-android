@@ -4,6 +4,7 @@ import com.squareup.moshi.Json
 
 data class Restaurant(
         @field:Json(name = "id") val id: Int,
+        @field:Json(name = "code") val code: Int,
         @field:Json(name = "en_name") val enName: String,
         @field:Json(name = "kr_name") val krName: String,
         @field:Json(name = "operating_hours") val operatingHours: String,

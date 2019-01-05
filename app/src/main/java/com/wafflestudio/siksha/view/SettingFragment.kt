@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import com.wafflestudio.siksha.R
 
 class SettingFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_setting, container, false)
-
     companion object {
         fun newInstance(): SettingFragment = SettingFragment()
     }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_setting, container, false)
 }

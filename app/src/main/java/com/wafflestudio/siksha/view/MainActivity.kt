@@ -35,16 +35,11 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initViews()
-        initEvents()
+        initPager()
     }
 
-    private fun initViews() {
+    private fun initPager() {
         view_pager.adapter = MainPagerAdapter(supportFragmentManager)
-        view_pager.setCurrentItem(1, false)
-    }
-
-    private fun initEvents() {
         tab_layout_navigation.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
@@ -53,7 +48,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
                     MainPagerAdapter.FAVORITE_INDEX -> {
                         include.setBackgroundColor(color(android.R.color.transparent))
                     }
-                    MainPagerAdapter.MENU_INDEX -> {
+                    MainPagerAdapter.MAIN_INDEX -> {
                         include.setBackgroundColor(color(R.color.white))
                     }
                     MainPagerAdapter.SETTING_INDEX -> {
@@ -63,6 +58,6 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
                 view_pager.setCurrentItem(tab.position, false)
             }
         })
-        tab_layout_navigation.getTabAt(MainPagerAdapter.MENU_INDEX)?.select()
+        tab_layout_navigation.getTabAt(MainPagerAdapter.MAIN_INDEX)?.select()
     }
 }

@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import com.wafflestudio.siksha.R
 
 class FavoriteFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.fragment_favorite, container, false)
-
     companion object {
         fun newInstance(): FavoriteFragment = FavoriteFragment()
     }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_favorite, container, false)
 }
