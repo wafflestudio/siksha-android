@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.item_meal.view.*
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-class MealAdapter(items: List<Meal>) : BaseAdapter<Meal, MealAdapter.MealHolder>(items) {
+class MealAdapter(getItems: () -> List<Meal>) : BaseAdapter<Meal, MealAdapter.MealHolder>(getItems) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealHolder {
         val view = LayoutInflater
                 .from(parent.context)

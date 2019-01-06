@@ -20,21 +20,37 @@ import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
 
-class MainFragment : Fragment(), HasSupportFragmentInjector {
+open class MainFragment : Fragment(), HasSupportFragmentInjector {
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
+    open val onlyFavorites = false
+
     private var selectedDayIsTomorrow = false
     private var selectedType: Menu.Type = Menu.Type.BREAKFAST
     private lateinit var onTabSelectedListener: TabLayout.OnTabSelectedListener
+    var adapter: MenuPagerAdapter? = null
 
     @Inject
     lateinit var preference: SikshaPreference
 
     companion object {
         fun newInstance(): MainFragment = MainFragment()
+    }
+
+    open fun refresh() {
+        listOf(
+                MenuPagerAdapter.TODAY_BREAKFAST_INDEX,
+                MenuPagerAdapter.TODAY_LUNCH_INDEX,
+                MenuPagerAdapter.TODAY_DINNER_INDEX,
+                MenuPagerAdapter.TOMORROW_BREAKFAST_INDEX,
+                MenuPagerAdapter.TOMORROW_LUNCH_INDEX,
+                MenuPagerAdapter.TOMORROW_DINNER_INDEX
+        ).map { position ->
+            (adapter?.getItem(position) as? MenuFragment)?.refresh()
+        }
     }
 
     override fun onAttach(context: Context?) {
@@ -67,11 +83,15 @@ class MainFragment : Fragment(), HasSupportFragmentInjector {
         ).map {
             tab_layout_date.addTab(tab_layout_date.newTab().setText(it))
         }
-        view_pager.adapter = MenuPagerAdapter(childFragmentManager)
+        adapter = MenuPagerAdapter(childFragmentManager, onlyFavorites)
+        view_pager.adapter = adapter
         view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
-            override fun onPageSelected(position: Int) = setTabSelected(position)
+            override fun onPageSelected(position: Int) {
+                setTabSelected(position)
+                (adapter?.getItem(position) as? MenuFragment)?.refresh()
+            }
         })
     }
 

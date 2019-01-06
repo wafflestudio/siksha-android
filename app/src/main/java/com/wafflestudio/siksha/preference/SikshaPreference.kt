@@ -14,6 +14,26 @@ class SikshaPreference @Inject constructor(
         get() = getParcelable<MenuResponse>(PrefKey.MENU)
         set(value) = setParcelable(PrefKey.MENU, value)
 
+    val favorite: List<String>
+        get() = getString(PrefKey.FAVORITE, "")
+                .split(',')
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+
+    fun addFavorite(code: String) {
+        val newFavorites = favorite
+                .toMutableList()
+                .plus(code)
+                .toSet()
+                .toList()
+                .joinToString()
+        setString(PrefKey.FAVORITE, newFavorites)
+    }
+
+    fun removeFavorite(code: String) {
+        setString(PrefKey.FAVORITE, favorite.filter { it != code }.joinToString())
+    }
+
     private fun getString(key: PrefKey, defaultValue: String): String =
             sharedPreferences.getString(key.name, defaultValue) ?: defaultValue
 
@@ -44,6 +64,7 @@ class SikshaPreference @Inject constructor(
     }
 
     private enum class PrefKey {
-        MENU
+        MENU,
+        FAVORITE
     }
 }

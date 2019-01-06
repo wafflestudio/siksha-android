@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.wafflestudio.siksha.model.Menu
 
-class MenuPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class MenuPagerAdapter(fragmentManager: FragmentManager, onlyFavorites: Boolean) : FragmentPagerAdapter(fragmentManager) {
     companion object {
         const val TODAY_INDEX = 0
         const val TOMORROW_INDEX = 1
@@ -19,15 +19,14 @@ class MenuPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
     }
 
     private val pages = arrayOf(
-            MenuFragment.newInstance(true, Menu.Type.BREAKFAST),
-            MenuFragment.newInstance(true, Menu.Type.LUNCH),
-            MenuFragment.newInstance(true, Menu.Type.DINNER),
-            MenuFragment.newInstance(false, Menu.Type.BREAKFAST),
-            MenuFragment.newInstance(false, Menu.Type.LUNCH),
-            MenuFragment.newInstance(false, Menu.Type.DINNER)
+            MenuFragment.newInstance(true, Menu.Type.BREAKFAST, onlyFavorites),
+            MenuFragment.newInstance(true, Menu.Type.LUNCH, onlyFavorites),
+            MenuFragment.newInstance(true, Menu.Type.DINNER, onlyFavorites),
+            MenuFragment.newInstance(false, Menu.Type.BREAKFAST, onlyFavorites),
+            MenuFragment.newInstance(false, Menu.Type.LUNCH, onlyFavorites),
+            MenuFragment.newInstance(false, Menu.Type.DINNER, onlyFavorites)
     )
 
     override fun getItem(position: Int): Fragment = pages[position]
-
     override fun getCount(): Int = pages.size
 }

@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:tabBackground="@color/white"
+        app:tabBackground="@drawable/background_top_line"
         app:tabIndicatorHeight="0dp"
         >
 

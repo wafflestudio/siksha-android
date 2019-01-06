@@ -3,4 +3,6 @@
 
     <string name="today">오늘</string>
     <string name="tomorrow">내일</string>
+
+    <string name="no_favorite">즐겨찾기에 추가된 식당이 없습니다.\n식당 탭에서 별을 눌러 추가해보세요.</string>
 </resources>

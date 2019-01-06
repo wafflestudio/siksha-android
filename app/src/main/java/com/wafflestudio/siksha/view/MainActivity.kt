@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
@@ -39,14 +40,29 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
     }
 
     private fun initPager() {
-        view_pager.adapter = MainPagerAdapter(supportFragmentManager)
+        val adapter = MainPagerAdapter(supportFragmentManager)
+        view_pager.adapter = adapter
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) = Unit
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    MainPagerAdapter.FAVORITE_INDEX -> (adapter.getItem(position) as? FavoriteFragment)?.refresh()
+                    MainPagerAdapter.MAIN_INDEX -> (adapter.getItem(position) as? MainFragment)?.refresh()
+                }
+            }
+        })
         tab_layout_navigation.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
                     MainPagerAdapter.FAVORITE_INDEX -> {
-                        include.setBackgroundColor(color(android.R.color.transparent))
+                        if (preference.favorite.isEmpty()) {
+                            include.setBackgroundColor(color(android.R.color.transparent))
+                        } else {
+                            include.setBackgroundColor(color(R.color.white))
+                        }
                     }
                     MainPagerAdapter.MAIN_INDEX -> {
                         include.setBackgroundColor(color(R.color.white))

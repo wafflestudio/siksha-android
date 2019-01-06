@@ -42,4 +42,9 @@
         <item name="android:paddingTop">3dp</item>
         <item name="android:paddingBottom">3dp</item>
     </style>
+
+    <style name="TextNoFavorite">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/lightGray</item>
+    </style>
 </resources>

@@ -19,14 +19,18 @@ class MenuFragment : Fragment() {
     @Inject
     lateinit var preference: SikshaPreference
 
+    var adapter: MenuAdapter? = null
+
     companion object {
         const val EXTRA_IS_TODAY = "MENU_FRAGMENT_IS_TODAY"
         const val EXTRA_TYPE = "MENU_FRAGMENT_TYPE"
+        const val EXTRA_ONLY_FAVORITES = "MENU_ONLY_FAVORITES"
 
-        fun newInstance(isToday: Boolean, menuType: Menu.Type): MenuFragment = MenuFragment().apply {
+        fun newInstance(isToday: Boolean, menuType: Menu.Type, onlyFavorites: Boolean) = MenuFragment().apply {
             arguments = Bundle().apply {
                 putBoolean(EXTRA_IS_TODAY, isToday)
                 putInt(EXTRA_TYPE, menuType.ordinal)
+                putBoolean(EXTRA_ONLY_FAVORITES, onlyFavorites)
             }
         }
     }
@@ -34,6 +38,13 @@ class MenuFragment : Fragment() {
     private val isToday: Boolean by lazy { arguments?.getBoolean(EXTRA_IS_TODAY) ?: true }
     private val menuType: Menu.Type by lazy {
         Menu.Type.values()[arguments?.getInt(EXTRA_TYPE) ?: 0]
+    }
+    private val onlyFavorites: Boolean by lazy {
+        arguments?.getBoolean(EXTRA_ONLY_FAVORITES) ?: false
+    }
+
+    fun refresh() {
+        adapter?.refresh()
     }
 
     override fun onAttach(context: Context?) {
@@ -50,9 +61,34 @@ class MenuFragment : Fragment() {
 
     private fun initViews() {
         preference.menuResponse?.let { menuResponse ->
-            val menus = (if (isToday) menuResponse.today else menuResponse.tomorrow).menus.filter { it.type == menuType }
+            val getMenus = {
+                (if (isToday) menuResponse.today else menuResponse.tomorrow).menus
+                        .filter { it.type == menuType }
+                        .filter { !onlyFavorites || preference.favorite.contains(it.restaurant.code) }
+                        .map {
+                            it.copy(
+                                    restaurant = it.restaurant.copy(
+                                            favorite = preference.favorite.contains(it.restaurant.code)
+                                    )
+                            )
+                        }
+            }
             list_menu.layoutManager = LinearLayoutManager(context)
-            list_menu.adapter = MenuAdapter(menus)
+            adapter = MenuAdapter(getMenus,
+                    infoButtonListener = { restaurant ->
+                    },
+                    favoriteButtonListener = { restaurant ->
+                        if (restaurant.favorite) {
+                            preference.removeFavorite(restaurant.code)
+                            if (preference.favorite.isEmpty()) {
+                                (parentFragment as? FavoriteFragment)?.refresh()
+                            }
+                        } else {
+                            preference.addFavorite(restaurant.code)
+                        }
+                    }
+            )
+            list_menu.adapter = adapter
         }
     }
 }
