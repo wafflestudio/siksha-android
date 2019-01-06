@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import com.wafflestudio.siksha.R
+import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
 import dagger.android.AndroidInjection
@@ -14,6 +15,10 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), HasSupportFragmentInjector {
@@ -23,8 +28,14 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     companion object {
-        fun createIntent(context: Context) = Intent(context, MainActivity::class.java)
+        private const val EXTRA_WAS_UPDATED = "MAIN_WAS_UPDATED"
+
+        fun createIntent(context: Context, wasUpdated: Boolean) = Intent(context, MainActivity::class.java).apply {
+            putExtra(EXTRA_WAS_UPDATED, wasUpdated)
+        }
     }
+
+    private val wasUpdated by lazy { intent.getBooleanExtra(EXTRA_WAS_UPDATED, false) }
 
     @Inject
     lateinit var api: SikshaApi
@@ -35,6 +46,20 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (!wasUpdated) {
+            Timber.d("Updating menus in main activity")
+            api.fetchMenus().enqueue(object : Callback<MenuResponse> {
+                override fun onFailure(call: Call<MenuResponse>, t: Throwable) = Unit
+                override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
+                    if (response.isSuccessful) {
+                        response.body()?.let {
+                            preference.menuResponse = it
+                        }
+                    }
+                }
+            })
+        }
 
         initPager()
     }

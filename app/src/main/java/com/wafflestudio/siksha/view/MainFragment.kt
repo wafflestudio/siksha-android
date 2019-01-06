@@ -12,6 +12,7 @@ import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.Menu
 import com.wafflestudio.siksha.preference.SikshaPreference
 import com.wafflestudio.siksha.util.compareDate
+import com.wafflestudio.siksha.util.formatDate
 import com.wafflestudio.siksha.util.getCurrentType
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -80,7 +81,7 @@ open class MainFragment : Fragment(), HasSupportFragmentInjector {
         listOf(
                 preference.menuResponse?.today?.date ?: getString(R.string.today),
                 preference.menuResponse?.tomorrow?.date ?: getString(R.string.tomorrow)
-        ).map {
+        ).map { formatDate(it) }.forEach {
             tab_layout_date.addTab(tab_layout_date.newTab().setText(it))
         }
         adapter = MenuPagerAdapter(childFragmentManager, onlyFavorites)

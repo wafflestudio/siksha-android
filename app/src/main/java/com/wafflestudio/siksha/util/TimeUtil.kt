@@ -13,3 +13,7 @@ fun getCurrentType(): Menu.Type = when (Calendar.getInstance().get(Calendar.HOUR
     in 11..13 -> Menu.Type.LUNCH
     else -> Menu.Type.DINNER
 }
+
+fun formatDate(date: String): String = SimpleDateFormat("MM.dd.E")
+        .format(SimpleDateFormat("yyyy-MM-dd").parse(date))
+        .format(Locale.KOREA)
