@@ -17,55 +17,68 @@
         android:layout_height="wrap_content"
         android:background="@drawable/background_restaurant"
         android:elevation="2dp"
+        tools:layout_editor_absoluteX="10dp"
         >
 
-        <TextView
-            android:id="@+id/text_restaurant_name"
-            style="@style/TextRestaurantName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
-        <ImageView
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/button_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/text_restaurant_name"
-            app:layout_constraintEnd_toStartOf="@+id/text_open"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/text_restaurant_name"
-            app:layout_constraintTop_toTopOf="@+id/text_restaurant_name"
-            app:srcCompat="@drawable/ic_info"
-            />
-
-        <TextView
-            android:id="@+id/text_open"
-            style="@style/TextRestaurantOpen"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
-            android:paddingBottom="2dp"
-            android:paddingEnd="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingStart="8dp"
-            android:paddingTop="2dp"
-            android:text="open"
-            app:layout_constraintBottom_toBottomOf="@+id/button_favorite"
             app:layout_constraintEnd_toStartOf="@+id/button_favorite"
-            app:layout_constraintTop_toTopOf="@+id/button_favorite"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            >
+
+
+            <TextView
+                android:id="@+id/text_restaurant_name"
+                style="@style/TextRestaurantName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="9dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <ImageView
+                android:id="@+id/icon_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/text_restaurant_name"
+                app:layout_constraintEnd_toStartOf="@+id/text_open"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/text_restaurant_name"
+                app:layout_constraintTop_toTopOf="@+id/text_restaurant_name"
+                app:srcCompat="@drawable/ic_info"
+                />
+
+            <TextView
+                android:id="@+id/text_open"
+                style="@style/TextRestaurantOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:paddingEnd="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:text="open"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+        </android.support.constraint.ConstraintLayout>
 
         <ImageView
             android:id="@+id/button_favorite"
@@ -82,11 +95,10 @@
             android:id="@+id/view"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:layout_marginTop="9dp"
             android:background="@drawable/gradient_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_restaurant_name"
+            app:layout_constraintTop_toBottomOf="@+id/button_info"
             />
 
         <android.support.v7.widget.RecyclerView

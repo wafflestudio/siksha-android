@@ -20,6 +20,17 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextRestaurantLabel">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextRestaurantInfo">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
     <style name="TextRestaurantOpen">
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/colorPrimary</item>

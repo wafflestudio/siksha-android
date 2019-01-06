@@ -2,6 +2,7 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import com.wafflestudio.siksha.adapter.MenuAdapter
 import com.wafflestudio.siksha.model.Menu
 import com.wafflestudio.siksha.preference.SikshaPreference
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.bottom_restaurant_info.*
 import kotlinx.android.synthetic.main.fragment_menu.*
 import javax.inject.Inject
 
@@ -20,6 +22,7 @@ class MenuFragment : Fragment() {
     lateinit var preference: SikshaPreference
 
     var adapter: MenuAdapter? = null
+    var infoSheet: BottomSheetDialog? = null
 
     companion object {
         const val EXTRA_IS_TODAY = "MENU_FRAGMENT_IS_TODAY"
@@ -56,6 +59,12 @@ class MenuFragment : Fragment() {
             inflater.inflate(R.layout.fragment_menu, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        activity?.let { activity ->
+            infoSheet = BottomSheetDialog(activity).apply {
+                val view = activity.layoutInflater.inflate(R.layout.bottom_restaurant_info, null)
+                setContentView(view)
+            }
+        }
         initViews()
     }
 
@@ -76,6 +85,15 @@ class MenuFragment : Fragment() {
             list_menu.layoutManager = LinearLayoutManager(context)
             adapter = MenuAdapter(getMenus,
                     infoButtonListener = { restaurant ->
+                        infoSheet?.apply {
+                            text_restaurant_name.text = restaurant.krName
+                            text_restaurant_location.text = restaurant.location
+                            text_restaurant_breakfast_operating_hours.text = restaurant.hoursBreakfast.replace('-', '~')
+                            text_restaurant_lunch_operating_hours.text = restaurant.hoursLunch.replace('-', '~')
+                            text_restaurant_dinner_operating_hours.text = restaurant.hoursDinner.replace('-', '~')
+                            button_close.setOnClickListener { hide() }
+                            show()
+                        }
                     },
                     favoriteButtonListener = { restaurant ->
                         if (restaurant.favorite) {
