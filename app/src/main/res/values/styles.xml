@@ -20,6 +20,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextMealLabel">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
     <style name="TextRestaurantLabel">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/gray</item>
@@ -57,5 +62,13 @@
     <style name="TextNoFavorite">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/lightGray</item>
+    </style>
+
+    <style name="ButtonLeaveScore">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/gradient_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

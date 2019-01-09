@@ -6,6 +6,21 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+def getProperty(String filename, String propName) {
+    def propsFile = rootProject.file(filename)
+    if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        if (props[propName] != null) {
+            return props[propName]
+        } else {
+            print("No such property " + propName + " in file " + filename)
+        }
+    } else {
+        print(filename + " does not exist!")
+    }
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -22,10 +37,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL", "\"https://siksha.kr:8000\""
             buildConfigField "String", "PREF_KEY", "\"wassub.preference\""
+            buildConfigField "String", "JWT_SECRET", "\""+getProperty('local.properties', 'jwt_secret')+"\""
         }
         debug {
             buildConfigField "String", "BASE_URL", "\"https://siksha.kr:8000\""
             buildConfigField "String", "PREF_KEY", "\"debug.wassub.preference\""
+            buildConfigField "String", "JWT_SECRET", "\""+getProperty('local.properties', 'jwt_secret')+"\""
         }
     }
 }
@@ -46,6 +63,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation "com.squareup.moshi:moshi:$moshi_version"
 
     // Dagger 2

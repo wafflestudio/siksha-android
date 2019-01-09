@@ -16,7 +16,8 @@ import javax.inject.Singleton
     ActivityModule::class,
     AppModule::class,
     NetworkModule::class,
-    PreferenceModule::class])
+    PreferenceModule::class,
+    EncoderModule::class])
 interface AppComponent : AndroidInjector<SikshaApplication> {
     @Component.Builder
     interface Builder {
@@ -24,6 +25,8 @@ interface AppComponent : AndroidInjector<SikshaApplication> {
         fun application(application: Application): Builder
 
         fun preferenceModule(preferenceModule: PreferenceModule): Builder
+
+        fun encoderModule(encoderModule: EncoderModule): Builder
 
         fun build(): AppComponent
     }

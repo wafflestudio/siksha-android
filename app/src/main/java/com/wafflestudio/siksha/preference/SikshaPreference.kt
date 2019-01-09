@@ -5,7 +5,9 @@ import com.squareup.moshi.Moshi
 import com.wafflestudio.siksha.model.MenuResponse
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SikshaPreference @Inject constructor(
         private val sharedPreferences: SharedPreferences,
         private val moshi: Moshi

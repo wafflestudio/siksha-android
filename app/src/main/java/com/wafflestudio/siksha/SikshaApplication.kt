@@ -5,6 +5,7 @@ import android.app.Application
 import android.support.v4.app.Fragment
 import com.facebook.stetho.Stetho
 import com.wafflestudio.siksha.di.DaggerAppComponent
+import com.wafflestudio.siksha.di.EncoderModule
 import com.wafflestudio.siksha.di.PreferenceModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -28,6 +29,7 @@ class SikshaApplication : Application(), HasActivityInjector {
         DaggerAppComponent.builder()
                 .application(this)
                 .preferenceModule(PreferenceModule(BuildConfig.PREF_KEY))
+                .encoderModule(EncoderModule(BuildConfig.JWT_SECRET))
                 .build()
                 .inject(this)
     }
