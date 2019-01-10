@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF9A44</color>
     <color name="colorBackground">#FAFAFA</color>
     <color name="colorShadow">#BDBDBD</color>
+    <color name="colorDisabled">#F7F7F7</color>
+    <color name="colorDisabledText">#D0D0D0</color>
     <color name="white">#FFFFFF</color>
     <color name="gray">#707070</color>
     <color name="lightGray">#DBDBDB</color>

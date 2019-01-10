@@ -17,6 +17,7 @@ import com.wafflestudio.siksha.model.Review
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
 import com.wafflestudio.siksha.util.SikshaEncoder
+import com.wafflestudio.siksha.util.visible
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.bottom_restaurant_info.*
 import kotlinx.android.synthetic.main.bottom_score.*
@@ -125,43 +126,40 @@ class MenuFragment : Fragment() {
                         }
                     },
                     onMealClickListener = { meal, restaurant ->
-                        if (isToday) {
-                            leaveScoreSheet?.apply {
-                                text_score_restaurant_name.text = restaurant.krName
-                                text_meal_name.text = meal.krName
-                                text_score.text = meal.score?.let {
-                                    DecimalFormat("0.0").apply { roundingMode = RoundingMode.FLOOR }.format(it)
-                                } ?: "-.-"
-                                text_score_count.text = meal.scoreCount.toString()
-                                button_score_close.setOnClickListener { hide() }
-                                button_leave_score.setOnClickListener {
-                                    Timber.d("rating ${rating_bar.rating}")
+                        leaveScoreSheet?.apply {
+                            text_score_restaurant_name.text = restaurant.krName
+                            text_meal_name.text = meal.krName
+                            text_score.text = meal.score?.let {
+                                DecimalFormat("0.0").apply { roundingMode = RoundingMode.FLOOR }.format(it)
+                            } ?: "-.-"
+                            text_score_count.text = meal.scoreCount.toString()
+                            button_score_close.setOnClickListener { hide() }
+                            val scorable = isToday && when (menuType) {
+                                Menu.Type.BREAKFAST -> !preference.reviewedBreakfast
+                                Menu.Type.LUNCH -> !preference.reviewedLunch
+                                Menu.Type.DINNER -> !preference.reviewedDinner
+                            }
+                            button_leave_score.isEnabled = scorable
+                            rating_bar.visible = scorable
+                            button_leave_score.setOnClickListener {
+                                val device = Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
+                                val encoded = encoder.encode(meal.id, rating_bar.rating, device)
 
-                                    val device = Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
-                                    val encoded = encoder.encode(meal.id, rating_bar.rating, device)
+                                api.leaveReview(encoded).enqueue(object : Callback<Review> {
+                                    override fun onFailure(call: Call<Review>, t: Throwable) = Unit
 
-                                    api.leaveReview(encoded).enqueue(object : Callback<Review> {
-                                        override fun onFailure(call: Call<Review>, t: Throwable) = Unit
-
-                                        override fun onResponse(call: Call<Review>, response: Response<Review>) {
-                                            if (response.isSuccessful) {
-                                                api.fetchMenus().enqueue(object : Callback<MenuResponse> {
-                                                    override fun onFailure(call: Call<MenuResponse>, t: Throwable) = Unit
-
-                                                    override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
-                                                        if (response.isSuccessful) {
-                                                            response.body()?.let { menuResponse -> preference.menuResponse = menuResponse }
-                                                        }
-                                                        this@MenuFragment.refresh()
-                                                        leaveScoreSheet?.hide()
-                                                    }
-                                                })
+                                    override fun onResponse(call: Call<Review>, response: Response<Review>) {
+                                        if (response.isSuccessful) {
+                                            response.body()?.let { review ->
+                                                preference.registerReview(meal, menuType, review)
+                                                hide()
+                                                refresh()
                                             }
                                         }
-                                    })
-                                }
-                                show()
+                                    }
+                                })
                             }
+                            show()
                         }
                     }
             )
