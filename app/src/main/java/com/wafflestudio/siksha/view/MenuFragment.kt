@@ -125,40 +125,43 @@ class MenuFragment : Fragment() {
                         }
                     },
                     onMealClickListener = { meal, restaurant ->
-                        leaveScoreSheet?.apply {
-                            text_score_restaurant_name.text = restaurant.krName
-                            text_score.text = meal.score?.let {
-                                DecimalFormat("0.0").apply { roundingMode = RoundingMode.FLOOR }.format(it)
-                            } ?: "-.-"
-                            text_score_count.text = meal.scoreCount.toString()
-                            button_score_close.setOnClickListener { hide() }
-                            button_leave_score.setOnClickListener {
-                                Timber.d("rating ${rating_bar.rating}")
+                        if (isToday) {
+                            leaveScoreSheet?.apply {
+                                text_score_restaurant_name.text = restaurant.krName
+                                text_meal_name.text = meal.krName
+                                text_score.text = meal.score?.let {
+                                    DecimalFormat("0.0").apply { roundingMode = RoundingMode.FLOOR }.format(it)
+                                } ?: "-.-"
+                                text_score_count.text = meal.scoreCount.toString()
+                                button_score_close.setOnClickListener { hide() }
+                                button_leave_score.setOnClickListener {
+                                    Timber.d("rating ${rating_bar.rating}")
 
-                                val device = Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
-                                val encoded = encoder.encode(meal.id, rating_bar.rating, device)
+                                    val device = Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
+                                    val encoded = encoder.encode(meal.id, rating_bar.rating, device)
 
-                                api.leaveReview(encoded).enqueue(object : Callback<Review> {
-                                    override fun onFailure(call: Call<Review>, t: Throwable) = Unit
+                                    api.leaveReview(encoded).enqueue(object : Callback<Review> {
+                                        override fun onFailure(call: Call<Review>, t: Throwable) = Unit
 
-                                    override fun onResponse(call: Call<Review>, response: Response<Review>) {
-                                        if (response.isSuccessful) {
-                                            api.fetchMenus().enqueue(object : Callback<MenuResponse> {
-                                                override fun onFailure(call: Call<MenuResponse>, t: Throwable) = Unit
+                                        override fun onResponse(call: Call<Review>, response: Response<Review>) {
+                                            if (response.isSuccessful) {
+                                                api.fetchMenus().enqueue(object : Callback<MenuResponse> {
+                                                    override fun onFailure(call: Call<MenuResponse>, t: Throwable) = Unit
 
-                                                override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
-                                                    if (response.isSuccessful) {
-                                                        response.body()?.let { menuResponse -> preference.menuResponse = menuResponse }
+                                                    override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
+                                                        if (response.isSuccessful) {
+                                                            response.body()?.let { menuResponse -> preference.menuResponse = menuResponse }
+                                                        }
+                                                        this@MenuFragment.refresh()
+                                                        leaveScoreSheet?.hide()
                                                     }
-                                                    this@MenuFragment.refresh()
-                                                    leaveScoreSheet?.hide()
-                                                }
-                                            })
+                                                })
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                                }
+                                show()
                             }
-                            show()
                         }
                     }
             )
