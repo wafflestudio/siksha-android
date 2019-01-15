@@ -11,4 +11,7 @@
 
     <string name="current_score">현재 평점</string>
     <string name="leave_score">별점 남기기</string>
+
+    <string name="restaurant_open">OPEN</string>
+    <string name="restaurant_close">CLOSE</string>
 </resources>

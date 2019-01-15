@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha.model
 
 import com.squareup.moshi.Json
+import com.wafflestudio.siksha.util.isOpenUnit
 
 data class Restaurant(
         @field:Json(name = "id") val id: Int,
@@ -16,4 +17,7 @@ data class Restaurant(
         @field:Json(name = "longitude") val longitude: Double,
 
         var favorite: Boolean = false
-)
+) {
+    val isOpen: Boolean
+        get() = isOpenUnit(hoursBreakfast) || isOpenUnit(hoursLunch) || isOpenUnit(hoursDinner)
+}
