@@ -8,7 +8,6 @@ import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.Meal
 import com.wafflestudio.siksha.model.Menu
 import com.wafflestudio.siksha.model.Restaurant
-import com.wafflestudio.siksha.util.isOpen
 import kotlinx.android.synthetic.main.item_menu.view.*
 
 class MenuAdapter(
@@ -45,7 +44,7 @@ class MenuAdapter(
             }
             view.button_info.setOnClickListener { infoButtonListener(data.restaurant) }
             view.button_favorite.setOnClickListener { favoriteButtonListener(data.restaurant) }
-            view.text_open.setText(if(isOpen(data.restaurant)) R.string.restaurant_open else R.string.restaurant_close)
+            view.text_open.setText(if(data.restaurant.isOpen) R.string.restaurant_open else R.string.restaurant_close)
         }
     }
 }

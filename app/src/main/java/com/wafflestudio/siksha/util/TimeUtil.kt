@@ -33,42 +33,25 @@ fun isOpenUnit(inputUnit: String): Boolean {
     while (openMatch.find()) {
         val raw = openMatch.group()
         val parts = raw.split(" - ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        for (i in 0..1) {
-            val numMatch = numExtractPattern.matcher(parts[i])
-            var res: String
-            if (parts[i].contains("오전")) {
-                numMatch.find()
-                res = numMatch.group()
-                if (parts[i].contains("분")) {
-                    numMatch.find()
-                    res += numMatch.group()
-                } else {
-                    res += "00"
-                }
-            } else {
-                numMatch.find()
-                res = numMatch.group()
+        parts.forEachIndexed { index, string ->
+            val numMatch = numExtractPattern.matcher(string)
+            numMatch.find()
+            var res = numMatch.group()
+            if(string.contains("오후")){
                 val integerRes = Integer.parseInt(res) + 12
                 res = integerRes.toString()
-                if (parts[i].contains("분")) {
-                    numMatch.find()
-                    res += numMatch.group()
-                } else {
-                    res += "00"
-                }
             }
+            res += if(string.contains("분")) {
+                numMatch.find()
+                numMatch.group()
+            } else "00"
             val resInt = Integer.parseInt(res)
-            if (i == 0) {
-                if (resInt < timeInterval[i]) timeInterval[i] = resInt
-            } else {
-                if (timeInterval[i] < resInt) timeInterval[i] = resInt
+            timeInterval[index] = when(index){
+                0 -> if(resInt < timeInterval[index]) resInt else timeInterval[index]
+                1 -> if(timeInterval[index] < resInt) resInt else timeInterval[index]
+                else -> timeInterval[index]
             }
         }
     }
     return timeInterval[0] <= integerCurrentTime && integerCurrentTime <= timeInterval[1]
-}
-
-fun isOpen(restaurant: Restaurant): Boolean {
-    val judgeByTime = isOpenUnit(restaurant.hoursBreakfast)||isOpenUnit(restaurant.hoursLunch)||isOpenUnit(restaurant.hoursDinner)
-    return judgeByTime
 }
