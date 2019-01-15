@@ -37,18 +37,18 @@ fun isOpenUnit(inputUnit: String): Boolean {
             val numMatch = numExtractPattern.matcher(string)
             numMatch.find()
             var res = numMatch.group()
-            if(string.contains("오후")){
+            if (string.contains("오후")) {
                 val integerRes = Integer.parseInt(res) + 12
                 res = integerRes.toString()
             }
-            res += if(string.contains("분")) {
+            res += if (string.contains("분")) {
                 numMatch.find()
                 numMatch.group()
             } else "00"
             val resInt = Integer.parseInt(res)
-            timeInterval[index] = when(index){
-                0 -> if(resInt < timeInterval[index]) resInt else timeInterval[index]
-                1 -> if(timeInterval[index] < resInt) resInt else timeInterval[index]
+            timeInterval[index] = when (index) {
+                0 -> if (resInt < timeInterval[index]) resInt else timeInterval[index]
+                1 -> if (timeInterval[index] < resInt) resInt else timeInterval[index]
                 else -> timeInterval[index]
             }
         }

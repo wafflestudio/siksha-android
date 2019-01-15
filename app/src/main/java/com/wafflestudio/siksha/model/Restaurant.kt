@@ -17,7 +17,7 @@ data class Restaurant(
         @field:Json(name = "longitude") val longitude: Double,
 
         var favorite: Boolean = false
-){
+) {
     val isOpen: Boolean
-        get() = isOpenUnit(hoursBreakfast)||isOpenUnit(hoursLunch)||isOpenUnit(hoursDinner)
+        get() = isOpenUnit(hoursBreakfast) || isOpenUnit(hoursLunch) || isOpenUnit(hoursDinner)
 }
