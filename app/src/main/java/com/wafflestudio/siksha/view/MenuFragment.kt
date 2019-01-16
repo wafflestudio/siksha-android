@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha.view
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.support.design.widget.BottomSheetDialog
@@ -111,6 +113,21 @@ class MenuFragment : Fragment() {
                             text_restaurant_breakfast_operating_hours.text = restaurant.hoursBreakfast.replace('-', '~')
                             text_restaurant_lunch_operating_hours.text = restaurant.hoursLunch.replace('-', '~')
                             text_restaurant_dinner_operating_hours.text = restaurant.hoursDinner.replace('-', '~')
+                            button_google_map.setOnClickListener { _ ->
+                                val googleUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}")
+                                val googleMapIntent = Intent(Intent.ACTION_VIEW, googleUri)
+                                startActivity(googleMapIntent)
+                            }
+                            button_kakao_map.setOnClickListener { _ ->
+                                val kakaoUri = Uri.parse("daummaps://look?p=${restaurant.latitude},${restaurant.longitude}")
+                                val kakaoMapIntent = Intent(Intent.ACTION_VIEW, kakaoUri)
+                                startActivity(kakaoMapIntent)
+                            }
+                            button_naver_map.setOnClickListener{ _ ->
+                                val naverUri = Uri.parse("nmap://place?lat=${restaurant.latitude}&lng=${restaurant.longitude}&appname=com.wafflestudio.siksha")
+                                val naverMapIntent = Intent(Intent.ACTION_VIEW, naverUri)
+                                startActivity(naverMapIntent)
+                            }
                             button_close.setOnClickListener { hide() }
                             show()
                         }
