@@ -28,7 +28,6 @@ class SplashActivity : BaseActivity() {
             Timber.d("Updating menus in splash activity")
             api.fetchMenus().enqueue(object : Callback<MenuResponse> {
                 override fun onFailure(call: Call<MenuResponse>, t: Throwable) {
-                    Timber.d("failed to fetch datas: "+t.message)
                     finish()
                 }
 
