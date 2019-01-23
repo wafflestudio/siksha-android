@@ -96,6 +96,11 @@ class MenuFragment : Fragment() {
                 (if (isToday) menuResponse.today else menuResponse.tomorrow).menus
                         .filter { it.type == menuType }
                         .filter { !onlyFavorites || preference.favorite.contains(it.restaurant.code) }
+                        .sortedWith(object : Comparator<Menu> {
+                            override fun compare(p0: Menu, p1: Menu) =
+                                    preference.getRestaurantPriority(p0.restaurant.code) -
+                                            preference.getRestaurantPriority(p1.restaurant.code)
+                        })
                         .map {
                             it.copy(
                                     restaurant = it.restaurant.copy(
@@ -123,7 +128,7 @@ class MenuFragment : Fragment() {
                                 val kakaoMapIntent = Intent(Intent.ACTION_VIEW, kakaoUri)
                                 startActivity(kakaoMapIntent)
                             }
-                            button_naver_map.setOnClickListener{ _ ->
+                            button_naver_map.setOnClickListener { _ ->
                                 val naverUri = Uri.parse("nmap://place?lat=${restaurant.latitude}&lng=${restaurant.longitude}&appname=com.wafflestudio.siksha")
                                 val naverMapIntent = Intent(Intent.ACTION_VIEW, naverUri)
                                 startActivity(naverMapIntent)
