@@ -16,6 +16,10 @@ class SikshaPreference @Inject constructor(
         get() = getParcelable<MenuResponse>(PrefKey.MENU)
         set(value) = setParcelable(PrefKey.MENU, value)
 
+    var visibleNoMenu: Boolean
+        get() = getBoolean(PrefKey.VISIBLE_NO_MENU, true)
+        set(value) = setBoolean(PrefKey.VISIBLE_NO_MENU, value)
+
     val favorite: List<String>
         get() = getString(PrefKey.FAVORITE, "")
                 .split(',')
@@ -204,6 +208,7 @@ class SikshaPreference @Inject constructor(
         REVIEWS,
         REVIEWED_BREAKFAST,
         REVIEWED_LUNCH,
-        REVIEWED_DINNER
+        REVIEWED_DINNER,
+        VISIBLE_NO_MENU
     }
 }

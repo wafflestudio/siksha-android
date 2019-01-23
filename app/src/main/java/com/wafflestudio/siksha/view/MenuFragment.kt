@@ -101,6 +101,7 @@ class MenuFragment : Fragment() {
                                     preference.getRestaurantPriority(p0.restaurant.code) -
                                             preference.getRestaurantPriority(p1.restaurant.code)
                         })
+                        .filter { preference.visibleNoMenu || it.meals.isNotEmpty() }
                         .map {
                             it.copy(
                                     restaurant = it.restaurant.copy(
