@@ -45,6 +45,12 @@ class MenuAdapter(
             view.button_info.setOnClickListener { infoButtonListener(data.restaurant) }
             view.button_favorite.setOnClickListener { favoriteButtonListener(data.restaurant) }
             view.text_open.setText(if (data.restaurant.isOpen) R.string.restaurant_open else R.string.restaurant_close)
+            if (data.meals.isEmpty()) {
+                view.text_no_menu.text = "식단이 없습니다"
+            }
+            else {
+                view.text_no_menu.text = ""
+            }
         }
     }
 }
