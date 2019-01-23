@@ -75,6 +75,11 @@ open class MainFragment : Fragment(), HasSupportFragmentInjector {
         }
         if (selectedDayIsTomorrow) index += 3
         view_pager.setCurrentItem(index, false)
+        when (index) {
+            0, 3 -> tab_item_breakfast.setImageResource(R.drawable.breakfast_s)
+            1, 4 -> tab_item_lunch.setImageResource(R.drawable.lunch_s)
+            2, 5 -> tab_item_dinner.setImageResource(R.drawable.dinner_s)
+        }
     }
 
     private fun initPager() {
