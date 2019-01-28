@@ -12,4 +12,6 @@
     <color name="lightGray">#DBDBDB</color>
     <color name="lineGray">#E3E3E3</color>
     <color name="black">#2B2B2B</color>
+    <color name="settingBorder">#D6D6D6</color>
+    <color name="settingText">#8C8C8C</color>
 </resources>
