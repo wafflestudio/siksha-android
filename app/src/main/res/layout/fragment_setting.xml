@@ -27,6 +27,7 @@
             android:textColor="@color/settingText"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -178,6 +179,111 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_widget"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/img_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_siksha_information"
+            app:layout_constraintEnd_toStartOf="@+id/img_inform_arrow"
+            app:layout_constraintTop_toTopOf="@+id/text_siksha_information"
+            app:srcCompat="@drawable/ic_new" />
+
+        <ImageView
+            android:id="@+id/img_inform_arrow"
+            android:layout_width="10dp"
+            android:layout_height="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_siksha_information"
+            app:layout_constraintEnd_toEndOf="@+id/text_siksha_information"
+            app:layout_constraintTop_toTopOf="@+id/text_siksha_information"
+            app:srcCompat="@drawable/ic_arrow" />
+
+        <ImageView
+            android:id="@+id/img_refresh"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_reload"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_reload"
+            app:srcCompat="@drawable/refresh" />
+
+        <TextView
+            android:id="@+id/text_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="8dp"
+            android:text="MM. DD. HH:MM"
+            app:layout_constraintBottom_toBottomOf="@+id/text_reload"
+            app:layout_constraintEnd_toStartOf="@+id/img_refresh"
+            app:layout_constraintTop_toTopOf="@+id/text_reload"
+            android:textColor="@color/colorPrimary"/>
+
+        <ImageView
+            android:id="@+id/img_check"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_hide_no_menu"
+            app:layout_constraintEnd_toEndOf="@+id/text_hide_no_menu"
+            app:layout_constraintTop_toTopOf="@+id/text_hide_no_menu"
+            app:srcCompat="@drawable/check" />
+
+        <ImageView
+            android:id="@+id/img_reorder_arrow"
+            android:layout_width="10dp"
+            android:layout_height="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_reorder"
+            app:layout_constraintEnd_toEndOf="@+id/text_reorder"
+            app:layout_constraintTop_toTopOf="@+id/text_reorder"
+            app:srcCompat="@drawable/ic_arrow" />
+
+        <ImageView
+            android:id="@+id/img_reorder_favorite_arrow"
+            android:layout_width="10dp"
+            android:layout_height="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_reorder_favorite"
+            app:layout_constraintEnd_toEndOf="@+id/text_reorder_favorite"
+            app:layout_constraintTop_toTopOf="@+id/text_reorder_favorite"
+            app:srcCompat="@drawable/ic_arrow" />
+
+        <ImageView
+            android:id="@+id/img_widget_arrow"
+            android:layout_width="10dp"
+            android:layout_height="18dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_widget_setting"
+            app:layout_constraintEnd_toEndOf="@+id/text_widget_setting"
+            app:layout_constraintTop_toTopOf="@+id/text_widget_setting"
+            app:srcCompat="@drawable/ic_arrow" />
 
 
     </android.support.constraint.ConstraintLayout>
