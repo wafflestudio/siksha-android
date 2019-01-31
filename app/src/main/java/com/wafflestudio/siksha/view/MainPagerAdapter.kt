@@ -15,7 +15,7 @@ class MainPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(
     private val pages = arrayOf(
             FavoriteFragment.newInstance(),
             MainFragment.newInstance(),
-            SettingFragment.newInstance()
+            SettingWrapperFragment.newInstance()
     )
 
     override fun getItem(position: Int): Fragment = pages[position]
