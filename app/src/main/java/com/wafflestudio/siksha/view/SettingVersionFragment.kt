@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wafflestudio.siksha.R
-import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting_version.view.*
+
 
 class SettingVersionFragment : Fragment() {
     companion object {

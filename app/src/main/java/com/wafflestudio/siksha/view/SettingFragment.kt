@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wafflestudio.siksha.R
-import kotlinx.android.synthetic.main.fragment_setting.*
 import kotlinx.android.synthetic.main.fragment_setting.view.*
 
 class SettingFragment : Fragment() {
@@ -24,6 +23,7 @@ class SettingFragment : Fragment() {
                     ?.addToBackStack(null)
                     ?.commit()
         }
+        view.img_new.visibility = View.INVISIBLE
         return view
     }
 }
