@@ -80,6 +80,9 @@ dependencies {
     implementation "com.facebook.stetho:stetho:$stetho_version"
     implementation "com.facebook.stetho:stetho-okhttp3:$stetho_version"
 
+    // DragListView
+    implementation "com.github.woxthebox:draglistview:1.6.3"
+
     // Junit test
     testImplementation 'junit:junit:4.12'
 
