@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.MenuAdapter
 import com.wafflestudio.siksha.model.Menu
-import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.model.Review
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
@@ -27,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_menu.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject

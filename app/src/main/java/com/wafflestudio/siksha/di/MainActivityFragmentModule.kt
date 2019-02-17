@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha.di
 
-import com.wafflestudio.siksha.view.FavoriteFragment
-import com.wafflestudio.siksha.view.MainFragment
+import com.wafflestudio.siksha.view.*
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -12,4 +11,16 @@ abstract class MainActivityFragmentModule {
 
     @ContributesAndroidInjector(modules = [FavoriteFragmentFragmentModule::class])
     abstract fun favoriteFragment(): FavoriteFragment
+
+    @ContributesAndroidInjector
+    abstract fun settingFragment(): SettingFragment
+
+    @ContributesAndroidInjector
+    abstract fun settingVersionFragment(): SettingVersionFragment
+
+    @ContributesAndroidInjector
+    abstract fun settingReorderFavoriteFragment(): SettingReorderFavoriteFragment
+
+    @ContributesAndroidInjector
+    abstract fun settingReorderMainFragment(): SettingReorderMainFragment
 }

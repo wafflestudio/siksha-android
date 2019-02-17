@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.wafflestudio.siksha.R
 
 class SettingWrapperFragment : Fragment() {
+
     companion object {
         fun newInstance(): SettingWrapperFragment = SettingWrapperFragment()
     }
