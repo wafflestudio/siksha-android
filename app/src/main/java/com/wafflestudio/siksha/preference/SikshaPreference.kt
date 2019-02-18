@@ -26,6 +26,10 @@ class SikshaPreference @Inject constructor(
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
 
+    var latestUpdate: String
+        get() = getString(PrefKey.LATEST_UPDATE, "-")
+        set(value) = setString(PrefKey.LATEST_UPDATE, value)
+
     val restaurantCodeList: List<String> =
             listOf("VET-001",
                     "GRD-001",
@@ -69,48 +73,48 @@ class SikshaPreference @Inject constructor(
 
     fun getRestaurantPriority(code: String): Int {
         val defaultPriority = when (code) {
-            "VET-001" -> 1
-            "GRD-001" -> 2
-            "SCO-001" -> 3
-            "SCO-002" -> 4
-            "SCO-003" -> 5
-            "SCO-004" -> 6
-            "SCO-005" -> 7
-            "SCO-006" -> 8
-            "SCO-007" -> 9
-            "SCO-008" -> 10
-            "SCO-009" -> 11
-            "SCO-010" -> 12
-            "SCO-011" -> 13
-            "SCO-020" -> 14
-            "SCO-012" -> 15
-            "SCO-021" -> 16
-            "SCO-013" -> 17
-            else -> 99
+            "VET-001" -> 0
+            "GRD-001" -> 1
+            "SCO-001" -> 2
+            "SCO-002" -> 3
+            "SCO-003" -> 4
+            "SCO-004" -> 5
+            "SCO-005" -> 6
+            "SCO-006" -> 7
+            "SCO-007" -> 8
+            "SCO-008" -> 9
+            "SCO-009" -> 10
+            "SCO-010" -> 11
+            "SCO-011" -> 12
+            "SCO-020" -> 13
+            "SCO-012" -> 14
+            "SCO-021" -> 15
+            "SCO-013" -> 16
+            else -> 100
         }
         return getIntPriority(code, defaultPriority)
     }
 
     fun getFavoriteRestaurantPriority(code: String): Int {
         val defaultPriority = when (code) {
-            "VET-001" -> 1
-            "GRD-001" -> 2
-            "SCO-001" -> 3
-            "SCO-002" -> 4
-            "SCO-003" -> 5
-            "SCO-004" -> 6
-            "SCO-005" -> 7
-            "SCO-006" -> 8
-            "SCO-007" -> 9
-            "SCO-008" -> 10
-            "SCO-009" -> 11
-            "SCO-010" -> 12
-            "SCO-011" -> 13
-            "SCO-020" -> 14
-            "SCO-012" -> 15
-            "SCO-021" -> 16
-            "SCO-013" -> 17
-            else -> 99
+            "VET-001" -> 0
+            "GRD-001" -> 1
+            "SCO-001" -> 2
+            "SCO-002" -> 3
+            "SCO-003" -> 4
+            "SCO-004" -> 5
+            "SCO-005" -> 6
+            "SCO-006" -> 7
+            "SCO-007" -> 8
+            "SCO-008" -> 9
+            "SCO-009" -> 10
+            "SCO-010" -> 11
+            "SCO-011" -> 12
+            "SCO-020" -> 13
+            "SCO-012" -> 14
+            "SCO-021" -> 15
+            "SCO-013" -> 16
+            else -> 100
         }
         return getFavoriteIntPriority(code, defaultPriority)
     }
@@ -247,6 +251,7 @@ class SikshaPreference @Inject constructor(
         REVIEWED_BREAKFAST,
         REVIEWED_LUNCH,
         REVIEWED_DINNER,
-        VISIBLE_NO_MENU
+        VISIBLE_NO_MENU,
+        LATEST_UPDATE
     }
 }

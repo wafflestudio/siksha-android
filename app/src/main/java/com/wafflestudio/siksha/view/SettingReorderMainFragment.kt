@@ -50,12 +50,45 @@ open class SettingReorderMainFragment : Fragment() {
         mDragListView.setDragListListener(object : DragListView.DragListListenerAdapter() {
             override fun onItemDragStarted(position: Int) {
                 mRefreshLayout.isEnabled = false
-                Toast.makeText(mDragListView.context, "Start - position: $position", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(mDragListView.context, "Start - position: $position", Toast.LENGTH_SHORT).show()
             }
 
             override fun onItemDragEnded(fromPosition: Int, toPosition: Int) {
                 mRefreshLayout.isEnabled = true
-                Toast.makeText(mDragListView.context, "Strat - Position: $fromPosition\nEnd - position: $toPosition", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(mDragListView.context, "Strat - Position: $fromPosition\nEnd - position: $toPosition", Toast.LENGTH_SHORT).show()
+                val diff = toPosition - fromPosition
+                val restaurantCodeList = preference.restaurantCodeList
+                if (diff < 0) {
+                    //get higher priority
+                    if (onlyFavorites) {
+                        restaurantCodeList.forEachIndexed { index, code ->
+                            val priority = preference.getFavoriteRestaurantPriority(code)
+                            if (priority == fromPosition) preference.setFavoriteRestaurantPriority(code, toPosition)
+                            else if (priority in toPosition..(fromPosition-1)) preference.setFavoriteRestaurantPriority(code, priority+1)
+                        }
+                    } else {
+                        restaurantCodeList.forEachIndexed { index, code ->
+                            val priority = preference.getRestaurantPriority(code)
+                            if (priority == fromPosition) preference.setRestaurantPriority(code, toPosition)
+                            else if (priority in toPosition..(fromPosition-1)) preference.setRestaurantPriority(code, priority+1)
+                        }
+                    }
+                } else if (diff > 0) {
+                    //get lower priority
+                    if (onlyFavorites) {
+                        restaurantCodeList.forEachIndexed { index, code ->
+                            val priority = preference.getFavoriteRestaurantPriority(code)
+                            if (priority == fromPosition) preference.setFavoriteRestaurantPriority(code, toPosition)
+                            else if (priority in (fromPosition+1)..toPosition) preference.setFavoriteRestaurantPriority(code, priority-1)
+                        }
+                    } else {
+                        restaurantCodeList.forEachIndexed { index, code ->
+                            val priority = preference.getRestaurantPriority(code)
+                            if (priority == fromPosition) preference.setRestaurantPriority(code, toPosition)
+                            else if (priority in (fromPosition+1)..toPosition) preference.setRestaurantPriority(code, priority-1)
+                        }
+                    }
+                }
             }
         })
         val codeList = preference.restaurantCodeList
@@ -69,8 +102,16 @@ open class SettingReorderMainFragment : Fragment() {
                                         preference.getRestaurantPriority(p1)
                 })
         mItemArray = ArrayList()
+        if (onlyFavorites) preference.restaurantCodeList.forEachIndexed { index, code ->
+            if (!preference.favorite.contains(code)) {
+                preference.setFavoriteRestaurantPriority(code, 100 + index)
+            }
+        }
         codeList.forEachIndexed { index, code ->
             (mItemArray as ArrayList<Pair<Long, String>>).add(Pair(index.toLong(), preference.getNameWithCode(code)))
+            if (onlyFavorites) {
+                preference.setFavoriteRestaurantPriority(code, index)
+            }
         }
         mRefreshLayout.setScrollingView(mDragListView.recyclerView)
         mRefreshLayout.setOnRefreshListener { mRefreshLayout.postDelayed({ mRefreshLayout.isRefreshing = false }, 0) }

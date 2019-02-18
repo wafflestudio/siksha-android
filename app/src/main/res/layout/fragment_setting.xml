@@ -79,7 +79,7 @@
             android:background="@drawable/background_setting_box"
             android:gravity="center_vertical"
             android:paddingLeft="25dp"
-            android:text="메뉴 없는 식당 숨기"
+            android:text="메뉴 없는 식당 숨기기"
             android:textColor="@color/settingText"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"

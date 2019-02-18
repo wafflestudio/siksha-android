@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha.view
 
 import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -30,10 +32,17 @@ class SettingVersionFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_setting_version, container, false)
-        view.img_back.setOnClickListener { _ ->
+        var version: String? = "Ver. "
+        try {
+            val packageInfo = context?.packageManager?.getPackageInfo(context?.packageName, 0)
+            version += packageInfo?.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+        }
+        view.text_siksha_version.text = version
+        view.img_back.setOnClickListener {
             fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
-        view.text_back.setOnClickListener { _ ->
+        view.text_back.setOnClickListener {
             fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         return view

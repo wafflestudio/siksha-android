@@ -11,6 +11,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity() {
@@ -37,6 +39,7 @@ class SplashActivity : BaseActivity() {
                     if (response.isSuccessful) {
                         response.body()?.let {
                             preference.menuResponse = it
+                            preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
                             startActivity(MainActivity.createIntent(context, true))
                             finish()
                         }

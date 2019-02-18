@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.MenuAdapter
 import com.wafflestudio.siksha.model.Menu
@@ -120,17 +121,17 @@ class MenuFragment : Fragment() {
                             text_restaurant_breakfast_operating_hours.text = restaurant.hoursBreakfast.replace('-', '~')
                             text_restaurant_lunch_operating_hours.text = restaurant.hoursLunch.replace('-', '~')
                             text_restaurant_dinner_operating_hours.text = restaurant.hoursDinner.replace('-', '~')
-                            button_google_map.setOnClickListener { _ ->
+                            button_google_map.setOnClickListener {
                                 val googleUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}")
                                 val googleMapIntent = Intent(Intent.ACTION_VIEW, googleUri)
                                 startActivity(googleMapIntent)
                             }
-                            button_kakao_map.setOnClickListener { _ ->
+                            button_kakao_map.setOnClickListener {
                                 val kakaoUri = Uri.parse("daummaps://look?p=${restaurant.latitude},${restaurant.longitude}")
                                 val kakaoMapIntent = Intent(Intent.ACTION_VIEW, kakaoUri)
                                 startActivity(kakaoMapIntent)
                             }
-                            button_naver_map.setOnClickListener { _ ->
+                            button_naver_map.setOnClickListener {
                                 val naverUri = Uri.parse("nmap://place?lat=${restaurant.latitude}&lng=${restaurant.longitude}&appname=com.wafflestudio.siksha")
                                 val naverMapIntent = Intent(Intent.ACTION_VIEW, naverUri)
                                 startActivity(naverMapIntent)
