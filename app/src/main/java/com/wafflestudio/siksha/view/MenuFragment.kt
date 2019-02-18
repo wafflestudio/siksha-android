@@ -96,8 +96,11 @@ class MenuFragment : Fragment() {
                         .filter { !onlyFavorites || preference.favorite.contains(it.restaurant.code) }
                         .sortedWith(object : Comparator<Menu> {
                             override fun compare(p0: Menu, p1: Menu) =
-                                    preference.getRestaurantPriority(p0.restaurant.code) -
-                                            preference.getRestaurantPriority(p1.restaurant.code)
+                                    if (onlyFavorites) preference.getFavoriteRestaurantPriority(p0.restaurant.code) -
+                                            preference.getFavoriteRestaurantPriority(p1.restaurant.code)
+                                    else
+                                        preference.getRestaurantPriority(p0.restaurant.code) -
+                                                preference.getRestaurantPriority(p1.restaurant.code)
                         })
                         .filter { preference.visibleNoMenu || it.meals.isNotEmpty() }
                         .map {

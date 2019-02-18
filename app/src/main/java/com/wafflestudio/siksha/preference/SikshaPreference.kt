@@ -91,8 +91,36 @@ class SikshaPreference @Inject constructor(
         return getIntPriority(code, defaultPriority)
     }
 
+    fun getFavoriteRestaurantPriority(code: String): Int {
+        val defaultPriority = when (code) {
+            "VET-001" -> 1
+            "GRD-001" -> 2
+            "SCO-001" -> 3
+            "SCO-002" -> 4
+            "SCO-003" -> 5
+            "SCO-004" -> 6
+            "SCO-005" -> 7
+            "SCO-006" -> 8
+            "SCO-007" -> 9
+            "SCO-008" -> 10
+            "SCO-009" -> 11
+            "SCO-010" -> 12
+            "SCO-011" -> 13
+            "SCO-020" -> 14
+            "SCO-012" -> 15
+            "SCO-021" -> 16
+            "SCO-013" -> 17
+            else -> 99
+        }
+        return getFavoriteIntPriority(code, defaultPriority)
+    }
+
     fun setRestaurantPriority(code: String, value: Int) {
         setIntPriority(code, value)
+    }
+
+    fun setFavoriteRestaurantPriority(code: String, value: Int) {
+        setFavoriteIntPriority(code, value)
     }
 
     fun addFavorite(code: String) {
@@ -168,9 +196,19 @@ class SikshaPreference @Inject constructor(
     private fun getIntPriority(key: String, defaultValue: Int): Int =
             sharedPreferences.getInt(key, defaultValue)
 
+    private fun getFavoriteIntPriority(key: String, defaultValue: Int): Int =
+            sharedPreferences.getInt("$key:favorite", defaultValue)
+
     private fun setIntPriority(key: String, value: Int) {
         sharedPreferences.edit().apply {
             putInt(key, value)
+            commit()
+        }
+    }
+
+    private fun setFavoriteIntPriority(key: String, value: Int) {
+        sharedPreferences.edit().apply {
+            putInt("$key:favorite", value)
             commit()
         }
     }

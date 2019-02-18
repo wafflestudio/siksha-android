@@ -37,6 +37,20 @@ class SettingFragment : Fragment() {
                     ?.commit()
         }
         view.img_new.visibility = View.INVISIBLE
+        view.text_reorder.setOnClickListener { _->
+            fragmentManager?.beginTransaction()
+                    ?.replace(R.id.fragment_setting_view, SettingReorderMainFragment.newInstance())
+                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
+        view.text_reorder_favorite.setOnClickListener { _->
+            fragmentManager?.beginTransaction()
+                    ?.replace(R.id.fragment_setting_view, SettingReorderFavoriteFragment.newInstance())
+                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.addToBackStack(null)
+                    ?.commit()
+        }
         return view
     }
 }
