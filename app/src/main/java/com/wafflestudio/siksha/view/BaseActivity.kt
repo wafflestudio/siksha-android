@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 abstract class BaseActivity : AppCompatActivity() {
+
     val context: Context
         get() = this
 

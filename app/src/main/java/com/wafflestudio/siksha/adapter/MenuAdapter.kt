@@ -15,6 +15,7 @@ class MenuAdapter(
         private val favoriteButtonListener: (Restaurant) -> Unit,
         private val onMealClickListener: (Meal, Restaurant) -> Unit
 ) : BaseAdapter<Menu, MenuAdapter.MenuHolder>(getItems) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuHolder {
         val view = LayoutInflater
                 .from(parent.context)

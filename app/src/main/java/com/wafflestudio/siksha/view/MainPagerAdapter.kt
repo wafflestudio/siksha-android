@@ -1,8 +1,11 @@
 package com.wafflestudio.siksha.view
 
-class MainPagerAdapter(fragmentManager: androidx.fragment.app.FragmentManager)
-    : androidx.fragment.app.FragmentPagerAdapter(fragmentManager)
-{
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+
+class MainPagerAdapter(fragmentManager: FragmentManager)
+    : FragmentPagerAdapter(fragmentManager) {
 
     companion object {
         const val FAVORITE_INDEX = 0
@@ -16,7 +19,7 @@ class MainPagerAdapter(fragmentManager: androidx.fragment.app.FragmentManager)
             SettingWrapperFragment.newInstance()
     )
 
-    override fun getItem(position: Int): androidx.fragment.app.Fragment = pages[position]
+    override fun getItem(position: Int): Fragment = pages[position]
 
     override fun getCount(): Int = pages.size
 }

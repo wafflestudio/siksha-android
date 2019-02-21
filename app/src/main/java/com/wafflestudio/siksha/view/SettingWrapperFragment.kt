@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.wafflestudio.siksha.R
 
-class SettingWrapperFragment : androidx.fragment.app.Fragment() {
+class SettingWrapperFragment : Fragment() {
 
     companion object {
         fun newInstance(): SettingWrapperFragment = SettingWrapperFragment()

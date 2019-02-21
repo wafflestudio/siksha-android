@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.MenuAdapter
@@ -29,7 +30,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-class MenuFragment : androidx.fragment.app.Fragment() {
+class MenuFragment : Fragment() {
     @Inject
     lateinit var api: SikshaApi
     @Inject
@@ -37,9 +38,9 @@ class MenuFragment : androidx.fragment.app.Fragment() {
     @Inject
     lateinit var encoder: SikshaEncoder
 
-    var adapter: MenuAdapter? = null
-    var infoSheet: BottomSheetDialog? = null
-    var leaveScoreSheet: BottomSheetDialog? = null
+    private var adapter: MenuAdapter? = null
+    private var infoSheet: BottomSheetDialog? = null
+    private var leaveScoreSheet: BottomSheetDialog? = null
 
     companion object {
         const val EXTRA_IS_TODAY = "MENU_FRAGMENT_IS_TODAY"
@@ -92,15 +93,15 @@ class MenuFragment : androidx.fragment.app.Fragment() {
         preference.menuResponse?.let { menuResponse ->
             val getMenus = {
                 (if (isToday) menuResponse.today else menuResponse.tomorrow).menus
+                        .asSequence()
                         .filter { it.type == menuType }
                         .filter { !onlyFavorites || preference.favorite.contains(it.restaurant.code) }
-                        .sortedWith(object : Comparator<Menu> {
-                            override fun compare(p0: Menu, p1: Menu) =
-                                    if (onlyFavorites) preference.getFavoriteRestaurantPriority(p0.restaurant.code) -
-                                            preference.getFavoriteRestaurantPriority(p1.restaurant.code)
-                                    else
-                                        preference.getRestaurantPriority(p0.restaurant.code) -
-                                                preference.getRestaurantPriority(p1.restaurant.code)
+                        .sortedWith(Comparator { p0, p1 ->
+                            if (onlyFavorites) preference.getFavoriteRestaurantPriority(p0.restaurant.code) -
+                                    preference.getFavoriteRestaurantPriority(p1.restaurant.code)
+                            else
+                                preference.getRestaurantPriority(p0.restaurant.code) -
+                                        preference.getRestaurantPriority(p1.restaurant.code)
                         })
                         .filter { preference.visibleNoMenu || it.meals.isNotEmpty() }
                         .map {
@@ -110,6 +111,7 @@ class MenuFragment : androidx.fragment.app.Fragment() {
                                     )
                             )
                         }
+                        .toList()
             }
             list_menu.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
             adapter = MenuAdapter(getMenus,

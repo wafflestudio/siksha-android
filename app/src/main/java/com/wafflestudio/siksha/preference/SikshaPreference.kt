@@ -133,6 +133,7 @@ class SikshaPreference @Inject constructor(
 
     fun addFavorite(code: String) {
         val newFavorites = favorite
+                .asSequence()
                 .toMutableList()
                 .plus(code)
                 .toSet()
@@ -197,7 +198,7 @@ class SikshaPreference @Inject constructor(
     private fun setString(key: PrefKey, value: String?) {
         sharedPreferences.edit().apply {
             putString(key.name, value)
-            commit()
+            apply()
         }
     }
 
@@ -210,14 +211,14 @@ class SikshaPreference @Inject constructor(
     private fun setIntPriority(key: String, value: Int) {
         sharedPreferences.edit().apply {
             putInt(key, value)
-            commit()
+            apply()
         }
     }
 
     private fun setFavoriteIntPriority(key: String, value: Int) {
         sharedPreferences.edit().apply {
             putInt("$key:favorite", value)
-            commit()
+            apply()
         }
     }
 
@@ -227,7 +228,7 @@ class SikshaPreference @Inject constructor(
     private fun setBoolean(key: PrefKey, value: Boolean) {
         sharedPreferences.edit().apply {
             putBoolean(key.name, value)
-            commit()
+            apply()
         }
     }
 

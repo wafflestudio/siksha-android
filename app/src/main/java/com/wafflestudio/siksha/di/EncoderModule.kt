@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+@Suppress("SpellCheckingInspection")
 @Module
 class EncoderModule(private val secret: String) {
     @Provides

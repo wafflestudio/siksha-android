@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.util.Pair
+import androidx.fragment.app.Fragment
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.RestaurantAdapter
 import com.wafflestudio.siksha.preference.SikshaPreference
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_setting_version.view.*
 import java.util.ArrayList
 import javax.inject.Inject
 
-open class SettingReorderMainFragment : androidx.fragment.app.Fragment() {
+open class SettingReorderMainFragment : Fragment() {
 
     @Inject
     lateinit var preference: SikshaPreference

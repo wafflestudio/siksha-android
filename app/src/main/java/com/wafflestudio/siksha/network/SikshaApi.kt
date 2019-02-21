@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.wafflestudio.siksha.network
 
 import com.wafflestudio.siksha.model.MenuResponse

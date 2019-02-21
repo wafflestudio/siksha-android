@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.Menu
@@ -19,11 +20,12 @@ import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
 
-open class MainFragment : androidx.fragment.app.Fragment(), HasSupportFragmentInjector {
-    @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
+open class MainFragment : Fragment(), HasSupportFragmentInjector {
 
-    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment> = fragmentInjector
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     open val onlyFavorites = false
 

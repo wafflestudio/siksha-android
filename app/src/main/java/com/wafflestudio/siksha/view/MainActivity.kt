@@ -3,6 +3,8 @@ package com.wafflestudio.siksha.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.MenuResponse
@@ -20,17 +22,17 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), HasSupportFragmentInjector {
-    @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<androidx.fragment.app.Fragment>
 
-    override fun supportFragmentInjector(): AndroidInjector<androidx.fragment.app.Fragment> = fragmentInjector
+    @Inject
+    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 
     companion object {
         private const val EXTRA_WAS_UPDATED = "MAIN_WAS_UPDATED"
 
-        fun createIntent(context: Context, wasUpdated: Boolean) = Intent(context, MainActivity::class.java).apply {
-            putExtra(EXTRA_WAS_UPDATED, wasUpdated)
-        }
+        fun createIntent(context: Context, wasUpdated: Boolean): Intent? =
+                Intent(context, MainActivity::class.java).putExtra(EXTRA_WAS_UPDATED, wasUpdated)
     }
 
     private val wasUpdated by lazy { intent.getBooleanExtra(EXTRA_WAS_UPDATED, false) }
@@ -65,7 +67,7 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
     private fun initPager() {
         val adapter = MainPagerAdapter(supportFragmentManager)
         view_pager.adapter = adapter
-        view_pager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
             override fun onPageSelected(position: Int) {

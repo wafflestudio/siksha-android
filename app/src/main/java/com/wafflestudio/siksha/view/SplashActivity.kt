@@ -16,6 +16,7 @@ import java.util.Date
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity() {
+
     @Inject
     lateinit var api: SikshaApi
     @Inject

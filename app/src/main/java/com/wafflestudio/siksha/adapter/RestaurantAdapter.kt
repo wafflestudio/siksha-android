@@ -13,8 +13,7 @@ internal class RestaurantAdapter(val list: ArrayList<Pair<Long, String>>,
                                  private val mLayoutId: Int,
                                  private val mGrabHandleId: Int,
                                  private val mDragOnLongPress: Boolean)
-    : DragItemAdapter<Pair<Long, String>, RestaurantAdapter.ViewHolder>()
-{
+    : DragItemAdapter<Pair<Long, String>, RestaurantAdapter.ViewHolder>() {
 
     init {
         itemList = list
@@ -36,10 +35,6 @@ internal class RestaurantAdapter(val list: ArrayList<Pair<Long, String>>,
     }
 
     internal inner class ViewHolder(itemView: View) : DragItemAdapter.ViewHolder(itemView, mGrabHandleId, mDragOnLongPress) {
-        var mText: TextView
-
-        init {
-            mText = itemView.findViewById(R.id.text_setting_restaurant) as TextView
-        }
+        val mText: TextView = itemView.findViewById(R.id.text_setting_restaurant) as TextView
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.preference.SikshaPreference
 import dagger.android.support.AndroidSupportInjection
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_setting_version.view.*
 import javax.inject.Inject
 
 
-class SettingVersionFragment : androidx.fragment.app.Fragment() {
+class SettingVersionFragment : Fragment() {
 
     @Inject
     lateinit var preference: SikshaPreference

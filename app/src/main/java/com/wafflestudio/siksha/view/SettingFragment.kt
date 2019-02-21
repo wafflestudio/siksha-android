@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
@@ -19,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
 
-class SettingFragment : androidx.fragment.app.Fragment() {
+class SettingFragment : Fragment() {
 
     @Inject
     lateinit var preference: SikshaPreference
