@@ -6,12 +6,13 @@ import com.squareup.moshi.Moshi
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
+@Suppress("SpellCheckingInspection")
 class SikshaEncoder(private val secret: String, private val moshi: Moshi) {
     companion object {
         private const val ALGORITHM_NAME = "HmacSHA256"
     }
 
-    fun base64(byteArray: ByteArray): String = Base64.encodeToString(
+    private fun base64(byteArray: ByteArray): String = Base64.encodeToString(
             byteArray,
             Base64.NO_PADDING or Base64.NO_WRAP or Base64.URL_SAFE
     )

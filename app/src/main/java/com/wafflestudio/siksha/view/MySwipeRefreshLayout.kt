@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha.view
 
 import android.content.Context
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import android.util.AttributeSet
 import android.view.View
 

@@ -12,7 +12,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity() {
@@ -43,8 +43,7 @@ class SplashActivity : BaseActivity() {
                             startActivity(MainActivity.createIntent(context, true))
                             finish()
                         }
-                    }
-                    else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+                    } else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
                 }
             })
         } else {

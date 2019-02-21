@@ -1,7 +1,5 @@
 package com.wafflestudio.siksha.adapter
 
-import androidx.recyclerview.widget.RecyclerView
-
 abstract class BaseAdapter<T, VH : BaseViewHolder<T>>(
         private val getItems: () -> List<T>
 ) : androidx.recyclerview.widget.RecyclerView.Adapter<VH>() {

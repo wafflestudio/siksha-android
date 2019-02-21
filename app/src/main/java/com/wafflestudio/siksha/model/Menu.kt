@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha.model
 
 import com.squareup.moshi.Json
-import java.lang.Exception
 
 data class Menu(
         @field:Json(name = "id") val id: Int,

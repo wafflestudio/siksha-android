@@ -1,11 +1,8 @@
 package com.wafflestudio.siksha.view
 
 import android.content.Context
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +22,7 @@ class SettingVersionFragment : androidx.fragment.app.Fragment() {
         fun newInstance(): SettingVersionFragment = SettingVersionFragment()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

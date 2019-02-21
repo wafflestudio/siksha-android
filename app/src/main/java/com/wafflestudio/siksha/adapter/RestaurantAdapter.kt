@@ -1,18 +1,20 @@
 package com.wafflestudio.siksha.adapter
 
-import androidx.core.util.Pair
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.util.Pair
 import com.wafflestudio.siksha.R
-
 import com.woxthebox.draglistview.DragItemAdapter
-
 import java.util.ArrayList
 
-internal class RestaurantAdapter(list: ArrayList<Pair<Long, String>>, private val mLayoutId: Int, private val mGrabHandleId: Int, private val mDragOnLongPress: Boolean) : DragItemAdapter<Pair<Long, String>, RestaurantAdapter.ViewHolder>() {
+internal class RestaurantAdapter(val list: ArrayList<Pair<Long, String>>,
+                                 private val mLayoutId: Int,
+                                 private val mGrabHandleId: Int,
+                                 private val mDragOnLongPress: Boolean)
+    : DragItemAdapter<Pair<Long, String>, RestaurantAdapter.ViewHolder>()
+{
 
     init {
         itemList = list

@@ -1,17 +1,15 @@
 package com.wafflestudio.siksha.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.MenuAdapter
 import com.wafflestudio.siksha.model.Menu
@@ -69,7 +67,7 @@ class MenuFragment : androidx.fragment.app.Fragment() {
         adapter?.refresh()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -77,6 +75,7 @@ class MenuFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_menu, container, false)
 
+    @SuppressLint("InflateParams")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             infoSheet = BottomSheetDialog(activity).apply {

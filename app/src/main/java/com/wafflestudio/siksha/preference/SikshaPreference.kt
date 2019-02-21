@@ -2,7 +2,11 @@ package com.wafflestudio.siksha.preference
 
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
-import com.wafflestudio.siksha.model.*
+import com.wafflestudio.siksha.model.Meal
+import com.wafflestudio.siksha.model.Menu
+import com.wafflestudio.siksha.model.MenuResponse
+import com.wafflestudio.siksha.model.Review
+import com.wafflestudio.siksha.model.Reviews
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

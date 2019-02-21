@@ -2,19 +2,14 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.core.util.Pair
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.util.Pair
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.RestaurantAdapter
 import com.wafflestudio.siksha.preference.SikshaPreference
-import com.wafflestudio.siksha.view.MySwipeRefreshLayout
 import com.woxthebox.draglistview.DragItem
 import com.woxthebox.draglistview.DragListView
 import dagger.android.support.AndroidSupportInjection
@@ -37,7 +32,7 @@ open class SettingReorderMainFragment : androidx.fragment.app.Fragment() {
         fun newInstance(): SettingReorderMainFragment = SettingReorderMainFragment()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -64,13 +59,13 @@ open class SettingReorderMainFragment : androidx.fragment.app.Fragment() {
                         restaurantCodeList.forEachIndexed { index, code ->
                             val priority = preference.getFavoriteRestaurantPriority(code)
                             if (priority == fromPosition) preference.setFavoriteRestaurantPriority(code, toPosition)
-                            else if (priority in toPosition..(fromPosition-1)) preference.setFavoriteRestaurantPriority(code, priority+1)
+                            else if (priority in toPosition..(fromPosition - 1)) preference.setFavoriteRestaurantPriority(code, priority + 1)
                         }
                     } else {
                         restaurantCodeList.forEachIndexed { index, code ->
                             val priority = preference.getRestaurantPriority(code)
                             if (priority == fromPosition) preference.setRestaurantPriority(code, toPosition)
-                            else if (priority in toPosition..(fromPosition-1)) preference.setRestaurantPriority(code, priority+1)
+                            else if (priority in toPosition..(fromPosition - 1)) preference.setRestaurantPriority(code, priority + 1)
                         }
                     }
                 } else if (diff > 0) {
@@ -79,13 +74,13 @@ open class SettingReorderMainFragment : androidx.fragment.app.Fragment() {
                         restaurantCodeList.forEachIndexed { index, code ->
                             val priority = preference.getFavoriteRestaurantPriority(code)
                             if (priority == fromPosition) preference.setFavoriteRestaurantPriority(code, toPosition)
-                            else if (priority in (fromPosition+1)..toPosition) preference.setFavoriteRestaurantPriority(code, priority-1)
+                            else if (priority in (fromPosition + 1)..toPosition) preference.setFavoriteRestaurantPriority(code, priority - 1)
                         }
                     } else {
                         restaurantCodeList.forEachIndexed { index, code ->
                             val priority = preference.getRestaurantPriority(code)
                             if (priority == fromPosition) preference.setRestaurantPriority(code, toPosition)
-                            else if (priority in (fromPosition+1)..toPosition) preference.setRestaurantPriority(code, priority-1)
+                            else if (priority in (fromPosition + 1)..toPosition) preference.setRestaurantPriority(code, priority - 1)
                         }
                     }
                 }

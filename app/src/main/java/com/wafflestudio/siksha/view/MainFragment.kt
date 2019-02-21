@@ -2,12 +2,10 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.tabs.TabLayout
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.Menu
 import com.wafflestudio.siksha.preference.SikshaPreference
@@ -54,7 +52,7 @@ open class MainFragment : androidx.fragment.app.Fragment(), HasSupportFragmentIn
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }

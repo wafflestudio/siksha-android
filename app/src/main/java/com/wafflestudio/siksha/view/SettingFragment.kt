@@ -2,8 +2,6 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class SettingFragment : androidx.fragment.app.Fragment() {
@@ -32,7 +30,7 @@ class SettingFragment : androidx.fragment.app.Fragment() {
         fun newInstance(): SettingFragment = SettingFragment()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -63,8 +61,8 @@ class SettingFragment : androidx.fragment.app.Fragment() {
         }
         view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
         view.img_check.setOnClickListener {
-            var preBoolValue = preference.visibleNoMenu
-            preference.visibleNoMenu =!preBoolValue
+            val preBoolValue = preference.visibleNoMenu
+            preference.visibleNoMenu = !preBoolValue
             view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
         }
         view.text_refresh.text = preference.latestUpdate
@@ -82,8 +80,7 @@ class SettingFragment : androidx.fragment.app.Fragment() {
                             view.text_refresh.text = preference.latestUpdate
                             Toast.makeText(context, "식단을 가져오는데 성공했습니다", Toast.LENGTH_LONG).show()
                         }
-                    }
-                    else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+                    } else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
                 }
             })
         }
