@@ -5,9 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.support.design.widget.BottomSheetDialog
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +31,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-class MenuFragment : Fragment() {
+class MenuFragment : androidx.fragment.app.Fragment() {
     @Inject
     lateinit var api: SikshaApi
     @Inject
@@ -112,7 +112,7 @@ class MenuFragment : Fragment() {
                             )
                         }
             }
-            list_menu.layoutManager = LinearLayoutManager(context)
+            list_menu.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
             adapter = MenuAdapter(getMenus,
                     infoButtonListener = { restaurant ->
                         infoSheet?.apply {

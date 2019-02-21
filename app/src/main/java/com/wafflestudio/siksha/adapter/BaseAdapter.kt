@@ -1,10 +1,10 @@
 package com.wafflestudio.siksha.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseAdapter<T, VH : BaseViewHolder<T>>(
         private val getItems: () -> List<T>
-) : RecyclerView.Adapter<VH>() {
+) : androidx.recyclerview.widget.RecyclerView.Adapter<VH>() {
     private var items: List<T> = getItems()
 
     fun refresh() {

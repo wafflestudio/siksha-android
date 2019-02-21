@@ -1,13 +1,13 @@
 package com.wafflestudio.siksha.view
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wafflestudio.siksha.R
 
-class SettingWrapperFragment : Fragment() {
+class SettingWrapperFragment : androidx.fragment.app.Fragment() {
 
     companion object {
         fun newInstance(): SettingWrapperFragment = SettingWrapperFragment()

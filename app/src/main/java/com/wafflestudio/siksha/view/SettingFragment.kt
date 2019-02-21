@@ -2,8 +2,8 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class SettingFragment : Fragment() {
+class SettingFragment : androidx.fragment.app.Fragment() {
 
     @Inject
     lateinit var preference: SikshaPreference
@@ -42,7 +42,7 @@ class SettingFragment : Fragment() {
         view.text_siksha_information.setOnClickListener {
             fragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_setting_view, SettingVersionFragment.newInstance())
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     ?.addToBackStack(null)
                     ?.commit()
         }
@@ -50,14 +50,14 @@ class SettingFragment : Fragment() {
         view.text_reorder.setOnClickListener {
             fragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_setting_view, SettingReorderMainFragment.newInstance())
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     ?.addToBackStack(null)
                     ?.commit()
         }
         view.text_reorder_favorite.setOnClickListener {
             fragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_setting_view, SettingReorderFavoriteFragment.newInstance())
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     ?.addToBackStack(null)
                     ?.commit()
         }

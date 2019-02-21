@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_setting_version.view.*
 import javax.inject.Inject
 
 
-class SettingVersionFragment : Fragment() {
+class SettingVersionFragment : androidx.fragment.app.Fragment() {
 
     @Inject
     lateinit var preference: SikshaPreference
@@ -40,10 +40,10 @@ class SettingVersionFragment : Fragment() {
         }
         view.text_siksha_version.text = version
         view.img_back.setOnClickListener {
-            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         view.text_back.setOnClickListener {
-            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         return view
     }

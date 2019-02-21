@@ -2,10 +2,10 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.util.Pair
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.core.util.Pair
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_setting_version.view.*
 import java.util.ArrayList
 import javax.inject.Inject
 
-open class SettingReorderMainFragment : Fragment() {
+open class SettingReorderMainFragment : androidx.fragment.app.Fragment() {
 
     @Inject
     lateinit var preference: SikshaPreference
@@ -117,16 +117,16 @@ open class SettingReorderMainFragment : Fragment() {
         mRefreshLayout.setOnRefreshListener { mRefreshLayout.postDelayed({ mRefreshLayout.isRefreshing = false }, 0) }
         setupListRecyclerView()
         view.img_back.setOnClickListener { _ ->
-            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         view.text_back.setOnClickListener { _ ->
-            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         return view
     }
 
     private fun setupListRecyclerView() {
-        mDragListView.setLayoutManager(LinearLayoutManager(context))
+        mDragListView.setLayoutManager(androidx.recyclerview.widget.LinearLayoutManager(context))
         val listAdapter = RestaurantAdapter(mItemArray ?: ArrayList(), R.layout.item_restaurant,
                 R.id.icon_drag, false)
         mDragListView.setAdapter(listAdapter, true)

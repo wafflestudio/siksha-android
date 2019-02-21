@@ -1,12 +1,12 @@
 package com.wafflestudio.siksha.view
 
 import android.content.Context
-import android.support.v4.view.ViewPager
+import androidx.viewpager.widget.ViewPager
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 
-class NonSwipeableViewPager : ViewPager {
+class NonSwipeableViewPager : androidx.viewpager.widget.ViewPager {
     constructor(context: Context) : super(context)
     constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
 

@@ -1,6 +1,6 @@
 package com.wafflestudio.siksha
 
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.runner.AndroidJUnit4
 import com.squareup.moshi.Moshi
 import com.wafflestudio.siksha.util.SikshaEncoder
 import org.junit.Assert

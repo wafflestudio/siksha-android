@@ -1,6 +1,6 @@
 package com.wafflestudio.siksha.adapter
 
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +34,7 @@ class MenuAdapter(
     ) : BaseViewHolder<Menu>(view) {
         override fun bind(data: Menu) {
             view.text_restaurant_name.text = data.restaurant.krName
-            view.list_meal.layoutManager = LinearLayoutManager(view.context)
+            view.list_meal.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.context)
             view.list_meal.adapter = MealAdapter({ data.meals }, data.restaurant, onMealClickListener)
             view.list_meal.isNestedScrollingEnabled = false
             if (data.restaurant.favorite) {
