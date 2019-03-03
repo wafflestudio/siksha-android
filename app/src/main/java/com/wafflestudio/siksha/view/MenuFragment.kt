@@ -165,6 +165,14 @@ class MenuFragment : Fragment() {
                                 Menu.Type.DINNER -> !preference.reviewedDinner
                             }
                             button_leave_score.isEnabled = scorable
+                            if(!scorable){
+                                if(!isToday){
+                                    button_leave_score.text = "오늘 메뉴만 평가 가능합니다."
+                                }
+                                else{
+                                    button_leave_score.text = "해당 시간대에 이미 평가하셨습니다."
+                                }
+                            }
                             rating_bar.visible = scorable
                             button_leave_score.setOnClickListener {
                                 val device = Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
