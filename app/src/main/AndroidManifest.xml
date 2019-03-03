@@ -7,9 +7,9 @@
     <application
         android:name=".SikshaApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/siksha_app_icn_sq"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/siksha_app_icn"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
