@@ -33,5 +33,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/text_setting_restaurant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_drag" />
+        app:srcCompat="@drawable/ic_drag_gray" />
 </android.support.constraint.ConstraintLayout>
