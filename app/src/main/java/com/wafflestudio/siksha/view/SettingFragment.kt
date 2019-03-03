@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.MenuResponse
@@ -64,14 +65,20 @@ class SettingFragment : Fragment() {
         view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
         view.img_check.setOnClickListener {
             var preBoolValue = preference.visibleNoMenu
-            preference.visibleNoMenu =!preBoolValue
+            preference.visibleNoMenu = !preBoolValue
             view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
         }
         view.text_refresh.text = preference.latestUpdate
         view.img_refresh.setOnClickListener {
+            view.img_refresh.isEnabled = false
+            val rotateAnimation = AnimationUtils.loadAnimation(context, R.anim.rotate)
+            view.img_refresh.startAnimation(rotateAnimation)
             api.fetchMenus().enqueue(object : Callback<MenuResponse> {
                 override fun onFailure(call: Call<MenuResponse>, t: Throwable) {
                     Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+                    rotateAnimation.cancel()
+                    rotateAnimation.reset()
+                    view.img_refresh.isEnabled = true
                 }
 
                 override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
@@ -82,8 +89,10 @@ class SettingFragment : Fragment() {
                             view.text_refresh.text = preference.latestUpdate
                             Toast.makeText(context, "식단을 가져오는데 성공했습니다", Toast.LENGTH_LONG).show()
                         }
-                    }
-                    else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+                    } else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+                    rotateAnimation.cancel()
+                    rotateAnimation.reset()
+                    view.img_refresh.isEnabled = true
                 }
             })
         }
