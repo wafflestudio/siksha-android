@@ -24,7 +24,7 @@ open class SettingReorderMainFragment : Fragment() {
     lateinit var preference: SikshaPreference
 
     private var mItemArray: ArrayList<Pair<Long, String>>? = null
-    lateinit var mDragListView: DragListView
+    private lateinit var mDragListView: DragListView
     lateinit var mRefreshLayout: MySwipeRefreshLayout
 
     open val onlyFavorites = false
@@ -57,13 +57,13 @@ open class SettingReorderMainFragment : Fragment() {
                 if (diff < 0) {
                     //get higher priority
                     if (onlyFavorites) {
-                        restaurantCodeList.forEachIndexed { index, code ->
+                        restaurantCodeList.forEachIndexed { _, code ->
                             val priority = preference.getFavoriteRestaurantPriority(code)
                             if (priority == fromPosition) preference.setFavoriteRestaurantPriority(code, toPosition)
                             else if (priority in toPosition..(fromPosition - 1)) preference.setFavoriteRestaurantPriority(code, priority + 1)
                         }
                     } else {
-                        restaurantCodeList.forEachIndexed { index, code ->
+                        restaurantCodeList.forEachIndexed { _, code ->
                             val priority = preference.getRestaurantPriority(code)
                             if (priority == fromPosition) preference.setRestaurantPriority(code, toPosition)
                             else if (priority in toPosition..(fromPosition - 1)) preference.setRestaurantPriority(code, priority + 1)
@@ -72,13 +72,13 @@ open class SettingReorderMainFragment : Fragment() {
                 } else if (diff > 0) {
                     //get lower priority
                     if (onlyFavorites) {
-                        restaurantCodeList.forEachIndexed { index, code ->
+                        restaurantCodeList.forEachIndexed { _, code ->
                             val priority = preference.getFavoriteRestaurantPriority(code)
                             if (priority == fromPosition) preference.setFavoriteRestaurantPriority(code, toPosition)
                             else if (priority in (fromPosition + 1)..toPosition) preference.setFavoriteRestaurantPriority(code, priority - 1)
                         }
                     } else {
-                        restaurantCodeList.forEachIndexed { index, code ->
+                        restaurantCodeList.forEachIndexed { _, code ->
                             val priority = preference.getRestaurantPriority(code)
                             if (priority == fromPosition) preference.setRestaurantPriority(code, toPosition)
                             else if (priority in (fromPosition + 1)..toPosition) preference.setRestaurantPriority(code, priority - 1)
@@ -89,13 +89,12 @@ open class SettingReorderMainFragment : Fragment() {
         })
         val codeList = preference.restaurantCodeList
                 .filter { !onlyFavorites || preference.favorite.contains(it) }
-                .sortedWith(object : Comparator<String> {
-                    override fun compare(p0: String, p1: String) =
-                            if (onlyFavorites) preference.getFavoriteRestaurantPriority(p0) -
-                                    preference.getFavoriteRestaurantPriority(p1)
-                            else
-                                preference.getRestaurantPriority(p0) -
-                                        preference.getRestaurantPriority(p1)
+                .sortedWith(Comparator { p0, p1 ->
+                    if (onlyFavorites) preference.getFavoriteRestaurantPriority(p0) -
+                        preference.getFavoriteRestaurantPriority(p1)
+                    else
+                        preference.getRestaurantPriority(p0) -
+                            preference.getRestaurantPriority(p1)
                 })
         mItemArray = ArrayList()
         if (onlyFavorites) preference.restaurantCodeList.forEachIndexed { index, code ->
@@ -112,10 +111,10 @@ open class SettingReorderMainFragment : Fragment() {
         mRefreshLayout.setScrollingView(mDragListView.recyclerView)
         mRefreshLayout.setOnRefreshListener { mRefreshLayout.postDelayed({ mRefreshLayout.isRefreshing = false }, 0) }
         setupListRecyclerView()
-        view.img_back.setOnClickListener { _ ->
+        view.img_back.setOnClickListener {
             fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
-        view.text_back.setOnClickListener { _ ->
+        view.text_back.setOnClickListener {
             fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         return view

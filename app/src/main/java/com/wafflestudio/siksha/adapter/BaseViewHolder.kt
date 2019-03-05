@@ -5,10 +5,10 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class BaseViewHolder<T>(protected val view: View)
-    : RecyclerView.ViewHolder(view) {
+  : RecyclerView.ViewHolder(view) {
 
-    protected val context: Context
-        get() = view.context
+  protected val context: Context
+    get() = view.context
 
-    abstract fun bind(data: T)
+  abstract fun bind(data: T)
 }
