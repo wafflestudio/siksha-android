@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
@@ -41,7 +42,7 @@ class SettingFragment : Fragment() {
         view.text_siksha_information.setOnClickListener {
             fragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_setting_view, SettingVersionFragment.newInstance())
-                    ?.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     ?.addToBackStack(null)
                     ?.commit()
         }
@@ -49,14 +50,14 @@ class SettingFragment : Fragment() {
         view.text_reorder.setOnClickListener {
             fragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_setting_view, SettingReorderMainFragment.newInstance())
-                    ?.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     ?.addToBackStack(null)
                     ?.commit()
         }
         view.text_reorder_favorite.setOnClickListener {
             fragmentManager?.beginTransaction()
                     ?.replace(R.id.fragment_setting_view, SettingReorderFavoriteFragment.newInstance())
-                    ?.setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     ?.addToBackStack(null)
                     ?.commit()
         }
@@ -75,8 +76,8 @@ class SettingFragment : Fragment() {
 
                 override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
                     if (response.isSuccessful) {
-                        response.body()?.let {
-                            preference.menuResponse = it
+                        response.body()?.let { body ->
+                            preference.menuResponse = body
                             preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
                             view.text_refresh.text = preference.latestUpdate
                             Toast.makeText(context, "식단을 가져오는데 성공했습니다", Toast.LENGTH_LONG).show()

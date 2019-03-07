@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha.view
 
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.wafflestudio.siksha.model.Menu
@@ -28,6 +29,6 @@ class MenuPagerAdapter(fragmentManager: FragmentManager, onlyFavorites: Boolean)
             MenuFragment.newInstance(false, Menu.Type.DINNER, onlyFavorites)
     )
 
-    override fun getItem(position: Int): androidx.fragment.app.Fragment = pages[position]
+    override fun getItem(position: Int): Fragment = pages[position]
     override fun getCount(): Int = pages.size
 }

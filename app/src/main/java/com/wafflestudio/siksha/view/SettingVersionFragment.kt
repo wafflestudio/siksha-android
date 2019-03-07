@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.preference.SikshaPreference
 import dagger.android.support.AndroidSupportInjection
@@ -38,10 +39,10 @@ class SettingVersionFragment : Fragment() {
         }
         view.text_siksha_version.text = version
         view.img_back.setOnClickListener {
-            fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         view.text_back.setOnClickListener {
-            fragmentManager?.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         return view
     }
