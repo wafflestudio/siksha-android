@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.RestaurantAdapter
 import com.wafflestudio.siksha.preference.SikshaPreference
@@ -121,7 +123,7 @@ open class SettingReorderMainFragment : Fragment() {
     }
 
     private fun setupListRecyclerView() {
-        mDragListView.setLayoutManager(androidx.recyclerview.widget.LinearLayoutManager(context))
+        mDragListView.setLayoutManager(LinearLayoutManager(context))
         val listAdapter = RestaurantAdapter(mItemArray ?: ArrayList(), R.layout.item_restaurant,
                 R.id.icon_drag, false)
         mDragListView.setAdapter(listAdapter, true)
