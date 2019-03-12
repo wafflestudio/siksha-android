@@ -1,20 +1,19 @@
 package com.wafflestudio.siksha.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.support.design.widget.BottomSheetDialog
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.MenuAdapter
 import com.wafflestudio.siksha.model.Menu
-import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.model.Review
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
@@ -27,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_menu.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import timber.log.Timber
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -40,9 +38,9 @@ class MenuFragment : Fragment() {
     @Inject
     lateinit var encoder: SikshaEncoder
 
-    var adapter: MenuAdapter? = null
-    var infoSheet: BottomSheetDialog? = null
-    var leaveScoreSheet: BottomSheetDialog? = null
+    private var adapter: MenuAdapter? = null
+    private var infoSheet: BottomSheetDialog? = null
+    private var leaveScoreSheet: BottomSheetDialog? = null
 
     companion object {
         const val EXTRA_IS_TODAY = "MENU_FRAGMENT_IS_TODAY"
@@ -70,7 +68,7 @@ class MenuFragment : Fragment() {
         adapter?.refresh()
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -78,6 +76,7 @@ class MenuFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             inflater.inflate(R.layout.fragment_menu, container, false)
 
+    @SuppressLint("InflateParams")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.let { activity ->
             infoSheet = BottomSheetDialog(activity).apply {
@@ -94,8 +93,17 @@ class MenuFragment : Fragment() {
         preference.menuResponse?.let { menuResponse ->
             val getMenus = {
                 (if (isToday) menuResponse.today else menuResponse.tomorrow).menus
+                        .asSequence()
                         .filter { it.type == menuType }
                         .filter { !onlyFavorites || preference.favorite.contains(it.restaurant.code) }
+                        .sortedWith(Comparator { p0, p1 ->
+                            if (onlyFavorites) preference.getFavoriteRestaurantPriority(p0.restaurant.code) -
+                                    preference.getFavoriteRestaurantPriority(p1.restaurant.code)
+                            else
+                                preference.getRestaurantPriority(p0.restaurant.code) -
+                                        preference.getRestaurantPriority(p1.restaurant.code)
+                        })
+                        .filter { preference.visibleNoMenu || it.meals.isNotEmpty() }
                         .map {
                             it.copy(
                                     restaurant = it.restaurant.copy(
@@ -103,8 +111,9 @@ class MenuFragment : Fragment() {
                                     )
                             )
                         }
+                        .toList()
             }
-            list_menu.layoutManager = LinearLayoutManager(context)
+            list_menu.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
             adapter = MenuAdapter(getMenus,
                     infoButtonListener = { restaurant ->
                         infoSheet?.apply {
@@ -113,17 +122,17 @@ class MenuFragment : Fragment() {
                             text_restaurant_breakfast_operating_hours.text = restaurant.hoursBreakfast.replace('-', '~')
                             text_restaurant_lunch_operating_hours.text = restaurant.hoursLunch.replace('-', '~')
                             text_restaurant_dinner_operating_hours.text = restaurant.hoursDinner.replace('-', '~')
-                            button_google_map.setOnClickListener { _ ->
+                            button_google_map.setOnClickListener {
                                 val googleUri = Uri.parse("https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}")
                                 val googleMapIntent = Intent(Intent.ACTION_VIEW, googleUri)
                                 startActivity(googleMapIntent)
                             }
-                            button_kakao_map.setOnClickListener { _ ->
+                            button_kakao_map.setOnClickListener {
                                 val kakaoUri = Uri.parse("daummaps://look?p=${restaurant.latitude},${restaurant.longitude}")
                                 val kakaoMapIntent = Intent(Intent.ACTION_VIEW, kakaoUri)
                                 startActivity(kakaoMapIntent)
                             }
-                            button_naver_map.setOnClickListener{ _ ->
+                            button_naver_map.setOnClickListener {
                                 val naverUri = Uri.parse("nmap://place?lat=${restaurant.latitude}&lng=${restaurant.longitude}&appname=com.wafflestudio.siksha")
                                 val naverMapIntent = Intent(Intent.ACTION_VIEW, naverUri)
                                 startActivity(naverMapIntent)

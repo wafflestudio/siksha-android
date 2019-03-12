@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+@Suppress("SpellCheckingInspection")
 @Module
 class PreferenceModule(private val prefKey: String) {
     @Provides

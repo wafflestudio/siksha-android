@@ -3,9 +3,9 @@ package com.wafflestudio.siksha.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
@@ -22,6 +22,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), HasSupportFragmentInjector {
+
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -30,9 +31,8 @@ class MainActivity : BaseActivity(), HasSupportFragmentInjector {
     companion object {
         private const val EXTRA_WAS_UPDATED = "MAIN_WAS_UPDATED"
 
-        fun createIntent(context: Context, wasUpdated: Boolean) = Intent(context, MainActivity::class.java).apply {
-            putExtra(EXTRA_WAS_UPDATED, wasUpdated)
-        }
+        fun createIntent(context: Context, wasUpdated: Boolean): Intent? =
+                Intent(context, MainActivity::class.java).putExtra(EXTRA_WAS_UPDATED, wasUpdated)
     }
 
     private val wasUpdated by lazy { intent.getBooleanExtra(EXTRA_WAS_UPDATED, false) }

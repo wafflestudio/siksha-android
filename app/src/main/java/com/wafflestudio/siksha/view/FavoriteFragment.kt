@@ -9,6 +9,7 @@ import com.wafflestudio.siksha.util.visible
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class FavoriteFragment : MainFragment() {
+
     companion object {
         fun newInstance(): FavoriteFragment = FavoriteFragment()
     }

@@ -2,12 +2,11 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayout
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.Menu
 import com.wafflestudio.siksha.preference.SikshaPreference
@@ -22,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
 
 open class MainFragment : Fragment(), HasSupportFragmentInjector {
+
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
@@ -54,7 +54,7 @@ open class MainFragment : Fragment(), HasSupportFragmentInjector {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
@@ -75,6 +75,11 @@ open class MainFragment : Fragment(), HasSupportFragmentInjector {
         }
         if (selectedDayIsTomorrow) index += 3
         view_pager.setCurrentItem(index, false)
+        when (index) {
+            0, 3 -> tab_item_breakfast.setImageResource(R.drawable.breakfast_s)
+            1, 4 -> tab_item_lunch.setImageResource(R.drawable.lunch_s)
+            2, 5 -> tab_item_dinner.setImageResource(R.drawable.dinner_s)
+        }
     }
 
     private fun initPager() {
@@ -86,7 +91,7 @@ open class MainFragment : Fragment(), HasSupportFragmentInjector {
         }
         adapter = MenuPagerAdapter(childFragmentManager, onlyFavorites)
         view_pager.adapter = adapter
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        view_pager.addOnPageChangeListener(object : androidx.viewpager.widget.ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) = Unit
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) = Unit
             override fun onPageSelected(position: Int) {

@@ -1,11 +1,13 @@
 package com.wafflestudio.siksha.view
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import com.wafflestudio.siksha.model.Menu
 
-class MenuPagerAdapter(fragmentManager: FragmentManager, onlyFavorites: Boolean) : FragmentPagerAdapter(fragmentManager) {
+class MenuPagerAdapter(fragmentManager: FragmentManager, onlyFavorites: Boolean)
+    : FragmentPagerAdapter(fragmentManager) {
+
     companion object {
         const val TODAY_INDEX = 0
         const val TOMORROW_INDEX = 1

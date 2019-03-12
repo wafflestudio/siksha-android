@@ -1,9 +1,10 @@
 package com.wafflestudio.siksha.util
 
 import com.wafflestudio.siksha.model.Menu
-import com.wafflestudio.siksha.model.Restaurant
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.regex.Pattern
 
 fun compareDate(date: String): Boolean {
