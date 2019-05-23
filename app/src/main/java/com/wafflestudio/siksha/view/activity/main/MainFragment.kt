@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.main
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,8 @@ import com.wafflestudio.siksha.preference.SikshaPreference
 import com.wafflestudio.siksha.util.compareDate
 import com.wafflestudio.siksha.util.formatDate
 import com.wafflestudio.siksha.util.getCurrentType
+import com.wafflestudio.siksha.view.activity.menu.MenuFragment
+import com.wafflestudio.siksha.view.adapter.MenuPagerAdapter
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.AndroidSupportInjection

@@ -1,9 +1,10 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.wafflestudio.siksha.model.Menu
+import com.wafflestudio.siksha.view.activity.menu.MenuFragment
 
 class MenuPagerAdapter(fragmentManager: FragmentManager, onlyFavorites: Boolean)
   : FragmentPagerAdapter(fragmentManager) {

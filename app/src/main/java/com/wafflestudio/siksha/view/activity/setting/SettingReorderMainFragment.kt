@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.setting
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.adapter.RestaurantAdapter
 import com.wafflestudio.siksha.preference.SikshaPreference
+import com.wafflestudio.siksha.view.custom.MySwipeRefreshLayout
 import com.woxthebox.draglistview.DragItem
 import com.woxthebox.draglistview.DragListView
 import dagger.android.support.AndroidSupportInjection

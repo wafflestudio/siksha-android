@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    tools:context=".view.MainActivity"
+    tools:context=".view.activity.main.MainActivity"
     >
 
-    <com.wafflestudio.siksha.view.NonSwipeableViewPager
+    <com.wafflestudio.siksha.view.custom.NonSwipeableViewPager
         android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"

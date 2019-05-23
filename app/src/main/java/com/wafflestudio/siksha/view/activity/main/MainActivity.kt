@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.main
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,9 @@ import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
+import com.wafflestudio.siksha.view.BaseActivity
+import com.wafflestudio.siksha.view.activity.favourite.FavoriteFragment
+import com.wafflestudio.siksha.view.adapter.MainPagerAdapter
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector

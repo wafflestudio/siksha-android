@@ -1,8 +1,11 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.wafflestudio.siksha.view.activity.favourite.FavoriteFragment
+import com.wafflestudio.siksha.view.activity.main.MainFragment
+import com.wafflestudio.siksha.view.activity.setting.SettingWrapperFragment
 
 class MainPagerAdapter(fragmentManager: FragmentManager)
   : FragmentPagerAdapter(fragmentManager) {

@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.favourite
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.wafflestudio.siksha.R
 import com.wafflestudio.siksha.util.visible
+import com.wafflestudio.siksha.view.activity.main.MainFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class FavoriteFragment : MainFragment() {

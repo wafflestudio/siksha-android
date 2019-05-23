@@ -1,7 +1,7 @@
 package com.wafflestudio.siksha.di
 
-import com.wafflestudio.siksha.view.MainActivity
-import com.wafflestudio.siksha.view.SplashActivity
+import com.wafflestudio.siksha.view.activity.main.MainActivity
+import com.wafflestudio.siksha.view.activity.splash.SplashActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

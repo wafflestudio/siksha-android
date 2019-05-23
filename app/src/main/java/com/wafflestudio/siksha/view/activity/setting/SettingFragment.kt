@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.setting
 
 import android.content.Context
 import android.os.Bundle

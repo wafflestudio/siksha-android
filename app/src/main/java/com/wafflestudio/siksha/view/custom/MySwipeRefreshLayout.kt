@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.custom
 
 import android.content.Context
 import android.util.AttributeSet

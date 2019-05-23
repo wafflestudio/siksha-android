@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.setting
 
 class SettingReorderFavoriteFragment : SettingReorderMainFragment() {
 

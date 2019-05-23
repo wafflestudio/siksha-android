@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.menu
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,6 +19,7 @@ import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
 import com.wafflestudio.siksha.util.SikshaEncoder
 import com.wafflestudio.siksha.util.visible
+import com.wafflestudio.siksha.view.activity.favourite.FavoriteFragment
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.bottom_restaurant_info.*
 import kotlinx.android.synthetic.main.bottom_score.*

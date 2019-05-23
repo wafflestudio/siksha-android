@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.splash
 
 import android.os.Bundle
 import android.widget.Toast
@@ -6,6 +6,8 @@ import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
 import com.wafflestudio.siksha.util.compareDate
+import com.wafflestudio.siksha.view.BaseActivity
+import com.wafflestudio.siksha.view.activity.main.MainActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

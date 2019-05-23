@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha.view
+package com.wafflestudio.siksha.view.activity.setting
 
 import android.os.Bundle
 import android.view.LayoutInflater
