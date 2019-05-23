@@ -11,22 +11,22 @@ import timber.log.Timber
 @Suppress("SpellCheckingInspection")
 class SikshaApplication : DaggerApplication() {
 
-    private val appComponent = DaggerAppComponent.builder()
-        .application(this)
-        .preferenceModule(PreferenceModule(BuildConfig.PREF_KEY))
-        .encoderModule(EncoderModule(BuildConfig.JWT_SECRET))
-        .build()
+  private val appComponent = DaggerAppComponent.builder()
+      .application(this)
+      .preferenceModule(PreferenceModule(BuildConfig.PREF_KEY))
+      .encoderModule(EncoderModule(BuildConfig.JWT_SECRET))
+      .build()
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return appComponent
+  override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+    return appComponent
+  }
+
+  override fun onCreate() {
+    super.onCreate()
+
+    if (BuildConfig.DEBUG) {
+      Timber.plant(Timber.DebugTree())
+      Stetho.initializeWithDefaults(this)
     }
-
-    override fun onCreate() {
-        super.onCreate()
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-            Stetho.initializeWithDefaults(this)
-        }
-    }
+  }
 }

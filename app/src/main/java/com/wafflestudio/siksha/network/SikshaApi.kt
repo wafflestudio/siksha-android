@@ -10,9 +10,9 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface SikshaApi {
-    @GET("api/v1/snu/menus/")
-    fun fetchMenus(): Call<MenuResponse>
+  @GET("api/v1/snu/menus/")
+  fun fetchMenus(): Call<MenuResponse>
 
-    @POST("api/v1/snu/review/")
-    fun leaveReview(@Body encoded: String): Call<Review>
+  @POST("api/v1/snu/review/")
+  fun leaveReview(@Body encoded: String): Call<Review>
 }

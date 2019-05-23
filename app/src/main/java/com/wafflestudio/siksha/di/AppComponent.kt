@@ -11,25 +11,25 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
-    AndroidInjectionModule::class,
-    AndroidSupportInjectionModule::class,
-    ActivityModule::class,
-    AppModule::class,
-    NetworkModule::class,
-    PreferenceModule::class,
-    EncoderModule::class])
+  AndroidInjectionModule::class,
+  AndroidSupportInjectionModule::class,
+  ActivityModule::class,
+  AppModule::class,
+  NetworkModule::class,
+  PreferenceModule::class,
+  EncoderModule::class])
 interface AppComponent : AndroidInjector<SikshaApplication> {
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(application: Application): Builder
+  @Component.Builder
+  interface Builder {
+    @BindsInstance
+    fun application(application: Application): Builder
 
-        fun preferenceModule(preferenceModule: PreferenceModule): Builder
+    fun preferenceModule(preferenceModule: PreferenceModule): Builder
 
-        fun encoderModule(encoderModule: EncoderModule): Builder
+    fun encoderModule(encoderModule: EncoderModule): Builder
 
-        fun build(): AppComponent
-    }
+    fun build(): AppComponent
+  }
 
-    override fun inject(instance: SikshaApplication)
+  override fun inject(instance: SikshaApplication)
 }

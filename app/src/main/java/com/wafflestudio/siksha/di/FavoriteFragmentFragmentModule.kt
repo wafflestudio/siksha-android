@@ -7,6 +7,6 @@ import dagger.android.ContributesAndroidInjector
 @Suppress("unused")
 @Module
 abstract class FavoriteFragmentFragmentModule {
-    @ContributesAndroidInjector
-    abstract fun menuFragment(): MenuFragment
+  @ContributesAndroidInjector
+  abstract fun menuFragment(): MenuFragment
 }

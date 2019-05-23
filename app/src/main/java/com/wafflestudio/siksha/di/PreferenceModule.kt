@@ -10,15 +10,15 @@ import javax.inject.Singleton
 @Suppress("SpellCheckingInspection")
 @Module
 class PreferenceModule(private val prefKey: String) {
-    @Provides
-    @Singleton
-    fun provideMoshi(): Moshi {
-        return Moshi.Builder().build()
-    }
+  @Provides
+  @Singleton
+  fun provideMoshi(): Moshi {
+    return Moshi.Builder().build()
+  }
 
-    @Provides
-    @Singleton
-    fun provideSharedPreference(context: Context): SharedPreferences {
-        return context.getSharedPreferences(prefKey, Context.MODE_PRIVATE)
-    }
+  @Provides
+  @Singleton
+  fun provideSharedPreference(context: Context): SharedPreferences {
+    return context.getSharedPreferences(prefKey, Context.MODE_PRIVATE)
+  }
 }

@@ -7,8 +7,8 @@ import dagger.Provides
 
 @Module
 class AppModule {
-    @Provides
-    fun provideContext(application: Application): Context {
-        return application
-    }
+  @Provides
+  fun provideContext(application: Application): Context {
+    return application
+  }
 }

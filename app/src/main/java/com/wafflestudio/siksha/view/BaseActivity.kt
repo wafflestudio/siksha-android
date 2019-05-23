@@ -7,8 +7,8 @@ import androidx.core.content.ContextCompat
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    val context: Context
-        get() = this
+  val context: Context
+    get() = this
 
-    fun color(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+  fun color(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 }

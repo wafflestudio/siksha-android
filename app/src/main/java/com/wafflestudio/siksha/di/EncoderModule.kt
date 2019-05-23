@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Suppress("SpellCheckingInspection")
 @Module
 class EncoderModule(private val secret: String) {
-    @Provides
-    @Singleton
-    fun provideSikshaEncoder(moshi: Moshi): SikshaEncoder = SikshaEncoder(secret, moshi)
+  @Provides
+  @Singleton
+  fun provideSikshaEncoder(moshi: Moshi): SikshaEncoder = SikshaEncoder(secret, moshi)
 }

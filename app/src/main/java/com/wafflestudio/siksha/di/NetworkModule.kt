@@ -13,28 +13,28 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule {
-    @Provides
-    @Singleton
-    fun provideHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-                .addNetworkInterceptor(StethoInterceptor())
-                .build()
-    }
+  @Provides
+  @Singleton
+  fun provideHttpClient(): OkHttpClient {
+    return OkHttpClient.Builder()
+        .addNetworkInterceptor(StethoInterceptor())
+        .build()
+  }
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl(BuildConfig.BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
-    }
+  @Provides
+  @Singleton
+  fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    return Retrofit.Builder()
+        .client(okHttpClient)
+        .baseUrl(BuildConfig.BASE_URL)
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build()
+  }
 
-    @Provides
-    @Singleton
-    fun provideService(retrofit: Retrofit): SikshaApi {
-        return retrofit.create(SikshaApi::class.java)
-    }
+  @Provides
+  @Singleton
+  fun provideService(retrofit: Retrofit): SikshaApi {
+    return retrofit.create(SikshaApi::class.java)
+  }
 }

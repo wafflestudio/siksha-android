@@ -17,33 +17,33 @@ import javax.inject.Inject
 
 class SettingVersionFragment : Fragment() {
 
-    @Inject
-    lateinit var preference: SikshaPreference
+  @Inject
+  lateinit var preference: SikshaPreference
 
-    companion object {
-        fun newInstance(): SettingVersionFragment = SettingVersionFragment()
-    }
+  companion object {
+    fun newInstance(): SettingVersionFragment = SettingVersionFragment()
+  }
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
+  override fun onAttach(context: Context) {
+    AndroidSupportInjection.inject(this)
+    super.onAttach(context)
+  }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_setting_version, container, false)
-        var version: String? = "Ver. "
-        try {
-            val packageInfo = context?.packageManager?.getPackageInfo(context?.packageName, 0)
-            version += packageInfo?.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-        }
-        view.text_siksha_version.text = version
-        view.img_back.setOnClickListener {
-            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
-        view.text_back.setOnClickListener {
-            fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
-        return view
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    val view = inflater.inflate(R.layout.fragment_setting_version, container, false)
+    var version: String? = "Ver. "
+    try {
+      val packageInfo = context?.packageManager?.getPackageInfo(context?.packageName, 0)
+      version += packageInfo?.versionName
+    } catch (e: PackageManager.NameNotFoundException) {
     }
+    view.text_siksha_version.text = version
+    view.img_back.setOnClickListener {
+      fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+    view.text_back.setOnClickListener {
+      fragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+    }
+    return view
+  }
 }

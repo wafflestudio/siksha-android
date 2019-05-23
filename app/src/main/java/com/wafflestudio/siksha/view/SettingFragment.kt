@@ -23,69 +23,69 @@ import javax.inject.Inject
 
 class SettingFragment : Fragment() {
 
-    @Inject
-    lateinit var preference: SikshaPreference
-    @Inject
-    lateinit var api: SikshaApi
+  @Inject
+  lateinit var preference: SikshaPreference
+  @Inject
+  lateinit var api: SikshaApi
 
-    companion object {
-        fun newInstance(): SettingFragment = SettingFragment()
+  companion object {
+    fun newInstance(): SettingFragment = SettingFragment()
+  }
+
+  override fun onAttach(context: Context) {
+    AndroidSupportInjection.inject(this)
+    super.onAttach(context)
+  }
+
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    val view = inflater.inflate(R.layout.fragment_setting, container, false)
+    view.text_siksha_information.setOnClickListener {
+      fragmentManager?.beginTransaction()
+          ?.replace(R.id.fragment_setting_view, SettingVersionFragment.newInstance())
+          ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+          ?.addToBackStack(null)
+          ?.commit()
     }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
+    view.img_new.visibility = View.INVISIBLE
+    view.text_reorder.setOnClickListener {
+      fragmentManager?.beginTransaction()
+          ?.replace(R.id.fragment_setting_view, SettingReorderMainFragment.newInstance())
+          ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+          ?.addToBackStack(null)
+          ?.commit()
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_setting, container, false)
-        view.text_siksha_information.setOnClickListener {
-            fragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragment_setting_view, SettingVersionFragment.newInstance())
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    ?.addToBackStack(null)
-                    ?.commit()
-        }
-        view.img_new.visibility = View.INVISIBLE
-        view.text_reorder.setOnClickListener {
-            fragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragment_setting_view, SettingReorderMainFragment.newInstance())
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    ?.addToBackStack(null)
-                    ?.commit()
-        }
-        view.text_reorder_favorite.setOnClickListener {
-            fragmentManager?.beginTransaction()
-                    ?.replace(R.id.fragment_setting_view, SettingReorderFavoriteFragment.newInstance())
-                    ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    ?.addToBackStack(null)
-                    ?.commit()
-        }
-        view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
-        view.img_check.setOnClickListener {
-            val preBoolValue = preference.visibleNoMenu
-            preference.visibleNoMenu = !preBoolValue
-            view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
-        }
-        view.text_refresh.text = preference.latestUpdate
-        view.img_refresh.setOnClickListener {
-            api.fetchMenus().enqueue(object : Callback<MenuResponse> {
-                override fun onFailure(call: Call<MenuResponse>, t: Throwable) {
-                    Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
-                    if (response.isSuccessful) {
-                        response.body()?.let { body ->
-                            preference.menuResponse = body
-                            preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
-                            view.text_refresh.text = preference.latestUpdate
-                            Toast.makeText(context, "식단을 가져오는데 성공했습니다", Toast.LENGTH_LONG).show()
-                        }
-                    } else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
-                }
-            })
-        }
-        return view
+    view.text_reorder_favorite.setOnClickListener {
+      fragmentManager?.beginTransaction()
+          ?.replace(R.id.fragment_setting_view, SettingReorderFavoriteFragment.newInstance())
+          ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+          ?.addToBackStack(null)
+          ?.commit()
     }
+    view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
+    view.img_check.setOnClickListener {
+      val preBoolValue = preference.visibleNoMenu
+      preference.visibleNoMenu = !preBoolValue
+      view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
+    }
+    view.text_refresh.text = preference.latestUpdate
+    view.img_refresh.setOnClickListener {
+      api.fetchMenus().enqueue(object : Callback<MenuResponse> {
+        override fun onFailure(call: Call<MenuResponse>, t: Throwable) {
+          Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+        }
+
+        override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
+          if (response.isSuccessful) {
+            response.body()?.let { body ->
+              preference.menuResponse = body
+              preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
+              view.text_refresh.text = preference.latestUpdate
+              Toast.makeText(context, "식단을 가져오는데 성공했습니다", Toast.LENGTH_LONG).show()
+            }
+          } else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+        }
+      })
+    }
+    return view
+  }
 }

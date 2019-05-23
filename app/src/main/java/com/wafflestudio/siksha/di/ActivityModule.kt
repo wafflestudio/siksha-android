@@ -9,9 +9,9 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityModule {
 
-    @ContributesAndroidInjector
-    abstract fun contributeSplashActivity(): SplashActivity
+  @ContributesAndroidInjector
+  abstract fun contributeSplashActivity(): SplashActivity
 
-    @ContributesAndroidInjector(modules = [MainActivityFragmentModule::class])
-    abstract fun contributeMainActivity(): MainActivity
+  @ContributesAndroidInjector(modules = [MainActivityFragmentModule::class])
+  abstract fun contributeMainActivity(): MainActivity
 }

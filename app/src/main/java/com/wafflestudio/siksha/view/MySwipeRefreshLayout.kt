@@ -7,15 +7,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class MySwipeRefreshLayout : SwipeRefreshLayout {
 
-    private var mScrollingView: View? = null
+  private var mScrollingView: View? = null
 
-    constructor(context: Context) : super(context)
+  constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+  constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    override fun canChildScrollUp(): Boolean = mScrollingView?.canScrollVertically(-1) ?: false
+  override fun canChildScrollUp(): Boolean = mScrollingView?.canScrollVertically(-1) ?: false
 
-    fun setScrollingView(scrollingView: View) {
-        mScrollingView = scrollingView
-    }
+  fun setScrollingView(scrollingView: View) {
+    mScrollingView = scrollingView
+  }
 }

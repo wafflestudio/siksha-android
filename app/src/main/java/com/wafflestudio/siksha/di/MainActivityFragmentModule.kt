@@ -12,21 +12,21 @@ import dagger.android.ContributesAndroidInjector
 @Suppress("unused")
 @Module
 abstract class MainActivityFragmentModule {
-    @ContributesAndroidInjector(modules = [MainFragmentFragmentModule::class])
-    abstract fun mainFragment(): MainFragment
+  @ContributesAndroidInjector(modules = [MainFragmentFragmentModule::class])
+  abstract fun mainFragment(): MainFragment
 
-    @ContributesAndroidInjector(modules = [FavoriteFragmentFragmentModule::class])
-    abstract fun favoriteFragment(): FavoriteFragment
+  @ContributesAndroidInjector(modules = [FavoriteFragmentFragmentModule::class])
+  abstract fun favoriteFragment(): FavoriteFragment
 
-    @ContributesAndroidInjector
-    abstract fun settingFragment(): SettingFragment
+  @ContributesAndroidInjector
+  abstract fun settingFragment(): SettingFragment
 
-    @ContributesAndroidInjector
-    abstract fun settingVersionFragment(): SettingVersionFragment
+  @ContributesAndroidInjector
+  abstract fun settingVersionFragment(): SettingVersionFragment
 
-    @ContributesAndroidInjector
-    abstract fun settingReorderFavoriteFragment(): SettingReorderFavoriteFragment
+  @ContributesAndroidInjector
+  abstract fun settingReorderFavoriteFragment(): SettingReorderFavoriteFragment
 
-    @ContributesAndroidInjector
-    abstract fun settingReorderMainFragment(): SettingReorderMainFragment
+  @ContributesAndroidInjector
+  abstract fun settingReorderMainFragment(): SettingReorderMainFragment
 }

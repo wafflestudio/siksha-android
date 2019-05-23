@@ -17,39 +17,39 @@ import javax.inject.Inject
 
 class SplashActivity : BaseActivity() {
 
-    @Inject
-    lateinit var api: SikshaApi
-    @Inject
-    lateinit var preference: SikshaPreference
+  @Inject
+  lateinit var api: SikshaApi
+  @Inject
+  lateinit var preference: SikshaPreference
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-        super.onCreate(savedInstanceState)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    AndroidInjection.inject(this)
+    super.onCreate(savedInstanceState)
 
-        val needsUpdate = preference.menuResponse?.let { !compareDate(it.today.date) } ?: true
+    val needsUpdate = preference.menuResponse?.let { !compareDate(it.today.date) } ?: true
 
-        if (needsUpdate) {
-            Timber.d("Updating menus in splash activity")
-            api.fetchMenus().enqueue(object : Callback<MenuResponse> {
-                override fun onFailure(call: Call<MenuResponse>, t: Throwable) {
-                    Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
-                    finish()
-                }
-
-                override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-                            preference.menuResponse = it
-                            preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
-                            startActivity(MainActivity.createIntent(context, true))
-                            finish()
-                        }
-                    } else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
-                }
-            })
-        } else {
-            startActivity(MainActivity.createIntent(context, false))
-            finish()
+    if (needsUpdate) {
+      Timber.d("Updating menus in splash activity")
+      api.fetchMenus().enqueue(object : Callback<MenuResponse> {
+        override fun onFailure(call: Call<MenuResponse>, t: Throwable) {
+          Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+          finish()
         }
+
+        override fun onResponse(call: Call<MenuResponse>, response: Response<MenuResponse>) {
+          if (response.isSuccessful) {
+            response.body()?.let {
+              preference.menuResponse = it
+              preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
+              startActivity(MainActivity.createIntent(context, true))
+              finish()
+            }
+          } else Toast.makeText(context, "식단을 가져오는데 실패했습니다", Toast.LENGTH_LONG).show()
+        }
+      })
+    } else {
+      startActivity(MainActivity.createIntent(context, false))
+      finish()
     }
+  }
 }
