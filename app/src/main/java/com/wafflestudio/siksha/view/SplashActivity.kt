@@ -6,7 +6,6 @@ import com.wafflestudio.siksha.model.MenuResponse
 import com.wafflestudio.siksha.network.SikshaApi
 import com.wafflestudio.siksha.preference.SikshaPreference
 import com.wafflestudio.siksha.util.compareDate
-import dagger.android.AndroidInjection
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,7 +22,6 @@ class SplashActivity : BaseActivity() {
   lateinit var preference: SikshaPreference
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    AndroidInjection.inject(this)
     super.onCreate(savedInstanceState)
 
     val needsUpdate = preference.menuResponse?.let { !compareDate(it.today.date) } ?: true

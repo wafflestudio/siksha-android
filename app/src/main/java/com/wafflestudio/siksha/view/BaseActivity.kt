@@ -2,10 +2,10 @@ package com.wafflestudio.siksha.view
 
 import android.content.Context
 import androidx.annotation.ColorRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import dagger.android.DaggerActivity
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : DaggerActivity() {
 
   val context: Context
     get() = this
