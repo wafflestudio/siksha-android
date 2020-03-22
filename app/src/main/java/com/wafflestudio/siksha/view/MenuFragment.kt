@@ -93,7 +93,9 @@ class MenuFragment : Fragment() {
         preference.menuResponse?.let { menuResponse ->
             val getMenus = {
                 (if (isToday) menuResponse.today else menuResponse.tomorrow).menus
+                        .asSequence()
                         .filter { it.type == menuType }
+
                         .filter { !onlyFavorites || preference.favorite.contains(it.restaurant.code) }
                         .sortedWith(object : Comparator<Menu> {
                             override fun compare(p0: Menu, p1: Menu) =
@@ -111,6 +113,7 @@ class MenuFragment : Fragment() {
                                     )
                             )
                         }
+                        .toList()
             }
             list_menu.layoutManager = LinearLayoutManager(context)
             adapter = MenuAdapter(getMenus,
@@ -165,11 +168,10 @@ class MenuFragment : Fragment() {
                                 Menu.Type.DINNER -> !preference.reviewedDinner
                             }
                             button_leave_score.isEnabled = scorable
-                            if(!scorable){
-                                if(!isToday){
+                            if (!scorable) {
+                                if (!isToday) {
                                     button_leave_score.text = "오늘 메뉴만 평가 가능합니다."
-                                }
-                                else{
+                                } else {
                                     button_leave_score.text = "해당 시간대에 이미 평가하셨습니다."
                                 }
                             }
@@ -185,6 +187,7 @@ class MenuFragment : Fragment() {
                                         if (response.isSuccessful) {
                                             response.body()?.let { review ->
                                                 preference.registerReview(meal, menuType, review)
+                                                Toast.makeText(this@MenuFragment.context, "리뷰가 등록되었습니다.\n몇 분 뒤 리뷰가 반영됩니다", Toast.LENGTH_SHORT).show()
                                                 hide()
                                                 refresh()
                                             }
@@ -198,5 +201,11 @@ class MenuFragment : Fragment() {
             )
             list_menu.adapter = adapter
         }
+    }
+
+    override fun onStop() {
+        infoSheet?.dismiss()
+        leaveScoreSheet?.dismiss()
+        super.onStop()
     }
 }

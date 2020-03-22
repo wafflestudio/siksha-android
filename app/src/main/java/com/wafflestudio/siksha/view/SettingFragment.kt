@@ -69,7 +69,7 @@ class SettingFragment : Fragment() {
             view.img_check.setImageResource(if (preference.visibleNoMenu) R.drawable.check else R.drawable.check_s)
         }
         view.text_refresh.text = preference.latestUpdate
-        view.img_refresh.setOnClickListener {
+        view.text_reload.setOnClickListener {
             view.img_refresh.isEnabled = false
             val rotateAnimation = AnimationUtils.loadAnimation(context, R.anim.rotate)
             view.img_refresh.startAnimation(rotateAnimation)

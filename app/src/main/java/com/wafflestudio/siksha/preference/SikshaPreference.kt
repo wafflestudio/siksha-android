@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha.preference
 
 import android.content.SharedPreferences
+import android.util.Log
 import com.squareup.moshi.Moshi
 import com.wafflestudio.siksha.model.*
 import timber.log.Timber
