@@ -39,7 +39,7 @@ class SplashActivity : BaseActivity() {
                     if (response.isSuccessful) {
                         response.body()?.let {
                             preference.menuResponse = it
-                            preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
+                            preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ", Locale.KOREA).format(Date())
                             startActivity(MainActivity.createIntent(context, true))
                             finish()
                         }

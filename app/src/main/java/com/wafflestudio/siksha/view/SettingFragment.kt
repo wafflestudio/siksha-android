@@ -85,7 +85,7 @@ class SettingFragment : Fragment() {
                     if (response.isSuccessful) {
                         response.body()?.let {
                             preference.menuResponse = it
-                            preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ").format(Date())
+                            preference.latestUpdate = SimpleDateFormat("MM. dd. HH:mm ", Locale.KOREA).format(Date())
                             view.text_refresh.text = preference.latestUpdate
                             Toast.makeText(context, "식단을 가져오는데 성공했습니다", Toast.LENGTH_LONG).show()
                         }

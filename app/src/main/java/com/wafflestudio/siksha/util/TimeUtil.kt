@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun isVacation(today: Date): Boolean {
-    val sdf = SimpleDateFormat("yyyy/MM/dd")
+    val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.KOREA)
     val vacationInterval = arrayListOf(Pair(sdf.parse("2020/03/22"), sdf.parse("2020/03/23")))
     vacationInterval.forEach {
         if (it.first.before(today) && it.second.after(today)) {
@@ -16,6 +16,7 @@ fun isVacation(today: Date): Boolean {
     return false
 }
 
+fun getFormattedToday(): String = SimpleDateFormat("yyyy/MM/dd", Locale.KOREA).format(Date())
 
 fun compareDate(date: String): Boolean {
     return SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time) == date

@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import com.squareup.moshi.Moshi
 import com.wafflestudio.siksha.model.*
+import com.wafflestudio.siksha.util.getFormattedToday
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -146,9 +147,9 @@ class SikshaPreference @Inject constructor(
         get() = getParcelable<Reviews>(PrefKey.REVIEWS)?.reviews ?: listOf()
         private set(value) = setParcelable(PrefKey.REVIEWS, Reviews(value))
 
-    val reviewedBreakfast: Boolean get() = getBoolean(PrefKey.REVIEWED_BREAKFAST, false)
-    val reviewedLunch: Boolean get() = getBoolean(PrefKey.REVIEWED_LUNCH, false)
-    val reviewedDinner: Boolean get() = getBoolean(PrefKey.REVIEWED_DINNER, false)
+    val reviewedBreakfast: Boolean get() = getString(PrefKey.REVIEWED_BREAKFAST, "") == getFormattedToday()
+    val reviewedLunch: Boolean get() = getString(PrefKey.REVIEWED_LUNCH, "") == getFormattedToday()
+    val reviewedDinner: Boolean get() = getString(PrefKey.REVIEWED_DINNER, "") == getFormattedToday()
 
     fun registerReview(meal: Meal, type: Menu.Type, review: Review) {
         menuResponse?.let { m ->
@@ -179,9 +180,9 @@ class SikshaPreference @Inject constructor(
         }
         reviews = reviews.toMutableList().plus(review)
         when (type) {
-            Menu.Type.BREAKFAST -> setBoolean(PrefKey.REVIEWED_BREAKFAST, true)
-            Menu.Type.LUNCH -> setBoolean(PrefKey.REVIEWED_LUNCH, true)
-            Menu.Type.DINNER -> setBoolean(PrefKey.REVIEWED_DINNER, true)
+            Menu.Type.BREAKFAST -> setString(PrefKey.REVIEWED_BREAKFAST, getFormattedToday())
+            Menu.Type.LUNCH -> setString(PrefKey.REVIEWED_LUNCH, getFormattedToday())
+            Menu.Type.DINNER -> setString(PrefKey.REVIEWED_DINNER, getFormattedToday())
         }
     }
 
