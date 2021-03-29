@@ -53,8 +53,11 @@ jobs:
           cat << EOF > ./app/src/main/res/values/secrets.xml
           ${{ secrets.secrets_xml_test }}
           EOF
-      - name: Setup mock google-services.json
-        run: cp ./app/mock-google-services.json ./app/google-services.json
+      - name: Setup google-services.json
+        run:  |
+          cat << EOF > ./app/google-services.json
+          ${{ secrets.google_services_json }}
+          EOF
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
       - name: Run test
