@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SettingItem">
+        <attr name="itemText" format="string" />
+        <attr name="showNewIcon" format="boolean" />
+        <attr name="showArrowIcon" format="boolean" />
+        <attr name="showCheckbox" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="RatingStarsView">
+        <attr name="starSize" format="enum">
+            <enum name="small" value="0" />
+            <enum name="medium" value="1" />
+            <enum name="large" value="2" />
+        </attr>
+        <attr name="dragEnabled" format="boolean" />
+    </declare-styleable>
+</resources>

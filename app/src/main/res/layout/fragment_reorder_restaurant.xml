@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray_300"
+    android:orientation="vertical"
+    tools:context=".ui.main.setting.reorder.ReorderRestaurantFragment">
+
+    <LinearLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_left_arrow" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:ellipsize="marquee"
+            android:fontFamily="@font/nanum_square_bold"
+            android:paddingVertical="16dp"
+            android:singleLine="true"
+            android:text="@string/setting_reorder_restaurant_title"
+            android:textColor="@color/gray_900"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginVertical="22dp"
+        android:fontFamily="@font/nanum_square_regular"
+        android:text="@string/setting_reorder_restaurant_label"
+        android:textColor="@color/gray_500"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/empty_order"
+        android:layout_gravity="center"
+        android:fontFamily="@font/nanum_square_regular"
+        android:text="@string/reorder_no_restaurant"
+        android:textColor="@color/gray_900"
+        android:textSize="12sp" />
+
+    <com.woxthebox.draglistview.DragListView
+        android:id="@+id/order_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
+
+</LinearLayout>

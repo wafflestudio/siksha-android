@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.MainFragment"
+        android:label="MainFragment">
+
+        <action
+            android:id="@+id/action_mainFragment_to_menuDetailFragment"
+            app:destination="@id/menuDetailFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+
+        <action
+            android:id="@+id/action_mainFragment_to_reorderRestaurantFragment"
+            app:destination="@id/reorderRestaurantFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_sikshaInfoFragment"
+            app:destination="@id/sikshaInfoFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/menuDetailFragment"
+        android:name="com.wafflestudio.siksha2.ui.menu_detail.MenuDetailFragment"
+        android:label="fragment_menu_detail"
+        tools:layout="@layout/fragment_menu_detail">
+        <argument
+            android:name="menuId"
+            app:argType="long" />
+        <argument
+            android:name="isTodayMenu"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_menuDetailFragment_to_leaveReviewFragment"
+            app:destination="@id/leaveReviewFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/leaveReviewFragment"
+        android:name="com.wafflestudio.siksha2.ui.menu_detail.LeaveReviewFragment"
+        android:label="fragment_leave_review"
+        tools:layout="@layout/fragment_leave_review" />
+
+    <fragment
+        android:id="@+id/sikshaInfoFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.info.SikshaInfoFragment"
+        android:label="fragment_siksha_info"
+        tools:layout="@layout/fragment_siksha_info" />
+
+    <fragment
+        android:id="@+id/reorderRestaurantFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.reorder.ReorderRestaurantFragment"
+        android:label="fragment_reorder_restaurant"
+        tools:layout="@layout/fragment_reorder_restaurant">
+        <argument
+            android:name="orderArg"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
+</navigation>

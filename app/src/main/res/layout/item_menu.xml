@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/price_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/frame_price_text"
+        android:fontFamily="@font/nanum_square_regular"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        tools:text="3000" />
+
+
+    <TextView
+        android:id="@+id/menu_title_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:fontFamily="@font/nanum_square_regular"
+        android:maxLines="1"
+        android:textColor="@color/gray_700"
+        android:textSize="14sp"
+        tools:text="버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기" />
+
+    <ImageView
+        android:id="@+id/icon_no_fork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/content_no_fork"
+        android:src="@drawable/ic_no_fork" />
+
+    <TextView
+        android:id="@+id/menu_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/nanum_square_regular"
+        android:gravity="end"
+        android:textColor="@color/orange_700"
+        android:textSize="13sp"
+        tools:text="4.7" />
+
+</LinearLayout>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">식샤</string>
+    <string name="splash_login_kakao_button">카카오로 로그인하기</string>
+    <string name="splash_login_google_button">구글로 로그인하기</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="restaurant_info_location_label">식당 위치</string>
+    <string name="restaurant_info_operation_time_label">영업 시간</string>
+    <string name="menu_group_empty">해당 시간대의 메뉴가 없습니다.</string>
+    <string name="setting_siksha">식샤 설정</string>
+    <string name="setting_siksha_info">식샤 정보</string>
+    <string name="setting_restaurant">식당 설정</string>
+    <string name="setting_reorder_restaurant_title">식단 순서 변경</string>
+    <string name="setting_reorder_favorite_title">즐겨찾기 순서 변경</string>
+    <string name="setting_reorder_restaurant_label">우측 손잡이를 드래그하여 순서를 바꿔보세요.</string>
+    <string name="menu_detail_review_label">메뉴평가</string>
+    <string name="leave_review_title">리뷰 남기기</string>
+    <string name="leave_review_description">식단 한 줄 평을 함께 남겨보세요!</string>
+    <string name="leave_review_button">평가하기</string>
+    <string name="menu_detail_no_review">아직 해당 메뉴의 리뷰가 없습니다.\n리뷰를 남겨보세요</string>
+    <string name="reorder_no_restaurant">순서를 지정할 식당이 없습니다.</string>
+    <string name="favorite_empty">즐겨찾기에 추가된 식당이 없습니다.\n식당 탭에서 별을 눌러 추가해보세요.</string>
+    <string name="common_network_error">네트워크 연결이 불안정합니다.</string>
+    <string name="leave_review_hint">식단 평가</string>
+    <string name="leave_review_text_count">%1$d 자 / %2$d 자</string>
+    <string name="common_back">돌아가기</string>
+    <string name="common_continue">진행하기</string>
+    <string name="date_fallback">…</string>
+    <string name="daily_restaurant_no_menus">해당 시간대의 메뉴가 없습니다.</string>
+    <string name="menu_detail_leave_review_button">나의 평가 남기기</string>
+    <string name="content_no_fork">no fork</string>
+</resources>

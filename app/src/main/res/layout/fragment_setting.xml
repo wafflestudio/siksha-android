@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="80dp"
+    tools:background="@color/light_gray_300"
+    tools:context=".ui.main.setting.SettingFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:fontFamily="@font/nanum_square_bold"
+        android:text="@string/setting_siksha"
+        android:textColor="@color/gray_900"
+        android:textSize="18sp" />
+
+    <com.wafflestudio.siksha2.components.SettingItemRow
+        android:id="@+id/info_row"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:itemText="식샤 정보" />
+
+    <com.wafflestudio.siksha2.components.SettingItemRow
+        android:id="@+id/logout_row"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:itemText="앱 로그아웃"
+        app:showArrowIcon="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/nanum_square_bold"
+        android:text="@string/setting_restaurant"
+        android:textColor="@color/gray_900"
+        android:textSize="18sp" />
+
+    <com.wafflestudio.siksha2.components.SettingItemRow
+        android:id="@+id/order_restaurant_row"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:itemText="식당 리스트 순서 변경" />
+
+    <com.wafflestudio.siksha2.components.SettingItemRow
+        android:id="@+id/order_favorite_row"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:itemText="즐겨찾기 식당 리스트 순서 변경" />
+
+    <com.wafflestudio.siksha2.components.SettingItemRow
+        android:id="@+id/show_empty_check_row"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:itemText="메뉴 없는 식당 숨기기"
+        app:showArrowIcon="false"
+        app:showCheckbox="true" />
+
+</LinearLayout>
