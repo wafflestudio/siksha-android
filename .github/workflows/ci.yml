@@ -49,15 +49,15 @@ jobs:
       - name: Clean build
         run: ./gradlew clean
       - name: Setup Secrets
-        run:  |
-          cat << EOF > ./app/src/main/res/values/secrets.xml
-          ${{ secrets.secrets_xml_test }}
-          EOF
+        run:  'echo "$SECRETS_XML" > ./app/src/main/res/values/secrets.xml'
+        shell: bash
+        env:
+          - SECRETS_XML: ${{ secrets.secrets_xml }}
       - name: Setup google-services.json
-        run:  |
-          cat << EOF > ./app/google-services.json
-          ${{ secrets.google_services_json }}
-          EOF
+        run:  'echo "$GOOGLE_SERVICES_JSON" > ./app/google-services.json'
+        shell: bash
+        env:
+          - GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
       - name: Run test
