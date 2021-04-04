@@ -103,6 +103,7 @@
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:hint="@string/leave_review_hint"
+                android:textColorHint="@color/gray_500"
                 android:maxLength="150"
                 android:minHeight="150dp"
                 android:padding="12dp"
