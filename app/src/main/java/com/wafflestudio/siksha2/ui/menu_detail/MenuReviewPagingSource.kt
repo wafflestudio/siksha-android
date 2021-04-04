@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
 import okio.IOException
+import retrofit2.HttpException
 
 class MenuReviewPagingSource(
     private val api: SikshaApi,
@@ -24,9 +25,11 @@ class MenuReviewPagingSource(
                 prevKey,
                 nextKey
             )
-        } catch (e: IOException) {
+        } catch (e: HttpException) {
             // TODO: 마지막 페이지 일 때 다음페이지 항상 404 뜨면서 페이징이 종료됨
-            // 기능상 문제는 없지만 api 변경 요청하기
+            // 기능상 문제는 없지만 api에서 다음 페이지 유무 확인할 수 있도록 변경 요청하기
+            return LoadResult.Error(e)
+        } catch (e: IOException) {
             return LoadResult.Error(e)
         }
     }

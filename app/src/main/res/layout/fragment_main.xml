@@ -39,6 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:elevation="4dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:tabIconTint="#00ffffff"
         app:tabIconTintMode="add"
