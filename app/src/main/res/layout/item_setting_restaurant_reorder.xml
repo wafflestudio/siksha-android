@@ -18,7 +18,7 @@
         android:fontFamily="@font/nanum_square_bold"
         android:maxLines="1"
         android:textColor="@color/gray_700"
-        android:textSize="15sp"
+        android:textSize="15dp"
         tools:text="학생회관 식당" />
 
     <ImageView

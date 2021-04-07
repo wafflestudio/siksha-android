@@ -27,7 +27,7 @@
         android:fontFamily="@font/nanum_square_regular"
         android:maxLines="1"
         android:textColor="@color/gray_700"
-        android:textSize="14sp"
+        android:textSize="14dp"
         tools:text="75-1동 전망대 3층, 4층" />
 
     <TextView
@@ -41,7 +41,7 @@
         android:maxLines="1"
         android:text="@string/hello_blank_fragment"
         android:textColor="@color/gray_900"
-        android:textSize="24sp"
+        android:textSize="24dp"
         tools:text="농생대 3식당" />
 
     <View
@@ -61,7 +61,7 @@
         android:maxLines="1"
         android:text="@string/restaurant_info_location_label"
         android:textColor="@color/gray_700"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
@@ -88,7 +88,7 @@
             android:maxLines="1"
             android:text="@string/restaurant_info_operation_time_label"
             android:textColor="@color/gray_700"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
                 android:textColor="@color/menu_time_color"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 android:visibility="gone"
                 tools:text="주중" />
 
@@ -118,7 +118,7 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:textColor="@color/menu_time_color"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 android:translationX="-1dp"
                 android:visibility="gone"
                 tools:text="주중" />
@@ -132,7 +132,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="4dp"
                 android:textColor="@color/menu_time_color"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 android:translationX="-2dp"
                 android:visibility="gone"
                 tools:text="주중" />
@@ -149,7 +149,7 @@
         android:layout_marginTop="14dp"
         android:fontFamily="@font/nanum_square_regular"
         android:textColor="@color/gray_700"
-        android:textSize="14sp"
+        android:textSize="14dp"
         tools:text="오전 11:30 ~ 오후 1:30\n오후 5:30 ~ 오후 7:30" />
 
 </LinearLayout>
