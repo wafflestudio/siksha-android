@@ -31,7 +31,7 @@
             android:fontFamily="@font/nanum_square_bold"
             android:text="@string/leave_review_title"
             android:textColor="@color/gray_900"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
     </LinearLayout>
 
@@ -53,7 +53,7 @@
                 android:layout_marginTop="60dp"
                 android:fontFamily="@font/nanum_square_bold"
                 android:textColor="@color/gray_900"
-                android:textSize="22sp"
+                android:textSize="22dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보제육보" />
@@ -88,7 +88,7 @@
                 android:fontFamily="@font/nanum_square_bold"
                 android:text="@string/leave_review_description"
                 android:textColor="@color/gray_700"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 app:layout_constraintStart_toEndOf="@+id/imageView3"
                 app:layout_constraintTop_toBottomOf="@+id/rating" />
 
@@ -108,7 +108,7 @@
                 android:minHeight="150dp"
                 android:padding="12dp"
                 android:textColor="@color/gray_900"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -120,7 +120,7 @@
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/nanum_square_light"
                 android:textColor="@color/gray_700"
-                android:textSize="12sp"
+                android:textSize="12dp"
                 app:layout_constraintEnd_toEndOf="@+id/comment_edit"
                 app:layout_constraintTop_toBottomOf="@+id/comment_edit"
                 tools:text="10 자 / 150 자" />
@@ -141,7 +141,7 @@
         android:paddingVertical="20dp"
         android:text="@string/leave_review_button"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </LinearLayout>
