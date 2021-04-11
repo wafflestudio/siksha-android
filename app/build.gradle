@@ -34,8 +34,8 @@ android {
         applicationId "com.wafflestudio.siksha2"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 1000002
-        versionName "1.0.2"
+        versionCode 1000003
+        versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
