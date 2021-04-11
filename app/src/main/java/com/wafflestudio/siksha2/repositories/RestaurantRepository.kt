@@ -55,11 +55,12 @@ class RestaurantRepository @Inject constructor(
         list: List<RestaurantInfo>,
         order: List<Long>
     ): List<RestaurantInfo> {
+        val sortedList = list.sortedByDescending { it.id }
         val result = mutableListOf<RestaurantInfo>()
         order.forEach { id ->
-            list.find { it.id == id }?.let { result.add(it) }
+            sortedList.find { it.id == id }?.let { result.add(it) }
         }
-        result.addAll(list.filter { (it.id in order).not() })
+        result.addAll(sortedList.filter { (it.id in order).not() })
         return result
     }
 }
