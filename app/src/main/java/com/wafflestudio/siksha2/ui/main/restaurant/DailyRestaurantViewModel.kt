@@ -107,10 +107,11 @@ class DailyRestaurantViewModel @Inject constructor(
             .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
             .combine(if (showOnlyFavorite) favoriteRestaurantOrder else restaurantOrder) { menuGroups, (order) ->
                 val result = mutableListOf<MenuGroup>()
+                val sortedMenuGroups = menuGroups.sortedByDescending { it.id }
                 order.forEach {
-                    menuGroups.find { item -> item.id == it }?.also { result.add(it) }
+                    sortedMenuGroups.find { item -> item.id == it }?.also { result.add(it) }
                 }
-                result.addAll(menuGroups.filterNot { item -> item.id in order })
+                result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
                 result
             }
     }

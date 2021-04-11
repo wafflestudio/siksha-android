@@ -36,7 +36,7 @@
                 android:text="@string/date_fallback"
                 android:textAlignment="center"
                 android:textColor="@color/gray_500"
-                android:textSize="14sp"
+                android:textSize="14dp"
                 tools:text="03.13. 수" />
 
             <FrameLayout
@@ -53,7 +53,7 @@
                     android:text="..."
                     android:textAlignment="center"
                     android:textColor="@color/orange_500"
-                    android:textSize="14sp"
+                    android:textSize="14dp"
                     tools:text="03.13. 수" />
 
                 <View
@@ -75,7 +75,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/gray_500"
 
-                android:textSize="14sp"
+                android:textSize="14dp"
                 tools:text="03.13. 수" />
 
         </LinearLayout>

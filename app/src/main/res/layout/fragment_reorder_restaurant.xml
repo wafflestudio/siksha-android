@@ -35,7 +35,7 @@
             android:singleLine="true"
             android:text="@string/setting_reorder_restaurant_title"
             android:textColor="@color/gray_900"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
     </LinearLayout>
 
@@ -47,7 +47,7 @@
         android:fontFamily="@font/nanum_square_regular"
         android:text="@string/setting_reorder_restaurant_label"
         android:textColor="@color/gray_500"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:textStyle="normal" />
 
     <TextView
@@ -58,7 +58,7 @@
         android:fontFamily="@font/nanum_square_regular"
         android:text="@string/reorder_no_restaurant"
         android:textColor="@color/gray_900"
-        android:textSize="12sp" />
+        android:textSize="12dp" />
 
     <com.woxthebox.draglistview.DragListView
         android:id="@+id/order_list"

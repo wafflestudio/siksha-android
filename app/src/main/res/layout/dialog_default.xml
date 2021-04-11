@@ -37,7 +37,7 @@
             android:text="@string/common_back"
             android:textAlignment="center"
             android:textColor="@color/dim_gray"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/positive"
@@ -51,7 +51,7 @@
             android:text="@string/common_continue"
             android:textAlignment="center"
             android:textColor="@color/menu_time_color"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
     </LinearLayout>
 
 

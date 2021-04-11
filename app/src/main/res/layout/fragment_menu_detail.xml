@@ -36,7 +36,7 @@
             android:paddingVertical="16dp"
             android:singleLine="true"
             android:textColor="@color/gray_900"
-            android:textSize="22sp"
+            android:textSize="22dp"
             tools:text="제육보쌈막국수" />
 
     </LinearLayout>
@@ -60,7 +60,7 @@
             android:layout_marginTop="36dp"
             android:fontFamily="@font/nanum_square_extra_bold"
             android:textColor="@color/gray_900"
-            android:textSize="22sp"
+            android:textSize="22dp"
             tools:text="4.5점" />
 
         <com.wafflestudio.siksha2.components.RatingStarsView
@@ -78,7 +78,7 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/nanum_square_bold"
             android:textColor="@color/gray_500"
-            android:textSize="12sp"
+            android:textSize="12dp"
             tools:text="누적 평가 123개" />
 
         <TextView
@@ -93,7 +93,7 @@
             android:paddingVertical="8dp"
             android:text="@string/menu_detail_leave_review_button"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14dp" />
 
 
         <TextView
@@ -104,7 +104,7 @@
             android:fontFamily="@font/nanum_square_extra_bold"
             android:text="@string/menu_detail_review_label"
             android:textColor="@color/gray_900"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/empty_list"

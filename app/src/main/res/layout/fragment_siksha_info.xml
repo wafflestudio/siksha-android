@@ -36,7 +36,7 @@
             android:singleLine="true"
             android:text="@string/setting_siksha_info"
             android:textColor="@color/gray_900"
-            android:textSize="22sp" />
+            android:textSize="22dp" />
 
     </LinearLayout>
 

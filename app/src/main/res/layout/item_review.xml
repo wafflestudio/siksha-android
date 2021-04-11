@@ -15,7 +15,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="10dp"
         android:textColor="@color/gray_900"
-        android:textSize="12sp"
+        android:textSize="12dp"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="그냥저냥 먹을만해요" />
 
@@ -27,7 +27,7 @@
         android:layout_marginBottom="2dp"
         android:fontFamily="@font/nanum_square_bold"
         android:textColor="@color/gray_500"
-        android:textSize="12sp"
+        android:textSize="12dp"
         app:layout_constraintBottom_toTopOf="@+id/stars"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="2020년 1월 1일" />
