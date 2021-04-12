@@ -42,13 +42,14 @@ class UserStatusManager @Inject constructor(
         clearUserToken()
     }
 
+    // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)
     fun logoutUser(context: Context) {
         when (sikshaPrefObjects.oAuthProvider.getValue()) {
             OAuthProvider.KAKAO -> {
                 UserApiClient.instance.logout { error ->
                     error?.let {
                         Timber.d(it)
-                        context.showToast("로그아웃 실패!")
+                        context.showToast(context.getString(R.string.logout_failed))
                         return@logout
                     }
                     clearUserToken()
@@ -63,7 +64,7 @@ class UserStatusManager @Inject constructor(
                 val googleSignInClient = GoogleSignIn.getClient(context, gso)
                 googleSignInClient.signOut().addOnCompleteListener {
                     if (it.isCanceled)
-                        context.showToast("로그아웃 실패!")
+                        context.showToast(context.getString(R.string.logout_failed))
                     else
                         clearUserToken()
                 }

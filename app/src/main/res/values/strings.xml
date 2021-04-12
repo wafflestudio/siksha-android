@@ -28,4 +28,5 @@
     <string name="daily_restaurant_no_menus">해당 시간대의 메뉴가 없습니다.</string>
     <string name="menu_detail_leave_review_button">나의 평가 남기기</string>
     <string name="content_no_fork">no fork</string>
+    <string name="logout_failed">로그아웃에 실패하였습니다.</string>
 </resources>
