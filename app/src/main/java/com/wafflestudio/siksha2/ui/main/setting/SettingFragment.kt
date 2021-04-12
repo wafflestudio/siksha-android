@@ -66,7 +66,7 @@ class SettingFragment : Fragment() {
             dialog.setListener(
                 object : SikshaDialogListener {
                     override fun onPositive() {
-                        userStatusManager.logoutUser()
+                        userStatusManager.logoutUser(requireContext())
                         activity?.finish()
                     }
 

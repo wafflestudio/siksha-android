@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.preferences
 
 import android.content.SharedPreferences
 import com.wafflestudio.siksha2.models.RestaurantOrder
+import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.preferences.serializer.Serializer
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -39,5 +40,14 @@ class SikshaPrefObjects @Inject constructor(
             sharedPreferences,
             serializer,
             String::class.java
+        )
+
+    val oAuthProvider: Preference<OAuthProvider> =
+        Preference(
+            "oAuthProvider",
+            OAuthProvider.KAKAO,
+            sharedPreferences,
+            serializer,
+            OAuthProvider::class.java
         )
 }
