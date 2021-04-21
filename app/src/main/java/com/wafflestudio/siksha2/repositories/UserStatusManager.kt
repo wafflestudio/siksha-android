@@ -37,22 +37,50 @@ class UserStatusManager @Inject constructor(
         }
     }
 
-    suspend fun deleteUser() {
+    suspend fun deleteUser(context: Context, withdrawCallback: () -> Unit?) {
         sikshaApi.deleteAccount()
-        clearUserToken()
+
+        when (sikshaPrefObjects.oAuthProvider.getValue()) {
+            OAuthProvider.KAKAO -> {
+                UserApiClient.instance.unlink { error ->
+                    if (error != null) {
+                        Timber.d(error)
+                        context.showToast(context.getString(R.string.signout_failed))
+                    } else {
+                        clearUserToken()
+                        withdrawCallback.invoke()
+                    }
+                }
+            }
+            OAuthProvider.GOOGLE -> {
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestScopes(Scope(Scopes.EMAIL))
+                    .requestIdToken(context.getString(R.string.google_server_client_id))
+                    .requestEmail()
+                    .build()
+                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                googleSignInClient.revokeAccess().addOnCompleteListener {
+                    if (it.isCanceled) {
+                        context.showToast(context.getString(R.string.signout_failed))
+                    } else {
+                        clearUserToken()
+                        withdrawCallback.invoke()
+                    }
+                }
+            }
+        }
     }
 
     // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)
-    fun logoutUser(context: Context) {
+    fun logoutUser(context: Context, logoutCallback: () -> Unit?) {
         when (sikshaPrefObjects.oAuthProvider.getValue()) {
             OAuthProvider.KAKAO -> {
                 UserApiClient.instance.logout { error ->
-                    error?.let {
-                        Timber.d(it)
-                        context.showToast(context.getString(R.string.logout_failed))
-                        return@logout
-                    }
+                    if (error != null)
+                        Timber.d(error)
+
                     clearUserToken()
+                    logoutCallback.invoke()
                 }
             }
             OAuthProvider.GOOGLE -> {
@@ -63,10 +91,12 @@ class UserStatusManager @Inject constructor(
                     .build()
                 val googleSignInClient = GoogleSignIn.getClient(context, gso)
                 googleSignInClient.signOut().addOnCompleteListener {
-                    if (it.isCanceled)
+                    if (it.isCanceled) {
                         context.showToast(context.getString(R.string.logout_failed))
-                    else
+                    } else {
                         clearUserToken()
+                        logoutCallback.invoke()
+                    }
                 }
             }
         }
