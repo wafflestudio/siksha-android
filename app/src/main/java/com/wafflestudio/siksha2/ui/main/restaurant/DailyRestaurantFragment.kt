@@ -19,7 +19,6 @@ import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
 
