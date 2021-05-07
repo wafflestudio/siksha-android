@@ -29,7 +29,7 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
             iconNoFork.visibleOrGone(noMeat)
 
             priceText.text = menu.price?.toString() ?: "-"
-            menuScore.text = StringFormatter.formatScore(menu.score)
+            rateText.rate = menu.score ?: 0.0
             root.setOnClickListener {
                 onMenuItemClickListener.invoke(menu.id)
             }

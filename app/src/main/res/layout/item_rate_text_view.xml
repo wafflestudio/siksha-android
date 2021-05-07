@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:orientation="horizontal"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <TextView
+        android:id="@+id/menu_score"
+        android:layout_width="48dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="6dp"
+        android:fontFamily="@font/nanum_square_regular"
+        android:background="@drawable/frame_rate_text_red"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        tools:text="4.7" />
+
+</merge>
