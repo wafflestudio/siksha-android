@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMenuBinding
 import com.wafflestudio.siksha2.models.Menu
-import com.wafflestudio.siksha2.utils.StringFormatter
 import com.wafflestudio.siksha2.utils.visibleOrGone
 
 class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
@@ -29,7 +28,7 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
             iconNoFork.visibleOrGone(noMeat)
 
             priceText.text = menu.price?.toString() ?: "-"
-            menuScore.text = StringFormatter.formatScore(menu.score)
+            rateText.rate = menu.score ?: 0.0
             root.setOnClickListener {
                 onMenuItemClickListener.invoke(menu.id)
             }

@@ -8,21 +8,11 @@
     android:paddingVertical="4dp">
 
     <TextView
-        android:id="@+id/price_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/frame_price_text"
-        android:fontFamily="@font/nanum_square_regular"
-        android:textColor="@color/white"
-        android:textSize="13dp"
-        tools:text="3000" />
-
-
-    <TextView
         android:id="@+id/menu_title_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
+        android:layout_marginHorizontal="6dp"
+        android:paddingEnd="6dp"
         android:layout_weight="1"
         android:ellipsize="end"
         android:fontFamily="@font/nanum_square_regular"
@@ -36,17 +26,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/content_no_fork"
+        android:layout_marginEnd="5dp"
         android:src="@drawable/ic_no_fork" />
 
     <TextView
-        android:id="@+id/menu_score"
+        android:id="@+id/price_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginHorizontal="8dp"
         android:fontFamily="@font/nanum_square_regular"
-        android:gravity="end"
-        android:textColor="@color/orange_700"
-        android:textSize="13dp"
-        tools:text="4.7" />
+        android:textColor="@color/black"
+        android:textSize="14dp"
+        tools:text="3000" />
+
+    <com.wafflestudio.siksha2.components.RateTextView
+        android:id="@+id/rate_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
 </LinearLayout>
