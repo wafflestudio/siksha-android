@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMenuBinding
 import com.wafflestudio.siksha2.models.Menu
-import com.wafflestudio.siksha2.utils.StringFormatter
 import com.wafflestudio.siksha2.utils.visibleOrGone
 
 class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :

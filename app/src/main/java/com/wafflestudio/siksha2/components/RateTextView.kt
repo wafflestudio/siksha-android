@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemRateTextViewBinding
 import com.wafflestudio.siksha2.utils.StringFormatter
@@ -13,16 +12,16 @@ class RateTextView : LinearLayout {
 
     private val binding = ItemRateTextViewBinding.inflate(LayoutInflater.from(context), this)
     var rate: Double = 0.0
-    set(value) {
-        if (field == value) return
-        if (value == 0.0) {
-            setTextNull()
-        } else {
-            setText(value)
-        }
+        set(value) {
+            if (field == value) return
+            if (value == 0.0) {
+                setTextNull()
+            } else {
+                setText(value)
+            }
 
-        field = value
-    }
+            field = value
+        }
 
     constructor(context: Context) : super(context) {
         init()
