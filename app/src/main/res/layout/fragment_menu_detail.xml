@@ -12,10 +12,11 @@
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
+        android:layout_marginVertical="0dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/orange_normal"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -24,20 +25,31 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
             android:paddingVertical="16dp"
-            android:src="@drawable/ic_left_arrow" />
+            android:src="@drawable/ic_back_arrow" />
 
         <TextView
             android:id="@+id/menu_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
             android:ellipsize="marquee"
             android:fontFamily="@font/nanum_square_bold"
-            android:paddingVertical="16dp"
+            android:paddingVertical="12dp"
             android:singleLine="true"
-            android:textColor="@color/gray_900"
-            android:textSize="22dp"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textAlignment="center"
             tools:text="제육보쌈막국수" />
+
+        <!-- textview 양옆 마진 맞추기용 -->
+        <ImageView
+            android:id="@+id/back_button_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow"
+            android:visibility="invisible" />
 
     </LinearLayout>
 
