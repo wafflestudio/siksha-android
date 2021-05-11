@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalTime
 
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
@@ -124,6 +125,12 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
+
+        when (LocalTime.now().hour) {
+            in 0..9 -> vm.setMealsOfDayFilter(MealsOfDay.BR)
+            in 9..13 -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+            else -> vm.setMealsOfDayFilter(MealsOfDay.DN)
+        }
     }
 
     companion object {
