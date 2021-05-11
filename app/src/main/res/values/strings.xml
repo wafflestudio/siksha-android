@@ -15,7 +15,7 @@
     <string name="setting_reorder_favorite_title">즐겨찾기 순서 변경</string>
     <string name="setting_reorder_restaurant_label">우측 손잡이를 드래그하여 순서를 바꿔보세요.</string>
     <string name="menu_detail_review_label">메뉴평가</string>
-    <string name="leave_review_title">리뷰 남기기</string>
+    <string name="leave_review_title">나의 평가 남기기</string>
     <string name="leave_review_description">식단 한 줄 평을 함께 남겨보세요!</string>
     <string name="leave_review_button">평가하기</string>
     <string name="menu_detail_no_review">아직 해당 메뉴의 리뷰가 없습니다.\n리뷰를 남겨보세요</string>
