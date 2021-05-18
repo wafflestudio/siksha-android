@@ -30,4 +30,7 @@
     <string name="daily_restaurant_no_menus">해당 시간대의 메뉴가 없습니다.</string>
     <string name="menu_detail_leave_review_button">나의 평가 남기기</string>
     <string name="content_no_fork">no fork</string>
+    <string name="operating_hour_weekdays">주중</string>
+    <string name="operating_hour_saturday">토요일</string>
+    <string name="operating_hour_holiday">휴일</string>
 </resources>
