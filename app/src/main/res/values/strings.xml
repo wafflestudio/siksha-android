@@ -17,7 +17,11 @@
     <string name="menu_detail_review_label">메뉴평가</string>
     <string name="leave_review_title">나의 평가 남기기</string>
     <string name="leave_review_description">식단 한 줄 평을 함께 남겨보세요!</string>
-    <string name="leave_review_button">평가하기</string>
+    <string name="leave_review_button">평가 등록</string>
+    <string name="leave_review_star_description">별점을 선택해주세요.</string>
+    <string name="leave_review_how_about_with_bottom">은 어땠나요?</string>
+    <string name="leave_review_how_about_wo_bottom">는 어땠나요?</string>
+    <string name="leave_review_quote">\'</string>
     <string name="menu_detail_no_review">아직 해당 메뉴의 리뷰가 없습니다.\n리뷰를 남겨보세요</string>
     <string name="reorder_no_restaurant">순서를 지정할 식당이 없습니다.</string>
     <string name="favorite_empty">즐겨찾기에 추가된 식당이 없습니다.\n식당 탭에서 별을 눌러 추가해보세요.</string>

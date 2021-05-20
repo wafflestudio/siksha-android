@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.OnRatingChangeListener
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
+import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
 import okio.IOException
@@ -35,7 +36,14 @@ class LeaveReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         vm.menu.observe(viewLifecycleOwner) { menu ->
-            binding.menuTitle.text = menu?.nameKr
+            menu?.let {
+                binding.menuTitle.text = it.nameKr
+                binding.menuTitleHowAbout.text = when (it.nameKr?.hasFinalConsInKr()) {
+                    true -> getString(R.string.leave_review_how_about_with_bottom)
+                    false -> getString(R.string.leave_review_how_about_wo_bottom)
+                    else -> getString(R.string.leave_review_how_about_wo_bottom)
+                }
+            }
         }
 
         vm.commentHint.observe(viewLifecycleOwner) { hint ->
@@ -58,10 +66,12 @@ class LeaveReviewFragment : Fragment() {
         }
 
         vm.getRecommendationReview(binding.rating.rating.toLong())
+        binding.rateText.text = binding.rating.rating.toLong().toString()
         binding.rating.setOnRatingChangeListener(
             object : OnRatingChangeListener {
                 override fun onChange(rating: Float) {
                     vm.getRecommendationReview(rating.toLong())
+                    binding.rateText.text = rating.toLong().toString()
                 }
             }
         )
