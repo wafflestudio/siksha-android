@@ -29,6 +29,10 @@ class MenuDetailViewModel @Inject constructor(
     val networkResultState: LiveData<State>
         get() = _networkResultState
 
+    private val _reviewDistribution = MutableLiveData<List<Long>>()
+    val reviewDistribution: LiveData<List<Long>>
+        get() = _reviewDistribution
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -49,6 +53,12 @@ class MenuDetailViewModel @Inject constructor(
         // TODO: LruCache 로 캐싱해놓고 꺼내쓰기
         viewModelScope.launch {
             _commentHint.value = menuRepository.getReviewRecommendationComments(score)
+        }
+    }
+
+    fun refreshReviewDistribution(menuId: Long) {
+        viewModelScope.launch {
+            _reviewDistribution.value = menuRepository.getReviewDistribution(menuId)
         }
     }
 

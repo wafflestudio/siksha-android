@@ -67,6 +67,10 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchRecommendationReviewComments(score).comment
     }
 
+    suspend fun getReviewDistribution(menuId: Long): List<Long> {
+        return sikshaApi.fetchReviewDistribution(menuId).dist
+    }
+
     companion object {
         const val CACHING_DATE_LIMITATION_DAYS = 30L
     }
