@@ -14,6 +14,7 @@ import com.wafflestudio.siksha2.utils.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -61,6 +62,10 @@ class MenuRepository @Inject constructor(
 
     suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): LeaveReviewResult {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
+    }
+
+    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: String, images: List<MultipartBody.Part>): LeaveReviewResult {
+        return sikshaApi.leaveMenuReviewImages(menuId, score, comment, images)
     }
 
     suspend fun getReviewRecommendationComments(score: Long): String {

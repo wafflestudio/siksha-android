@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
+import okhttp3.MultipartBody
 import retrofit2.http.*
 import java.time.LocalDate
 
@@ -27,6 +28,15 @@ interface SikshaApi {
 
     @POST("reviews/")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): LeaveReviewResult
+
+    @Multipart
+    @POST("reviews/images/")
+    suspend fun leaveMenuReviewImages(
+        @Part("menu_id") menuId: Long,
+        @Part("score") score: Long,
+        @Part("comment") comment: String,
+        @Part images: List<MultipartBody.Part>
+    ): LeaveReviewResult
 
     @POST("auth/login/kakao")
     suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): LoginOAuthResult
