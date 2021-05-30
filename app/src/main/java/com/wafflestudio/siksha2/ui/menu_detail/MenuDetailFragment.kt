@@ -27,7 +27,7 @@ class MenuDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentMenuDetailBinding
     private val args: MenuDetailFragmentArgs by navArgs()
-    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter()
+    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter(false)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,6 +59,7 @@ class MenuDetailFragment : Fragment() {
         }
 
         vm.refreshMenu(args.menuId)
+        vm.refreshImages(args.menuId)
         vm.refreshReviewDistribution(args.menuId)
 
         vm.networkResultState.observe(viewLifecycleOwner) {
@@ -91,6 +92,25 @@ class MenuDetailFragment : Fragment() {
             }
         }
 
+        vm.imageCount.observe(viewLifecycleOwner) { imageCount ->
+            binding.layoutPhotoReview.visibleOrGone(imageCount > 0)
+            if (imageCount > 3) {
+                binding.reviewImageView3.showMorePhotos(imageCount - 3)
+            }
+        }
+
+        vm.imageUrlList.observe(viewLifecycleOwner) { imageUrlList ->
+            val imageReviewList = listOf(binding.reviewImageView1, binding.reviewImageView2, binding.reviewImageView3)
+            for (i in 0 until 3) {
+                if (i < imageUrlList.size) {
+                    imageReviewList[i].run {
+                        setImage(imageUrlList[i])
+                        visibleOrGone(true)
+                    }
+                }
+            }
+        }
+
         lifecycleScope.launch {
             vm.getReviews(args.menuId).collectLatest {
                 reviewsAdapter.submitData(it)
@@ -99,6 +119,16 @@ class MenuDetailFragment : Fragment() {
 
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.layoutCollectPhotoReviews.setOnClickListener {
+            val action = MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(args.menuId)
+            findNavController().navigate(action)
+        }
+
+        binding.layoutCollectReviews.setOnClickListener {
+            val action = MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(args.menuId)
+            findNavController().navigate(action)
         }
 
         binding.leaveReviewButton.setOnClickListener {

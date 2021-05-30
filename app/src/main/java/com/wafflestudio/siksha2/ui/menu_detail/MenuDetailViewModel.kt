@@ -18,6 +18,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,13 +45,42 @@ class MenuDetailViewModel @Inject constructor(
     val uriList: LiveData<List<Uri>>
         get() = _uriList
 
+    private val _imageUrlList = MutableLiveData<List<String>>()
+    val imageUrlList: LiveData<List<String>>
+        get() = _imageUrlList
+
+    private val _imageCount = MutableLiveData<Long>()
+    val imageCount: LiveData<Long>
+        get() = _imageCount
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
             try {
                 _menu.value = menuRepository.getMenuById(menuId)
                 _networkResultState.value = State.SUCCESS
-            } catch (e: Exception) {
+            } catch (e: IOException) {
+                _networkResultState.value = State.FAILED
+            }
+        }
+    }
+
+    fun refreshImages(menuId: Long) {
+        viewModelScope.launch {
+            try {
+                val data = menuRepository.getFirstReviewPhotoByMenuId(menuId)
+                _imageCount.value = data.totalCount
+                val urlList = emptyList<String>().toMutableList()
+                for (i in 0 until 3) {
+                    if (i < data.result.size) {
+                        data.result[i].etc?.images?.get(0)?.let {
+                            urlList.add(it)
+                        }
+                    }
+                }
+                _imageUrlList.value = urlList
+            } catch (e: IOException) {
+                _imageUrlList.value = emptyList()
                 _networkResultState.value = State.FAILED
             }
         }
@@ -58,6 +88,10 @@ class MenuDetailViewModel @Inject constructor(
 
     fun getReviews(menuId: Long): Flow<PagingData<Review>> {
         return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
+    }
+
+    fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {
+        return menuRepository.getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId)
     }
 
     fun getRecommendationReview(score: Long) {

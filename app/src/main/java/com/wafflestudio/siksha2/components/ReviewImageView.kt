@@ -4,8 +4,12 @@ import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemReviewImageViewBinding
+import com.wafflestudio.siksha2.utils.visibleOrGone
 
 class ReviewImageView : ConstraintLayout {
 
@@ -13,11 +17,11 @@ class ReviewImageView : ConstraintLayout {
     private var onDeleteClickListener: OnDeleteClickListener? = null
 
     constructor(context: Context) : super(context) {
-        init()
+        init(null)
     }
 
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
-        init()
+        init(attributeSet)
     }
 
     constructor(context: Context, attributeSet: AttributeSet?, defStyle: Int) : super(
@@ -25,10 +29,24 @@ class ReviewImageView : ConstraintLayout {
         attributeSet,
         defStyle
     ) {
-        init()
+        init(attributeSet)
     }
 
-    private fun init() {
+    private fun init(attr: AttributeSet?) {
+
+        context.theme.obtainStyledAttributes(
+            attr,
+            R.styleable.ReviewImageView,
+            0,
+            0
+        ).apply {
+            try {
+                binding.deleteImageButton.visibleOrGone(getBoolean(R.styleable.ReviewImageView_showDeleteIcon, true))
+            } finally {
+                recycle()
+            }
+        }
+
         binding.deleteImageButton.setOnClickListener {
             onDeleteClickListener?.onClick()
         }
@@ -36,6 +54,18 @@ class ReviewImageView : ConstraintLayout {
 
     fun setImage(uri: Uri) {
         binding.reviewImage.setImageURI(uri)
+        requestLayout()
+        invalidate()
+    }
+
+    fun setImage(url: String) {
+        Glide.with(context)
+            .load(url)
+            .into(binding.reviewImage)
+    }
+    fun showMorePhotos(photoCount: Long) {
+        binding.morePhotoLayout.visibility = View.VISIBLE
+        binding.textMorePhoto.text = photoCount.toString()
     }
 
     fun setOnDeleteClickListener(listener: OnDeleteClickListener) {

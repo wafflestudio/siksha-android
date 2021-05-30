@@ -1,13 +1,17 @@
 package com.wafflestudio.siksha2.ui.menu_detail
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -133,6 +137,16 @@ class LeaveReviewFragment : Fragment() {
         }
 
         binding.addImageButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                showToast("저장공간 권한이 없으면 사진을 등록할 수 없습니다.")
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQUEST_STORAGE_PERMISSION
+                )
+
+                return@setOnClickListener
+            }
             val intent = Intent(Intent.ACTION_PICK)
             intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
             startActivityForResult(intent, GET_GALLERY_IMAGE)
@@ -151,5 +165,6 @@ class LeaveReviewFragment : Fragment() {
 
     companion object {
         private const val GET_GALLERY_IMAGE = 1126
+        private const val REQUEST_STORAGE_PERMISSION = 555
     }
 }

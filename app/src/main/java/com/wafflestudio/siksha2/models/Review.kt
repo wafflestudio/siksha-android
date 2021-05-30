@@ -10,5 +10,11 @@ data class Review(
     @Json(name = "user_id") val userId: Long,
     @Json(name = "score") val score: Double,
     @Json(name = "comment") val comment: String?,
-    @Json(name = "created_at") val createdAt: String
+    @Json(name = "created_at") val createdAt: String,
+    @Json(name = "etc") val etc: Etc?
+)
+
+@JsonClass(generateAdapter = true)
+data class Etc(
+    @Json(name = "images") val images: List<String>?
 )
