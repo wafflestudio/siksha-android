@@ -101,13 +101,11 @@ class DailyRestaurantFragment : Fragment() {
         }
 
         vm.dateFilter.observe(viewLifecycleOwner) { date ->
-            binding.dateBefore.text = date.minusDays(1).toPrettyString()
             ObjectAnimator.ofFloat(binding.dateBefore, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
             binding.dateCurrent.text = date.toPrettyString()
             ObjectAnimator.ofFloat(binding.dateCurrent, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
-            binding.dateAfter.text = date.plusDays(1).toPrettyString()
             ObjectAnimator.ofFloat(binding.dateAfter, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
         }

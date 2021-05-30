@@ -20,63 +20,41 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="95dp"
             android:background="@color/white"
             android:elevation="4dp"
             android:gravity="bottom"
             android:orientation="horizontal">
 
-            <TextView
+            <ImageView
                 android:id="@+id/date_before"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/nanum_square_regular"
-                android:padding="10dp"
-                android:text="@string/date_fallback"
-                android:textAlignment="center"
-                android:textColor="@color/gray_500"
-                android:textSize="14dp"
-                tools:text="03.13. 수" />
-
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.1">
-
-                <TextView
-                    android:id="@+id/date_current"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:padding="10dp"
-                    android:text="..."
-                    android:textAlignment="center"
-                    android:textColor="@color/orange_500"
-                    android:textSize="14dp"
-                    tools:text="03.13. 수" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    android:background="@color/orange_700" />
-
-            </FrameLayout>
+                android:src="@drawable/ic_orange_left_arrow"
+                android:layout_marginHorizontal="6dp"
+                android:padding="10dp" />
 
             <TextView
-                android:id="@+id/date_after"
+                android:id="@+id/date_current"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/nanum_square_regular"
+                android:fontFamily="@font/nanum_square_bold"
                 android:padding="10dp"
                 android:text="..."
                 android:textAlignment="center"
-                android:textColor="@color/gray_500"
-
+                android:textColor="@color/orange_500"
                 android:textSize="14dp"
+                android:layout_weight="1"
                 tools:text="03.13. 수" />
+
+
+            <ImageView
+                android:id="@+id/date_after"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_orange_right_arrow"
+                android:layout_marginHorizontal="6dp"
+                android:padding="10dp" />
 
         </LinearLayout>
 
