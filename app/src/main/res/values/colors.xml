@@ -31,6 +31,7 @@
 
     <color name="google_gray">#80000000</color>
 
+    <color name="black_50percent">#80000000</color>
 
     <color name="white_dim">#EAEAEA</color>
     <color name="white">#FFFFFFFF</color>

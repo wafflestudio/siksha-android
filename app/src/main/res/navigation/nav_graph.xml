@@ -53,6 +53,20 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_menuDetailFragment_to_ReviewPhotoFragment"
+            app:destination="@id/reviewPhotoFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_menuDetailFragment_to_ReviewFragment"
+            app:destination="@id/reviewFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
 
     <fragment
@@ -60,6 +74,26 @@
         android:name="com.wafflestudio.siksha2.ui.menu_detail.LeaveReviewFragment"
         android:label="fragment_leave_review"
         tools:layout="@layout/fragment_leave_review" />
+
+    <fragment
+        android:id="@+id/reviewPhotoFragment"
+        android:name="com.wafflestudio.siksha2.ui.menu_detail.review.ReviewPhotoFragment"
+        android:label="fragment_review_photo"
+        tools:layout="@layout/fragment_review_photo">
+        <argument
+            android:name="menuId"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.wafflestudio.siksha2.ui.menu_detail.review.ReviewFragment"
+        android:label="fragment_review"
+        tools:layout="@layout/fragment_review">
+        <argument
+            android:name="menuId"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/sikshaInfoFragment"

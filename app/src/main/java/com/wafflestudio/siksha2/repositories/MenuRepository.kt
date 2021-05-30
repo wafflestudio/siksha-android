@@ -7,13 +7,16 @@ import com.wafflestudio.siksha2.models.DailyMenu
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
 import com.wafflestudio.siksha2.ui.menu_detail.MenuReviewPagingSource
+import com.wafflestudio.siksha2.ui.menu_detail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -59,12 +62,31 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
+    fun getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
+        return Pager(
+            config = MenuReviewWithImagePagingSource.Config,
+            pagingSourceFactory = { MenuReviewWithImagePagingSource(sikshaApi, menuId) }
+        ).flow
+    }
+
     suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): LeaveReviewResult {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
     }
 
+    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: String, images: List<MultipartBody.Part>): LeaveReviewResult {
+        return sikshaApi.leaveMenuReviewImages(menuId, score, comment, images)
+    }
+
     suspend fun getReviewRecommendationComments(score: Long): String {
         return sikshaApi.fetchRecommendationReviewComments(score).comment
+    }
+
+    suspend fun getReviewDistribution(menuId: Long): List<Long> {
+        return sikshaApi.fetchReviewDistribution(menuId).dist
+    }
+
+    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
+        return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
     companion object {

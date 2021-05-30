@@ -1,10 +1,17 @@
 package com.wafflestudio.siksha2.ui.menu_detail
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,9 +19,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.OnRatingChangeListener
+import com.wafflestudio.siksha2.components.ReviewImageView
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import com.wafflestudio.siksha2.utils.showToast
+import com.wafflestudio.siksha2.utils.visibleOrGone
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
@@ -34,6 +43,8 @@ class LeaveReviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        vm.refreshUriList()
 
         vm.menu.observe(viewLifecycleOwner) { menu ->
             menu?.let {
@@ -76,6 +87,26 @@ class LeaveReviewFragment : Fragment() {
             }
         )
 
+        vm.uriList.observe(viewLifecycleOwner) {
+            val reviewImageViewList = listOf(binding.reviewImageView1, binding.reviewImageView2, binding.reviewImageView3)
+
+            for (i in 0 until 3) {
+                if (i < it.size) {
+                    reviewImageViewList[i].setImage(it[i])
+                    reviewImageViewList[i].visibility = View.VISIBLE
+                    reviewImageViewList[i].setOnDeleteClickListener(
+                        object : ReviewImageView.OnDeleteClickListener {
+                            override fun onClick() { vm.deleteUri(i) }
+                        }
+                    )
+                } else {
+                    reviewImageViewList[i].visibility = View.GONE
+                }
+            }
+
+            binding.imageLayout.visibleOrGone(it.isNotEmpty())
+        }
+
         binding.closeButton.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -85,6 +116,7 @@ class LeaveReviewFragment : Fragment() {
                 try {
                     val comment = binding.commentEdit.text
                     vm.leaveReview(
+                        requireContext(),
                         binding.rating.rating.toDouble(),
                         (
                             if (comment.isNullOrBlank()) binding.commentEdit.hint
@@ -103,5 +135,36 @@ class LeaveReviewFragment : Fragment() {
                 }
             }
         }
+
+        binding.addImageButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                showToast("저장공간 권한이 없으면 사진을 등록할 수 없습니다.")
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQUEST_STORAGE_PERMISSION
+                )
+
+                return@setOnClickListener
+            }
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            startActivityForResult(intent, GET_GALLERY_IMAGE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == GET_GALLERY_IMAGE && resultCode == Activity.RESULT_OK) {
+            data?.data?.let {
+                if (!vm.addUri(it)) {
+                    requireContext().showToast(getString(R.string.leave_review_max_image_toast))
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val GET_GALLERY_IMAGE = 1126
+        private const val REQUEST_STORAGE_PERMISSION = 555
     }
 }
