@@ -32,6 +32,13 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_vocFragment"
+            app:destination="@id/vocFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
 
     </fragment>
 
@@ -110,5 +117,13 @@
             android:name="orderArg"
             android:defaultValue="false"
             app:argType="boolean" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/vocFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.voc.VocFragment"
+        android:label="fragment_voc"
+        tools:layout="@layout/fragment_voc">
+
     </fragment>
 </navigation>

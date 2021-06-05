@@ -9,66 +9,115 @@
     tools:background="@color/light_gray_300"
     tools:context=".ui.main.setting.SettingFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:fontFamily="@font/nanum_square_bold"
-        android:text="@string/setting_siksha"
-        android:textColor="@color/gray_900"
-        android:textSize="18dp" />
-
-    <com.wafflestudio.siksha2.components.SettingItemRow
+    <LinearLayout
         android:id="@+id/info_row"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        app:itemText="식샤 정보" />
+        android:background="@drawable/frame_setting_layout"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
 
-    <com.wafflestudio.siksha2.components.SettingItemRow
-        android:id="@+id/logout_row"
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/version"
+            android:layout_marginVertical="12dp"
+            android:layout_marginStart="16dp"/>
+
+        <TextView
+            android:id="@+id/version_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/gray_500"
+            tools:text="siksha-2.0.0"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right_arrow"
+            android:layout_gravity="center"
+            android:layout_marginEnd="18dp" />
+    </LinearLayout>
+    
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        app:itemText="앱 로그아웃"
-        app:showArrowIcon="false" />
+        android:layout_marginTop="16dp"
+        android:background="@drawable/frame_setting_layout"
+        android:orientation="vertical">
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/order_restaurant_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:itemText="식당 순서 변경" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray_500"
+            android:layout_marginHorizontal="8dp" />
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/order_favorite_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:itemText="즐겨찾기 식당 순서 변경" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray_500"
+            android:layout_marginHorizontal="8dp" />
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/show_empty_check_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:itemText="메뉴 없는 식당 숨기기"
+            app:showArrowIcon="false"
+            app:showCheckbox="true" />
+
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/voc_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/nanum_square_bold"
-        android:text="@string/setting_restaurant"
-        android:textColor="@color/gray_900"
-        android:textSize="18dp" />
-
-    <com.wafflestudio.siksha2.components.SettingItemRow
-        android:id="@+id/order_restaurant_row"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:text="1:1 문의하기"
+        android:fontFamily="@font/nanum_square_regular"
+        android:textSize="15dp"
+        android:maxLines="1"
+        android:textColor="@color/orange_700"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        app:itemText="식당 리스트 순서 변경" />
+        android:layout_marginTop="20dp"
+        android:paddingHorizontal="18dp"
+        />
 
-    <com.wafflestudio.siksha2.components.SettingItemRow
-        android:id="@+id/order_favorite_row"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+    <TextView
+        android:id="@+id/logout_row"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="앱 로그아웃"
+        android:fontFamily="@font/nanum_square_regular"
+        android:textSize="15dp"
+        android:maxLines="1"
+        android:textColor="@color/gray_700"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        app:itemText="즐겨찾기 식당 리스트 순서 변경" />
-
-    <com.wafflestudio.siksha2.components.SettingItemRow
-        android:id="@+id/show_empty_check_row"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
-        app:itemText="메뉴 없는 식당 숨기기"
-        app:showArrowIcon="false"
-        app:showCheckbox="true" />
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="18dp"
+        />
 
 </LinearLayout>

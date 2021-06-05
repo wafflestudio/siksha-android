@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.setting
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,13 @@ class SettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        try {
+            val packageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+            binding.versionText.text = "siksha-" + packageInfo.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            binding.versionText.text = "버전 코드를 불러올 수 없습니다."
+        }
 
         binding.infoRow.setOnClickListener {
             val action =
@@ -76,6 +84,11 @@ class SettingFragment : Fragment() {
                 }
             )
             dialog.show(childFragmentManager, "logout")
+        }
+
+        binding.vocRow.setOnClickListener {
+            val action = MainFragmentDirections.actionMainFragmentToVocFragment()
+            findNavController().navigate(action)
         }
 
         lifecycleScope.launch {

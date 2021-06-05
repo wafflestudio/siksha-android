@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.repositories
 
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.VocParam
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,6 +31,14 @@ class UserStatusManager @Inject constructor(
     suspend fun deleteUser() {
         sikshaApi.deleteAccount()
         clearUserToken()
+    }
+
+    suspend fun sendVoc(voc: String) {
+        sikshaApi.sendVoc(VocParam(voc))
+    }
+
+    suspend fun getUserData(): Long {
+        return sikshaApi.getUserData().id
     }
 
     fun logoutUser() {

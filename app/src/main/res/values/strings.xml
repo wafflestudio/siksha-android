@@ -14,6 +14,10 @@
     <string name="setting_reorder_restaurant_title">식단 순서 변경</string>
     <string name="setting_reorder_favorite_title">즐겨찾기 순서 변경</string>
     <string name="setting_reorder_restaurant_label">우측 손잡이를 드래그하여 순서를 바꿔보세요.</string>
+    <string name="setting_voc_title">1:1 문의하기</string>
+    <string name="setting_voc_leave_message">문의할 내용을 남겨주세요.</string>
+    <string name="setting_voc_hint">문의할 내용을 작성해주세요.</string>
+    <string name="setting_voc_send_voc">전송하기</string>
     <string name="menu_detail_review_label">메뉴평가</string>
     <string name="leave_review_title">나의 평가 남기기</string>
     <string name="leave_review_description">식단 한 줄 평을 함께 남겨보세요!</string>
