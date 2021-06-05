@@ -18,12 +18,15 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="56dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="95dp"
+            android:layout_height="53dp"
             android:background="@color/white"
-            android:elevation="4dp"
-            android:gravity="bottom"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
@@ -32,20 +35,20 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_orange_left_arrow"
                 android:layout_marginHorizontal="6dp"
-                android:padding="10dp" />
+                android:padding="10dp"/>
 
             <TextView
                 android:id="@+id/date_current"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
+                android:fontFamily="@font/nanum_square_extra_bold"
                 android:padding="10dp"
                 android:text="..."
                 android:textAlignment="center"
                 android:textColor="@color/orange_500"
-                android:textSize="14dp"
+                android:textSize="15dp"
                 android:layout_weight="1"
-                tools:text="03.13. 수" />
+                tools:text="2021-03-28 (일)" />
 
 
             <ImageView
@@ -54,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_orange_right_arrow"
                 android:layout_marginHorizontal="6dp"
-                android:padding="10dp" />
+                android:padding="10dp"/>
 
         </LinearLayout>
 
@@ -64,31 +67,88 @@
             android:layout_marginTop="4dp"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/tab_breakfast"
+            <LinearLayout
+                android:id="@+id/breakfast_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:padding="8dp"
-                android:src="@drawable/ic_menu_breakfast"
-                app:tint="@color/meals_of_day_icon" />
+                android:orientation="vertical"
+                android:gravity="center" >
 
-            <ImageView
-                android:id="@+id/tab_lunch"
+                <ImageView
+                    android:id="@+id/tab_breakfast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_breakfast"
+                    app:tint="@color/meals_of_day_icon" />
+
+                <TextView
+                    android:id="@+id/breakfast_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:textColor="@color/gray_500"
+                    android:textSize="10dp"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/daily_restaurant_breakfast" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lunch_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:padding="8dp"
-                android:src="@drawable/ic_menu_lunch"
-                app:tint="@color/meals_of_day_icon" />
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <ImageView
-                android:id="@+id/tab_dinner"
+                <ImageView
+                    android:id="@+id/tab_lunch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_lunch"
+                    app:tint="@color/meals_of_day_icon" />
+
+                <TextView
+                    android:id="@+id/lunch_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:textColor="@color/gray_500"
+                    android:textSize="10dp"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/daily_restaurant_lunch" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dinner_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:src="@drawable/ic_menu_dinner"
-                app:tint="@color/meals_of_day_icon" />
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/tab_dinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_dinner"
+                    app:tint="@color/meals_of_day_icon" />
+
+                <TextView
+                    android:id="@+id/dinner_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:textColor="@color/gray_500"
+                    android:textSize="10dp"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/daily_restaurant_dinner" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -118,5 +178,32 @@
         </FrameLayout>
 
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/calendar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <com.wafflestudio.siksha2.components.CalendarSelectView
+            android:id="@+id/calendar_select_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:elevation="4dp"
+            android:layout_marginTop="109dp" />
+
+        <View
+            android:id="@+id/blank"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/black_50percent"
+            app:layout_constraintTop_toBottomOf="@id/calendar_select_view"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -20,6 +20,7 @@ fun LocalDate.toISODateString(): String {
 }
 
 fun LocalDate.toPrettyString(): String {
+    val year = year.toString().padStart(4, '0')
     val month = monthValue.toString().padStart(2, '0')
     val day = dayOfMonth.toString().padStart(2, '0')
     val dayOfWeek = when (dayOfWeek!!) {
@@ -31,7 +32,7 @@ fun LocalDate.toPrettyString(): String {
         DayOfWeek.SATURDAY -> "토"
         DayOfWeek.SUNDAY -> "일"
     }
-    return "$month.$day. $dayOfWeek"
+    return "$year-$month-$day ($dayOfWeek)"
 }
 
 fun String.toLocalDate(): LocalDate {

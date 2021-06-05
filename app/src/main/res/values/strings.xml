@@ -47,4 +47,15 @@
     <string name="operating_hour_weekdays">주중</string>
     <string name="operating_hour_saturday">토요일</string>
     <string name="operating_hour_holiday">휴일</string>
+    <string name="calendar_view_monday">MON</string>
+    <string name="calendar_view_tuesday">TUE</string>
+    <string name="calendar_view_wednesday">WED</string>
+    <string name="calendar_view_thursday">THU</string>
+    <string name="calendar_view_friday">FRI</string>
+    <string name="calendar_view_saturday">SAT</string>
+    <string name="calendar_view_sunday">SUN</string>
+    <string name="daily_restaurant_breakfast">아침</string>
+    <string name="daily_restaurant_lunch">점심</string>
+    <string name="daily_restaurant_dinner">저녁</string>
+
 </resources>
