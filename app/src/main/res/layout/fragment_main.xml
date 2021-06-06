@@ -21,14 +21,13 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:elevation="4dp"
         android:background="@color/orange_normal"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="42dp"
-        android:elevation="5dp"
+        android:elevation="1dp"
         android:src="@drawable/ic_rice_bowl_with_text"
         app:layout_constraintBottom_toBottomOf="@id/top_bar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +45,7 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:elevation="4dp"
+        android:elevation="6dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:tabIconTint="#00ffffff"

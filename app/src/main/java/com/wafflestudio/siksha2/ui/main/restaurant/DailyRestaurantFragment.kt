@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
@@ -79,6 +82,15 @@ class DailyRestaurantFragment : Fragment() {
             }
         )
 
+        binding.calendarSelectView.updateDate(LocalDate.now())
+        binding.calendarSelectView.setDateChangeListener(
+            object : CalendarSelectView.OnDateChangeListener {
+                override fun onChange(date: LocalDate) {
+                    vm.setDateFilter(date)
+                }
+            }
+        )
+
         binding.menuGroupList.also {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(context)
@@ -100,27 +112,54 @@ class DailyRestaurantFragment : Fragment() {
                 }
         }
 
+        binding.dateCurrent.setOnClickListener {
+            vm.toggleCalendarVisibility()
+        }
+
+        binding.blank.setOnClickListener {
+            vm.setCalendarVisibility(false)
+        }
+
         vm.dateFilter.observe(viewLifecycleOwner) { date ->
-            binding.dateBefore.text = date.minusDays(1).toPrettyString()
             ObjectAnimator.ofFloat(binding.dateBefore, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
             binding.dateCurrent.text = date.toPrettyString()
             ObjectAnimator.ofFloat(binding.dateCurrent, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
-            binding.dateAfter.text = date.plusDays(1).toPrettyString()
             ObjectAnimator.ofFloat(binding.dateAfter, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
         }
 
         vm.mealsOfDayFilter.observe(viewLifecycleOwner) { mealsOfDay ->
+            when (mealsOfDay) {
+                MealsOfDay.BR -> {
+                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
+                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                }
+                MealsOfDay.LU -> {
+                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
+                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                }
+                MealsOfDay.DN -> {
+                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
+                }
+            }
             binding.tabBreakfast.isSelected = mealsOfDay == MealsOfDay.BR
             binding.tabLunch.isSelected = mealsOfDay == MealsOfDay.LU
             binding.tabDinner.isSelected = mealsOfDay == MealsOfDay.DN
         }
 
-        binding.tabBreakfast.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
-        binding.tabLunch.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
-        binding.tabDinner.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
+        vm.isCalendarVisible.observe(viewLifecycleOwner) { visibility ->
+            binding.calendarLayout.visibleOrGone(visibility)
+        }
+
+        binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
+        binding.lunchLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
+        binding.dinnerLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
