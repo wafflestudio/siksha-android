@@ -14,7 +14,6 @@ import com.wafflestudio.siksha2.databinding.ItemCalendarSelectViewBinding
 import com.wafflestudio.siksha2.databinding.ItemWeekBinding
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.visibleOrGone
-import timber.log.Timber
 import java.time.LocalDate
 
 class CalendarSelectView : LinearLayout {
@@ -74,12 +73,10 @@ class CalendarSelectView : LinearLayout {
     }
 
     private fun setDate(date: LocalDate) {
-        Timber.d("setDate called with (${date.year}.${date.monthValue})")
         year = date.year
         month = date.monthValue
-        Timber.d("setDate called with (${date.year}.${date.monthValue})")
         val yearMonthText = year.toString() + "." +
-            (if (month > 10) month.toString() else "0$month") + "."
+            (if (month > 9) month.toString() else "0$month") + "."
         binding.yearMonthText.text = yearMonthText
 
         val weeks = mutableListOf<List<Int>>()
@@ -90,11 +87,8 @@ class CalendarSelectView : LinearLayout {
         for (i in 0 until startDayOfWeek) firstWeek.add(0)
         for (i in 0 until 7 - startDayOfWeek) firstWeek.add(i + 1)
         weeks.add(firstWeek)
-        startDate = startDate.plusWeeks(1)
-        var q = 1
-        Timber.d("current date ${startDate.year}.${startDate.monthValue}.${startDate.dayOfMonth}")
+        startDate = startDate.plusDays((7 - startDayOfWeek).toLong())
         while (startDate.monthValue == month) {
-            Timber.d("current date ${startDate.year}.${startDate.monthValue}.${startDate.dayOfMonth}")
             val week = mutableListOf<Int>()
             for (i in 0 until 7) {
                 if (startDate.monthValue != month) week.add(0)

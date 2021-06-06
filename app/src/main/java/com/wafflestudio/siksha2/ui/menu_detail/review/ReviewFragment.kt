@@ -23,7 +23,7 @@ class ReviewFragment : Fragment() {
     private lateinit var binding: FragmentReviewBinding
     private val vm: MenuDetailViewModel by activityViewModels()
     private val args: ReviewFragmentArgs by navArgs()
-    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter(false)
+    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter(true)
 
     override fun onCreateView(
         inflater: LayoutInflater,

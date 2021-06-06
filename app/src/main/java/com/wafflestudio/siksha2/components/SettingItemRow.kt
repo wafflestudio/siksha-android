@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemSettingRowBinding
 import com.wafflestudio.siksha2.utils.dp
+import com.wafflestudio.siksha2.utils.visibleOrGone
 
 class SettingItemRow : LinearLayout {
 

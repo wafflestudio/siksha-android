@@ -25,6 +25,49 @@
             android:scaleType="centerCrop"
             tools:src="" />
 
+        <LinearLayout
+            android:id="@+id/more_photo_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:background="@color/black_50percent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_detail_plus"
+                android:fontFamily="@font/nanum_square_regular"
+                android:textSize="12dp"
+                android:textColor="@color/white" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_more_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/white"
+                    tools:text="100"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/white"
+                    android:text="@string/menu_detail_more_photo" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
     <ImageView
@@ -37,47 +80,6 @@
         app:layout_constraintEnd_toEndOf="@id/review_image_card"
         app:layout_constraintTop_toTopOf="@id/review_image_card" />
 
-    <LinearLayout
-        android:id="@+id/more_photo_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
-        android:background="@color/black_50percent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/menu_detail_plus"
-            android:fontFamily="@font/nanum_square_regular"
-            android:textSize="12dp"
-            android:textColor="@color/white" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/text_more_photo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_regular"
-                android:textSize="12dp"
-                android:textColor="@color/white"
-                tools:text="100"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_regular"
-                android:textSize="12dp"
-                android:textColor="@color/white"
-                android:text="@string/menu_detail_more_photo" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
 
 </merge>

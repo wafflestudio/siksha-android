@@ -427,7 +427,7 @@
             android:layout_weight="1"
             android:clipToPadding="true"
             android:paddingBottom="20dp"
-            android:background="@color/light_gray_300"
+            android:background="@color/white"
             tools:listitem="@layout/item_review" />
 
     </LinearLayout>

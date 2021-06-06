@@ -96,6 +96,10 @@ class MenuDetailFragment : Fragment() {
             binding.layoutPhotoReview.visibleOrGone(imageCount > 0)
             if (imageCount > 3) {
                 binding.reviewImageView3.showMorePhotos(imageCount - 3)
+                binding.reviewImageView3.setOnClickListener {
+                    val action = MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(args.menuId)
+                    findNavController().navigate(action)
+                }
             }
         }
 

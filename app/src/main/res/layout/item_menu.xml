@@ -14,9 +14,7 @@
         android:layout_marginHorizontal="6dp"
         android:paddingEnd="6dp"
         android:layout_weight="1"
-        android:ellipsize="end"
         android:fontFamily="@font/nanum_square_regular"
-        android:maxLines="1"
         android:textColor="@color/gray_700"
         android:textSize="14dp"
         tools:text="버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기" />
@@ -36,8 +34,10 @@
         android:layout_marginHorizontal="8dp"
         android:fontFamily="@font/nanum_square_regular"
         android:textColor="@color/black"
+        android:textAlignment="center"
+        android:gravity="center"
         android:textSize="14dp"
-        tools:text="3000" />
+        tools:text="    -    " />
 
     <com.wafflestudio.siksha2.components.RateTextView
         android:id="@+id/rate_text"
