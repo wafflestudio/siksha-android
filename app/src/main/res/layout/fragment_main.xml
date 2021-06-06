@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="42dp"
         android:elevation="1dp"
-        android:src="@drawable/ic_rice_bowl_with_text"
+        android:src="@drawable/ic_siksha_rice_bowl_with_spoon"
         app:layout_constraintBottom_toBottomOf="@id/top_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
