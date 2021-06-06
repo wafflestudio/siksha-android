@@ -51,8 +51,8 @@ class SikshaInfoFragment : Fragment() {
                     override fun onPositive() {
                         lifecycleScope.launch {
                             try {
-                                userStatusManager.deleteUser()
-                                activity?.finish()
+                                val withdrawCallback = { activity?.finish() }
+                                userStatusManager.deleteUser(requireContext(), withdrawCallback)
                             } catch (e: IOException) {
                                 showToast(getString(R.string.common_network_error))
                             }

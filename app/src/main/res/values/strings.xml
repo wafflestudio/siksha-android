@@ -61,5 +61,6 @@
     <string name="daily_restaurant_breakfast">아침</string>
     <string name="daily_restaurant_lunch">점심</string>
     <string name="daily_restaurant_dinner">저녁</string>
-
+    <string name="logout_failed">로그아웃에 실패하였습니다.</string>
+    <string name="signout_failed">탈퇴에 실패하였습니다.\n연속하여 실패할 경우 관리자에게 문의해주세요.</string>
 </resources>
