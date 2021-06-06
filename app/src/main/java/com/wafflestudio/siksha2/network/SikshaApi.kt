@@ -3,6 +3,7 @@ package com.wafflestudio.siksha2.network
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
 import okhttp3.MultipartBody
+import retrofit2.Response
 import retrofit2.http.*
 import java.time.LocalDate
 
@@ -65,4 +66,12 @@ interface SikshaApi {
     @GET("reviews/dist")
     suspend fun fetchReviewDistribution(@Query("menu_id") menuId: Long):
         FetchReviewDistributionResult
+
+    @POST("voc/")
+    suspend fun sendVoc(
+        @Body req: VocParam
+    ): Response<String>
+
+    @GET("auth/me")
+    suspend fun getUserData(): GetUserDataResult
 }
