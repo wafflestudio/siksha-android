@@ -107,14 +107,30 @@ class LeaveReviewFragment : Fragment() {
             binding.imageLayout.visibleOrGone(it.isNotEmpty())
         }
 
+        vm.leaveReviewState.observe(viewLifecycleOwner) {
+            binding.onLoadingContainer.root.visibleOrGone(it == MenuDetailViewModel.ReviewState.COMPRESSING)
+        }
+
         binding.closeButton.setOnClickListener {
             findNavController().popBackStack()
         }
 
         binding.submitButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                showToast("저장공간 권한이 없으면 사진을 업로할 수 없습니다.")
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    REQUEST_STORAGE_PERMISSION
+                )
+
+                return@setOnClickListener
+            }
+
             lifecycleScope.launch {
                 try {
                     val comment = binding.commentEdit.text
+                    showToast("이미지 압축 중입니다.")
                     vm.leaveReview(
                         requireContext(),
                         binding.rating.rating.toDouble(),
@@ -124,14 +140,17 @@ class LeaveReviewFragment : Fragment() {
                             ).toString()
                     )
                     showToast("평가가 등록되었습니다.")
+                    vm.notifySendReviewEnd()
                     findNavController().popBackStack()
                 } catch (e: HttpException) {
                     // TODO: 서버에 400 이 더 적절하지 않을 지 믈어보기
                     if (e.code() == 403) {
                         showToast("같은 메뉴에 리뷰를 여러 번 남길 수 없습니다.")
+                        vm.notifySendReviewEnd()
                     }
                 } catch (e: IOException) {
                     showToast("네트워크 연결이 불안정합니다.")
+                    vm.notifySendReviewEnd()
                 }
             }
         }

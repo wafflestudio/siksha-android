@@ -73,7 +73,7 @@ class MenuRepository @Inject constructor(
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
     }
 
-    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: String, images: List<MultipartBody.Part>): LeaveReviewResult {
+    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: MultipartBody.Part, images: List<MultipartBody.Part>): LeaveReviewResult {
         return sikshaApi.leaveMenuReviewImages(menuId, score, comment, images)
     }
 
