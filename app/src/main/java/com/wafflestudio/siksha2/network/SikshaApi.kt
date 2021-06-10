@@ -43,7 +43,7 @@ interface SikshaApi {
     suspend fun leaveMenuReviewImages(
         @Part("menu_id") menuId: Long,
         @Part("score") score: Long,
-        @Part("comment") comment: String,
+        @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
     ): LeaveReviewResult
 

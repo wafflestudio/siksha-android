@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.ui.menu_detail
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,11 +13,16 @@ import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.PathUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
@@ -52,6 +58,10 @@ class MenuDetailViewModel @Inject constructor(
     private val _imageCount = MutableLiveData<Long>()
     val imageCount: LiveData<Long>
         get() = _imageCount
+
+    private val _leaveReviewState = MutableLiveData<ReviewState>(ReviewState.WAITING)
+    val leaveReviewState: LiveData<ReviewState>
+        get() = _leaveReviewState
 
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
@@ -127,18 +137,28 @@ class MenuDetailViewModel @Inject constructor(
         _uriList.value = listOf()
     }
 
+    fun notifySendReviewEnd() {
+        _leaveReviewState.value = ReviewState.WAITING
+    }
+
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
         _menu.value?.id?.let { id ->
             if (_uriList.value?.isNotEmpty() == true) {
+                _leaveReviewState.value = ReviewState.COMPRESSING
                 val imageList = mutableListOf<MultipartBody.Part>()
                 _uriList.value?.forEach {
                     val path = PathUtil.getPath(context, it)
-                    val file = File(path)
-                    val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    var file = File(path)
+                    file = Compressor.compress(context, file) {
+                        size(500000)
+                        format(Bitmap.CompressFormat.JPEG)
+                    }
+                    val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     val multipartBody = MultipartBody.Part.createFormData("images", file.name, requestBody)
                     imageList.add(multipartBody)
                 }
-                menuRepository.leaveMenuReviewImage(id, score.toLong(), comment, imageList)
+                val commentBody = MultipartBody.Part.createFormData("comment", comment)
+                menuRepository.leaveMenuReviewImage(id, score.toLong(), commentBody, imageList)
             } else {
                 menuRepository.leaveMenuReview(id, score, comment)
             }
@@ -149,5 +169,10 @@ class MenuDetailViewModel @Inject constructor(
         LOADING,
         SUCCESS,
         FAILED
+    }
+
+    enum class ReviewState {
+        WAITING,
+        COMPRESSING
     }
 }
