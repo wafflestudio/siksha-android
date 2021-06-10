@@ -27,7 +27,6 @@ import com.wafflestudio.siksha2.utils.visibleOrGone
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
-import timber.log.Timber
 
 class LeaveReviewFragment : Fragment() {
     private lateinit var binding: FragmentLeaveReviewBinding
