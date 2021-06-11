@@ -15,6 +15,7 @@ import com.wafflestudio.siksha2.utils.PathUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -148,7 +149,8 @@ class MenuDetailViewModel @Inject constructor(
                     val path = PathUtil.getPath(context, it)
                     var file = File(path)
                     file = Compressor.compress(context, file) {
-                        size(500000)
+                        resolution(500, 500)
+                        size(400000)
                         format(Bitmap.CompressFormat.JPEG)
                     }
                     val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())

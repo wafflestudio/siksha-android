@@ -18,7 +18,6 @@ import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -84,7 +83,6 @@ class MenuDetailFragment : Fragment() {
             distBarList.forEachIndexed { index, bar ->
                 val params = bar.layoutParams
                 val ratio = distList[index].toDouble() / maxCount.toDouble()
-                Timber.d("idx = $index ratio = $ratio")
                 if (ratio != 0.0) params.width = (requireContext().dp(MAX_REVIEW_DIST_BAR_WIDTH_DP) * ratio).toInt()
                 else params.width = requireContext().dp(NO_REVIEW_DIST_BAR_WIDTH_DP)
                 bar.layoutParams = params
