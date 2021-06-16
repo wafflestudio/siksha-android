@@ -35,6 +35,11 @@ fun LocalDate.toPrettyString(): String {
     return "$year-$month-$day ($dayOfWeek)"
 }
 
+fun Long?.toPrettyString(): String {
+    return if (this == null) "    -    "
+    else String.format("%,d", this)
+}
+
 fun String.toLocalDate(): LocalDate {
     return LocalDate.parse(this, DateTimeFormatter.ISO_DATE)
 }
