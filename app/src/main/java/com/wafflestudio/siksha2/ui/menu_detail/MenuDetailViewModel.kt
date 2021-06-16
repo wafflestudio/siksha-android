@@ -149,8 +149,8 @@ class MenuDetailViewModel @Inject constructor(
                     val path = PathUtil.getPath(context, it)
                     var file = File(path)
                     file = Compressor.compress(context, file) {
-                        resolution(500, 500)
-                        size(400000)
+                        resolution(300, 300)
+                        size(100000)
                         format(Bitmap.CompressFormat.JPEG)
                     }
                     val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
