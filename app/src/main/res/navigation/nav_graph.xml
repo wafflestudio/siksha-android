@@ -106,7 +106,11 @@
         android:id="@+id/sikshaInfoFragment"
         android:name="com.wafflestudio.siksha2.ui.main.setting.info.SikshaInfoFragment"
         android:label="fragment_siksha_info"
-        tools:layout="@layout/fragment_siksha_info" />
+        tools:layout="@layout/fragment_siksha_info">
+        <argument
+            android:name="latestVersionNum"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/reorderRestaurantFragment"

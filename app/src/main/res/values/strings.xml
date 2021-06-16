@@ -11,6 +11,8 @@
     <string name="setting_siksha">식샤 설정</string>
     <string name="setting_siksha_info">식샤 정보</string>
     <string name="setting_restaurant">식당 설정</string>
+    <string name="setting_using_latest_version">최신버전을 이용중입니다.</string>
+    <string name="setting_need_update">업데이트가 필요합니다.</string>
     <string name="setting_reorder_restaurant_title">식단 순서 변경</string>
     <string name="setting_reorder_favorite_title">즐겨찾기 순서 변경</string>
     <string name="setting_reorder_restaurant_label">우측 손잡이를 드래그하여 순서를 바꿔보세요.</string>

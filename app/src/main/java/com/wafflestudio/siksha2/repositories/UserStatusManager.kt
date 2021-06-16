@@ -80,6 +80,10 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.getUserData().id
     }
 
+    suspend fun getVersion(): String {
+        return sikshaApi.getVersion().version
+    }
+
     // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)
     fun logoutUser(context: Context, logoutCallback: () -> Unit?) {
         when (sikshaPrefObjects.oAuthProvider.getValue()) {

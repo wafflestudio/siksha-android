@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha2.ui.main.setting
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.wafflestudio.siksha2.BuildConfig
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.ui.SikshaDialog
 import com.wafflestudio.siksha2.ui.SikshaDialogListener
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
+import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
+import kotlin.math.*
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
@@ -26,6 +30,9 @@ class SettingFragment : Fragment() {
 
     @Inject
     lateinit var userStatusManager: UserStatusManager
+
+    private var packageVersion: String = BuildConfig.VERSION_NAME
+    private var latestVersionNum: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,16 +46,33 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        try {
-            val packageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
-            binding.versionText.text = "siksha-" + packageInfo.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            binding.versionText.text = "버전 코드를 불러올 수 없습니다."
+        binding.versionText.text = "siksha-" + packageVersion
+
+        lifecycleScope.launch {
+            try {
+                val version = userStatusManager.getVersion()
+                latestVersionNum = 0
+                version.split('.').forEachIndexed { idx, s ->
+                    latestVersionNum += ((100.0F).pow(2 - idx) * (s.toIntOrNull() ?: 0)).toInt()
+                }
+                var currVersionNum = 0
+                packageVersion.split('.').forEachIndexed { idx, s ->
+                    currVersionNum += ((100.0F).pow(2 - idx) * (s.toIntOrNull() ?: 0)).toInt()
+                }
+
+                if (latestVersionNum == currVersionNum) {
+                    binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
+                } else {
+                    binding.versionCheckText.text = getString(R.string.setting_need_update)
+                }
+            } catch (e: IOException) {
+                showToast("최신버전 정보를 가져올 수 없습니다.")
+            }
         }
 
         binding.infoRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToSikshaInfoFragment()
+                MainFragmentDirections.actionMainFragmentToSikshaInfoFragment(latestVersionNum.toLong())
             findNavController().navigate(action)
         }
 

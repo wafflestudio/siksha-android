@@ -74,4 +74,7 @@ interface SikshaApi {
 
     @GET("auth/me")
     suspend fun getUserData(): GetUserDataResult
+
+    @GET("versions/android")
+    suspend fun getVersion(): GetVersionResult
 }

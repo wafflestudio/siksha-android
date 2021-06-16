@@ -25,16 +25,36 @@
             android:layout_marginVertical="12dp"
             android:layout_marginStart="16dp"/>
 
-        <TextView
-            android:id="@+id/version_text"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="14dp"
-            android:gravity="center"
-            android:layout_marginStart="24dp"
-            android:fontFamily="@font/nanum_square_regular"
-            android:textColor="@color/gray_500"
-            tools:text="siksha-2.0.0"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/version_check_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:gravity="center"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/nanum_square_regular"
+                android:textColor="@color/gray_500"
+                tools:text="최신버전을 이용중입니다."/>
+
+            <TextView
+                android:id="@+id/version_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:gravity="center"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/nanum_square_regular"
+                android:textColor="@color/gray_500"
+                tools:text="siksha-2.0.0"/>
+
+        </LinearLayout>
+
 
         <View
             android:layout_width="0dp"
