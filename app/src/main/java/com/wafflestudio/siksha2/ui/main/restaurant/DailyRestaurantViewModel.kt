@@ -24,6 +24,9 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _mealsOfDayFilter = MutableLiveData<MealsOfDay>(MealsOfDay.LU)
     val mealsOfDayFilter: LiveData<MealsOfDay> = _mealsOfDayFilter
 
+    private val _isCalendarVisible = MutableLiveData<Boolean>(false)
+    val isCalendarVisible: LiveData<Boolean> = _isCalendarVisible
+
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
     // 현재 앱 시작시에 Network 연결 없을 때 노티하는 중
     // 앱 사용 중에도 Network 연결 없어질 시 인지 할 수 있어야함.
@@ -53,6 +56,24 @@ class DailyRestaurantViewModel @Inject constructor(
     fun addDateOffset(offset: Long) {
         viewModelScope.launch {
             _dateFilter.value = _dateFilter.value?.plusDays(offset)
+        }
+    }
+
+    fun setDateFilter(date: LocalDate) {
+        viewModelScope.launch {
+            _dateFilter.value = date
+        }
+    }
+
+    fun toggleCalendarVisibility() {
+        viewModelScope.launch {
+            _isCalendarVisible.value = _isCalendarVisible.value?.not()
+        }
+    }
+
+    fun setCalendarVisibility(visibility: Boolean) {
+        viewModelScope.launch {
+            _isCalendarVisible.value = visibility
         }
     }
 

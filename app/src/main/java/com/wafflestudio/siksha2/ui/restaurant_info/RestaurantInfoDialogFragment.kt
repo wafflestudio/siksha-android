@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -18,8 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentRestaurantInfoBinding
 import com.wafflestudio.siksha2.models.RestaurantInfo
-import com.wafflestudio.siksha2.utils.dp
-import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 
 // TODO: 전반적으로 대충 짬 나중에 날잡고 고치기
@@ -34,8 +31,6 @@ class RestaurantInfoDialogFragment private constructor() :
             RESTAURANT_INFO
         )!!
     }
-
-    private val selectedOperatingHour = MutableLiveData<DayType>(DayType.WEEKDAY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,16 +57,10 @@ class RestaurantInfoDialogFragment private constructor() :
 
         binding.title.text = restaurantInfo.nameKr
         binding.subtitle.text = restaurantInfo.address
-        selectedOperatingHour.observe(viewLifecycleOwner) {
-            binding.operationTime.text = when (it!!) {
-                DayType.WEEKDAY -> restaurantInfo.etc?.operatingHours?.weekdays
-                DayType.SATURDAY -> restaurantInfo.etc?.operatingHours?.saturday
-                DayType.HOLIDAY -> restaurantInfo.etc?.operatingHours?.holiday
-            }?.joinToString("\n")
-        }
         restaurantInfo.etc?.operatingHours?.let {
             setUpOperatingHour(it)
         }
+        binding.closeButton.setOnClickListener { dismiss() }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -86,61 +75,29 @@ class RestaurantInfoDialogFragment private constructor() :
     }
 
     private fun setUpOperatingHour(operatingHour: RestaurantInfo.OperatingHour) {
-        var ind = 0
-        val items = listOf(binding.timeTableStart, binding.timeTableCenter, binding.timeTableEnd)
+        val items = listOf(binding.timeLayoutWeekday, binding.timeLayoutSaturday, binding.timeLayoutHoliday)
         if (operatingHour.weekdays.isNotEmpty()) {
-            items[ind].apply {
-                text = "주중"
-                setOnClickListener {
-                    selectedOperatingHour.value = DayType.WEEKDAY
-                    items.forEach { item -> item.isSelected = false }
-                    isSelected = true
-                }
+            items[0].apply {
+                visibility = View.VISIBLE
+                binding.timeTextWeekday.text = operatingHour.weekdays.joinToString("\n")
             }
-            ind++
         }
 
         if (operatingHour.saturday.isNotEmpty()) {
-            items[ind].apply {
-                text = "토요일"
-                setOnClickListener {
-                    selectedOperatingHour.value = DayType.SATURDAY
-                    items.forEach { item -> item.isSelected = false }
-                    isSelected = true
-                }
+            items[1].apply {
+                visibility = View.VISIBLE
+                binding.timeTextSaturday.text = operatingHour.saturday.joinToString("\n")
+                binding.lineDivFirst.visibility = View.VISIBLE
             }
-            ind++
         }
 
         if (operatingHour.holiday.isNotEmpty()) {
-            items[ind].apply {
-                text = "휴일"
-                setOnClickListener {
-                    selectedOperatingHour.value = DayType.HOLIDAY
-                    items.forEach { item -> item.isSelected = false }
-                    isSelected = true
-                }
+            items[2].apply {
+                visibility = View.VISIBLE
+                binding.timeTextHoliday.text = operatingHour.holiday.joinToString("\n")
+                binding.lineDivSecond.visibility = View.VISIBLE
             }
-            ind++
         }
-        items.subList(ind, items.size).forEach { it.visibleOrGone(false) }
-        items.subList(0, ind).apply {
-            forEachIndexed { index, it ->
-                it.visibleOrGone(true)
-                it.setBackgroundResource(R.drawable.frame_corner_center)
-                it.translationX = -requireContext().dp(index).toFloat()
-            }
-            first().setBackgroundResource(R.drawable.frame_corner_left)
-            last().setBackgroundResource(R.drawable.frame_corner_right)
-            first().isSelected = true
-        }
-        if (ind == 1) items.first().setBackgroundResource(R.drawable.frame_corner_all)
-    }
-
-    private enum class DayType {
-        WEEKDAY,
-        SATURDAY,
-        HOLIDAY
     }
 
     companion object {

@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemSettingRowBinding
 import com.wafflestudio.siksha2.utils.dp
@@ -56,7 +55,6 @@ class SettingItemRow : LinearLayout {
     }
 
     private fun init(attr: AttributeSet?) {
-        background = ContextCompat.getDrawable(context, R.drawable.frame_setting_item)
         gravity = Gravity.CENTER_VERTICAL
         orientation = HORIZONTAL
         val dp18 = context.dp(18)

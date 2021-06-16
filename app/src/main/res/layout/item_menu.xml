@@ -1,52 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingVertical="4dp">
 
     <TextView
+        android:id="@+id/dots_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=". . . . . . . . ."
+        android:fontFamily="@font/nanum_square_regular"
+        android:textSize="12dp"
+        android:textColor="@color/black_30percent"
+        app:layout_constraintEnd_toEndOf="@id/price_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="50dp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/dots_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/menu_title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/gray_700"
+            android:textSize="15dp"
+            android:maxWidth="200dp"
+            android:background="@color/white"
+            tools:text="불고기불고기불고기불고기불고기불고기불고기불고기불고기불고기불고기불고기불고기불고기불고기" />
+
+        <ImageView
+            android:id="@+id/icon_no_fork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/content_no_fork"
+            android:layout_marginStart="8dp"
+            android:background="@color/white"
+            android:src="@drawable/ic_no_fork" />
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/price_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/frame_price_text"
-        android:fontFamily="@font/nanum_square_regular"
-        android:textColor="@color/white"
-        android:textSize="13dp"
-        tools:text="3000" />
-
-
-    <TextView
-        android:id="@+id/menu_title_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:fontFamily="@font/nanum_square_regular"
-        android:maxLines="1"
-        android:textColor="@color/gray_700"
-        android:textSize="14dp"
-        tools:text="버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기버섯 불고기" />
-
-    <ImageView
-        android:id="@+id/icon_no_fork"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/content_no_fork"
-        android:src="@drawable/ic_no_fork" />
-
-    <TextView
-        android:id="@+id/menu_score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="6dp"
         android:fontFamily="@font/nanum_square_regular"
-        android:gravity="end"
-        android:textColor="@color/orange_700"
-        android:textSize="13dp"
-        tools:text="4.7" />
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toStartOf="@id/rate_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="    -    " />
 
-</LinearLayout>
+    <com.wafflestudio.siksha2.components.RateTextView
+        android:id="@+id/rate_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

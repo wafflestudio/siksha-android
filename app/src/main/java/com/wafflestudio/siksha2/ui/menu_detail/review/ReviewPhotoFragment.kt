@@ -1,0 +1,64 @@
+package com.wafflestudio.siksha2.ui.menu_detail.review
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.wafflestudio.siksha2.databinding.FragmentReviewPhotoBinding
+import com.wafflestudio.siksha2.ui.menu_detail.MenuDetailViewModel
+import com.wafflestudio.siksha2.ui.menu_detail.MenuReviewsAdapter
+import com.wafflestudio.siksha2.utils.visibleOrGone
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
+class ReviewPhotoFragment : Fragment() {
+    private lateinit var binding: FragmentReviewPhotoBinding
+    private val vm: MenuDetailViewModel by activityViewModels()
+    private val args: ReviewPhotoFragmentArgs by navArgs()
+    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentReviewPhotoBinding.inflate(inflater, container, false)
+        binding.reviewList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = reviewsAdapter
+        }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        lifecycleScope.launch {
+            reviewsAdapter.loadStateFlow
+                .collectLatest {
+                    if (it.refresh is LoadState.NotLoading) {
+                        (reviewsAdapter.itemCount < 1).let { empty ->
+                            binding.reviewList.visibleOrGone(empty.not())
+                        }
+                    }
+                }
+        }
+
+        lifecycleScope.launch {
+            vm.getReviewsWithImages(args.menuId).collectLatest {
+                reviewsAdapter.submitData(it)
+            }
+        }
+
+        binding.closeButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+}

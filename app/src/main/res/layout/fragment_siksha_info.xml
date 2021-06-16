@@ -56,11 +56,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/version_check_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="현재 버전 정보"
+            android:textColor="@color/gray_500"
+            android:fontFamily="@font/nanum_square_regular"
+            tools:text="@string/setting_using_latest_version"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView5" />
@@ -69,9 +71,12 @@
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/gray_500"
+            android:fontFamily="@font/nanum_square_regular"
+            tools:text="3.0.0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView" />
+            app:layout_constraintTop_toBottomOf="@id/version_check_text" />
 
 
         <TextView

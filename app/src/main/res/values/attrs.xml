@@ -14,4 +14,7 @@
         </attr>
         <attr name="dragEnabled" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="ReviewImageView">
+        <attr name="showDeleteIcon" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:orientation="horizontal"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/review_image_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/review_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            tools:src="" />
+
+        <LinearLayout
+            android:id="@+id/more_photo_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:background="@color/black_50percent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_detail_plus"
+                android:fontFamily="@font/nanum_square_regular"
+                android:textSize="12dp"
+                android:textColor="@color/white" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_more_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/white"
+                    tools:text="100"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/white"
+                    android:text="@string/menu_detail_more_photo" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/delete_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:translationX="4dp"
+        android:translationY="-4dp"
+        android:src="@drawable/ic_image_delete"
+        app:layout_constraintEnd_toEndOf="@id/review_image_card"
+        app:layout_constraintTop_toTopOf="@id/review_image_card" />
+
+
+
+</merge>
