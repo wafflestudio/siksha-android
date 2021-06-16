@@ -23,13 +23,15 @@
                 android:id="@+id/left_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingHorizontal="2dp"
                 android:src="@drawable/ic_left_arrow_orange" />
 
             <TextView
                 android:id="@+id/year_month_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
+                android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/nanum_square_extra_bold"
                 android:textSize="15dp"
                 android:textColor="@color/orange_normal"
@@ -39,6 +41,8 @@
                 android:id="@+id/right_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingHorizontal="2dp"
                 android:src="@drawable/ic_right_arrow_orange" />
 
         </LinearLayout>
