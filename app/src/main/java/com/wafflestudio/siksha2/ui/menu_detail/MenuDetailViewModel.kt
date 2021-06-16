@@ -105,13 +105,21 @@ class MenuDetailViewModel @Inject constructor(
     fun getRecommendationReview(score: Long) {
         // TODO: LruCache 로 캐싱해놓고 꺼내쓰기
         viewModelScope.launch {
-            _commentHint.value = menuRepository.getReviewRecommendationComments(score)
+            try {
+                _commentHint.value = menuRepository.getReviewRecommendationComments(score)
+            } catch (e: IOException) {
+                _commentHint.value = ""
+            }
         }
     }
 
     fun refreshReviewDistribution(menuId: Long) {
         viewModelScope.launch {
-            _reviewDistribution.value = menuRepository.getReviewDistribution(menuId)
+            try {
+                _reviewDistribution.value = menuRepository.getReviewDistribution(menuId)
+            } catch (e: IOException) {
+                _reviewDistribution.value = emptyList()
+            }
         }
     }
 

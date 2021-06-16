@@ -78,6 +78,7 @@ class MenuDetailFragment : Fragment() {
         }
 
         vm.reviewDistribution.observe(viewLifecycleOwner) { distList ->
+            if (distList.isEmpty()) return@observe
             val distBarList = listOf(binding.distBar1, binding.distBar2, binding.distBar3, binding.distBar4, binding.distBar5)
             var maxCount = 1L
             distList.forEach { if (maxCount < it) maxCount = it }
