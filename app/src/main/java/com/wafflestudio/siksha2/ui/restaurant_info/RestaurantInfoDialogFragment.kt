@@ -56,7 +56,7 @@ class RestaurantInfoDialogFragment private constructor() :
         super.onViewCreated(view, savedInstanceState)
 
         binding.title.text = restaurantInfo.nameKr
-        binding.subtitle.text = restaurantInfo.address
+        binding.subtitle.text = restaurantInfo.address?.replace("서울 관악구 관악로 1", "") ?: ""
         restaurantInfo.etc?.operatingHours?.let {
             setUpOperatingHour(it)
         }
