@@ -12,6 +12,7 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.PathUtil
+import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
@@ -53,7 +54,7 @@ class MenuDetailViewModel @Inject constructor(
     val imageUrlList: LiveData<List<String>>
         get() = _imageUrlList
 
-    private val _imageCount = MutableLiveData<Long>()
+    private val _imageCount = MutableLiveData<Long>(0)
     val imageCount: LiveData<Long>
         get() = _imageCount
 
@@ -150,6 +151,7 @@ class MenuDetailViewModel @Inject constructor(
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
         _menu.value?.id?.let { id ->
             if (_uriList.value?.isNotEmpty() == true) {
+                context.showToast("이미지 압축 중입니다.")
                 _leaveReviewState.value = ReviewState.COMPRESSING
                 val imageList = mutableListOf<MultipartBody.Part>()
                 _uriList.value?.forEach {

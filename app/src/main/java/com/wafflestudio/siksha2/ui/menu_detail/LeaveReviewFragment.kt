@@ -116,7 +116,7 @@ class LeaveReviewFragment : Fragment() {
         }
 
         binding.submitButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (vm.imageCount.value!! > 0 && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 showToast("저장공간 권한이 없으면 사진을 업로드할 수 없습니다.")
                 ActivityCompat.requestPermissions(
                     requireActivity(),
@@ -130,7 +130,6 @@ class LeaveReviewFragment : Fragment() {
             lifecycleScope.launch {
                 try {
                     val comment = binding.commentEdit.text
-                    showToast("이미지 압축 중입니다.")
                     vm.leaveReview(
                         requireContext(),
                         binding.rating.rating.toDouble(),
