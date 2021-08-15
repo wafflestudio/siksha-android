@@ -157,6 +157,8 @@ class DailyRestaurantFragment : Fragment() {
 
         vm.isCalendarVisible.observe(viewLifecycleOwner) { visibility ->
             binding.calendarLayout.visibleOrGone(visibility)
+            binding.dateAfter.visibleOrGone(!visibility)
+            binding.dateBefore.visibleOrGone(!visibility)
         }
 
         binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }

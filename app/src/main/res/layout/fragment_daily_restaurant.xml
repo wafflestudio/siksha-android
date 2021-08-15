@@ -38,29 +38,38 @@
                 android:paddingVertical="10dp"/>
 
             <LinearLayout
-                android:id="@+id/layout_select_calendar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 >
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/layout_select_calendar"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_calendar" />
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/date_current"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_extra_bold"
-                    android:padding="10dp"
-                    android:text="..."
-                    android:textAlignment="center"
-                    android:textColor="@color/orange_500"
-                    android:textSize="15dp"
-                    tools:text="2021-03-28 (일)" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_calendar" />
+
+                    <TextView
+                        android:id="@+id/date_current"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_square_extra_bold"
+                        android:padding="10dp"
+                        android:text="..."
+                        android:textAlignment="center"
+                        android:textColor="@color/orange_500"
+                        android:textSize="15dp"
+                        tools:text="2021-03-28 (일)" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

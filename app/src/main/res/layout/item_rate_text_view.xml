@@ -9,7 +9,7 @@
         android:layout_width="48dp"
         android:layout_height="20dp"
         android:layout_marginStart="6dp"
-        android:fontFamily="@font/nanum_square_regular"
+        android:fontFamily="@font/nanum_square_bold"
         android:background="@drawable/frame_rate_text_red"
         android:gravity="center"
         android:textColor="@color/white"

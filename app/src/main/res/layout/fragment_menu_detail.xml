@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_marginVertical="0dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -28,7 +28,6 @@
             android:src="@drawable/ic_back_arrow" />
 
         <TextView
-            android:id="@+id/menu_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,7 +38,7 @@
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textAlignment="center"
-            tools:text="제육보쌈막국수" />
+            android:text="@string/menu_detail_toolbar" />
 
         <!-- textview 양옆 마진 맞추기용 -->
         <ImageView
@@ -53,275 +52,352 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/menu_info_container"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tool_bar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/menu_info_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/menu_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/text_rate_5"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="16dp">
+                android:fontFamily="@font/nanum_square_bold"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                tools:text=" 셀프코너 :잡곡밥 + 계란물만둣국 + 뭐시기 뭐시기 뭐시기 뭐시기"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="40dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@id/text_rate_5"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:textSize="10dp"
+                        android:textColor="@color/gray_500"
+                        android:text="@string/menu_detail_review_people_total" />
+
+                    <TextView
+                        android:id="@+id/review_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:textSize="10dp"
+                        android:textColor="@color/orange_normal"
+                        tools:text="123명" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:textSize="10dp"
+                        android:textColor="@color/gray_500"
+                        android:text="@string/menu_detail_review_people_has_reviewed" />
+
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/menu_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_extra_bold"
+                    android:textColor="@color/gray_900"
+                    android:textSize="32dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="36dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="4.5" />
+
+                <com.wafflestudio.siksha2.components.RatingStarsView
+                    android:id="@+id/menu_stars"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:starSize="small"
+                    app:layout_constraintTop_toBottomOf="@id/menu_rating"
+                    app:layout_constraintStart_toStartOf="@id/menu_rating"
+                    app:layout_constraintEnd_toEndOf="@id/menu_rating"
+                    />
+
+                <ImageView
+                    android:id="@+id/star_5"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/ic_gray_star"
+                    android:layout_marginStart="34dp"
+                    android:layout_marginTop="36dp"
+                    app:layout_constraintStart_toEndOf="@id/menu_stars"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_rate_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:textSize="10dp"
+                    android:textSize="8dp"
+                    android:text="5"
                     android:textColor="@color/gray_500"
-                    android:text="@string/menu_detail_review_people_total" />
+                    android:layout_marginEnd="3dp"
+                    app:layout_constraintTop_toTopOf="@id/star_5"
+                    app:layout_constraintBottom_toBottomOf="@id/star_5"
+                    app:layout_constraintEnd_toStartOf="@id/star_5" />
+
+                <ImageView
+                    android:id="@+id/dist_bar_5"
+                    android:layout_width="160dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/frame_dist_right_corner"
+                    android:layout_marginStart="9dp"
+                    app:layout_constraintStart_toEndOf="@id/star_5"
+                    app:layout_constraintTop_toTopOf="@id/star_5"
+                    app:layout_constraintBottom_toBottomOf="@id/star_5" />
+
+                <ImageView
+                    android:id="@+id/star_4"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/ic_gray_star"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="34dp"
+                    app:layout_constraintStart_toEndOf="@id/menu_stars"
+                    app:layout_constraintTop_toBottomOf="@id/star_5" />
 
                 <TextView
-                    android:id="@+id/review_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:textSize="10dp"
-                    android:textColor="@color/orange_normal"
-                    tools:text="123명" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:textSize="10dp"
+                    android:textSize="8dp"
+                    android:text="4"
                     android:textColor="@color/gray_500"
-                    android:text="@string/menu_detail_review_people_has_reviewed" />
+                    android:layout_marginEnd="3dp"
+                    app:layout_constraintTop_toTopOf="@id/star_4"
+                    app:layout_constraintBottom_toBottomOf="@id/star_4"
+                    app:layout_constraintEnd_toStartOf="@id/star_4" />
+
+                <ImageView
+                    android:id="@+id/dist_bar_4"
+                    android:layout_width="160dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/frame_dist_right_corner"
+                    android:layout_marginStart="9dp"
+                    app:layout_constraintStart_toEndOf="@id/star_4"
+                    app:layout_constraintTop_toTopOf="@id/star_4"
+                    app:layout_constraintBottom_toBottomOf="@id/star_4" />
+
+                <ImageView
+                    android:id="@+id/star_3"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/ic_gray_star"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="34dp"
+                    app:layout_constraintStart_toEndOf="@id/menu_stars"
+                    app:layout_constraintTop_toBottomOf="@id/star_4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:textSize="8dp"
+                    android:text="3"
+                    android:textColor="@color/gray_500"
+                    android:layout_marginEnd="3dp"
+                    app:layout_constraintTop_toTopOf="@id/star_3"
+                    app:layout_constraintBottom_toBottomOf="@id/star_3"
+                    app:layout_constraintEnd_toStartOf="@id/star_3" />
+
+                <ImageView
+                    android:id="@+id/dist_bar_3"
+                    android:layout_width="160dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/frame_dist_right_corner"
+                    android:layout_marginStart="9dp"
+                    app:layout_constraintStart_toEndOf="@id/star_3"
+                    app:layout_constraintTop_toTopOf="@id/star_3"
+                    app:layout_constraintBottom_toBottomOf="@id/star_3" />
+
+                <ImageView
+                    android:id="@+id/star_2"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/ic_gray_star"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="34dp"
+                    app:layout_constraintStart_toEndOf="@id/menu_stars"
+                    app:layout_constraintTop_toBottomOf="@id/star_3" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:textSize="8dp"
+                    android:text="2"
+                    android:textColor="@color/gray_500"
+                    android:layout_marginEnd="3dp"
+                    app:layout_constraintTop_toTopOf="@id/star_2"
+                    app:layout_constraintBottom_toBottomOf="@id/star_2"
+                    app:layout_constraintEnd_toStartOf="@id/star_2" />
+
+                <ImageView
+                    android:id="@+id/dist_bar_2"
+                    android:layout_width="160dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/frame_dist_right_corner"
+                    android:layout_marginStart="9dp"
+                    app:layout_constraintStart_toEndOf="@id/star_2"
+                    app:layout_constraintTop_toTopOf="@id/star_2"
+                    app:layout_constraintBottom_toBottomOf="@id/star_2" />
+
+                <ImageView
+                    android:id="@+id/star_1"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/ic_gray_star"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="34dp"
+                    app:layout_constraintStart_toEndOf="@id/menu_stars"
+                    app:layout_constraintTop_toBottomOf="@id/star_2" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:textSize="8dp"
+                    android:text="1"
+                    android:textColor="@color/gray_500"
+                    android:layout_marginEnd="3dp"
+                    app:layout_constraintTop_toTopOf="@id/star_1"
+                    app:layout_constraintBottom_toBottomOf="@id/star_1"
+                    app:layout_constraintEnd_toStartOf="@id/star_1" />
+
+                <ImageView
+                    android:id="@+id/dist_bar_1"
+                    android:layout_width="160dp"
+                    android:layout_height="5dp"
+                    android:src="@drawable/frame_dist_right_corner"
+                    android:layout_marginStart="9dp"
+                    app:layout_constraintStart_toEndOf="@id/star_1"
+                    app:layout_constraintTop_toTopOf="@id/star_1"
+                    app:layout_constraintBottom_toBottomOf="@id/star_1" />
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/leave_review_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="38dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/frame_leave_review_button"
+                android:fontFamily="@font/nanum_square_extra_bold"
+                android:paddingHorizontal="40dp"
+                android:paddingVertical="8dp"
+                android:text="@string/menu_detail_leave_review_button"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/light_gray_500"
+                android:layout_marginTop="16dp" />
+
+            <LinearLayout
+                android:id="@+id/layout_photo_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:id="@+id/layout_collect_photo_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/menu_detail_photo_review_gather"
+                        android:fontFamily="@font/nanum_square_regular"
+                        android:textSize="14dp"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="16dp"/>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_arrow_next"
+                        android:layout_marginEnd="16dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp">
+
+                    <com.wafflestudio.siksha2.components.ReviewImageView
+                        android:id="@+id/review_image_view_1"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:visibility="gone"
+                        app:showDeleteIcon="false"/>
+
+                    <com.wafflestudio.siksha2.components.ReviewImageView
+                        android:id="@+id/review_image_view_2"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:visibility="gone"
+                        app:showDeleteIcon="false"/>
+
+                    <com.wafflestudio.siksha2.components.ReviewImageView
+                        android:id="@id/review_image_view_3"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:visibility="gone"
+                        app:showDeleteIcon="false"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/menu_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_extra_bold"
-                android:textColor="@color/gray_900"
-                android:textSize="32dp"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="36dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="4.5" />
-
-            <com.wafflestudio.siksha2.components.RatingStarsView
-                android:id="@+id/menu_stars"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                app:starSize="small"
-                app:layout_constraintTop_toBottomOf="@id/menu_rating"
-                app:layout_constraintStart_toStartOf="@id/menu_rating"
-                app:layout_constraintEnd_toEndOf="@id/menu_rating"
-                />
-
-            <ImageView
-                android:id="@+id/star_5"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:src="@drawable/ic_gray_star"
-                android:layout_marginStart="34dp"
-                android:layout_marginTop="36dp"
-                app:layout_constraintStart_toEndOf="@id/menu_stars"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/text_rate_5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
-                android:textSize="8dp"
-                android:text="5"
-                android:textColor="@color/gray_500"
-                android:layout_marginEnd="3dp"
-                app:layout_constraintTop_toTopOf="@id/star_5"
-                app:layout_constraintBottom_toBottomOf="@id/star_5"
-                app:layout_constraintEnd_toStartOf="@id/star_5" />
-
-            <ImageView
-                android:id="@+id/dist_bar_5"
-                android:layout_width="160dp"
-                android:layout_height="5dp"
-                android:src="@drawable/frame_dist_right_corner"
-                android:layout_marginStart="9dp"
-                app:layout_constraintStart_toEndOf="@id/star_5"
-                app:layout_constraintTop_toTopOf="@id/star_5"
-                app:layout_constraintBottom_toBottomOf="@id/star_5" />
-
-            <ImageView
-                android:id="@+id/star_4"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:src="@drawable/ic_gray_star"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="34dp"
-                app:layout_constraintStart_toEndOf="@id/menu_stars"
-                app:layout_constraintTop_toBottomOf="@id/star_5" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
-                android:textSize="8dp"
-                android:text="4"
-                android:textColor="@color/gray_500"
-                android:layout_marginEnd="3dp"
-                app:layout_constraintTop_toTopOf="@id/star_4"
-                app:layout_constraintBottom_toBottomOf="@id/star_4"
-                app:layout_constraintEnd_toStartOf="@id/star_4" />
-
-            <ImageView
-                android:id="@+id/dist_bar_4"
-                android:layout_width="160dp"
-                android:layout_height="5dp"
-                android:src="@drawable/frame_dist_right_corner"
-                android:layout_marginStart="9dp"
-                app:layout_constraintStart_toEndOf="@id/star_4"
-                app:layout_constraintTop_toTopOf="@id/star_4"
-                app:layout_constraintBottom_toBottomOf="@id/star_4" />
-
-            <ImageView
-                android:id="@+id/star_3"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:src="@drawable/ic_gray_star"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="34dp"
-                app:layout_constraintStart_toEndOf="@id/menu_stars"
-                app:layout_constraintTop_toBottomOf="@id/star_4" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
-                android:textSize="8dp"
-                android:text="3"
-                android:textColor="@color/gray_500"
-                android:layout_marginEnd="3dp"
-                app:layout_constraintTop_toTopOf="@id/star_3"
-                app:layout_constraintBottom_toBottomOf="@id/star_3"
-                app:layout_constraintEnd_toStartOf="@id/star_3" />
-
-            <ImageView
-                android:id="@+id/dist_bar_3"
-                android:layout_width="160dp"
-                android:layout_height="5dp"
-                android:src="@drawable/frame_dist_right_corner"
-                android:layout_marginStart="9dp"
-                app:layout_constraintStart_toEndOf="@id/star_3"
-                app:layout_constraintTop_toTopOf="@id/star_3"
-                app:layout_constraintBottom_toBottomOf="@id/star_3" />
-
-            <ImageView
-                android:id="@+id/star_2"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:src="@drawable/ic_gray_star"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="34dp"
-                app:layout_constraintStart_toEndOf="@id/menu_stars"
-                app:layout_constraintTop_toBottomOf="@id/star_3" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
-                android:textSize="8dp"
-                android:text="2"
-                android:textColor="@color/gray_500"
-                android:layout_marginEnd="3dp"
-                app:layout_constraintTop_toTopOf="@id/star_2"
-                app:layout_constraintBottom_toBottomOf="@id/star_2"
-                app:layout_constraintEnd_toStartOf="@id/star_2" />
-
-            <ImageView
-                android:id="@+id/dist_bar_2"
-                android:layout_width="160dp"
-                android:layout_height="5dp"
-                android:src="@drawable/frame_dist_right_corner"
-                android:layout_marginStart="9dp"
-                app:layout_constraintStart_toEndOf="@id/star_2"
-                app:layout_constraintTop_toTopOf="@id/star_2"
-                app:layout_constraintBottom_toBottomOf="@id/star_2" />
-
-            <ImageView
-                android:id="@+id/star_1"
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:src="@drawable/ic_gray_star"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="34dp"
-                app:layout_constraintStart_toEndOf="@id/menu_stars"
-                app:layout_constraintTop_toBottomOf="@id/star_2" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
-                android:textSize="8dp"
-                android:text="1"
-                android:textColor="@color/gray_500"
-                android:layout_marginEnd="3dp"
-                app:layout_constraintTop_toTopOf="@id/star_1"
-                app:layout_constraintBottom_toBottomOf="@id/star_1"
-                app:layout_constraintEnd_toStartOf="@id/star_1" />
-
-            <ImageView
-                android:id="@+id/dist_bar_1"
-                android:layout_width="160dp"
-                android:layout_height="5dp"
-                android:src="@drawable/frame_dist_right_corner"
-                android:layout_marginStart="9dp"
-                app:layout_constraintStart_toEndOf="@id/star_1"
-                app:layout_constraintTop_toTopOf="@id/star_1"
-                app:layout_constraintBottom_toBottomOf="@id/star_1" />
-
-
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <TextView
-            android:id="@+id/leave_review_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="38dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/frame_leave_review_button"
-            android:fontFamily="@font/nanum_square_extra_bold"
-            android:paddingHorizontal="40dp"
-            android:paddingVertical="8dp"
-            android:text="@string/menu_detail_leave_review_button"
-            android:textColor="@color/white"
-            android:textSize="14dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@color/light_gray_500"
-            android:layout_marginTop="16dp" />
-
-        <LinearLayout
-            android:id="@+id/layout_photo_review"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
-
             <LinearLayout
-                android:id="@+id/layout_collect_photo_reviews"
+                android:id="@+id/layout_collect_reviews"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:orientation="horizontal"
@@ -330,7 +406,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/menu_detail_photo_review_gather"
+                    android:text="@string/menu_detail_review_gather"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="14dp"
                     android:textColor="@color/black"
@@ -349,92 +425,36 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="10dp">
-
-                <com.wafflestudio.siksha2.components.ReviewImageView
-                    android:id="@+id/review_image_view_1"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:visibility="gone"
-                    app:showDeleteIcon="false"/>
-
-                <com.wafflestudio.siksha2.components.ReviewImageView
-                    android:id="@+id/review_image_view_2"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:visibility="gone"
-                    app:showDeleteIcon="false"/>
-
-                <com.wafflestudio.siksha2.components.ReviewImageView
-                    android:id="@id/review_image_view_3"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:visibility="gone"
-                    app:showDeleteIcon="false"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_collect_reviews"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:gravity="center">
-
             <TextView
+                android:id="@+id/empty_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/menu_detail_review_gather"
-                android:fontFamily="@font/nanum_square_regular"
-                android:textSize="14dp"
-                android:textColor="@color/black"
-                android:layout_marginStart="16dp"/>
+                android:layout_gravity="center"
+                android:layout_marginTop="36dp"
+                android:fontFamily="@font/nanum_square_light"
+                android:text="@string/menu_detail_no_review"
+                android:textAlignment="center"
+                android:textColor="@color/gray_700"
+                android:visibility="gone" />
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_arrow_next"
-                android:layout_marginEnd="16dp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/review_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingHorizontal="36dp"
+                android:paddingTop="10dp"
+                android:layout_weight="1"
+                android:clipToPadding="true"
+                android:paddingBottom="20dp"
+                android:background="@color/white"
+                tools:listitem="@layout/item_review" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/empty_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="36dp"
-            android:fontFamily="@font/nanum_square_light"
-            android:text="@string/menu_detail_no_review"
-            android:textAlignment="center"
-            android:textColor="@color/gray_700"
-            android:visibility="gone" />
+    </androidx.core.widget.NestedScrollView>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/review_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:paddingHorizontal="36dp"
-            android:paddingTop="10dp"
-            android:layout_weight="1"
-            android:clipToPadding="true"
-            android:paddingBottom="20dp"
-            android:background="@color/white"
-            tools:listitem="@layout/item_review" />
-
-    </LinearLayout>
 
     <include
         android:id="@+id/on_error_container"

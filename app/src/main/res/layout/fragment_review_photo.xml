@@ -11,7 +11,7 @@
     <LinearLayout
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:background="@color/orange_normal" >
@@ -53,11 +53,23 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:clipToPadding="true"
+        android:clipToPadding="false"
         android:paddingTop="10dp"
         android:paddingBottom="20dp"
+        android:visibility="gone"
         tools:listitem="@layout/item_review" />
+
+    <TextView
+        android:id="@+id/text_no_reviews"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="visible"
+        android:text="@string/review_nothing"
+        android:fontFamily="@font/nanum_square_regular"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:textColor="@color/gray_700" />
 
 </LinearLayout>

@@ -25,8 +25,9 @@ class MenuDetailFragment : Fragment() {
     private val vm: MenuDetailViewModel by activityViewModels()
 
     private lateinit var binding: FragmentMenuDetailBinding
+    private lateinit var reviewsAdapter: MenuReviewsAdapter
+
     private val args: MenuDetailFragmentArgs by navArgs()
-    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter(true)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,16 +35,18 @@ class MenuDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMenuDetailBinding.inflate(inflater, container, false)
-        binding.reviewList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = reviewsAdapter
-        }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        reviewsAdapter = MenuReviewsAdapter(true, childFragmentManager)
+
+        binding.reviewList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = reviewsAdapter
+        }
 
         lifecycleScope.launch {
             reviewsAdapter.loadStateFlow
@@ -73,7 +76,7 @@ class MenuDetailFragment : Fragment() {
             binding.menuTitle.text = menu?.nameKr
             binding.menuRating.text = "${ menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"}"
             binding.menuStars.rating = menu?.score?.toFloat() ?: 0.0f
-            binding.reviewCount.text = "${menu?.reviewCount ?: 0}명"
+            binding.reviewCount.text = " ${menu?.reviewCount ?: 0}"
         }
 
         vm.reviewDistribution.observe(viewLifecycleOwner) { distList ->

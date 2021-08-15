@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha2.ui.menu_detail
 
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.findFragment
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +14,8 @@ import com.wafflestudio.siksha2.utils.toLocalDateTime
 import com.wafflestudio.siksha2.utils.visibleOrGone
 
 class MenuReviewsAdapter constructor(
-    private val showImage: Boolean = true
+    private val showImage: Boolean = true,
+    private val fragmentManager: FragmentManager? = null
 ) : PagingDataAdapter<Review, MenuReviewsAdapter.ViewHolder>(diffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -32,6 +35,12 @@ class MenuReviewsAdapter constructor(
                             if (i < it.size) {
                                 imageViewList[i].run {
                                     setImage(it[i])
+                                    fragmentManager?.let {
+                                        setImageClickListener { url ->
+                                            val dialog = ReviewImageDialog(url)
+                                            dialog.show(fragmentManager, "review_image_$url")
+                                        }
+                                    }
                                     visibleOrGone(true)
                                 }
                             }
