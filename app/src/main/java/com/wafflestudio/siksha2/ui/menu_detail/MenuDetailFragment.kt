@@ -26,7 +26,7 @@ class MenuDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentMenuDetailBinding
     private val args: MenuDetailFragmentArgs by navArgs()
-    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter(false)
+    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter(true)
 
     override fun onCreateView(
         inflater: LayoutInflater,

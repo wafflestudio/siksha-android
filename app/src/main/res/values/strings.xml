@@ -32,7 +32,7 @@
     <string name="leave_review_max_image_toast">사진은 최대 3개까지 등록할 수 있습니다.</string>
     <string name="menu_detail_no_review">아직 해당 메뉴의 리뷰가 없습니다.\n리뷰를 남겨보세요</string>
     <string name="menu_detail_review_people_total">총</string>
-    <string name="menu_detail_review_people_has_reviewed">이 평가했어요!</string>
+    <string name="menu_detail_review_people_has_reviewed">개의 평가가 있어요!</string>
     <string name="menu_detail_photo_review_gather">사진 리뷰 모아보기</string>
     <string name="menu_detail_review_gather">리뷰</string>
     <string name="menu_detail_plus">+</string>

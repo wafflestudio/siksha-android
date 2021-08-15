@@ -70,7 +70,7 @@ interface SikshaApi {
     @POST("voc/")
     suspend fun sendVoc(
         @Body req: VocParam
-    ): Response<String>
+    )
 
     @GET("auth/me")
     suspend fun getUserData(): GetUserDataResult

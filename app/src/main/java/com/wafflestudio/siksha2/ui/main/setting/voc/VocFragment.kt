@@ -57,6 +57,10 @@ class VocFragment : Fragment() {
             )
         }
 
+        binding.closeButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.submitButton.setOnClickListener {
             lifecycleScope.launch {
                 try {
