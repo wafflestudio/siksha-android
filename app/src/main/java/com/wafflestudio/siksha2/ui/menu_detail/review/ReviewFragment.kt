@@ -32,7 +32,6 @@ class ReviewFragment : Fragment() {
     ): View {
         binding = FragmentReviewBinding.inflate(inflater, container, false)
 
-
         return binding.root
     }
 

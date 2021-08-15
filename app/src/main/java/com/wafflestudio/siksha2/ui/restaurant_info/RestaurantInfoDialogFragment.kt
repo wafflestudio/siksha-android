@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha2.ui.restaurant_info
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -22,7 +21,6 @@ import com.wafflestudio.siksha2.databinding.FragmentRestaurantInfoBinding
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import java.util.*
 
 // TODO: 전반적으로 대충 짬 나중에 날잡고 고치기
@@ -105,7 +103,6 @@ class RestaurantInfoDialogFragment private constructor() :
                                 binding.layoutWeekdayDinner.visibleOrGone(true)
                                 binding.textWeekdayDinnerTime.text = s
                             }
-
                         }
                     }
                 }
@@ -133,7 +130,6 @@ class RestaurantInfoDialogFragment private constructor() :
                                 binding.layoutSaturdayDinner.visibleOrGone(true)
                                 binding.textSaturdayDinnerTime.text = s
                             }
-
                         }
                     }
                 }
@@ -161,7 +157,6 @@ class RestaurantInfoDialogFragment private constructor() :
                                 binding.layoutHolidayDinner.visibleOrGone(true)
                                 binding.textHolidayDinnerTime.text = s
                             }
-
                         }
                     }
                 }
@@ -176,15 +171,14 @@ class RestaurantInfoDialogFragment private constructor() :
         operatingHour.forEach {
             val minList = it.split("-")
             var startMinute = 0
-            minList[0].split(':').forEachIndexed { index, s -> when(index) { 0 -> startMinute += s.toInt() * 60 ; 1 -> startMinute += s.toInt()} }
+            minList[0].split(':').forEachIndexed { index, s -> when (index) { 0 -> startMinute += s.toInt() * 60 ; 1 -> startMinute += s.toInt() } }
             var endMinute = 0
-            minList[1].split(':').forEachIndexed { index, s -> when(index) { 0 -> endMinute += s.toInt() * 60 ; 1 -> endMinute += s.toInt()} }
+            minList[1].split(':').forEachIndexed { index, s -> when (index) { 0 -> endMinute += s.toInt() * 60 ; 1 -> endMinute += s.toInt() } }
             minuteList.add(Pair(startMinute, endMinute))
         }
 
-
-         for (i in 0..2) {
-            when(i) {
+        for (i in 0..2) {
+            when (i) {
                 0 -> {
                     var isFound = false
                     minuteList.forEach {

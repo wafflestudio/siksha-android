@@ -31,7 +31,6 @@ class ReviewPhotoFragment : Fragment() {
     ): View {
         binding = FragmentReviewPhotoBinding.inflate(inflater, container, false)
 
-
         return binding.root
     }
 

@@ -6,10 +6,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.bumptech.glide.Glide
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemReviewImageViewBinding
-import com.wafflestudio.siksha2.ui.menu_detail.ReviewImageDialog
 import com.wafflestudio.siksha2.utils.setImageUrl
 import com.wafflestudio.siksha2.utils.visibleOrGone
 
