@@ -5,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="12dp"
-    android:layout_marginTop="6dp"
-    android:layout_marginBottom="6dp"
-    android:background="@drawable/frame_corner_radius_10"
-    android:elevation="2dp"
+    android:layout_marginVertical="8dp"
+    android:background="@drawable/frame_corner_radius_10_border_thick"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout

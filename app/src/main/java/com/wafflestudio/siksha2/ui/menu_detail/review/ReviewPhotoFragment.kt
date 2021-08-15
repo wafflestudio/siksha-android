@@ -22,7 +22,7 @@ class ReviewPhotoFragment : Fragment() {
     private lateinit var binding: FragmentReviewPhotoBinding
     private val vm: MenuDetailViewModel by activityViewModels()
     private val args: ReviewPhotoFragmentArgs by navArgs()
-    private val reviewsAdapter: MenuReviewsAdapter = MenuReviewsAdapter()
+    private lateinit var reviewsAdapter: MenuReviewsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,15 +30,18 @@ class ReviewPhotoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentReviewPhotoBinding.inflate(inflater, container, false)
-        binding.reviewList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = reviewsAdapter
-        }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        reviewsAdapter = MenuReviewsAdapter(true, childFragmentManager)
+
+        binding.reviewList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = reviewsAdapter
+        }
 
         lifecycleScope.launch {
             reviewsAdapter.loadStateFlow
@@ -46,6 +49,7 @@ class ReviewPhotoFragment : Fragment() {
                     if (it.refresh is LoadState.NotLoading) {
                         (reviewsAdapter.itemCount < 1).let { empty ->
                             binding.reviewList.visibleOrGone(empty.not())
+                            binding.textNoReviews.visibleOrGone(empty)
                         }
                     }
                 }

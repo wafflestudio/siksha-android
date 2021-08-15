@@ -6,15 +6,17 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.bumptech.glide.Glide
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemReviewImageViewBinding
+import com.wafflestudio.siksha2.utils.setImageUrl
 import com.wafflestudio.siksha2.utils.visibleOrGone
 
 class ReviewImageView : ConstraintLayout {
 
     private val binding = ItemReviewImageViewBinding.inflate(LayoutInflater.from(context), this)
     private var onDeleteClickListener: OnDeleteClickListener? = null
+
+    private var imageUrl: String? = null
 
     constructor(context: Context) : super(context) {
         init(null)
@@ -59,10 +61,18 @@ class ReviewImageView : ConstraintLayout {
     }
 
     fun setImage(url: String) {
-        Glide.with(context)
-            .load(url)
-            .into(binding.reviewImage)
+        binding.reviewImage.setImageUrl(url)
+        imageUrl = url
     }
+
+    fun setImageClickListener(listener: (String) -> (Unit)) {
+        binding.reviewImage.setOnClickListener {
+            imageUrl?.let { url ->
+                listener.invoke(url)
+            }
+        }
+    }
+
     fun showMorePhotos(photoCount: Long) {
         binding.morePhotoLayout.visibility = View.VISIBLE
         binding.textMorePhoto.text = photoCount.toString()
