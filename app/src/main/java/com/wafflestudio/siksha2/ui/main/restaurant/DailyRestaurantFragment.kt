@@ -88,6 +88,7 @@ class DailyRestaurantFragment : Fragment() {
             object : CalendarSelectView.OnDateChangeListener {
                 override fun onChange(date: LocalDate) {
                     vm.setDateFilter(date)
+                    vm.setCalendarVisibility(false)
                 }
             }
         )
@@ -113,7 +114,7 @@ class DailyRestaurantFragment : Fragment() {
                 }
         }
 
-        binding.dateCurrent.setOnClickListener {
+        binding.layoutSelectCalendar.setOnClickListener {
             vm.toggleCalendarVisibility()
         }
 

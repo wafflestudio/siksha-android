@@ -68,7 +68,7 @@ class ReorderRestaurantFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.backButton.setOnClickListener {
+        binding.closeButton.setOnClickListener {
             findNavController().popBackStack()
         }
     }

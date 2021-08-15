@@ -83,11 +83,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 " />
 
-    <LinearLayout
+
+    <HorizontalScrollView
         android:id="@+id/review_image_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:visibility="gone"
         android:layout_marginStart="13dp"
         app:layout_constraintTop_toBottomOf="@id/review_text"
@@ -95,27 +95,35 @@
         app:layout_constraintEnd_toEndOf="@id/review_text"
         >
 
-        <com.wafflestudio.siksha2.components.ReviewImageView
-            android:id="@+id/review_image_view_1"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:visibility="gone"
-            app:showDeleteIcon="false" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
 
-        <com.wafflestudio.siksha2.components.ReviewImageView
-            android:id="@id/review_image_view_2"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:visibility="gone"
-            app:showDeleteIcon="false" />
+            <com.wafflestudio.siksha2.components.ReviewImageView
+                android:id="@+id/review_image_view_1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                app:showDeleteIcon="false" />
 
-        <com.wafflestudio.siksha2.components.ReviewImageView
-            android:id="@+id/review_image_view_3"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:visibility="gone"
-            app:showDeleteIcon="false" />
+            <com.wafflestudio.siksha2.components.ReviewImageView
+                android:id="@id/review_image_view_2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                app:showDeleteIcon="false" />
 
-    </LinearLayout>
+            <com.wafflestudio.siksha2.components.ReviewImageView
+                android:id="@+id/review_image_view_3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                app:showDeleteIcon="false" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
