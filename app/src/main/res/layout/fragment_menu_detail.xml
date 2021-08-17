@@ -315,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="38dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/frame_leave_review_button"
+                android:background="@drawable/frame_small_orange_button"
                 android:fontFamily="@font/nanum_square_extra_bold"
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="8dp"
