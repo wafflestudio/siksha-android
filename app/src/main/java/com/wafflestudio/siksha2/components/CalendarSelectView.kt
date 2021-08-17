@@ -72,6 +72,11 @@ class CalendarSelectView : LinearLayout {
         dateChangeListener = listener
     }
 
+    fun setSelectedDate(date: LocalDate) {
+        setDate(date)
+        focusingDate = date
+    }
+
     private fun setDate(date: LocalDate) {
         year = date.year
         month = date.monthValue

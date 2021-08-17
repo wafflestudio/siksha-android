@@ -22,6 +22,7 @@ import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -39,6 +40,12 @@ class DailyRestaurantFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             isFavorite = it.getBoolean(IS_FAVORITE)
+        }
+
+        when (LocalTime.now().hour) {
+            in 0..9 -> vm.setMealsOfDayFilter(MealsOfDay.BR)
+            in 9..13 -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+            else -> vm.setMealsOfDayFilter(MealsOfDay.DN)
         }
     }
 
@@ -110,7 +117,7 @@ class DailyRestaurantFragment : Fragment() {
                 .collect {
                     binding.menuGroupList.visibleOrGone(it.isNotEmpty())
                     binding.emptyText.visibleOrGone(it.isEmpty())
-                    adapter.submitList(it)
+                    adapter.submitList(it) { binding.menuGroupList.scrollToPosition(0) }
                 }
         }
 
@@ -123,6 +130,7 @@ class DailyRestaurantFragment : Fragment() {
         }
 
         vm.dateFilter.observe(viewLifecycleOwner) { date ->
+            binding.calendarSelectView.setSelectedDate(date)
             ObjectAnimator.ofFloat(binding.dateBefore, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
             binding.dateCurrent.text = date.toPrettyString()
@@ -168,15 +176,11 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
-        when (LocalTime.now().hour) {
-            in 0..9 -> vm.setMealsOfDayFilter(MealsOfDay.BR)
-            in 9..13 -> vm.setMealsOfDayFilter(MealsOfDay.LU)
-            else -> vm.setMealsOfDayFilter(MealsOfDay.DN)
-        }
     }
 
     companion object {
         const val IS_FAVORITE = "is_favorite"
+        private const val SAVED_INSTANCE_MEALS_OF_DAY = "meals_of_day"
 
         @JvmStatic
         fun newInstance(isFavorite: Boolean) =

@@ -73,7 +73,6 @@
         android:textColor="@color/gray_900"
         android:background="@drawable/speech_bubble"
         android:textSize="12dp"
-        android:elevation="4dp"
         android:paddingStart="30dp"
         android:paddingEnd="10dp"
         android:paddingTop="10dp"

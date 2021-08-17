@@ -24,6 +24,7 @@ class MainFragment : Fragment() {
         binding.viewPager.apply {
             adapter = stateAdapter
             isUserInputEnabled = false
+            setCurrentItem(1, false)
         }
 
         TabLayoutMediator(
