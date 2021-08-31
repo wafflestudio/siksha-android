@@ -2,9 +2,7 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,6 +23,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
@@ -32,6 +31,8 @@ class DailyRestaurantFragment : Fragment() {
 
     private lateinit var binding: FragmentDailyRestaurantBinding
     private lateinit var adapter: MenuGroupAdapter
+
+    private lateinit var gestureDetector: GestureDetector
 
     // 즐겨찾기 식당 탭과 일반 식당 탭이 다른 프래그먼트로 분리하기엔 중복이 많아서 플래그로 넘겨받고 관리.
     private var isFavorite: Boolean = false
@@ -66,6 +67,52 @@ class DailyRestaurantFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        gestureDetector = GestureDetector(requireContext(),
+            object : GestureDetector.OnGestureListener {
+                override fun onDown(p0: MotionEvent?): Boolean { return false }
+                override fun onShowPress(p0: MotionEvent?) {}
+                override fun onSingleTapUp(p0: MotionEvent?): Boolean { return false }
+                override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean { return false }
+                override fun onLongPress(p0: MotionEvent?) {}
+                override fun onFling(
+                    p0: MotionEvent?,
+                    p1: MotionEvent?,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+
+                    if (Math.abs(velocityY) > Math.abs(velocityX)) return false
+
+                    if (velocityX > 2000) {
+                        when(vm.mealsOfDayFilter.value) {
+                            MealsOfDay.BR -> {
+                                vm.addDateOffset(-1L)
+                                vm.setMealsOfDayFilter(MealsOfDay.DN)
+                            }
+                            MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.BR)
+                            MealsOfDay.DN -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+                        }
+
+                        return true
+                    }
+
+                    if (velocityX < -2000) {
+                        when(vm.mealsOfDayFilter.value) {
+                            MealsOfDay.BR -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+                            MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.DN)
+                            MealsOfDay.DN -> {
+                                vm.addDateOffset(1L)
+                                vm.setMealsOfDayFilter(MealsOfDay.BR)
+                            }
+                        }
+
+                        return true
+                    }
+
+                    return false
+                }
+            })
 
         adapter = MenuGroupAdapter(
             onMenuGroupInfoClickListener = {
@@ -105,6 +152,26 @@ class DailyRestaurantFragment : Fragment() {
             it.layoutManager = LinearLayoutManager(context)
         }
 
+        binding.menuGroupList.setOnTouchListener { _, ev ->
+            gestureDetector.onTouchEvent(ev)
+            false
+        }
+
+        binding.emptyText.setOnTouchListener { _, ev ->
+            gestureDetector.onTouchEvent(ev)
+            true
+        }
+
+//        binding.menuGroupList.setOnTouchListener { _, p1 ->
+//            gestureDetector.onTouchEvent(p1)
+//            true
+//        }
+//
+//        binding.emptyText.setOnTouchListener { _, p1 ->
+//            gestureDetector.onTouchEvent(p1)
+//            true
+//        }
+
         vm.favoriteRestaurantExists.observe(viewLifecycleOwner) {
             if (isFavorite) {
                 binding.emptyFavorite.root.visibleOrGone(it.not())
@@ -138,6 +205,8 @@ class DailyRestaurantFragment : Fragment() {
                 .apply { duration = 250 }.start()
             ObjectAnimator.ofFloat(binding.dateAfter, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
+
+            binding.calendarSelectView.updateDateWithoutListener(date)
         }
 
         vm.mealsOfDayFilter.observe(viewLifecycleOwner) { mealsOfDay ->
