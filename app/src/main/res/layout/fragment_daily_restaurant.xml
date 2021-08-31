@@ -175,6 +175,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/layout_menu_group_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -189,13 +190,17 @@
             <TextView
                 android:id="@+id/empty_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_height="match_parent"
+                android:paddingTop="48dp"
                 android:fontFamily="@font/nanum_square_light"
-                android:gravity="center"
+                android:gravity="center_horizontal|top"
                 android:text="@string/daily_restaurant_no_menus"
                 android:textColor="@color/gray_700"
                 android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </FrameLayout>
 

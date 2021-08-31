@@ -2,9 +2,7 @@ package com.wafflestudio.siksha2.components
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,9 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemCalendarSelectViewBinding
 import com.wafflestudio.siksha2.databinding.ItemWeekBinding
+import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.visibleOrGone
+import timber.log.Timber
 import java.time.LocalDate
+import kotlin.math.abs
 
 class CalendarSelectView : LinearLayout {
 
@@ -25,6 +26,7 @@ class CalendarSelectView : LinearLayout {
     private lateinit var focusingDate: LocalDate
     private lateinit var calendarAdapter: CalendarWeekAdapter
     private lateinit var calendarLayoutManager: LinearLayoutManager
+    private lateinit var gestureDetector: GestureDetector
     private var dateChangeListener: OnDateChangeListener? = null
 
     constructor(context: Context) : super(context) {
@@ -44,6 +46,44 @@ class CalendarSelectView : LinearLayout {
     }
 
     private fun init() {
+        gestureDetector = GestureDetector(context,
+            object : GestureDetector.OnGestureListener {
+                override fun onDown(p0: MotionEvent?): Boolean { return false }
+                override fun onShowPress(p0: MotionEvent?) {}
+                override fun onSingleTapUp(p0: MotionEvent?): Boolean { return false }
+                override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+                    Timber.d("scroll velocity x : $p2 y : $p3")
+                    if (abs(p2) > 100) return true
+                    return false
+                }
+                override fun onLongPress(p0: MotionEvent?) {}
+                override fun onFling(
+                    p0: MotionEvent?,
+                    p1: MotionEvent?,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+
+                    Timber.d(velocityX.toString())
+
+                    if (Math.abs(velocityY) > Math.abs(velocityX)) return false
+
+                    if (velocityX > 250) {
+                        val localDate = LocalDate.of(year, month, 1)
+                        setDate(localDate.minusMonths(1))
+                        return true
+                    }
+
+                    if (velocityX < -250) {
+                        val localDate = LocalDate.of(year, month, 1)
+                        setDate(localDate.plusMonths(1))
+                        return true
+                    }
+
+                    return false
+                }
+            })
+
         binding.leftArrow.setOnClickListener {
             val localDate = LocalDate.of(year, month, 1)
             setDate(localDate.minusMonths(1))
@@ -52,6 +92,11 @@ class CalendarSelectView : LinearLayout {
         binding.rightArrow.setOnClickListener {
             val localDate = LocalDate.of(year, month, 1)
             setDate(localDate.plusMonths(1))
+        }
+
+        binding.weekRecyclerview.setOnTouchListener { _, ev ->
+            gestureDetector.onTouchEvent(ev)
+            false
         }
 
         calendarAdapter = CalendarWeekAdapter()
@@ -68,6 +113,11 @@ class CalendarSelectView : LinearLayout {
         dateChangeListener?.onChange(focusingDate)
     }
 
+    fun updateDateWithoutListener(date: LocalDate) {
+        setDate(date)
+        focusingDate = date
+    }
+
     fun setDateChangeListener(listener: OnDateChangeListener) {
         dateChangeListener = listener
     }
@@ -76,7 +126,7 @@ class CalendarSelectView : LinearLayout {
         year = date.year
         month = date.monthValue
         val yearMonthText = year.toString() + "." +
-            (if (month > 9) month.toString() else "0$month") + "."
+            (if (month > 9) month.toString() else "0$month")
         binding.yearMonthText.text = yearMonthText
 
         val weeks = mutableListOf<List<Int>>()
