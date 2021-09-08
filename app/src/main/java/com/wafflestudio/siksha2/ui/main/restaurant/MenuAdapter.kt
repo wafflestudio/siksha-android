@@ -1,17 +1,20 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMenuBinding
 import com.wafflestudio.siksha2.models.Menu
-import com.wafflestudio.siksha2.utils.StringFormatter
+import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.visibleOrGone
 
 class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
     ListAdapter<Menu, MenuAdapter.MenuViewHolder>(diffCallback) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         return MenuViewHolder(
             ItemMenuBinding
@@ -21,17 +24,33 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
 
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = getItem(position)
+
+        val gestureDetector = GestureDetector(
+            holder.binding.root.context,
+            object : GestureDetector.OnGestureListener {
+                override fun onDown(p0: MotionEvent?): Boolean { return false }
+                override fun onShowPress(p0: MotionEvent?) {}
+                override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+                    onMenuItemClickListener.invoke(menu.id)
+                    return true
+                }
+                override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean { return false }
+                override fun onLongPress(p0: MotionEvent?) {}
+                override fun onFling(p0: MotionEvent?, p1: MotionEvent?, velocityX: Float, velocityY: Float): Boolean { return false }
+            }
+        )
+
         holder.binding.apply {
             // FIXME: Api 변경 요구 하기 (하드코딩 스트링 싫어요)
             // Context 제대로 파악하기 (no fork? no meat?)
             val noMeat = menu.etc?.contains("No meat") == true
             menuTitleText.text = menu.nameKr
             iconNoFork.visibleOrGone(noMeat)
-
-            priceText.text = menu.price?.toString() ?: "-"
-            menuScore.text = StringFormatter.formatScore(menu.score)
-            root.setOnClickListener {
-                onMenuItemClickListener.invoke(menu.id)
+            priceText.text = menu.price.toPrettyString()
+            rateText.rate = menu.score ?: 0.0
+            root.setOnTouchListener { _, event ->
+                gestureDetector.onTouchEvent(event)
+                true
             }
         }
     }

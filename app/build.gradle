@@ -34,8 +34,8 @@ android {
         applicationId "com.wafflestudio.siksha2"
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 1000003
-        versionName "1.0.3"
+        versionCode 3000000
+        versionName "3.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,7 +48,7 @@ android {
             buildConfigField("String", "PREF_KEY", "\"siksha.preference\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://siksha-api.wafflestudio.com\"")
+            buildConfigField("String", "BASE_URL", "\"http://3.36.80.144\"")
             buildConfigField("String", "PREF_KEY", "\"siksha.preference\"")
         }
     }
@@ -125,6 +125,13 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+
+    // Image Compression
+    implementation 'id.zelory:compressor:3.0.1'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

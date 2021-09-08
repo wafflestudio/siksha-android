@@ -11,11 +11,10 @@
     <LinearLayout
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
+        android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
+        android:background="@color/orange_normal" >
 
         <ImageView
             android:id="@+id/back_button"
@@ -23,20 +22,30 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
             android:paddingVertical="16dp"
-            android:src="@drawable/ic_left_arrow" />
+            android:src="@drawable/ic_back_arrow" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginEnd="20dp"
-            android:ellipsize="marquee"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="12dp"
+            android:layout_weight="1"
             android:fontFamily="@font/nanum_square_bold"
-            android:singleLine="true"
             android:text="@string/setting_siksha_info"
-            android:textColor="@color/gray_900"
-            android:textSize="22dp" />
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textSize="20dp" />
+
+        <!-- textview 양옆 마진 맞추기용 -->
+        <ImageView
+            android:id="@+id/back_button_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow"
+            android:visibility="invisible" />
 
     </LinearLayout>
 
@@ -56,11 +65,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/version_check_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="현재 버전 정보"
+            android:textColor="@color/gray_500"
+            android:fontFamily="@font/nanum_square_regular"
+            tools:text="@string/setting_using_latest_version"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView5" />
@@ -69,9 +80,12 @@
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/gray_500"
+            android:fontFamily="@font/nanum_square_regular"
+            tools:text="3.0.0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView" />
+            app:layout_constraintTop_toBottomOf="@id/version_check_text" />
 
 
         <TextView

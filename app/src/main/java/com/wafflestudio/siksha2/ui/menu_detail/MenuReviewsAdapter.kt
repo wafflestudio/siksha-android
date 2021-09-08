@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.ui.menu_detail
 
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +10,12 @@ import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.toKoreanDate
 import com.wafflestudio.siksha2.utils.toLocalDateTime
+import com.wafflestudio.siksha2.utils.visibleOrGone
 
-class MenuReviewsAdapter : PagingDataAdapter<Review, MenuReviewsAdapter.ViewHolder>(diffCallback) {
+class MenuReviewsAdapter constructor(
+    private val showImage: Boolean = true,
+    private val fragmentManager: FragmentManager? = null
+) : PagingDataAdapter<Review, MenuReviewsAdapter.ViewHolder>(diffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -18,6 +23,30 @@ class MenuReviewsAdapter : PagingDataAdapter<Review, MenuReviewsAdapter.ViewHold
             stars.rating = item?.score?.toFloat() ?: 0.0f
             reviewText.text = item?.comment
             date.text = item?.createdAt?.toLocalDateTime()?.toLocalDate()?.toKoreanDate() ?: "-"
+            idText.text = "ID " + item?.userId.toString()
+            if (showImage) {
+                item?.etc?.images?.let {
+                    if (it.isNotEmpty()) {
+                        val imageViewList = listOf(this.reviewImageView1, this.reviewImageView2, this.reviewImageView3)
+                        this.reviewImageLayout.visibleOrGone(true)
+
+                        for (i in 0 until 3) {
+                            if (i < it.size) {
+                                imageViewList[i].run {
+                                    setImage(it[i])
+                                    fragmentManager?.let {
+                                        setImageClickListener { url ->
+                                            val dialog = ReviewImageDialog(url)
+                                            dialog.show(fragmentManager, "review_image_$url")
+                                        }
+                                    }
+                                    visibleOrGone(true)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
