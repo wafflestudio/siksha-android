@@ -17,6 +17,10 @@
         <package android:name="com.google.android.apps.maps" />
     </queries>
 
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+    </queries>
+
     <application
         android:name="com.wafflestudio.siksha2.SikshaApplication"
         android:allowBackup="true"
