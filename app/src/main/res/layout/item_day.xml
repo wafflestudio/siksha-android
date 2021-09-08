@@ -8,8 +8,9 @@
 
     <TextView
         android:id="@+id/day_text"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_margin="1dp"
         android:textAlignment="center"
         android:textSize="14dp"
         android:gravity="center"

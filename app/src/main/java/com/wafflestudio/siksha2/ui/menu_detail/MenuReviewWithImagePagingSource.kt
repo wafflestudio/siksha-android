@@ -40,7 +40,7 @@ class MenuReviewWithImagePagingSource(
 
     companion object {
         const val STARTING_PAGE_INDEX = 1L
-        private const val PAGE_LOAD_SIZE = 20
+        private const val PAGE_LOAD_SIZE = 7
         val Config = PagingConfig(pageSize = PAGE_LOAD_SIZE)
     }
 }

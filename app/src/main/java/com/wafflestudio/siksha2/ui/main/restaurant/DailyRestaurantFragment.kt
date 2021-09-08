@@ -184,7 +184,7 @@ class DailyRestaurantFragment : Fragment() {
                 .collect {
                     binding.menuGroupList.visibleOrGone(it.isNotEmpty())
                     binding.emptyText.visibleOrGone(it.isEmpty())
-                    adapter.submitList(it) { binding.menuGroupList.scrollToPosition(0) }
+                    adapter.submitList(it)
                 }
         }
 

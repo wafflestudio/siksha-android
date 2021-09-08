@@ -18,7 +18,6 @@ import kotlin.math.abs
 class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
     ListAdapter<Menu, MenuAdapter.MenuViewHolder>(diffCallback) {
 
-    private lateinit var gestureDetector: GestureDetector
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         return MenuViewHolder(
@@ -30,7 +29,7 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = getItem(position)
 
-        gestureDetector = GestureDetector(holder.binding.root.context,
+        val gestureDetector = GestureDetector(holder.binding.root.context,
             object : GestureDetector.OnGestureListener {
                 override fun onDown(p0: MotionEvent?): Boolean { return false }
                 override fun onShowPress(p0: MotionEvent?) {}

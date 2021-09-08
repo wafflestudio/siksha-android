@@ -367,7 +367,8 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -449,7 +450,7 @@
                 android:id="@+id/review_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:paddingHorizontal="36dp"
+                android:paddingHorizontal="16dp"
                 android:paddingTop="10dp"
                 android:layout_weight="1"
                 android:clipToPadding="true"

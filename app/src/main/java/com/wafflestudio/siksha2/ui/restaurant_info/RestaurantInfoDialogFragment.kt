@@ -232,7 +232,7 @@ class RestaurantInfoDialogFragment private constructor() :
 
         private const val BREAKFAST_TIME_AS_MINUTE = 510
         private const val LUNCH_TIME_AS_MINUTE = 750
-        private const val DINNER_TIME_AS_MINUTE = 1110
+        private const val DINNER_TIME_AS_MINUTE = 1080
 
         @JvmStatic
         fun newInstance(restaurantInfo: RestaurantInfo) =

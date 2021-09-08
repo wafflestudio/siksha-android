@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wafflestudio.siksha2.R
@@ -17,6 +18,8 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var stateAdapter: MainFragmentStateAdapter
 
+    private val vm: MainViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -24,7 +27,7 @@ class MainFragment : Fragment() {
         binding.viewPager.apply {
             adapter = stateAdapter
             isUserInputEnabled = false
-            setCurrentItem(1, false)
+            setCurrentItem(vm.getVpState(), false)
         }
 
         TabLayoutMediator(
@@ -47,5 +50,11 @@ class MainFragment : Fragment() {
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        vm.setVpState(binding.viewPager.currentItem)
     }
 }
