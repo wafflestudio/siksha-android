@@ -20,10 +20,8 @@ import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
@@ -68,7 +66,8 @@ class DailyRestaurantFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gestureDetector = GestureDetector(requireContext(),
+        gestureDetector = GestureDetector(
+            requireContext(),
             object : GestureDetector.OnGestureListener {
                 override fun onDown(p0: MotionEvent?): Boolean { return false }
                 override fun onShowPress(p0: MotionEvent?) {}
@@ -85,7 +84,7 @@ class DailyRestaurantFragment : Fragment() {
                     if (Math.abs(velocityY) > Math.abs(velocityX)) return false
 
                     if (velocityX > 2000) {
-                        when(vm.mealsOfDayFilter.value) {
+                        when (vm.mealsOfDayFilter.value) {
                             MealsOfDay.BR -> {
                                 vm.addDateOffset(-1L)
                                 vm.setMealsOfDayFilter(MealsOfDay.DN)
@@ -98,7 +97,7 @@ class DailyRestaurantFragment : Fragment() {
                     }
 
                     if (velocityX < -2000) {
-                        when(vm.mealsOfDayFilter.value) {
+                        when (vm.mealsOfDayFilter.value) {
                             MealsOfDay.BR -> vm.setMealsOfDayFilter(MealsOfDay.LU)
                             MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.DN)
                             MealsOfDay.DN -> {
@@ -112,7 +111,8 @@ class DailyRestaurantFragment : Fragment() {
 
                     return false
                 }
-            })
+            }
+        )
 
         adapter = MenuGroupAdapter(
             onMenuGroupInfoClickListener = {
@@ -244,7 +244,6 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
-
     }
 
     companion object {

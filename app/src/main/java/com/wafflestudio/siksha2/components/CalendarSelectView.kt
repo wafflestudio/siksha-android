@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemCalendarSelectViewBinding
 import com.wafflestudio.siksha2.databinding.ItemWeekBinding
-import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.visibleOrGone
 import timber.log.Timber
@@ -46,7 +45,8 @@ class CalendarSelectView : LinearLayout {
     }
 
     private fun init() {
-        gestureDetector = GestureDetector(context,
+        gestureDetector = GestureDetector(
+            context,
             object : GestureDetector.OnGestureListener {
                 override fun onDown(p0: MotionEvent?): Boolean { return false }
                 override fun onShowPress(p0: MotionEvent?) {}
@@ -82,7 +82,8 @@ class CalendarSelectView : LinearLayout {
 
                     return false
                 }
-            })
+            }
+        )
 
         binding.leftArrow.setOnClickListener {
             val localDate = LocalDate.of(year, month, 1)

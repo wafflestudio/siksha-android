@@ -11,13 +11,9 @@ import com.wafflestudio.siksha2.databinding.ItemMenuBinding
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.visibleOrGone
-import timber.log.Timber
-import java.time.LocalDate
-import kotlin.math.abs
 
 class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
     ListAdapter<Menu, MenuAdapter.MenuViewHolder>(diffCallback) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         return MenuViewHolder(
@@ -29,7 +25,8 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
     override fun onBindViewHolder(holder: MenuViewHolder, position: Int) {
         val menu = getItem(position)
 
-        val gestureDetector = GestureDetector(holder.binding.root.context,
+        val gestureDetector = GestureDetector(
+            holder.binding.root.context,
             object : GestureDetector.OnGestureListener {
                 override fun onDown(p0: MotionEvent?): Boolean { return false }
                 override fun onShowPress(p0: MotionEvent?) {}
@@ -40,7 +37,8 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
                 override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean { return false }
                 override fun onLongPress(p0: MotionEvent?) {}
                 override fun onFling(p0: MotionEvent?, p1: MotionEvent?, velocityX: Float, velocityY: Float): Boolean { return false }
-            })
+            }
+        )
 
         holder.binding.apply {
             // FIXME: Api 변경 요구 하기 (하드코딩 스트링 싫어요)

@@ -10,5 +10,4 @@ class MainViewModel : ViewModel() {
     fun setVpState(vpState: Int) {
         this.vpState = vpState
     }
-
 }
