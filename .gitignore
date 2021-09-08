@@ -240,3 +240,7 @@ fabric.properties
 
 /app/src/main/res/values/secrets.xml
 /app/google-services.json
+
+.idea/codeStyles/Project.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/runConfigurations.xml
