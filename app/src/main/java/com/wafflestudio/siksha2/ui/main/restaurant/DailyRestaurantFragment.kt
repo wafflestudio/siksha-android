@@ -2,14 +2,15 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
@@ -29,6 +30,8 @@ class DailyRestaurantFragment : Fragment() {
     private lateinit var binding: FragmentDailyRestaurantBinding
     private lateinit var adapter: MenuGroupAdapter
 
+    private lateinit var gestureDetector: GestureDetector
+
     // 즐겨찾기 식당 탭과 일반 식당 탭이 다른 프래그먼트로 분리하기엔 중복이 많아서 플래그로 넘겨받고 관리.
     private var isFavorite: Boolean = false
 
@@ -36,6 +39,12 @@ class DailyRestaurantFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             isFavorite = it.getBoolean(IS_FAVORITE)
+        }
+
+        when (LocalTime.now().hour) {
+            in 0..9 -> vm.setMealsOfDayFilter(MealsOfDay.BR)
+            in 9..13 -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+            else -> vm.setMealsOfDayFilter(MealsOfDay.DN)
         }
     }
 
@@ -56,6 +65,54 @@ class DailyRestaurantFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        gestureDetector = GestureDetector(
+            requireContext(),
+            object : GestureDetector.OnGestureListener {
+                override fun onDown(p0: MotionEvent?): Boolean { return false }
+                override fun onShowPress(p0: MotionEvent?) {}
+                override fun onSingleTapUp(p0: MotionEvent?): Boolean { return false }
+                override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean { return false }
+                override fun onLongPress(p0: MotionEvent?) {}
+                override fun onFling(
+                    p0: MotionEvent?,
+                    p1: MotionEvent?,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+
+                    if (Math.abs(velocityY) > Math.abs(velocityX)) return false
+
+                    if (velocityX > 2000) {
+                        when (vm.mealsOfDayFilter.value) {
+                            MealsOfDay.BR -> {
+                                vm.addDateOffset(-1L)
+                                vm.setMealsOfDayFilter(MealsOfDay.DN)
+                            }
+                            MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.BR)
+                            MealsOfDay.DN -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+                        }
+
+                        return true
+                    }
+
+                    if (velocityX < -2000) {
+                        when (vm.mealsOfDayFilter.value) {
+                            MealsOfDay.BR -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+                            MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.DN)
+                            MealsOfDay.DN -> {
+                                vm.addDateOffset(1L)
+                                vm.setMealsOfDayFilter(MealsOfDay.BR)
+                            }
+                        }
+
+                        return true
+                    }
+
+                    return false
+                }
+            }
+        )
 
         adapter = MenuGroupAdapter(
             onMenuGroupInfoClickListener = {
@@ -80,10 +137,40 @@ class DailyRestaurantFragment : Fragment() {
             }
         )
 
+        binding.calendarSelectView.updateDate(LocalDate.now())
+        binding.calendarSelectView.setDateChangeListener(
+            object : CalendarSelectView.OnDateChangeListener {
+                override fun onChange(date: LocalDate) {
+                    vm.setDateFilter(date)
+                    vm.setCalendarVisibility(false)
+                }
+            }
+        )
+
         binding.menuGroupList.also {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(context)
         }
+
+        binding.menuGroupList.setOnTouchListener { _, ev ->
+            gestureDetector.onTouchEvent(ev)
+            false
+        }
+
+        binding.emptyText.setOnTouchListener { _, ev ->
+            gestureDetector.onTouchEvent(ev)
+            true
+        }
+
+//        binding.menuGroupList.setOnTouchListener { _, p1 ->
+//            gestureDetector.onTouchEvent(p1)
+//            true
+//        }
+//
+//        binding.emptyText.setOnTouchListener { _, p1 ->
+//            gestureDetector.onTouchEvent(p1)
+//            true
+//        }
 
         vm.favoriteRestaurantExists.observe(viewLifecycleOwner) {
             if (isFavorite) {
@@ -101,40 +188,67 @@ class DailyRestaurantFragment : Fragment() {
                 }
         }
 
+        binding.layoutSelectCalendar.setOnClickListener {
+            vm.toggleCalendarVisibility()
+        }
+
+        binding.blank.setOnClickListener {
+            vm.setCalendarVisibility(false)
+        }
+
         vm.dateFilter.observe(viewLifecycleOwner) { date ->
-            binding.dateBefore.text = date.minusDays(1).toPrettyString()
+            binding.calendarSelectView.setSelectedDate(date)
             ObjectAnimator.ofFloat(binding.dateBefore, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
             binding.dateCurrent.text = date.toPrettyString()
             ObjectAnimator.ofFloat(binding.dateCurrent, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
-            binding.dateAfter.text = date.plusDays(1).toPrettyString()
             ObjectAnimator.ofFloat(binding.dateAfter, View.ALPHA, 0f, 1f)
                 .apply { duration = 250 }.start()
+
+            binding.calendarSelectView.updateDateWithoutListener(date)
         }
 
         vm.mealsOfDayFilter.observe(viewLifecycleOwner) { mealsOfDay ->
+            when (mealsOfDay) {
+                MealsOfDay.BR -> {
+                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
+                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                }
+                MealsOfDay.LU -> {
+                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
+                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                }
+                MealsOfDay.DN -> {
+                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
+                }
+            }
             binding.tabBreakfast.isSelected = mealsOfDay == MealsOfDay.BR
             binding.tabLunch.isSelected = mealsOfDay == MealsOfDay.LU
             binding.tabDinner.isSelected = mealsOfDay == MealsOfDay.DN
         }
 
-        binding.tabBreakfast.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
-        binding.tabLunch.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
-        binding.tabDinner.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
+        vm.isCalendarVisible.observe(viewLifecycleOwner) { visibility ->
+            binding.calendarLayout.visibleOrGone(visibility)
+            binding.dateAfter.visibleOrGone(!visibility)
+            binding.dateBefore.visibleOrGone(!visibility)
+        }
+
+        binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
+        binding.lunchLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
+        binding.dinnerLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
-
-        when (LocalTime.now().hour) {
-            in 0..9 -> vm.setMealsOfDayFilter(MealsOfDay.BR)
-            in 9..13 -> vm.setMealsOfDayFilter(MealsOfDay.LU)
-            else -> vm.setMealsOfDayFilter(MealsOfDay.DN)
-        }
     }
 
     companion object {
         const val IS_FAVORITE = "is_favorite"
+        private const val SAVED_INSTANCE_MEALS_OF_DAY = "meals_of_day"
 
         @JvmStatic
         fun newInstance(isFavorite: Boolean) =

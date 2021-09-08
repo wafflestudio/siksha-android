@@ -7,20 +7,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentRestaurantInfoBinding
 import com.wafflestudio.siksha2.models.RestaurantInfo
-import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 // TODO: 전반적으로 대충 짬 나중에 날잡고 고치기
 @AndroidEntryPoint
@@ -34,8 +35,6 @@ class RestaurantInfoDialogFragment private constructor() :
             RESTAURANT_INFO
         )!!
     }
-
-    private val selectedOperatingHour = MutableLiveData<DayType>(DayType.WEEKDAY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,18 +59,16 @@ class RestaurantInfoDialogFragment private constructor() :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.title.text = restaurantInfo.nameKr
-        binding.subtitle.text = restaurantInfo.address
-        selectedOperatingHour.observe(viewLifecycleOwner) {
-            binding.operationTime.text = when (it!!) {
-                DayType.WEEKDAY -> restaurantInfo.etc?.operatingHours?.weekdays
-                DayType.SATURDAY -> restaurantInfo.etc?.operatingHours?.saturday
-                DayType.HOLIDAY -> restaurantInfo.etc?.operatingHours?.holiday
-            }?.joinToString("\n")
+        (dialog as BottomSheetDialog).behavior.apply {
+            state = BottomSheetBehavior.STATE_EXPANDED
         }
+
+        binding.title.text = restaurantInfo.nameKr
+        binding.subtitle.text = restaurantInfo.address?.replace("서울 관악구 관악로 1", "") ?: ""
         restaurantInfo.etc?.operatingHours?.let {
             setUpOperatingHour(it)
         }
+        binding.closeButton.setOnClickListener { dismiss() }
     }
 
     override fun onMapReady(googleMap: GoogleMap?) {
@@ -86,65 +83,156 @@ class RestaurantInfoDialogFragment private constructor() :
     }
 
     private fun setUpOperatingHour(operatingHour: RestaurantInfo.OperatingHour) {
-        var ind = 0
-        val items = listOf(binding.timeTableStart, binding.timeTableCenter, binding.timeTableEnd)
+        val items = listOf(binding.timeLayoutWeekday, binding.timeLayoutSaturday, binding.timeLayoutHoliday)
         if (operatingHour.weekdays.isNotEmpty()) {
-            items[ind].apply {
-                text = "주중"
-                setOnClickListener {
-                    selectedOperatingHour.value = DayType.WEEKDAY
-                    items.forEach { item -> item.isSelected = false }
-                    isSelected = true
+            items[0].apply {
+                visibleOrGone(true)
+                val operating = modifyOperatingHour(operatingHour.weekdays)
+                operating.forEachIndexed { index, s ->
+                    if (s.isNotBlank()) {
+                        when (index) {
+                            0 -> {
+                                binding.layoutWeekdayBreakfast.visibleOrGone(true)
+                                binding.textWeekdayBreakfastTime.text = s
+                            }
+                            1 -> {
+                                binding.layoutWeekdayLunch.visibleOrGone(true)
+                                binding.textWeekdayLunchTime.text = s
+                            }
+                            2 -> {
+                                binding.layoutWeekdayDinner.visibleOrGone(true)
+                                binding.textWeekdayDinnerTime.text = s
+                            }
+                        }
+                    }
                 }
             }
-            ind++
         }
 
         if (operatingHour.saturday.isNotEmpty()) {
-            items[ind].apply {
-                text = "토요일"
-                setOnClickListener {
-                    selectedOperatingHour.value = DayType.SATURDAY
-                    items.forEach { item -> item.isSelected = false }
-                    isSelected = true
+            items[1].apply {
+                visibleOrGone(true)
+                binding.lineDivFirst.visibility = View.VISIBLE
+
+                val operating = modifyOperatingHour(operatingHour.saturday)
+                operating.forEachIndexed { index, s ->
+                    if (s.isNotBlank()) {
+                        when (index) {
+                            0 -> {
+                                binding.layoutSaturdayBreakfast.visibleOrGone(true)
+                                binding.textSaturdayBreakfastTime.text = s
+                            }
+                            1 -> {
+                                binding.layoutSaturdayLunch.visibleOrGone(true)
+                                binding.textSaturdayLunchTime.text = s
+                            }
+                            2 -> {
+                                binding.layoutSaturdayDinner.visibleOrGone(true)
+                                binding.textSaturdayDinnerTime.text = s
+                            }
+                        }
+                    }
                 }
             }
-            ind++
         }
 
         if (operatingHour.holiday.isNotEmpty()) {
-            items[ind].apply {
-                text = "휴일"
-                setOnClickListener {
-                    selectedOperatingHour.value = DayType.HOLIDAY
-                    items.forEach { item -> item.isSelected = false }
-                    isSelected = true
+            items[2].apply {
+                visibleOrGone(true)
+                binding.lineDivSecond.visibility = View.VISIBLE
+
+                val operating = modifyOperatingHour(operatingHour.holiday)
+                operating.forEachIndexed { index, s ->
+                    if (s.isNotBlank()) {
+                        when (index) {
+                            0 -> {
+                                binding.layoutHolidayBreakfast.visibleOrGone(true)
+                                binding.textHolidayBreakfastTime.text = s
+                            }
+                            1 -> {
+                                binding.layoutHolidayLunch.visibleOrGone(true)
+                                binding.textHolidayLunchTime.text = s
+                            }
+                            2 -> {
+                                binding.layoutHolidayDinner.visibleOrGone(true)
+                                binding.textHolidayDinnerTime.text = s
+                            }
+                        }
+                    }
                 }
             }
-            ind++
         }
-        items.subList(ind, items.size).forEach { it.visibleOrGone(false) }
-        items.subList(0, ind).apply {
-            forEachIndexed { index, it ->
-                it.visibleOrGone(true)
-                it.setBackgroundResource(R.drawable.frame_corner_center)
-                it.translationX = -requireContext().dp(index).toFloat()
-            }
-            first().setBackgroundResource(R.drawable.frame_corner_left)
-            last().setBackgroundResource(R.drawable.frame_corner_right)
-            first().isSelected = true
-        }
-        if (ind == 1) items.first().setBackgroundResource(R.drawable.frame_corner_all)
     }
 
-    private enum class DayType {
-        WEEKDAY,
-        SATURDAY,
-        HOLIDAY
+    private fun modifyOperatingHour(operatingHour: List<String>): List<String> {
+        val mutableOperatingHour = operatingHour.toMutableList()
+        val minuteList = mutableListOf<Pair<Int, Int>>()
+        val resultList = mutableListOf<String>()
+        operatingHour.forEach {
+            val minList = it.split("-")
+            var startMinute = 0
+            minList[0].split(':').forEachIndexed { index, s -> when (index) { 0 -> startMinute += s.toInt() * 60 ; 1 -> startMinute += s.toInt() } }
+            var endMinute = 0
+            minList[1].split(':').forEachIndexed { index, s -> when (index) { 0 -> endMinute += s.toInt() * 60 ; 1 -> endMinute += s.toInt() } }
+            minuteList.add(Pair(startMinute, endMinute))
+        }
+
+        for (i in 0..2) {
+            when (i) {
+                0 -> {
+                    var isFound = false
+                    minuteList.forEach {
+                        if (it.first < BREAKFAST_TIME_AS_MINUTE && it.second > BREAKFAST_TIME_AS_MINUTE) {
+                            resultList.add(mutableOperatingHour.removeAt(0))
+                            isFound = true
+                            return@forEach
+                        }
+                    }
+                    if (isFound) {
+                        minuteList.removeAt(0)
+                        continue
+                    } else resultList.add("")
+                }
+                1 -> {
+                    var isFound = false
+                    minuteList.forEach {
+                        if (it.first < LUNCH_TIME_AS_MINUTE && it.second > LUNCH_TIME_AS_MINUTE) {
+                            resultList.add(mutableOperatingHour.removeAt(0))
+                            isFound = true
+                            return@forEach
+                        }
+                    }
+                    if (isFound) {
+                        minuteList.removeAt(0)
+                        continue
+                    } else resultList.add("")
+                }
+                2 -> {
+                    var isFound = false
+                    minuteList.forEach {
+                        if (it.first < DINNER_TIME_AS_MINUTE && it.second > DINNER_TIME_AS_MINUTE) {
+                            resultList.add(mutableOperatingHour.removeAt(0))
+                            isFound = true
+                            return@forEach
+                        }
+                    }
+                    if (isFound) {
+                        minuteList.removeAt(0)
+                        continue
+                    } else resultList.add("")
+                }
+            }
+        }
+
+        return resultList
     }
 
     companion object {
         const val RESTAURANT_INFO = "restaurant_info"
+
+        private const val BREAKFAST_TIME_AS_MINUTE = 510
+        private const val LUNCH_TIME_AS_MINUTE = 750
+        private const val DINNER_TIME_AS_MINUTE = 1080
 
         @JvmStatic
         fun newInstance(restaurantInfo: RestaurantInfo) =

@@ -6,23 +6,31 @@
     android:layout_height="match_parent"
     android:background="@color/light_gray_300"
     android:orientation="vertical"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.main.MainFragment"
+    android:id="@+id/fragment_main">
 
-    <ImageView
+    <!--ImageView
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:elevation="4dp"
         android:scaleType="fitXY"
         android:src="@drawable/frame_top_bar"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" -->
+
+    <View
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/orange_normal"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="28dp"
-        android:elevation="5dp"
-        android:src="@drawable/siksha_rice_bowl"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        android:layout_height="42dp"
+        android:elevation="1dp"
+        android:src="@drawable/ic_siksha_rice_bowl_with_spoon"
+        app:layout_constraintBottom_toBottomOf="@id/top_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +46,7 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:elevation="4dp"
+        android:elevation="6dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:tabIconTint="#00ffffff"

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.menu_detail.review.ReviewFragment">
+
+    <LinearLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@color/orange_normal" >
+
+        <ImageView
+            android:id="@+id/close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="12dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/nanum_square_bold"
+            android:text="@string/review_title"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textSize="20dp" />
+
+        <!-- textview 양옆 마진 맞추기용 -->
+        <ImageView
+            android:id="@+id/back_button_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/review_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        android:visibility="gone"
+        tools:listitem="@layout/item_review" />
+
+    <TextView
+        android:id="@+id/text_no_reviews"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="visible"
+        android:text="@string/review_nothing"
+        android:fontFamily="@font/nanum_square_regular"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:textColor="@color/gray_700" />
+
+</LinearLayout>

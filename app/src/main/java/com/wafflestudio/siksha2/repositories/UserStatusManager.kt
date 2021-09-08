@@ -9,6 +9,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.VocParam
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
 import timber.log.Timber
@@ -69,6 +70,18 @@ class UserStatusManager @Inject constructor(
                 }
             }
         }
+    }
+
+    suspend fun sendVoc(voc: String) {
+        sikshaApi.sendVoc(VocParam(voc))
+    }
+
+    suspend fun getUserData(): Long {
+        return sikshaApi.getUserData().id
+    }
+
+    suspend fun getVersion(): String {
+        return sikshaApi.getVersion().version
     }
 
     // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)

@@ -3,21 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="9dp"
+    android:paddingTop="2dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/frame_review_item"
-    android:minHeight="90dp">
+    android:minHeight="90dp"
+    android:clipToPadding="false"
+    android:paddingBottom="10dp">
+
+    <ImageView
+        android:id="@+id/profile_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_review_profile"
+        android:translationY="-2dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/review_text"
-        android:layout_width="match_parent"
+        android:id="@+id/id_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="10dp"
-        android:textColor="@color/gray_900"
+        android:fontFamily="@font/nanum_square_bold"
         android:textSize="12dp"
+        android:textColor="@color/black"
+        android:layout_marginStart="7dp"
+        app:layout_constraintStart_toEndOf="@id/profile_icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="그냥저냥 먹을만해요" />
+        tools:text="ID 1234" />
 
     <TextView
         android:id="@+id/date"
@@ -28,7 +40,7 @@
         android:fontFamily="@font/nanum_square_bold"
         android:textColor="@color/gray_500"
         android:textSize="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/stars"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="2020년 1월 1일" />
 
@@ -36,10 +48,84 @@
         android:id="@+id/stars"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="7dp"
         app:starSize="small"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/profile_icon"
+        app:layout_constraintTop_toBottomOf="@id/id_text"/>
+
+    <!--ImageView
+        android:id="@+id/speech_bubble"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="10dp"
+        android:src="@drawable/ic_speech_bubble"
+        android:elevation="4dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/profile_icon"
+        app:layout_constraintStart_toStartOf="parent" -->
+
+    <TextView
+        android:id="@+id/review_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="80dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="2dp"
+        android:textColor="@color/gray_900"
+        android:background="@drawable/speech_bubble"
+        android:textSize="12dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintTop_toBottomOf="@id/profile_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 " />
+
+
+    <HorizontalScrollView
+        android:id="@+id/review_image_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginStart="13dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/review_text"
+        app:layout_constraintStart_toStartOf="@id/review_text"
+        app:layout_constraintEnd_toEndOf="@id/review_text"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <com.wafflestudio.siksha2.components.ReviewImageView
+                android:id="@+id/review_image_view_1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                app:showDeleteIcon="false" />
+
+            <com.wafflestudio.siksha2.components.ReviewImageView
+                android:id="@id/review_image_view_2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                app:showDeleteIcon="false" />
+
+            <com.wafflestudio.siksha2.components.ReviewImageView
+                android:id="@+id/review_image_view_3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                app:showDeleteIcon="false" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,70 +7,113 @@
     android:background="@drawable/frame_restaurant_info"
     android:orientation="vertical"
     android:paddingBottom="36dp"
+    android:clipToPadding="false"
     tools:context=".ui.restaurant_info.RestaurantInfoDialogFragment">
 
-    <View
-        android:id="@+id/handle"
-        android:layout_width="40dp"
-        android:layout_height="6dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/ic_bottom_sheet_handle" />
 
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="20dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/nanum_square_regular"
-        android:maxLines="1"
-        android:textColor="@color/gray_700"
-        android:textSize="14dp"
-        tools:text="75-1동 전망대 3층, 4층" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/nanum_square_bold"
-        android:maxLines="1"
-        android:text="@string/hello_blank_fragment"
-        android:textColor="@color/gray_900"
-        android:textSize="24dp"
-        tools:text="농생대 3식당" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_stroke"
+            android:visibility="invisible"
+            android:layout_marginStart="20dp"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="15dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nanum_square_bold"
+            android:maxLines="1"
+            android:text="@string/hello_blank_fragment"
+            android:textColor="@color/gray_900"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            tools:text="농생대 3식당" />
+
+        <ImageView
+            android:id="@+id/close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_stroke"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="15dp"/>
+
+    </LinearLayout>
+
+
+
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/frame_splash" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="24dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/nanum_square_bold"
-        android:maxLines="1"
-        android:text="@string/restaurant_info_location_label"
-        android:textColor="@color/gray_700"
-        android:textSize="16dp" />
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/nanum_square_regular"
+            android:maxLines="1"
+            android:text="@string/restaurant_info_location_label"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_location"
+            android:layout_marginHorizontal="5dp"/>
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/nanum_square_regular"
+            android:maxLines="1"
+            android:textColor="@color/gray_700"
+            android:textSize="14dp"
+            tools:text="75-1동 전망대 3층, 4층" />
+
+    </LinearLayout>
+
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="250dp"
         android:layout_marginHorizontal="28dp"
         android:layout_marginTop="8dp"
         map:liteMode="true"
         map:mapType="normal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/light_gray_500"
+        android:layout_marginTop="24dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,74 +125,412 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="32dp"
+            android:layout_marginHorizontal="16dp"
             android:ellipsize="end"
-            android:fontFamily="@font/nanum_square_bold"
+            android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             android:text="@string/restaurant_info_operation_time_label"
             android:textColor="@color/gray_700"
             android:textSize="16dp" />
 
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/frame_splash" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/operation_time"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="32dp"-->
+<!--        android:layout_marginTop="14dp"-->
+<!--        android:fontFamily="@font/nanum_square_regular"-->
+<!--        android:textColor="@color/gray_700"-->
+<!--        android:textSize="14dp"-->
+<!--        tools:text="오전 11:30 ~ 오후 1:30\n오후 5:30 ~ 오후 7:30" />-->
+
+    <LinearLayout
+        android:id="@+id/time_layout_weekday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@string/operating_hour_weekdays" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/time_table_start"
+            <LinearLayout
+                android:id="@+id/layout_weekday_breakfast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_corner_left"
-                android:fontFamily="@font/nanum_square_bold"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:textColor="@color/menu_time_color"
-                android:textSize="12dp"
+                android:orientation="horizontal"
+                android:gravity="center"
                 android:visibility="gone"
-                tools:text="주중" />
+                android:layout_marginVertical="4dp"
+                >
 
-            <TextView
-                android:id="@+id/time_table_center"
+                <TextView
+                    android:id="@+id/text_weekday_breakfast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:gravity="center"
+                    android:text="@string/daily_restaurant_breakfast"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_weekday_breakfast_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:gravity="center"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="08:00 - 10:00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_weekday_lunch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_corner_center"
-                android:fontFamily="@font/nanum_square_bold"
-                android:paddingVertical="4dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textColor="@color/menu_time_color"
-                android:textSize="12dp"
-                android:translationX="-1dp"
+                android:orientation="horizontal"
+                android:gravity="center"
                 android:visibility="gone"
-                tools:text="주중" />
+                android:layout_marginVertical="4dp"
+                >
 
-            <TextView
-                android:id="@+id/time_table_end"
+                <TextView
+                    android:id="@+id/text_weekday_lunch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_lunch"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_weekday_lunch_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="11:30 - 13:30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_weekday_dinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/frame_corner_right"
-                android:fontFamily="@font/nanum_square_bold"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="4dp"
-                android:textColor="@color/menu_time_color"
-                android:textSize="12dp"
-                android:translationX="-2dp"
+                android:orientation="horizontal"
+                android:gravity="center"
                 android:visibility="gone"
-                tools:text="주중" />
+                android:layout_marginVertical="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_weekday_dinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_dinner"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_weekday_dinner_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="17:30 - 19:30" />
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/operation_time"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/line_div_first"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:visibility="gone"
+        android:background="@color/light_gray_500"/>
+
+    <LinearLayout
+        android:id="@+id/time_layout_saturday"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="14dp"
-        android:fontFamily="@font/nanum_square_regular"
-        android:textColor="@color/gray_700"
-        android:textSize="14dp"
-        tools:text="오전 11:30 ~ 오후 1:30\n오후 5:30 ~ 오후 7:30" />
+        android:visibility="gone"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@string/operating_hour_saturday" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layout_saturday_breakfast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginVertical="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_saturday_breakfast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_breakfast"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_saturday_breakfast_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="08:00 - 10:00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_saturday_lunch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginVertical="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_saturday_lunch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_lunch"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_saturday_lunch_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="11:30 - 13:30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_saturday_dinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginVertical="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_saturday_dinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_dinner"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_saturday_dinner_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="17:30 - 19:30" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_div_second"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:visibility="gone"
+        android:background="@color/light_gray_500"/>
+
+    <LinearLayout
+        android:id="@+id/time_layout_holiday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@string/operating_hour_holiday" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layout_holiday_breakfast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginVertical="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_holiday_breakfast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_breakfast"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_holiday_breakfast_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="08:00 - 10:00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_holiday_lunch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginVertical="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_holiday_lunch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_lunch"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_holiday_lunch_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="11:30 - 13:30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_holiday_dinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginVertical="4dp"
+                >
+
+                <TextView
+                    android:id="@+id/text_holiday_dinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nanum_square_regular"
+                    android:textSize="12dp"
+                    android:textColor="@color/orange_normal"
+                    android:text="@string/daily_restaurant_dinner"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_holiday_dinner_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/gray_700"
+                    android:fontFamily="@font/nanum_square_regular"
+                    tools:text="17:30 - 19:30" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

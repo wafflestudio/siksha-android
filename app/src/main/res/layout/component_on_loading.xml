@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="70dp"

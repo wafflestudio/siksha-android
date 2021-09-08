@@ -84,6 +84,18 @@ class RatingStarsView : LinearLayout {
                 }
                 rating = (if (ind == -1) 5 else ind + 1).toFloat()
             }
+            val action = event?.action
+            action?.let {
+                when (action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        this.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        this.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+                }
+            }
+
             return true
         }
         return super.onTouchEvent(event)

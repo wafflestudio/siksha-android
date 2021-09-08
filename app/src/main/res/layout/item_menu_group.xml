@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="12dp"
-    android:layout_marginTop="6dp"
-    android:layout_marginBottom="6dp"
-    android:background="@drawable/frame_corner_radius_10"
-    android:elevation="2dp"
+    android:layout_marginVertical="8dp"
+    android:background="@drawable/frame_corner_radius_10_border_thick"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/restaurant_title"
@@ -23,9 +22,8 @@
             android:fontFamily="@font/nanum_square_bold"
             android:maxLines="1"
             android:paddingStart="16dp"
-            android:paddingEnd="4dp"
             android:paddingVertical="10dp"
-            android:textColor="@color/gray_900"
+            android:textColor="@color/orange_dark"
             android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,6 +35,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_info"
+            android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/restaurant_title"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,12 +44,39 @@
             android:id="@+id/favorite_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="8dp"
             android:paddingVertical="10dp"
             android:src="@drawable/ic_star"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/info_button"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/price_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textSize="12dp"
+            android:textColor="@color/orange_normal"
+            android:text="@string/menu_group_price"
+            android:layout_marginEnd="28dp"
+            app:layout_constraintEnd_toStartOf="@id/rate_info"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/rate_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textSize="12dp"
+            android:textColor="@color/orange_normal"
+            android:text="@string/menu_group_rate"
+            android:layout_marginEnd="26dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -65,7 +91,6 @@
         android:id="@+id/menu_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="10dp"
         android:nestedScrollingEnabled="false"

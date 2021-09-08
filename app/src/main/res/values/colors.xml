@@ -6,6 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
 
     <color name="gray_900">#FF4F4F4F</color>
     <color name="gray_700">#FF707070</color>
@@ -18,6 +19,12 @@
     <color name="orange_700">#FFFE8B5A</color>
     <color name="pink_500">#FFFD7878</color>
 
+    <color name="orange_dark">#FFE15618</color>
+    <color name="orange_normal">#FFFE8C59</color>
+
+    <color name="rate_red">#FFF47156</color>
+    <color name="rate_orange">#FFF58625</color>
+    <color name="rate_yellow">#FFF5B52C</color>
 
     <color name="kakao_yellow">#FFFAE44D</color>
     <color name="kakao_yellow_dim">#DFCC48</color>
@@ -25,6 +32,8 @@
 
     <color name="google_gray">#80000000</color>
 
+    <color name="black_50percent">#80000000</color>
+    <color name="black_30percent">#4C000000</color>
 
     <color name="white_dim">#EAEAEA</color>
     <color name="white">#FFFFFFFF</color>
