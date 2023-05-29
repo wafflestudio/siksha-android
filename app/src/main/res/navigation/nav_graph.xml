@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/menuDetailFragment"
-        android:name="com.wafflestudio.siksha2.ui.menu_detail.MenuDetailFragment"
+        android:name="com.wafflestudio.siksha2.ui.menuDetail.MenuDetailFragment"
         android:label="fragment_menu_detail"
         tools:layout="@layout/fragment_menu_detail">
         <argument
@@ -78,13 +78,13 @@
 
     <fragment
         android:id="@+id/leaveReviewFragment"
-        android:name="com.wafflestudio.siksha2.ui.menu_detail.LeaveReviewFragment"
+        android:name="com.wafflestudio.siksha2.ui.menuDetail.LeaveReviewFragment"
         android:label="fragment_leave_review"
         tools:layout="@layout/fragment_leave_review" />
 
     <fragment
         android:id="@+id/reviewPhotoFragment"
-        android:name="com.wafflestudio.siksha2.ui.menu_detail.review.ReviewPhotoFragment"
+        android:name="com.wafflestudio.siksha2.ui.menuDetail.review.ReviewPhotoFragment"
         android:label="fragment_review_photo"
         tools:layout="@layout/fragment_review_photo">
         <argument
@@ -94,7 +94,7 @@
 
     <fragment
         android:id="@+id/reviewFragment"
-        android:name="com.wafflestudio.siksha2.ui.menu_detail.review.ReviewFragment"
+        android:name="com.wafflestudio.siksha2.ui.menuDetail.review.ReviewFragment"
         android:label="fragment_review"
         tools:layout="@layout/fragment_review">
         <argument

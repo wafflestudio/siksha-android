@@ -63,7 +63,6 @@ class CalendarSelectView : LinearLayout {
                     velocityX: Float,
                     velocityY: Float
                 ): Boolean {
-
                     Timber.d(velocityX.toString())
 
                     if (Math.abs(velocityY) > Math.abs(velocityX)) return false
@@ -147,8 +146,9 @@ class CalendarSelectView : LinearLayout {
         while (startDate.monthValue == month) {
             val week = mutableListOf<Int>()
             for (i in 0 until 7) {
-                if (startDate.monthValue != month) week.add(0)
-                else {
+                if (startDate.monthValue != month) {
+                    week.add(0)
+                } else {
                     week.add(startDate.dayOfMonth)
                     startDate = startDate.plusDays(1)
                 }

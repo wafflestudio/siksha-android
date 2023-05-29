@@ -63,8 +63,11 @@ class MenuGroupAdapter(
 
             override fun getChangePayload(oldItem: MenuGroup, newItem: MenuGroup): Any? {
                 // Favorite 토글 시 애니메이션 생기는 것 방지
-                return if (oldItem.isFavorite != newItem.isFavorite) 1
-                else null
+                return if (oldItem.isFavorite != newItem.isFavorite) {
+                    1
+                } else {
+                    null
+                }
             }
         }
     }

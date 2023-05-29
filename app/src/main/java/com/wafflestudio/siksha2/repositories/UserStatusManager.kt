@@ -89,8 +89,9 @@ class UserStatusManager @Inject constructor(
         when (sikshaPrefObjects.oAuthProvider.getValue()) {
             OAuthProvider.KAKAO -> {
                 UserApiClient.instance.logout { error ->
-                    if (error != null)
+                    if (error != null) {
                         Timber.d(error)
+                    }
 
                     clearUserToken()
                     logoutCallback.invoke()
@@ -121,6 +122,9 @@ class UserStatusManager @Inject constructor(
 
     // TODO: 필요한가...? 헷갈려서 일단 만듦.
     private fun attachBearerPrefix(token: String): String =
-        if (token.startsWith("Bearer ")) token
-        else "Bearer $token"
+        if (token.startsWith("Bearer ")) {
+            token
+        } else {
+            "Bearer $token"
+        }
 }

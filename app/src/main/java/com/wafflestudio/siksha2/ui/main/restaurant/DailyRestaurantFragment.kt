@@ -14,11 +14,10 @@ import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
-import com.wafflestudio.siksha2.ui.restaurant_info.RestaurantInfoDialogFragment
+import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoDialogFragment
 import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
@@ -80,7 +79,6 @@ class DailyRestaurantFragment : Fragment() {
                     velocityX: Float,
                     velocityY: Float
                 ): Boolean {
-
                     if (Math.abs(velocityY) > Math.abs(velocityX)) return false
 
                     if (velocityX > 2000) {

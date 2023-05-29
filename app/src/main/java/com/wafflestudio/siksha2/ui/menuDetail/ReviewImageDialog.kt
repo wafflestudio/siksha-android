@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.menu_detail
+package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

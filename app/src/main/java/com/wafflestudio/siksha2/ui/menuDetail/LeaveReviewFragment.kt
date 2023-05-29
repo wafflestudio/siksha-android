@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.menu_detail
+package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.Manifest
 import android.app.Activity
@@ -134,8 +134,11 @@ class LeaveReviewFragment : Fragment() {
                         requireContext(),
                         binding.rating.rating.toDouble(),
                         (
-                            if (comment.isNullOrBlank()) binding.commentEdit.hint
-                            else comment
+                            if (comment.isNullOrBlank()) {
+                                binding.commentEdit.hint
+                            } else {
+                                comment
+                            }
                             ).toString()
                     )
                     showToast("평가가 등록되었습니다.")

@@ -10,8 +10,8 @@ import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
-import com.wafflestudio.siksha2.ui.menu_detail.MenuReviewPagingSource
-import com.wafflestudio.siksha2.ui.menu_detail.MenuReviewWithImagePagingSource
+import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
+import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

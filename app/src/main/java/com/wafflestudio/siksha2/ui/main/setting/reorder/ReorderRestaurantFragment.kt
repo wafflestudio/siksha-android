@@ -60,8 +60,11 @@ class ReorderRestaurantFragment : Fragment() {
 
         binding.title.text =
             getString(
-                if (args.orderArg) R.string.setting_reorder_favorite_title
-                else R.string.setting_reorder_restaurant_title
+                if (args.orderArg) {
+                    R.string.setting_reorder_favorite_title
+                } else {
+                    R.string.setting_reorder_restaurant_title
+                }
             )
 
         binding.title.setOnClickListener {
@@ -83,8 +86,11 @@ class ReorderRestaurantFragment : Fragment() {
 
         lifecycleScope.launch {
             val list =
-                if (args.orderArg) vm.getOrderedFavoriteRestaurants()
-                else vm.getOrderedAllRestaurants()
+                if (args.orderArg) {
+                    vm.getOrderedFavoriteRestaurants()
+                } else {
+                    vm.getOrderedAllRestaurants()
+                }
             order.clear()
             order.addAll(list.map { it.id })
             binding.emptyOrder.visibleOrGone(list.isEmpty())

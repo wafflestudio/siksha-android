@@ -61,7 +61,6 @@ class SplashActivity : AppCompatActivity() {
             }
 
             if (checkLoginStatus().not()) {
-
                 binding.googleLoginButton.visibleOrGone(true)
                 binding.kakaoLoginButton.visibleOrGone(true)
 

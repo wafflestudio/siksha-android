@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.restaurant_info
+package com.wafflestudio.siksha2.ui.restaurantInfo
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -191,7 +191,9 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (isFound) {
                         minuteList.removeAt(0)
                         continue
-                    } else resultList.add("")
+                    } else {
+                        resultList.add("")
+                    }
                 }
                 1 -> {
                     var isFound = false
@@ -205,7 +207,9 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (isFound) {
                         minuteList.removeAt(0)
                         continue
-                    } else resultList.add("")
+                    } else {
+                        resultList.add("")
+                    }
                 }
                 2 -> {
                     var isFound = false
@@ -219,7 +223,9 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (isFound) {
                         minuteList.removeAt(0)
                         continue
-                    } else resultList.add("")
+                    } else {
+                        resultList.add("")
+                    }
                 }
             }
         }

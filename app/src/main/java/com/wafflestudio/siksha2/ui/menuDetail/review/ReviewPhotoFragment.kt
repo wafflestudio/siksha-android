@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.menu_detail.review
+package com.wafflestudio.siksha2.ui.menuDetail.review
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,18 +11,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.wafflestudio.siksha2.databinding.FragmentReviewBinding
-import com.wafflestudio.siksha2.ui.menu_detail.MenuDetailViewModel
-import com.wafflestudio.siksha2.ui.menu_detail.MenuReviewsAdapter
+import com.wafflestudio.siksha2.databinding.FragmentReviewPhotoBinding
+import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
+import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewsAdapter
 import com.wafflestudio.siksha2.utils.visibleOrGone
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ReviewFragment : Fragment() {
-
-    private lateinit var binding: FragmentReviewBinding
+class ReviewPhotoFragment : Fragment() {
+    private lateinit var binding: FragmentReviewPhotoBinding
     private val vm: MenuDetailViewModel by activityViewModels()
-    private val args: ReviewFragmentArgs by navArgs()
+    private val args: ReviewPhotoFragmentArgs by navArgs()
     private lateinit var reviewsAdapter: MenuReviewsAdapter
 
     override fun onCreateView(
@@ -30,13 +29,13 @@ class ReviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentReviewBinding.inflate(inflater, container, false)
+        binding = FragmentReviewPhotoBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        reviewsAdapter = MenuReviewsAdapter(false, childFragmentManager)
+        reviewsAdapter = MenuReviewsAdapter(true, childFragmentManager)
 
         binding.reviewList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -56,7 +55,7 @@ class ReviewFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            vm.getReviews(args.menuId).collectLatest {
+            vm.getReviewsWithImages(args.menuId).collectLatest {
                 reviewsAdapter.submitData(it)
             }
         }

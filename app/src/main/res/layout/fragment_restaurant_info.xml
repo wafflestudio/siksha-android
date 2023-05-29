@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:paddingBottom="36dp"
     android:clipToPadding="false"
-    tools:context=".ui.restaurant_info.RestaurantInfoDialogFragment">
+    tools:context=".ui.restaurantInfo.RestaurantInfoDialogFragment">
 
 
     <LinearLayout
