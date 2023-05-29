@@ -6,24 +6,24 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.44"
     id("com.google.firebase.crashlytics") version "2.9.5"
     id("com.google.gms.google-services") version "4.3.15"
-//    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
     id("androidx.navigation.safeargs") version "2.5.3"
 }
 
-//ktlint {
-//    android = true
-//    reporters {
-//        reporter "plain"
-//        reporter "checkstyle"
-//        reporter "html"
-//    }
-//    filter {
-//        exclude("**/generated/**")
-//        include("**/java/**")
-//    }
-//    // See https://github.com/pinterest/ktlint/issues/527
-//    disabledRules = ["import-ordering", "no-wildcard-imports"]
-//}
+ktlint {
+    android.set(true)
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
+    }
+    filter {
+        exclude("**/generated/**")
+        include("**/java/**")
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
 
 android {
     namespace = "com.wafflestudio.siksha2"
@@ -52,14 +52,6 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://siksha-api-dev.wafflestudio.com/\"")
             buildConfigField("String", "PREF_KEY", "\"siksha.preference\"")
         }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
     }
     buildFeatures {
         buildConfig = true
