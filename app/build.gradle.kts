@@ -1,5 +1,5 @@
 plugins {
-    id("com.android.application") version "8.0.2"
+    id("com.android.application") version "8.1.0-alpha11"
     id("org.jetbrains.kotlin.android") version "1.8.0"
     id("org.jetbrains.kotlin.plugin.parcelize") version "1.8.0"
     id("org.jetbrains.kotlin.kapt") version "1.8.0"
@@ -55,11 +55,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         buildConfig = true
@@ -68,67 +68,58 @@ android {
 }
 
 dependencies {
-    val kotlin_version = "1.4.31"
-    val navigation_version = "2.3.4"
-    val retrofit_version = "2.9.0"
-    val arch_lifecycle_version = "2.3.0"
-    val room_version = "2.3.0-beta03"
-    val paging_version = "3.0.0-beta02"
-    val glide_version = "4.12.0"
-
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
-    implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("com.google.android.material:material:1.3.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Android arch lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
 
     // Moshi
-    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.11.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("com.google.android.gms:play-services-maps:17.0.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.11.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
     // AAC Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
-    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     // Room
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-runtime:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.44")
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    kapt("androidx.hilt:hilt-compiler:1.0.0-beta01")
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     // Coroutine
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
     // Paging 3
-    implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
 
     // Timber
-    implementation("com.jakewharton.timber:timber:4.7.1")
-    implementation("com.orhanobut:logger:2.2.0")
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
     // misc
     implementation("com.github.woxthebox:draglistview:1.7.2")
     implementation("com.kakao.sdk:v2-user:2.4.1")
-    implementation("com.google.android.gms:play-services-auth:19.0.0")
-    implementation("com.airbnb.android:lottie:3.0.7")
+    implementation("com.google.android.gms:play-services-auth:20.5.0")
+    implementation("com.airbnb.android:lottie:5.2.0")
 
     // BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
@@ -136,12 +127,12 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Glide
-    implementation("com.github.bumptech.glide:glide:$glide_version")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
 
     // Image Compression
     implementation("id.zelory:compressor:3.0.1")
 
     testImplementation("junit:junit:4.+")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
