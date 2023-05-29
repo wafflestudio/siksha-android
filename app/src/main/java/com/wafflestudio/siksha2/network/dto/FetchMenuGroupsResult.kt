@@ -24,6 +24,6 @@ fun FetchMenuGroupsResult.DailyMenuGroupResponse.filterEmpty(): FetchMenuGroupsR
         date,
         breakfast.filter { it.menus.isNotEmpty() },
         breakfast.filter { it.menus.isNotEmpty() },
-        breakfast.filter { it.menus.isNotEmpty() },
+        breakfast.filter { it.menus.isNotEmpty() }
     )
 }

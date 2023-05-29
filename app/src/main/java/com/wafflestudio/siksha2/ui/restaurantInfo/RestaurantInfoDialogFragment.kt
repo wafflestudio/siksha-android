@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.restaurant_info
+package com.wafflestudio.siksha2.ui.restaurantInfo
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -71,11 +71,11 @@ class RestaurantInfoDialogFragment private constructor() :
         binding.closeButton.setOnClickListener { dismiss() }
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
+    override fun onMapReady(googleMap: GoogleMap) {
         // Add a marker in Sydney and move the camera
-        MapsInitializer.initialize(context)
+        MapsInitializer.initialize(requireContext())
         val position = LatLng(restaurantInfo.latitude ?: 0.0, restaurantInfo.longitude ?: 0.0)
-        with(googleMap!!) {
+        with(googleMap) {
             moveCamera(CameraUpdateFactory.newLatLngZoom(position, 14.5f))
             addMarker(MarkerOptions().position(position))
             mapType = GoogleMap.MAP_TYPE_NORMAL
@@ -191,7 +191,9 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (isFound) {
                         minuteList.removeAt(0)
                         continue
-                    } else resultList.add("")
+                    } else {
+                        resultList.add("")
+                    }
                 }
                 1 -> {
                     var isFound = false
@@ -205,7 +207,9 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (isFound) {
                         minuteList.removeAt(0)
                         continue
-                    } else resultList.add("")
+                    } else {
+                        resultList.add("")
+                    }
                 }
                 2 -> {
                     var isFound = false
@@ -219,7 +223,9 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (isFound) {
                         minuteList.removeAt(0)
                         continue
-                    } else resultList.add("")
+                    } else {
+                        resultList.add("")
+                    }
                 }
             }
         }

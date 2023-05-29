@@ -78,13 +78,13 @@ class SettingFragment : Fragment() {
 
         binding.orderRestaurantRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToReorderRestaurantFragment(false)
+                MainFragmentDirections.actionMainFragmentToReorderRestaurantFragment()
             findNavController().navigate(action)
         }
 
         binding.orderFavoriteRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToReorderRestaurantFragment(true)
+                MainFragmentDirections.actionMainFragmentToReorderRestaurantFragment()
             findNavController().navigate(action)
         }
 

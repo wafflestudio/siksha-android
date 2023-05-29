@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.menu_detail.review
+package com.wafflestudio.siksha2.ui.menuDetail.review
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,17 +11,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.wafflestudio.siksha2.databinding.FragmentReviewPhotoBinding
-import com.wafflestudio.siksha2.ui.menu_detail.MenuDetailViewModel
-import com.wafflestudio.siksha2.ui.menu_detail.MenuReviewsAdapter
+import com.wafflestudio.siksha2.databinding.FragmentReviewBinding
+import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
+import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewsAdapter
 import com.wafflestudio.siksha2.utils.visibleOrGone
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ReviewPhotoFragment : Fragment() {
-    private lateinit var binding: FragmentReviewPhotoBinding
+class ReviewFragment : Fragment() {
+
+    private lateinit var binding: FragmentReviewBinding
     private val vm: MenuDetailViewModel by activityViewModels()
-    private val args: ReviewPhotoFragmentArgs by navArgs()
+    private val args: ReviewFragmentArgs by navArgs()
     private lateinit var reviewsAdapter: MenuReviewsAdapter
 
     override fun onCreateView(
@@ -29,14 +30,13 @@ class ReviewPhotoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentReviewPhotoBinding.inflate(inflater, container, false)
+        binding = FragmentReviewBinding.inflate(inflater, container, false)
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        reviewsAdapter = MenuReviewsAdapter(true, childFragmentManager)
+        reviewsAdapter = MenuReviewsAdapter(false, childFragmentManager)
 
         binding.reviewList.apply {
             layoutManager = LinearLayoutManager(context)
@@ -56,7 +56,7 @@ class ReviewPhotoFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            vm.getReviewsWithImages(args.menuId).collectLatest {
+            vm.getReviews(args.menuId).collectLatest {
                 reviewsAdapter.submitData(it)
             }
         }

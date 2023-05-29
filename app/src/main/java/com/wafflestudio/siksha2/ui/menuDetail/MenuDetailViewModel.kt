@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.menu_detail
+package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.content.Context
 import android.graphics.Bitmap

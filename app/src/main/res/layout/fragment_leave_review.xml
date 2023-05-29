@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.menu_detail.LeaveReviewFragment">
+    tools:context=".ui.menuDetail.LeaveReviewFragment">
 
     <LinearLayout
         android:id="@+id/tool_bar"

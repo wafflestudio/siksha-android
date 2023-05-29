@@ -33,7 +33,6 @@ class VocFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         lifecycleScope.launch {
             try {
                 val id = userStatusManager.getUserData()

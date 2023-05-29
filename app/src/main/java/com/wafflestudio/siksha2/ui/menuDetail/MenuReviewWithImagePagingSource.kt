@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.menu_detail
+package com.wafflestudio.siksha2.ui.menuDetail
 
 import androidx.paging.PagingConfig
 import androidx.paging.PagingSource

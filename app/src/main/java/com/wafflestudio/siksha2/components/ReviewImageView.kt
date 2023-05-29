@@ -35,7 +35,6 @@ class ReviewImageView : ConstraintLayout {
     }
 
     private fun init(attr: AttributeSet?) {
-
         context.theme.obtainStyledAttributes(
             attr,
             R.styleable.ReviewImageView,

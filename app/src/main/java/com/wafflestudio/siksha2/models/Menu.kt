@@ -16,7 +16,7 @@ data class Menu(
     @Json(name = "price") val price: Long?,
     @Json(name = "score") val score: Double?,
     @Json(name = "etc") val etc: List<String>?,
-    @Json(name = "review_cnt") val reviewCount: Long,
+    @Json(name = "review_cnt") val reviewCount: Long
 ) {
     @JsonClass(generateAdapter = true)
     data class Extra(

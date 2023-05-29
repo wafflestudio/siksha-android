@@ -30,6 +30,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -60,7 +61,6 @@ class SplashActivity : AppCompatActivity() {
             }
 
             if (checkLoginStatus().not()) {
-
                 binding.googleLoginButton.visibleOrGone(true)
                 binding.kakaoLoginButton.visibleOrGone(true)
 
@@ -104,6 +104,7 @@ class SplashActivity : AppCompatActivity() {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
                     showToast("카카오 로그인 실패")
+                    Timber.e(error)
                 } else if (token != null) {
                     onOAuthSuccess(OAuthProvider.KAKAO, token.accessToken)
                 }
@@ -129,7 +130,7 @@ class SplashActivity : AppCompatActivity() {
                 return mGoogleSignInClient.signInIntent
             }
 
-            override fun parseResult(resultCode: Int, intent: Intent?): Task<GoogleSignInAccount>? {
+            override fun parseResult(resultCode: Int, intent: Intent?): Task<GoogleSignInAccount> {
                 return GoogleSignIn.getSignedInAccountFromIntent(intent)
             }
         }
@@ -141,6 +142,7 @@ class SplashActivity : AppCompatActivity() {
                     }
                 } catch (e: ApiException) {
                     showToast("구글 로그인 실패")
+                    Timber.e(e)
                 }
             }
     }

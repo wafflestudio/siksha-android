@@ -48,22 +48,21 @@ class CalendarSelectView : LinearLayout {
         gestureDetector = GestureDetector(
             context,
             object : GestureDetector.OnGestureListener {
-                override fun onDown(p0: MotionEvent?): Boolean { return false }
-                override fun onShowPress(p0: MotionEvent?) {}
-                override fun onSingleTapUp(p0: MotionEvent?): Boolean { return false }
-                override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+                override fun onDown(p0: MotionEvent): Boolean { return false }
+                override fun onShowPress(p0: MotionEvent) {}
+                override fun onSingleTapUp(p0: MotionEvent): Boolean { return false }
+                override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
                     Timber.d("scroll velocity x : $p2 y : $p3")
                     if (abs(p2) > 100) return true
                     return false
                 }
-                override fun onLongPress(p0: MotionEvent?) {}
+                override fun onLongPress(p0: MotionEvent) {}
                 override fun onFling(
-                    p0: MotionEvent?,
-                    p1: MotionEvent?,
+                    p0: MotionEvent,
+                    p1: MotionEvent,
                     velocityX: Float,
                     velocityY: Float
                 ): Boolean {
-
                     Timber.d(velocityX.toString())
 
                     if (Math.abs(velocityY) > Math.abs(velocityX)) return false
@@ -147,8 +146,9 @@ class CalendarSelectView : LinearLayout {
         while (startDate.monthValue == month) {
             val week = mutableListOf<Int>()
             for (i in 0 until 7) {
-                if (startDate.monthValue != month) week.add(0)
-                else {
+                if (startDate.monthValue != month) {
+                    week.add(0)
+                } else {
                     week.add(startDate.dayOfMonth)
                     startDate = startDate.plusDays(1)
                 }

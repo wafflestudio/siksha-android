@@ -24,7 +24,7 @@ class RatingStarsView : LinearLayout {
         binding.star2,
         binding.star3,
         binding.star4,
-        binding.star5,
+        binding.star5
     )
 
     var rating: Float = 5.0f

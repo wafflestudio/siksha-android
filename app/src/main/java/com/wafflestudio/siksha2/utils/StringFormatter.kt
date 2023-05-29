@@ -36,8 +36,11 @@ fun LocalDate.toPrettyString(): String {
 }
 
 fun Long?.toPrettyString(): String {
-    return if (this == null) "    -    "
-    else String.format("%,d", this)
+    return if (this == null) {
+        "    -    "
+    } else {
+        String.format("%,d", this)
+    }
 }
 
 fun String.toLocalDate(): LocalDate {

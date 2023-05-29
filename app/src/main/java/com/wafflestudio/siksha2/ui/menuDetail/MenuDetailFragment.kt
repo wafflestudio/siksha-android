@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.menu_detail
+package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -87,8 +87,11 @@ class MenuDetailFragment : Fragment() {
             distBarList.forEachIndexed { index, bar ->
                 val params = bar.layoutParams
                 val ratio = distList[index].toDouble() / maxCount.toDouble()
-                if (ratio != 0.0) params.width = (requireContext().dp(MAX_REVIEW_DIST_BAR_WIDTH_DP) * ratio).toInt()
-                else params.width = requireContext().dp(NO_REVIEW_DIST_BAR_WIDTH_DP)
+                if (ratio != 0.0) {
+                    params.width = (requireContext().dp(MAX_REVIEW_DIST_BAR_WIDTH_DP) * ratio).toInt()
+                } else {
+                    params.width = requireContext().dp(NO_REVIEW_DIST_BAR_WIDTH_DP)
+                }
                 bar.layoutParams = params
                 bar.requestLayout()
             }
