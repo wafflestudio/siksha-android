@@ -129,7 +129,7 @@ class SplashActivity : AppCompatActivity() {
                 return mGoogleSignInClient.signInIntent
             }
 
-            override fun parseResult(resultCode: Int, intent: Intent?): Task<GoogleSignInAccount>? {
+            override fun parseResult(resultCode: Int, intent: Intent?): Task<GoogleSignInAccount> {
                 return GoogleSignIn.getSignedInAccountFromIntent(intent)
             }
         }

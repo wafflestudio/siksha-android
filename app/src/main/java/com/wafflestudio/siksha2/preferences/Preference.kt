@@ -19,7 +19,7 @@ class Preference<T>(
     @ExperimentalCoroutinesApi
     private val keyFlow = callbackFlow {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            kotlin.runCatching { offer(key) }.getOrDefault(defaultValue)
+            kotlin.runCatching { trySend(key) }.getOrDefault(defaultValue)
         }
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
         awaitClose { sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener) }

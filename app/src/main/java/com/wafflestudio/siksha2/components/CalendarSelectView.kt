@@ -48,18 +48,18 @@ class CalendarSelectView : LinearLayout {
         gestureDetector = GestureDetector(
             context,
             object : GestureDetector.OnGestureListener {
-                override fun onDown(p0: MotionEvent?): Boolean { return false }
-                override fun onShowPress(p0: MotionEvent?) {}
-                override fun onSingleTapUp(p0: MotionEvent?): Boolean { return false }
-                override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean {
+                override fun onDown(p0: MotionEvent): Boolean { return false }
+                override fun onShowPress(p0: MotionEvent) {}
+                override fun onSingleTapUp(p0: MotionEvent): Boolean { return false }
+                override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
                     Timber.d("scroll velocity x : $p2 y : $p3")
                     if (abs(p2) > 100) return true
                     return false
                 }
-                override fun onLongPress(p0: MotionEvent?) {}
+                override fun onLongPress(p0: MotionEvent) {}
                 override fun onFling(
-                    p0: MotionEvent?,
-                    p1: MotionEvent?,
+                    p0: MotionEvent,
+                    p1: MotionEvent,
                     velocityX: Float,
                     velocityY: Float
                 ): Boolean {

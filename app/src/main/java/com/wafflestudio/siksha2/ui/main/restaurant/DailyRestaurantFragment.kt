@@ -69,14 +69,14 @@ class DailyRestaurantFragment : Fragment() {
         gestureDetector = GestureDetector(
             requireContext(),
             object : GestureDetector.OnGestureListener {
-                override fun onDown(p0: MotionEvent?): Boolean { return false }
-                override fun onShowPress(p0: MotionEvent?) {}
-                override fun onSingleTapUp(p0: MotionEvent?): Boolean { return false }
-                override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean { return false }
-                override fun onLongPress(p0: MotionEvent?) {}
+                override fun onDown(p0: MotionEvent): Boolean { return false }
+                override fun onShowPress(p0: MotionEvent) {}
+                override fun onSingleTapUp(p0: MotionEvent): Boolean { return false }
+                override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean { return false }
+                override fun onLongPress(p0: MotionEvent) {}
                 override fun onFling(
-                    p0: MotionEvent?,
-                    p1: MotionEvent?,
+                    p0: MotionEvent,
+                    p1: MotionEvent,
                     velocityX: Float,
                     velocityY: Float
                 ): Boolean {
@@ -91,6 +91,7 @@ class DailyRestaurantFragment : Fragment() {
                             }
                             MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.BR)
                             MealsOfDay.DN -> vm.setMealsOfDayFilter(MealsOfDay.LU)
+                            else -> {}
                         }
 
                         return true
@@ -104,6 +105,7 @@ class DailyRestaurantFragment : Fragment() {
                                 vm.addDateOffset(1L)
                                 vm.setMealsOfDayFilter(MealsOfDay.BR)
                             }
+                            else -> {}
                         }
 
                         return true
