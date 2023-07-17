@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".ui.menu_detail.MenuDetailFragment">
+    tools:context=".ui.menuDetail.MenuDetailFragment">
 
     <LinearLayout
         android:id="@+id/tool_bar"
@@ -28,6 +28,7 @@
             android:src="@drawable/ic_back_arrow" />
 
         <TextView
+            android:id="@+id/menu_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,7 +39,9 @@
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textAlignment="center"
-            android:text="@string/menu_detail_toolbar" />
+            tools:text=" 셀프코너 :잡곡밥 + 계란물만둣국 + 뭐시기 뭐시기 뭐시기 뭐시기"
+            android:maxLines="1"
+             />
 
         <!-- textview 양옆 마진 맞추기용 -->
         <ImageView
@@ -66,23 +69,39 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/menu_like_button"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
+                android:src="@drawable/ic_empty_heart"
+                android:layout_marginTop="22dp"
+                app:layout_constraintStart_toEndOf="@id/menu_stars"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
-                android:id="@+id/menu_title"
+                android:id="@+id/menu_like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
-                android:textSize="20dp"
+                android:fontFamily="@font/nanum_square_regular"
+                android:textSize="14dp"
                 android:textColor="@color/black"
-                tools:text=" 셀프코너 :잡곡밥 + 계란물만둣국 + 뭐시기 뭐시기 뭐시기 뭐시기"
+                android:text="좋아요 43개"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="40dp" />
+                android:layout_marginTop="9dp"
+                android:layout_marginHorizontal="10dp" />
+
+            <View
+                android:background="@color/orange_normal"
+                android:layout_height="1dp"
+                android:layout_width="343dp"
+                android:layout_marginTop="18dp"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -461,7 +480,6 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
 
 
     <include

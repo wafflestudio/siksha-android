@@ -48,7 +48,7 @@ android {
             buildConfigField("String", "PREF_KEY", "\"siksha.preference\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"http://3.36.80.144\"")
+            buildConfigField("String", "BASE_URL", "\"https://siksha-api-dev.wafflestudio.com\"")
             buildConfigField("String", "PREF_KEY", "\"siksha.preference\"")
         }
     }
