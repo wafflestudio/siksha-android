@@ -73,7 +73,7 @@
                 android:id="@+id/menu_like_button"
                 android:layout_width="21dp"
                 android:layout_height="21dp"
-                android:src="@drawable/ic_empty_heart"
+                android:src="@drawable/ic_heart"
                 android:layout_marginTop="22dp"
                 app:layout_constraintStart_toEndOf="@id/menu_stars"
                 app:layout_constraintTop_toTopOf="parent" />
