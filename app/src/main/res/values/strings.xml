@@ -8,6 +8,7 @@
     <string name="menu_group_empty">해당 시간대의 메뉴가 없습니다.</string>
     <string name="menu_group_price">Price</string>
     <string name="menu_group_rate">Rate</string>
+    <string name="menu_group_like">Like</string>
     <string name="setting_siksha">식샤 설정</string>
     <string name="setting_siksha_info">식샤 정보</string>
     <string name="setting_restaurant">식당 설정</string>

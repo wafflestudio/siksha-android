@@ -59,8 +59,8 @@
             android:textSize="12dp"
             android:textColor="@color/orange_normal"
             android:text="@string/menu_group_price"
-            android:layout_marginEnd="28dp"
-            app:layout_constraintEnd_toStartOf="@id/rate_info"
+            android:layout_marginEnd="48dp"
+            app:layout_constraintEnd_toEndOf="@id/rate_info"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -72,7 +72,20 @@
             android:textSize="12dp"
             android:textColor="@color/orange_normal"
             android:text="@string/menu_group_rate"
-            android:layout_marginEnd="26dp"
+            android:layout_marginEnd="44dp"
+            app:layout_constraintEnd_toEndOf="@id/like_info"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--여기 rate, like constraint-->
+        <TextView
+            android:id="@+id/like_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textSize="12dp"
+            android:textColor="@color/orange_normal"
+            android:text="@string/menu_group_like"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

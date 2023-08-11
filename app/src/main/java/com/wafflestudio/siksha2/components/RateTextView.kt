@@ -51,14 +51,10 @@ class RateTextView : LinearLayout {
 
     private fun setText(value: Double) {
         binding.menuScore.text = StringFormatter.formatScore(value)
-        binding.menuScore.setTextColor(resources.getColor(R.color.white, null))
-
-        if (value <= 3.0) {
-            binding.menuScore.setBackgroundResource(R.drawable.frame_rate_text_yellow)
-        } else if (value > 3.0 && value <= 4.0) {
-            binding.menuScore.setBackgroundResource(R.drawable.frame_rate_text_orange)
-        } else {
-            binding.menuScore.setBackgroundResource(R.drawable.frame_rate_text_red)
-        }
+//        binding.menuScore.setTextColor(resources.getColor(R.color.white, null))
+//        //이전 버전 디자인
+//        if (value <= 3.0) binding.menuScore.setBackgroundResource(R.drawable.frame_rate_text_yellow)
+//        else if (value > 3.0 && value <= 4.0) binding.menuScore.setBackgroundResource(R.drawable.frame_rate_text_orange)
+//        else binding.menuScore.setBackgroundResource(R.drawable.frame_rate_text_red)
     }
 }
