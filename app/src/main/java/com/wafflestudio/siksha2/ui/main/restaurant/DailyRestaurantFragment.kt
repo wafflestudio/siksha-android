@@ -27,8 +27,8 @@ class DailyRestaurantFragment : Fragment() {
     private val vm: DailyRestaurantViewModel by viewModels()
 
     private lateinit var binding: FragmentDailyRestaurantBinding
-    private lateinit var adapter: MenuGroupAdapter
-
+    private lateinit var menuGroupAdapter: MenuGroupAdapter
+    private lateinit var menuAdapter: MenuAdapter
     private lateinit var gestureDetector: GestureDetector
 
     // 즐겨찾기 식당 탭과 일반 식당 탭이 다른 프래그먼트로 분리하기엔 중복이 많아서 플래그로 넘겨받고 관리.
@@ -68,10 +68,24 @@ class DailyRestaurantFragment : Fragment() {
         gestureDetector = GestureDetector(
             requireContext(),
             object : GestureDetector.OnGestureListener {
-                override fun onDown(p0: MotionEvent): Boolean { return false }
+                override fun onDown(p0: MotionEvent): Boolean {
+                    return false
+                }
+
                 override fun onShowPress(p0: MotionEvent) {}
-                override fun onSingleTapUp(p0: MotionEvent): Boolean { return false }
-                override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean { return false }
+                override fun onSingleTapUp(p0: MotionEvent): Boolean {
+                    return false
+                }
+
+                override fun onScroll(
+                    p0: MotionEvent,
+                    p1: MotionEvent,
+                    p2: Float,
+                    p3: Float
+                ): Boolean {
+                    return false
+                }
+
                 override fun onLongPress(p0: MotionEvent) {}
                 override fun onFling(
                     p0: MotionEvent,
@@ -87,6 +101,7 @@ class DailyRestaurantFragment : Fragment() {
                                 vm.addDateOffset(-1L)
                                 vm.setMealsOfDayFilter(MealsOfDay.DN)
                             }
+
                             MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.BR)
                             MealsOfDay.DN -> vm.setMealsOfDayFilter(MealsOfDay.LU)
                             else -> {}
@@ -103,6 +118,7 @@ class DailyRestaurantFragment : Fragment() {
                                 vm.addDateOffset(1L)
                                 vm.setMealsOfDayFilter(MealsOfDay.BR)
                             }
+
                             else -> {}
                         }
 
@@ -114,7 +130,7 @@ class DailyRestaurantFragment : Fragment() {
             }
         )
 
-        adapter = MenuGroupAdapter(
+        menuGroupAdapter = MenuGroupAdapter(
             onMenuGroupInfoClickListener = {
                 lifecycleScope.launch {
                     vm.getRestaurantInfo(it)?.let {
@@ -134,6 +150,9 @@ class DailyRestaurantFragment : Fragment() {
                         vm.dateFilter.value == LocalDate.now()
                     )
                 findNavController().navigate(action)
+            },
+            onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
+                vm.toggleLike(menuId, isCurrentlyLiked)
             }
         )
 
@@ -148,7 +167,7 @@ class DailyRestaurantFragment : Fragment() {
         )
 
         binding.menuGroupList.also {
-            it.adapter = adapter
+            it.adapter = menuGroupAdapter
             it.layoutManager = LinearLayoutManager(context)
         }
 
@@ -179,12 +198,16 @@ class DailyRestaurantFragment : Fragment() {
             }
         }
 
+        vm.menuLikeUpdates.observe(viewLifecycleOwner) { (menuId, isLiked) ->
+            menuAdapter.refreshMenuItem(menuId, isLiked)
+        }
+
         lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
                     binding.menuGroupList.visibleOrGone(it.isNotEmpty())
                     binding.emptyText.visibleOrGone(it.isEmpty())
-                    adapter.submitList(it)
+                    menuGroupAdapter.submitList(it)
                 }
         }
 
@@ -212,19 +235,66 @@ class DailyRestaurantFragment : Fragment() {
         vm.mealsOfDayFilter.observe(viewLifecycleOwner) { mealsOfDay ->
             when (mealsOfDay) {
                 MealsOfDay.BR -> {
-                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
-                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
-                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.breakfastText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.orange_700
+                        )
+                    )
+                    binding.lunchText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray_500
+                        )
+                    )
+                    binding.dinnerText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray_500
+                        )
+                    )
                 }
+
                 MealsOfDay.LU -> {
-                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
-                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
-                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
+                    binding.breakfastText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray_500
+                        )
+                    )
+                    binding.lunchText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.orange_700
+                        )
+                    )
+                    binding.dinnerText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray_500
+                        )
+                    )
                 }
+
                 MealsOfDay.DN -> {
-                    binding.breakfastText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
-                    binding.lunchText.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_500))
-                    binding.dinnerText.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_700))
+                    binding.breakfastText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray_500
+                        )
+                    )
+                    binding.lunchText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray_500
+                        )
+                    )
+                    binding.dinnerText.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.orange_700
+                        )
+                    )
                 }
             }
             binding.tabBreakfast.isSelected = mealsOfDay == MealsOfDay.BR

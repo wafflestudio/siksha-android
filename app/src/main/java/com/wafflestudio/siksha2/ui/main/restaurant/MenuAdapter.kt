@@ -12,8 +12,10 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.visibleOrGone
 
-class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
-    ListAdapter<Menu, MenuAdapter.MenuViewHolder>(diffCallback) {
+class MenuAdapter(
+    private val onMenuItemClickListener: (Long) -> Unit,
+    private val onMenuItemToggleLikeClickListener: (menuId: Long, isCurrentlyLiked: Boolean) -> Unit
+) : ListAdapter<Menu, MenuAdapter.MenuViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         return MenuViewHolder(
@@ -28,15 +30,34 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
         val gestureDetector = GestureDetector(
             holder.binding.root.context,
             object : GestureDetector.OnGestureListener {
-                override fun onDown(e1: MotionEvent): Boolean { return false }
+                override fun onDown(e1: MotionEvent): Boolean {
+                    return false
+                }
+
                 override fun onShowPress(e1: MotionEvent) {}
                 override fun onSingleTapUp(e1: MotionEvent): Boolean {
                     onMenuItemClickListener.invoke(menu.id)
                     return true
                 }
-                override fun onScroll(e1: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean { return false }
+
+                override fun onScroll(
+                    e1: MotionEvent,
+                    p1: MotionEvent,
+                    p2: Float,
+                    p3: Float
+                ): Boolean {
+                    return false
+                }
+
                 override fun onLongPress(e1: MotionEvent) {}
-                override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean { return false }
+                override fun onFling(
+                    e1: MotionEvent,
+                    e2: MotionEvent,
+                    velocityX: Float,
+                    velocityY: Float
+                ): Boolean {
+                    return false
+                }
             }
         )
 
@@ -48,6 +69,10 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
             iconNoFork.visibleOrGone(noMeat)
             priceText.text = menu.price.toPrettyString()
             rateText.rate = menu.score ?: 0.0
+            likeButton.isSelected = menu.isLiked ?: false
+            likeButton.setOnClickListener {
+                onMenuItemToggleLikeClickListener.invoke(menu.id, menu.isLiked ?: false)
+            }
             root.setOnTouchListener { _, event ->
                 gestureDetector.onTouchEvent(event)
                 true
@@ -56,6 +81,18 @@ class MenuAdapter(private val onMenuItemClickListener: (Long) -> Unit) :
     }
 
     class MenuViewHolder(val binding: ItemMenuBinding) : RecyclerView.ViewHolder(binding.root)
+
+    fun refreshMenuItem(updatedMenuId: Long, isLiked: Boolean) {
+        val currentMenus = currentList.toMutableList()
+        val index = currentMenus.indexOfFirst { it.id == updatedMenuId }
+
+        if (index != -1) {
+            val updatedMenu = currentMenus[index].copy(isLiked = !isLiked)
+            currentMenus[index] = updatedMenu
+            submitList(currentMenus)  // submit the new list to the adapter
+            notifyItemChanged(index)  // notify the adapter about the change
+        }
+    }
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Menu>() {

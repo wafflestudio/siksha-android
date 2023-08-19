@@ -63,6 +63,8 @@ class MenuDetailViewModel @Inject constructor(
     val leaveReviewState: LiveData<ReviewState>
         get() = _leaveReviewState
 
+    val menuLikeUpdates: MutableLiveData<Triple<Long, Boolean, Int>> = MutableLiveData()
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -148,6 +150,15 @@ class MenuDetailViewModel @Inject constructor(
     fun notifySendReviewEnd() {
         _leaveReviewState.value = ReviewState.WAITING
     }
+
+    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+        viewModelScope.launch {
+            val response = menuRepository.toggleLike(id, isCurrentlyLiked)
+            menuLikeUpdates.postValue(Triple(id, response.isLiked, response.likeCount))
+        }
+    }
+
+
 
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
         _menu.value?.id?.let { id ->

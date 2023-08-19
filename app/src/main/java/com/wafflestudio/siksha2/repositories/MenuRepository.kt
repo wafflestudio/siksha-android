@@ -10,6 +10,7 @@ import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.dto.MenuLikeResponse
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
+import retrofit2.Response
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -87,6 +89,14 @@ class MenuRepository @Inject constructor(
 
     suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
+    }
+
+    suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeResponse {
+        return if (isCurrentlyLiked) {
+            sikshaApi.unlikeMenu(menuId)
+        } else {
+            sikshaApi.likeMenu(menuId)
+        }
     }
 
     companion object {

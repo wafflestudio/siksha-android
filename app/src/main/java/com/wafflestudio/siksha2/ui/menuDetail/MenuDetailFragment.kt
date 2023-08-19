@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
 import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.showToast
@@ -60,6 +63,10 @@ class MenuDetailFragment : Fragment() {
                 }
         }
 
+        val menuLikeButton: ImageView = binding.menuLikeButton
+        val menuLikeCount: TextView = binding.menuLikeCount
+
+
         vm.refreshMenu(args.menuId)
         vm.refreshImages(args.menuId)
         vm.refreshReviewDistribution(args.menuId)
@@ -77,6 +84,8 @@ class MenuDetailFragment : Fragment() {
             binding.menuRating.text = "${ menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"}"
             binding.menuStars.rating = menu?.score?.toFloat() ?: 0.0f
             binding.reviewCount.text = " ${menu?.reviewCount ?: 0}"
+            binding.menuLikeButton.isSelected = menu.isLiked ?: false
+            binding.menuLikeCount.text = "좋아요 ${menu?.likeCount ?: 0}개"
         }
 
         vm.reviewDistribution.observe(viewLifecycleOwner) { distList ->
@@ -128,6 +137,12 @@ class MenuDetailFragment : Fragment() {
             }
         }
 
+        vm.menuLikeUpdates.observe(viewLifecycleOwner) { (menuId, isLiked, likeCount) ->
+            menuLikeButton.isSelected = isLiked
+            // assuming you have a method or another LiveData that provides the like count for a menu:
+            menuLikeCount.text = "좋아요 ${likeCount}개"
+        }
+
         lifecycleScope.launch {
             vm.getReviews(args.menuId).collectLatest {
                 reviewsAdapter.submitData(it)
@@ -155,6 +170,13 @@ class MenuDetailFragment : Fragment() {
                 findNavController().navigate(action)
             } else {
                 showToast("오늘 메뉴만 평가할 수 있습니다.")
+            }
+        }
+
+        binding.menuLikeButton.setOnClickListener {
+            val menu = vm.menu.value
+            if (menu != null) {
+                vm.toggleLike(args.menuId, menu.isLiked == false)
             }
         }
     }

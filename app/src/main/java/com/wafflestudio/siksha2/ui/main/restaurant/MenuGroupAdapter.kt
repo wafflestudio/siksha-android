@@ -13,13 +13,14 @@ import com.wafflestudio.siksha2.utils.visibleOrGone
 class MenuGroupAdapter(
     private val onMenuGroupInfoClickListener: (Long) -> Unit,
     private val onMenuGroupToggleFavoriteClickListener: (Long) -> Unit,
-    private val onMenuItemClickListener: (Long) -> Unit
+    private val onMenuItemClickListener: (Long) -> Unit,
+    private val onMenuItemToggleLikeClickListener: (menuId: Long, isCurrentlyLiked: Boolean) -> Unit
 ) :
     ListAdapter<MenuGroup, MenuGroupAdapter.MenuGroupViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuGroupViewHolder {
         val binding = ItemMenuGroupBinding.inflate(parent.getInflater(), parent, false)
-        val adapter = MenuAdapter(onMenuItemClickListener)
+        val adapter = MenuAdapter(onMenuItemClickListener, onMenuItemToggleLikeClickListener)
         binding.menuList.also {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(parent.context)

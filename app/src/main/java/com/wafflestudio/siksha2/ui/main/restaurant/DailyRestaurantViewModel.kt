@@ -40,10 +40,18 @@ class DailyRestaurantViewModel @Inject constructor(
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
     private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
+    val menuLikeUpdates: MutableLiveData<Pair<Long, Boolean>> = MutableLiveData()
 
     fun toggleFavorite(id: Long) {
         viewModelScope.launch {
             restaurantRepository.toggleRestaurantFavoriteById(id)
+        }
+    }
+
+    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+        viewModelScope.launch {
+            menuRepository.toggleLike(id, isCurrentlyLiked)
+            menuLikeUpdates.postValue(Pair(id, !isCurrentlyLiked))
         }
     }
 
