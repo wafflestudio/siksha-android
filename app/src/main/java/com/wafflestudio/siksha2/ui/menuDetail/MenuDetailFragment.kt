@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha2.ui.menuDetail
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,8 +65,6 @@ class MenuDetailFragment : Fragment() {
                 }
         }
 
-        val menuLikeButton: ImageView = binding.menuLikeButton
-        val menuLikeCount: TextView = binding.menuLikeCount
 
 
         vm.refreshMenu(args.menuId)
@@ -84,9 +84,20 @@ class MenuDetailFragment : Fragment() {
             binding.menuRating.text = "${ menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"}"
             binding.menuStars.rating = menu?.score?.toFloat() ?: 0.0f
             binding.reviewCount.text = " ${menu?.reviewCount ?: 0}"
-            binding.menuLikeButton.isSelected = menu.isLiked ?: false
-            binding.menuLikeCount.text = "좋아요 ${menu?.likeCount ?: 0}개"
+            Log.d(TAG, "received the _menu change!")
+            // Handle menu likes
+            menu.isLiked?.let { isLiked ->
+                Log.d(TAG, "set the button UI!")
+                binding.menuLikeButton.isSelected = isLiked
+            }
+
+            // Handle like count
+            menu.likeCount?.let { count ->
+                Log.d(TAG, "set the like count text!")
+                binding.menuLikeCount.text = "좋아요 $count 개"
+            }
         }
+
 
         vm.reviewDistribution.observe(viewLifecycleOwner) { distList ->
             if (distList.isEmpty()) return@observe
@@ -137,12 +148,6 @@ class MenuDetailFragment : Fragment() {
             }
         }
 
-        vm.menuLikeUpdates.observe(viewLifecycleOwner) { (menuId, isLiked, likeCount) ->
-            menuLikeButton.isSelected = isLiked
-            // assuming you have a method or another LiveData that provides the like count for a menu:
-            menuLikeCount.text = "좋아요 ${likeCount}개"
-        }
-
         lifecycleScope.launch {
             vm.getReviews(args.menuId).collectLatest {
                 reviewsAdapter.submitData(it)
@@ -175,8 +180,9 @@ class MenuDetailFragment : Fragment() {
 
         binding.menuLikeButton.setOnClickListener {
             val menu = vm.menu.value
-            if (menu != null) {
-                vm.toggleLike(args.menuId, menu.isLiked == false)
+            menu?.let {
+                Log.d(TAG, "will go to the MenuDetailViewModel toggle from ${menu.isLiked} to ${!menu.isLiked!!}")
+                it.isLiked?.let { it1 -> vm.toggleLike(args.menuId, it1) }
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.wafflestudio.siksha2.repositories
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.db.DailyMenusDao
@@ -92,10 +94,12 @@ class MenuRepository @Inject constructor(
     }
 
     suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeResponse {
-        return if (isCurrentlyLiked) {
-            sikshaApi.unlikeMenu(menuId)
+        if (isCurrentlyLiked) {
+            Log.d(TAG, "repo called from vm/ Just unliked the menu!")
+            return sikshaApi.unlikeMenu(menuId)
         } else {
-            sikshaApi.likeMenu(menuId)
+            Log.d(TAG, "repo called from vm/ Just liked the menu!")
+            return sikshaApi.likeMenu(menuId)
         }
     }
 

@@ -1,7 +1,9 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
 import android.animation.ObjectAnimator
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -28,7 +30,6 @@ class DailyRestaurantFragment : Fragment() {
 
     private lateinit var binding: FragmentDailyRestaurantBinding
     private lateinit var menuGroupAdapter: MenuGroupAdapter
-    private lateinit var menuAdapter: MenuAdapter
     private lateinit var gestureDetector: GestureDetector
 
     // 즐겨찾기 식당 탭과 일반 식당 탭이 다른 프래그먼트로 분리하기엔 중복이 많아서 플래그로 넘겨받고 관리.
@@ -143,6 +144,10 @@ class DailyRestaurantFragment : Fragment() {
             onMenuGroupToggleFavoriteClickListener = {
                 vm.toggleFavorite(it)
             },
+            onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
+                Log.d(TAG, "fragment click listener/ The viewmodel being called and it's currently ${isCurrentlyLiked}")
+                vm.toggleLike(menuId, isCurrentlyLiked)
+            },
             onMenuItemClickListener = {
                 val action =
                     MainFragmentDirections.actionMainFragmentToMenuDetailFragment(
@@ -150,9 +155,6 @@ class DailyRestaurantFragment : Fragment() {
                         vm.dateFilter.value == LocalDate.now()
                     )
                 findNavController().navigate(action)
-            },
-            onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
-                vm.toggleLike(menuId, isCurrentlyLiked)
             }
         )
 
@@ -198,8 +200,11 @@ class DailyRestaurantFragment : Fragment() {
             }
         }
 
-        vm.menuLikeUpdates.observe(viewLifecycleOwner) { (menuId, isLiked) ->
-            menuAdapter.refreshMenuItem(menuId, isLiked)
+        vm.updatedMenuItemStream.observe(viewLifecycleOwner) { updatedMenuItem ->
+            updatedMenuItem?.let { menuItem ->
+                Log.d(TAG, "fragment observing vm/ Let's go to the menuGroupAdapter to refresh the menu. It should be ${menuItem.isLiked}")
+                menuGroupAdapter.refreshMenuItem(menuItem)
+            }
         }
 
         lifecycleScope.launch {

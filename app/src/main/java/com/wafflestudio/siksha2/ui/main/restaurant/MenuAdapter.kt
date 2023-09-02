@@ -1,5 +1,8 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.content.ContentValues.TAG
+import android.nfc.Tag
+import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -72,6 +75,7 @@ class MenuAdapter(
             likeButton.isSelected = menu.isLiked ?: false
             likeButton.setOnClickListener {
                 onMenuItemToggleLikeClickListener.invoke(menu.id, menu.isLiked ?: false)
+                true
             }
             root.setOnTouchListener { _, event ->
                 gestureDetector.onTouchEvent(event)
@@ -82,17 +86,18 @@ class MenuAdapter(
 
     class MenuViewHolder(val binding: ItemMenuBinding) : RecyclerView.ViewHolder(binding.root)
 
-    fun refreshMenuItem(updatedMenuId: Long, isLiked: Boolean) {
+    fun refreshMenuItem(updatedMenuItem: Menu) {
         val currentMenus = currentList.toMutableList()
-        val index = currentMenus.indexOfFirst { it.id == updatedMenuId }
+        val index = currentMenus.indexOfFirst { it.id == updatedMenuItem.id }
 
         if (index != -1) {
-            val updatedMenu = currentMenus[index].copy(isLiked = !isLiked)
-            currentMenus[index] = updatedMenu
-            submitList(currentMenus)  // submit the new list to the adapter
-            notifyItemChanged(index)  // notify the adapter about the change
+            Log.d(TAG, "in Adapter/ the exact menuId found! Let's change it!")
+            currentMenus[index] = updatedMenuItem
+            submitList(currentMenus)
+            Log.d(TAG, "in Adapter/ submitted the currentMenus~")
         }
     }
+
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Menu>() {

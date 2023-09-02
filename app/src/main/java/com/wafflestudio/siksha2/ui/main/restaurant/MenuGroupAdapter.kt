@@ -1,11 +1,14 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMenuGroupBinding
+import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.visibleOrGone
@@ -13,16 +16,21 @@ import com.wafflestudio.siksha2.utils.visibleOrGone
 class MenuGroupAdapter(
     private val onMenuGroupInfoClickListener: (Long) -> Unit,
     private val onMenuGroupToggleFavoriteClickListener: (Long) -> Unit,
-    private val onMenuItemClickListener: (Long) -> Unit,
-    private val onMenuItemToggleLikeClickListener: (menuId: Long, isCurrentlyLiked: Boolean) -> Unit
-) :
-    ListAdapter<MenuGroup, MenuGroupAdapter.MenuGroupViewHolder>(diffCallback) {
+    private val onMenuItemToggleLikeClickListener: (menuId: Long, isCurrentlyLiked: Boolean) -> Unit,
+    private val onMenuItemClickListener: (Long) -> Unit
+    ) : ListAdapter<MenuGroup, MenuGroupAdapter.MenuGroupViewHolder>(diffCallback) {
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuGroupViewHolder {
         val binding = ItemMenuGroupBinding.inflate(parent.getInflater(), parent, false)
-        val adapter = MenuAdapter(onMenuItemClickListener, onMenuItemToggleLikeClickListener)
+
+        val menuAdapter = MenuAdapter(
+            onMenuItemClickListener = onMenuItemClickListener,
+            onMenuItemToggleLikeClickListener = onMenuItemToggleLikeClickListener
+        )
+
         binding.menuList.also {
-            it.adapter = adapter
+            it.adapter = menuAdapter
             it.layoutManager = LinearLayoutManager(parent.context)
         }
         return MenuGroupViewHolder(binding)
@@ -48,6 +56,34 @@ class MenuGroupAdapter(
             (menuList.adapter as? MenuAdapter)?.submitList(menuGroup.menus)
         }
     }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
+
+    fun refreshMenuItem(updatedMenuItem: Menu) {
+        for (i in 0 until itemCount) {
+            val menuGroup = getItem(i)
+            if (menuGroup.menus.any { it.id == updatedMenuItem.id }) {
+                Log.d(TAG, "G-adapter/ found the menuAdapter!")
+
+                // Assuming you've set up your RecyclerView as a member or property of your adapter
+                val menuGroupViewHolder = recyclerView.findViewHolderForAdapterPosition(i) as? MenuGroupViewHolder
+
+                val innerAdapter = menuGroupViewHolder?.binding?.menuList?.adapter as? MenuAdapter
+                innerAdapter?.let {
+                    Log.d(TAG, "Adapter/ inner adapter found~")
+                }
+
+                // Use the entire updatedMenuItem object to refresh the item in the innerAdapter
+                innerAdapter?.refreshMenuItem(updatedMenuItem)
+                return
+            }
+        }
+    }
+
+
 
     class MenuGroupViewHolder(val binding: ItemMenuGroupBinding) :
         RecyclerView.ViewHolder(binding.root)

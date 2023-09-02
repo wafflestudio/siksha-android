@@ -1,8 +1,11 @@
 package com.wafflestudio.siksha2.ui.menuDetail
 
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -62,8 +65,6 @@ class MenuDetailViewModel @Inject constructor(
     private val _leaveReviewState = MutableLiveData<ReviewState>(ReviewState.WAITING)
     val leaveReviewState: LiveData<ReviewState>
         get() = _leaveReviewState
-
-    val menuLikeUpdates: MutableLiveData<Triple<Long, Boolean, Int>> = MutableLiveData()
 
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
@@ -153,11 +154,24 @@ class MenuDetailViewModel @Inject constructor(
 
     fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
         viewModelScope.launch {
-            val response = menuRepository.toggleLike(id, isCurrentlyLiked)
-            menuLikeUpdates.postValue(Triple(id, response.isLiked, response.likeCount))
+            val menuItem = menuRepository.getMenuById(id)
+            menuItem.isLiked = !isCurrentlyLiked
+            if (menuItem.isLiked == true) {
+                menuItem.likeCount = menuItem.likeCount?.plus(1)
+            } else {
+                menuItem.likeCount = menuItem.likeCount?.minus(1)
+            }
+            Log.d(TAG, "Just posted the change to ${!isCurrentlyLiked}")
+            _menu.postValue(menuItem)  // UI update first
+
+            val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
+            if (serverMenuItem.isLiked != menuItem.isLiked) {
+                Log.d(TAG, "server sync inconsistent")
+                _menu.postValue(serverMenuItem)
+            }
+
         }
     }
-
 
 
     suspend fun leaveReview(context: Context, score: Double, comment: String) {

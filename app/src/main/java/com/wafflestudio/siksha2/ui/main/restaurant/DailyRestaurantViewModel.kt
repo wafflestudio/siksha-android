@@ -1,7 +1,10 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.*
 import com.wafflestudio.siksha2.models.MealsOfDay
+import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.repositories.MenuRepository
@@ -36,11 +39,13 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _favoriteRestaurantExists = MutableLiveData(false)
     val favoriteRestaurantExists: LiveData<Boolean> = _favoriteRestaurantExists
 
+    private val _updatedMenuItemStream = MutableLiveData<Menu?>(null)
+    val updatedMenuItemStream: LiveData<Menu?> = _updatedMenuItemStream
+
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
     private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
-    val menuLikeUpdates: MutableLiveData<Pair<Long, Boolean>> = MutableLiveData()
 
     fun toggleFavorite(id: Long) {
         viewModelScope.launch {
@@ -50,26 +55,40 @@ class DailyRestaurantViewModel @Inject constructor(
 
     fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
         viewModelScope.launch {
-            menuRepository.toggleLike(id, isCurrentlyLiked)
-            menuLikeUpdates.postValue(Pair(id, !isCurrentlyLiked))
+            val menuItem = menuRepository.getMenuById(id)
+            menuItem.isLiked = !isCurrentlyLiked
+            _updatedMenuItemStream.postValue(menuItem)  // UI update first
+
+            val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
+            if (serverMenuItem.isLiked != menuItem.isLiked) {
+                Log.d(TAG, "server sync inconsistent")
+                _updatedMenuItemStream.postValue(serverMenuItem)
+            }
         }
     }
+
 
     fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
         viewModelScope.launch {
             _mealsOfDayFilter.value = mealsOfDay
+            Log.d(TAG, "vm/ We'll start refreshing data!")
+            startRefreshingData()
         }
     }
 
     fun addDateOffset(offset: Long) {
         viewModelScope.launch {
             _dateFilter.value = _dateFilter.value?.plusDays(offset)
+            Log.d(TAG, "vm/ We'll start refreshing data!")
+            startRefreshingData()
         }
     }
 
     fun setDateFilter(date: LocalDate) {
         viewModelScope.launch {
             _dateFilter.value = date
+            Log.d(TAG, "vm/ We'll start refreshing data!")
+            startRefreshingData()
         }
     }
 
