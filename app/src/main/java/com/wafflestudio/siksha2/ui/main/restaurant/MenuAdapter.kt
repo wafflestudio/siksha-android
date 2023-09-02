@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
 import android.content.ContentValues.TAG
-import android.nfc.Tag
 import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
@@ -97,7 +96,6 @@ class MenuAdapter(
             Log.d(TAG, "in Adapter/ submitted the currentMenus~")
         }
     }
-
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Menu>() {

@@ -18,7 +18,7 @@ class MenuGroupAdapter(
     private val onMenuGroupToggleFavoriteClickListener: (Long) -> Unit,
     private val onMenuItemToggleLikeClickListener: (menuId: Long, isCurrentlyLiked: Boolean) -> Unit,
     private val onMenuItemClickListener: (Long) -> Unit
-    ) : ListAdapter<MenuGroup, MenuGroupAdapter.MenuGroupViewHolder>(diffCallback) {
+) : ListAdapter<MenuGroup, MenuGroupAdapter.MenuGroupViewHolder>(diffCallback) {
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuGroupViewHolder {
@@ -69,7 +69,8 @@ class MenuGroupAdapter(
                 Log.d(TAG, "G-adapter/ found the menuAdapter!")
 
                 // Assuming you've set up your RecyclerView as a member or property of your adapter
-                val menuGroupViewHolder = recyclerView.findViewHolderForAdapterPosition(i) as? MenuGroupViewHolder
+                val menuGroupViewHolder =
+                    recyclerView.findViewHolderForAdapterPosition(i) as? MenuGroupViewHolder
 
                 val innerAdapter = menuGroupViewHolder?.binding?.menuList?.adapter as? MenuAdapter
                 innerAdapter?.let {
@@ -82,8 +83,6 @@ class MenuGroupAdapter(
             }
         }
     }
-
-
 
     class MenuGroupViewHolder(val binding: ItemMenuGroupBinding) :
         RecyclerView.ViewHolder(binding.root)

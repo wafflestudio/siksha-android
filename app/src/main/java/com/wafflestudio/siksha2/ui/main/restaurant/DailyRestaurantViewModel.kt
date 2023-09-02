@@ -67,7 +67,6 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
-
     fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
         viewModelScope.launch {
             _mealsOfDayFilter.value = mealsOfDay

@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha2.ui.menuDetail
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
@@ -162,17 +161,14 @@ class MenuDetailViewModel @Inject constructor(
                 menuItem.likeCount = menuItem.likeCount?.minus(1)
             }
             Log.d(TAG, "Just posted the change to ${!isCurrentlyLiked}")
-            _menu.postValue(menuItem)  // UI update first
-
+            _menu.postValue(menuItem)
             val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
             if (serverMenuItem.isLiked != menuItem.isLiked) {
                 Log.d(TAG, "server sync inconsistent")
                 _menu.postValue(serverMenuItem)
             }
-
         }
     }
-
 
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
         _menu.value?.id?.let { id ->
@@ -189,7 +185,8 @@ class MenuDetailViewModel @Inject constructor(
                         format(Bitmap.CompressFormat.JPEG)
                     }
                     val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                    val multipartBody = MultipartBody.Part.createFormData("images", file.name, requestBody)
+                    val multipartBody =
+                        MultipartBody.Part.createFormData("images", file.name, requestBody)
                     imageList.add(multipartBody)
                 }
                 val commentBody = MultipartBody.Part.createFormData("comment", comment)
