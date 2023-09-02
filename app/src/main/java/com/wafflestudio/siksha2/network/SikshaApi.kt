@@ -3,7 +3,6 @@ package com.wafflestudio.siksha2.network
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
 import okhttp3.MultipartBody
-import retrofit2.Response
 import retrofit2.http.*
 import java.time.LocalDate
 

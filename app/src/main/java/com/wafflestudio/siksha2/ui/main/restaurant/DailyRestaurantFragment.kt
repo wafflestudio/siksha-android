@@ -145,7 +145,6 @@ class DailyRestaurantFragment : Fragment() {
                 vm.toggleFavorite(it)
             },
             onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
-                Log.d(TAG, "fragment click listener/ The viewmodel being called and it's currently ${isCurrentlyLiked}")
                 vm.toggleLike(menuId, isCurrentlyLiked)
             },
             onMenuItemClickListener = {

@@ -62,8 +62,6 @@ class MenuDetailFragment : Fragment() {
                 }
         }
 
-
-
         vm.refreshMenu(args.menuId)
         vm.refreshImages(args.menuId)
         vm.refreshReviewDistribution(args.menuId)
@@ -94,7 +92,6 @@ class MenuDetailFragment : Fragment() {
                 binding.menuLikeCount.text = "좋아요 $count 개"
             }
         }
-
 
         vm.reviewDistribution.observe(viewLifecycleOwner) { distList ->
             if (distList.isEmpty()) return@observe
