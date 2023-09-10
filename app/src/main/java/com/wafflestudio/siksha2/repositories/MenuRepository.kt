@@ -12,7 +12,7 @@ import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
-import com.wafflestudio.siksha2.network.dto.MenuLikeResponse
+import com.wafflestudio.siksha2.network.dto.MenuLikeOrUnlikeResponse
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -92,7 +92,7 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
-    suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeResponse {
+    suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeOrUnlikeResponse {
         if (isCurrentlyLiked) {
             Log.d(TAG, "repo called from vm/ Just unliked the menu!")
             return sikshaApi.unlikeMenu(menuId)

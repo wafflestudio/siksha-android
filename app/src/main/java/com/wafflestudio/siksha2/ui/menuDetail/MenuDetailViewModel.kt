@@ -160,11 +160,9 @@ class MenuDetailViewModel @Inject constructor(
             } else {
                 menuItem.likeCount = menuItem.likeCount?.minus(1)
             }
-            Log.d(TAG, "Just posted the change to ${!isCurrentlyLiked}")
             _menu.postValue(menuItem)
             val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
-            if (serverMenuItem.isLiked != menuItem.isLiked) {
-                Log.d(TAG, "server sync inconsistent")
+            if (serverMenuItem != menuItem) {
                 _menu.postValue(serverMenuItem)
             }
         }

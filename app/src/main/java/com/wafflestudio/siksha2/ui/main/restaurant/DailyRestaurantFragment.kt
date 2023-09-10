@@ -201,7 +201,6 @@ class DailyRestaurantFragment : Fragment() {
 
         vm.updatedMenuItemStream.observe(viewLifecycleOwner) { updatedMenuItem ->
             updatedMenuItem?.let { menuItem ->
-                Log.d(TAG, "fragment observing vm/ Let's go to the menuGroupAdapter to refresh the menu. It should be ${menuItem.isLiked}")
                 menuGroupAdapter.refreshMenuItem(menuItem)
             }
         }

@@ -60,7 +60,6 @@ class DailyRestaurantViewModel @Inject constructor(
             _updatedMenuItemStream.postValue(menuItem)
             val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
             if (serverMenuItem.isLiked != menuItem.isLiked) {
-                Log.d(TAG, "server sync inconsistent")
                 _updatedMenuItemStream.postValue(serverMenuItem)
             }
         }
@@ -69,7 +68,6 @@ class DailyRestaurantViewModel @Inject constructor(
     fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
         viewModelScope.launch {
             _mealsOfDayFilter.value = mealsOfDay
-            Log.d(TAG, "vm/ We'll start refreshing data!")
             startRefreshingData()
         }
     }
@@ -77,7 +75,6 @@ class DailyRestaurantViewModel @Inject constructor(
     fun addDateOffset(offset: Long) {
         viewModelScope.launch {
             _dateFilter.value = _dateFilter.value?.plusDays(offset)
-            Log.d(TAG, "vm/ We'll start refreshing data!")
             startRefreshingData()
         }
     }
@@ -85,7 +82,6 @@ class DailyRestaurantViewModel @Inject constructor(
     fun setDateFilter(date: LocalDate) {
         viewModelScope.launch {
             _dateFilter.value = date
-            Log.d(TAG, "vm/ We'll start refreshing data!")
             startRefreshingData()
         }
     }

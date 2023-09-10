@@ -79,17 +79,14 @@ class MenuDetailFragment : Fragment() {
             binding.menuRating.text = "${menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"}"
             binding.menuStars.rating = menu?.score?.toFloat() ?: 0.0f
             binding.reviewCount.text = " ${menu?.reviewCount ?: 0}"
-            Log.d(TAG, "received the _menu change!")
             // Handle menu likes
             menu.isLiked?.let { isLiked ->
-                Log.d(TAG, "set the button UI!")
                 binding.menuLikeButton.isSelected = isLiked
             }
 
             // Handle like count
             menu.likeCount?.let { count ->
-                Log.d(TAG, "set the like count text!")
-                binding.menuLikeCount.text = "좋아요 $count 개"
+                binding.menuLikeCount.text = menu.likeCount?.let { "좋아요 $it 개" } ?: "-"
             }
         }
 
@@ -186,13 +183,8 @@ class MenuDetailFragment : Fragment() {
         }
 
         binding.menuLikeButton.setOnClickListener {
-            val menu = vm.menu.value
-            menu?.let {
-                Log.d(
-                    TAG,
-                    "will go to the MenuDetailViewModel toggle from ${menu.isLiked} to ${!menu.isLiked!!}"
-                )
-                it.isLiked?.let { it1 -> vm.toggleLike(args.menuId, it1) }
+            vm.menu.value?.isLiked?.let {
+                vm.toggleLike(args.menuId, it)
             }
         }
     }

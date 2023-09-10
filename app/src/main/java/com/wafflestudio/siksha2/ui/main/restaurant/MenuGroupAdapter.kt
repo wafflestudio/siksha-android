@@ -66,18 +66,14 @@ class MenuGroupAdapter(
         for (i in 0 until itemCount) {
             val menuGroup = getItem(i)
             if (menuGroup.menus.any { it.id == updatedMenuItem.id }) {
-                Log.d(TAG, "G-adapter/ found the menuAdapter!")
 
-                // Assuming you've set up your RecyclerView as a member or property of your adapter
                 val menuGroupViewHolder =
                     recyclerView.findViewHolderForAdapterPosition(i) as? MenuGroupViewHolder
 
                 val innerAdapter = menuGroupViewHolder?.binding?.menuList?.adapter as? MenuAdapter
                 innerAdapter?.let {
-                    Log.d(TAG, "Adapter/ inner adapter found~")
-                }
+                    }
 
-                // Use the entire updatedMenuItem object to refresh the item in the innerAdapter
                 innerAdapter?.refreshMenuItem(updatedMenuItem)
                 return
             }

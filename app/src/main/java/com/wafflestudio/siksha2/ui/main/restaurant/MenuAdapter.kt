@@ -90,11 +90,9 @@ class MenuAdapter(
         val index = currentMenus.indexOfFirst { it.id == updatedMenuItem.id }
 
         if (index != -1) {
-            Log.d(TAG, "in Adapter/ the exact menuId found! Let's change it!")
             currentMenus[index] = updatedMenuItem
             submitList(currentMenus)
-            Log.d(TAG, "in Adapter/ submitted the currentMenus~")
-        }
+            }
     }
 
     companion object {
