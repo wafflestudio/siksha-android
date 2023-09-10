@@ -1,7 +1,5 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.*
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu

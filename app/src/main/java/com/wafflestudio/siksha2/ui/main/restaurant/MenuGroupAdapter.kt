@@ -1,7 +1,5 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,13 +64,9 @@ class MenuGroupAdapter(
         for (i in 0 until itemCount) {
             val menuGroup = getItem(i)
             if (menuGroup.menus.any { it.id == updatedMenuItem.id }) {
-
-                val menuGroupViewHolder =
-                    recyclerView.findViewHolderForAdapterPosition(i) as? MenuGroupViewHolder
+                val menuGroupViewHolder = recyclerView.findViewHolderForAdapterPosition(i) as? MenuGroupViewHolder
 
                 val innerAdapter = menuGroupViewHolder?.binding?.menuList?.adapter as? MenuAdapter
-                innerAdapter?.let {
-                    }
 
                 innerAdapter?.refreshMenuItem(updatedMenuItem)
                 return

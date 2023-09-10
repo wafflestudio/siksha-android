@@ -1,9 +1,7 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
 import android.animation.ObjectAnimator
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment

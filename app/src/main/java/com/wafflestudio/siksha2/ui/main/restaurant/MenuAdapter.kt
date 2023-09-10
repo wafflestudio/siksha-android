@@ -1,7 +1,5 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -92,7 +90,7 @@ class MenuAdapter(
         if (index != -1) {
             currentMenus[index] = updatedMenuItem
             submitList(currentMenus)
-            }
+        }
     }
 
     companion object {
