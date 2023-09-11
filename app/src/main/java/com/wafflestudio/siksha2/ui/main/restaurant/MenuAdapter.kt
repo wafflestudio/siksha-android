@@ -84,14 +84,13 @@ class MenuAdapter(
     class MenuViewHolder(val binding: ItemMenuBinding) : RecyclerView.ViewHolder(binding.root)
 
     fun refreshMenuItem(updatedMenuItem: Menu) {
-        val currentMenus = currentList.toMutableList()
-        val index = currentMenus.indexOfFirst { it.id == updatedMenuItem.id }
-
-        if (index != -1) {
-            currentMenus[index] = updatedMenuItem
-            submitList(currentMenus)
+        val updatedMenus = currentList.map { menu ->
+            if (menu.id == updatedMenuItem.id) updatedMenuItem else menu
         }
+
+        submitList(updatedMenus)
     }
+
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Menu>() {

@@ -93,12 +93,10 @@ class MenuRepository @Inject constructor(
     }
 
     suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeOrUnlikeResponse {
-        if (isCurrentlyLiked) {
-            Log.d(TAG, "repo called from vm/ Just unliked the menu!")
-            return sikshaApi.unlikeMenu(menuId)
+        return if (isCurrentlyLiked) {
+            sikshaApi.unlikeMenu(menuId)
         } else {
-            Log.d(TAG, "repo called from vm/ Just liked the menu!")
-            return sikshaApi.likeMenu(menuId)
+            sikshaApi.likeMenu(menuId)
         }
     }
 

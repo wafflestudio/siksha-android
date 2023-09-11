@@ -1,5 +1,7 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.service.controls.ControlsProviderService.TAG
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,7 +33,7 @@ class MenuGroupAdapter(
             it.adapter = menuAdapter
             it.layoutManager = LinearLayoutManager(parent.context)
         }
-        return MenuGroupViewHolder(binding)
+        return MenuGroupViewHolder(binding, menuAdapter)
     }
 
     override fun onBindViewHolder(holder: MenuGroupViewHolder, position: Int) {
@@ -61,21 +63,22 @@ class MenuGroupAdapter(
     }
 
     fun refreshMenuItem(updatedMenuItem: Menu) {
-        for (i in 0 until itemCount) {
-            val menuGroup = getItem(i)
+        val updatedList = currentList.map { menuGroup ->
             if (menuGroup.menus.any { it.id == updatedMenuItem.id }) {
-                val menuGroupViewHolder = recyclerView.findViewHolderForAdapterPosition(i) as? MenuGroupViewHolder
-
-                val innerAdapter = menuGroupViewHolder?.binding?.menuList?.adapter as? MenuAdapter
-
-                innerAdapter?.refreshMenuItem(updatedMenuItem)
-                return
+                menuGroup.copy(menus = menuGroup.menus.map {
+                    if (it.id == updatedMenuItem.id) updatedMenuItem else it
+                })
+            } else {
+                menuGroup
             }
         }
+        submitList(updatedList)
     }
 
-    class MenuGroupViewHolder(val binding: ItemMenuGroupBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class MenuGroupViewHolder(
+        val binding: ItemMenuGroupBinding,
+        val menuAdapter: MenuAdapter
+    ) : RecyclerView.ViewHolder(binding.root)
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<MenuGroup>() {
