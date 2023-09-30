@@ -1,7 +1,5 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
-import android.service.controls.ControlsProviderService.TAG
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,9 +63,11 @@ class MenuGroupAdapter(
     fun refreshMenuItem(updatedMenuItem: Menu) {
         val updatedList = currentList.map { menuGroup ->
             if (menuGroup.menus.any { it.id == updatedMenuItem.id }) {
-                menuGroup.copy(menus = menuGroup.menus.map {
-                    if (it.id == updatedMenuItem.id) updatedMenuItem else it
-                })
+                menuGroup.copy(
+                    menus = menuGroup.menus.map {
+                        if (it.id == updatedMenuItem.id) updatedMenuItem else it
+                    }
+                )
             } else {
                 menuGroup
             }

@@ -91,7 +91,6 @@ class MenuAdapter(
         submitList(updatedMenus)
     }
 
-
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Menu>() {
             override fun areItemsTheSame(oldItem: Menu, newItem: Menu): Boolean {
