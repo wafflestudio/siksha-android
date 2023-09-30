@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 
 import androidx.lifecycle.*
 import com.wafflestudio.siksha2.models.MealsOfDay
+import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.repositories.MenuRepository
@@ -36,6 +37,9 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _favoriteRestaurantExists = MutableLiveData(false)
     val favoriteRestaurantExists: LiveData<Boolean> = _favoriteRestaurantExists
 
+    private val _updatedMenuItemStream = MutableLiveData<Menu?>(null)
+    val updatedMenuItemStream: LiveData<Menu?> = _updatedMenuItemStream
+
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
@@ -47,21 +51,36 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
+    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+        viewModelScope.launch {
+            val menuItem = menuRepository.getMenuById(id)
+            menuItem.isLiked = !isCurrentlyLiked
+            _updatedMenuItemStream.postValue(menuItem)
+            val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
+            if (serverMenuItem.isLiked != menuItem.isLiked) {
+                _updatedMenuItemStream.postValue(serverMenuItem)
+            }
+        }
+    }
+
     fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
         viewModelScope.launch {
             _mealsOfDayFilter.value = mealsOfDay
+            startRefreshingData()
         }
     }
 
     fun addDateOffset(offset: Long) {
         viewModelScope.launch {
             _dateFilter.value = _dateFilter.value?.plusDays(offset)
+            startRefreshingData()
         }
     }
 
     fun setDateFilter(date: LocalDate) {
         viewModelScope.launch {
             _dateFilter.value = date
+            startRefreshingData()
         }
     }
 

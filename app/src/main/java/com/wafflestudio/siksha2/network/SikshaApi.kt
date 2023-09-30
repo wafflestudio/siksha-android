@@ -7,7 +7,7 @@ import retrofit2.http.*
 import java.time.LocalDate
 
 interface SikshaApi {
-    @GET("menus/")
+    @GET("menus/lo")
     suspend fun fetchMenuGroups(
         @Query("start_date") startDate: LocalDate,
         @Query("end_date") endDate: LocalDate
@@ -76,4 +76,10 @@ interface SikshaApi {
 
     @GET("versions/android")
     suspend fun getVersion(): GetVersionResult
+
+    @POST("/menus/{menu_id}/like")
+    suspend fun likeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+
+    @POST("/menus/{menu_id}/unlike")
+    suspend fun unlikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
 }

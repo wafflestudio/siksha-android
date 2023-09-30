@@ -149,6 +149,23 @@ class MenuDetailViewModel @Inject constructor(
         _leaveReviewState.value = ReviewState.WAITING
     }
 
+    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+        viewModelScope.launch {
+            val menuItem = menuRepository.getMenuById(id)
+            menuItem.isLiked = !isCurrentlyLiked
+            if (menuItem.isLiked == true) {
+                menuItem.likeCount = menuItem.likeCount?.plus(1)
+            } else {
+                menuItem.likeCount = menuItem.likeCount?.minus(1)
+            }
+            _menu.postValue(menuItem)
+            val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
+            if (serverMenuItem != menuItem) {
+                _menu.postValue(serverMenuItem)
+            }
+        }
+    }
+
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
         _menu.value?.id?.let { id ->
             if (_uriList.value?.isNotEmpty() == true) {
@@ -164,7 +181,8 @@ class MenuDetailViewModel @Inject constructor(
                         format(Bitmap.CompressFormat.JPEG)
                     }
                     val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                    val multipartBody = MultipartBody.Part.createFormData("images", file.name, requestBody)
+                    val multipartBody =
+                        MultipartBody.Part.createFormData("images", file.name, requestBody)
                     imageList.add(multipartBody)
                 }
                 val commentBody = MultipartBody.Part.createFormData("comment", comment)
