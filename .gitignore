@@ -7,6 +7,7 @@
 **/*.aar
 **/*.ap_
 **/*.aab
+**/secrets.xml
 
 # Files for the ART/Dalvik VM
 *.dex

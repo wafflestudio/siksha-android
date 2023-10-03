@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application") version "8.1.0"
     id("org.jetbrains.kotlin.android") version "1.8.0"
@@ -25,6 +28,10 @@ kotlin {
     jvmToolchain(17)
 }
 
+val versionProps = Properties().apply {
+    load(FileInputStream(File(rootProject.rootDir, "version.properties")))
+}
+
 android {
     namespace = "com.wafflestudio.siksha2"
     compileSdk = 33
@@ -33,26 +40,35 @@ android {
         applicationId = "com.wafflestudio.siksha2"
         minSdk = 26
         targetSdk = 33
-        versionCode = 3000000
-        versionName = "3.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions.add("mode")
+
+    productFlavors {
+        create("staging") {
+            val propertyVersionName = versionProps.getProperty("sikshaVersion")
+            versionCode = SemVer.sementicVersionToSerializedCode(propertyVersionName).toInt()
+            versionName = propertyVersionName
+        }
+
+        create("live") {
+            val propertyVersionName = versionProps.getProperty("sikshaVersion")
+            versionCode = SemVer.sementicVersionToSerializedCode(propertyVersionName).toInt()
+            versionName = propertyVersionName
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android.txt"),
-                "proguard-rules.pro"
-            )
-            buildConfigField("String", "BASE_URL", "\"https://siksha-api.wafflestudio.com\"")
-            buildConfigField("String", "PREF_KEY", "\"siksha.preference\"")
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://siksha-api-dev.wafflestudio.com/\"")
-            buildConfigField("String", "PREF_KEY", "\"siksha.preference\"")
+            isMinifyEnabled = false
         }
     }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
