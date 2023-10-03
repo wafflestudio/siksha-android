@@ -1,7 +1,5 @@
 package com.wafflestudio.siksha2.repositories
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.db.DailyMenusDao
