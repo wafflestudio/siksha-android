@@ -14,7 +14,7 @@
 
 ## secrets
 - `app/google-services.json` 
-- `app/src/main/res/values/secrets.xml` -> (`TODO: debug, release 분리 필요`)
+- `app/staging/src/main/res/values/secrets.xml`
 - maintainer 에게 요청하기
 
 ## Maintainers (Contacts)
