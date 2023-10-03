@@ -29,7 +29,7 @@ jobs:
       - name: Clean build
         run: ./gradlew clean
       - name: Run ktlintDebug
-        run: ./gradlew ktlintMainSourceSetCheck
+        run: ./gradlew ktlintCheck
       - name: Upload ktlint report
         uses: actions/upload-artifact@v2
         if: failure()
