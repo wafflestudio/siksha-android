@@ -195,7 +195,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:gravity="center"
                     android:text="@string/daily_restaurant_breakfast"
                     android:layout_marginEnd="8dp"/>
@@ -227,7 +227,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_lunch"
                     android:layout_marginEnd="8dp"/>
 
@@ -257,7 +257,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_dinner"
                     android:layout_marginEnd="8dp"/>
 
@@ -326,7 +326,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_breakfast"
                     android:layout_marginEnd="8dp"/>
 
@@ -356,7 +356,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_lunch"
                     android:layout_marginEnd="8dp"/>
 
@@ -386,7 +386,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_dinner"
                     android:layout_marginEnd="8dp"/>
 
@@ -455,7 +455,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_breakfast"
                     android:layout_marginEnd="8dp"/>
 
@@ -485,7 +485,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_lunch"
                     android:layout_marginEnd="8dp"/>
 
@@ -515,7 +515,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nanum_square_regular"
                     android:textSize="12dp"
-                    android:textColor="@color/orange_normal"
+                    android:textColor="@color/orange_main"
                     android:text="@string/daily_restaurant_dinner"
                     android:layout_marginEnd="8dp"/>
 

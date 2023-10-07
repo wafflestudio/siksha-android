@@ -36,7 +36,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/nanum_square_extra_bold"
                 android:textSize="15dp"
-                android:textColor="@color/orange_normal"
+                android:textColor="@color/orange_main"
                 tools:text="2021.03." />
 
             <ImageView

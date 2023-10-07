@@ -240,7 +240,7 @@ class DailyRestaurantFragment : Fragment() {
                     binding.breakfastText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.orange_700
+                            R.color.orange_main
                         )
                     )
                     binding.lunchText.setTextColor(
@@ -267,7 +267,7 @@ class DailyRestaurantFragment : Fragment() {
                     binding.lunchText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.orange_700
+                            R.color.orange_main
                         )
                     )
                     binding.dinnerText.setTextColor(
@@ -294,7 +294,7 @@ class DailyRestaurantFragment : Fragment() {
                     binding.dinnerText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.orange_700
+                            R.color.orange_main
                         )
                     )
                 }

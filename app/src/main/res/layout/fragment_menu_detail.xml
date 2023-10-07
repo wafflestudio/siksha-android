@@ -16,7 +16,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/orange_normal"
+        android:background="@color/orange_main"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -92,7 +92,7 @@
                 android:layout_marginHorizontal="10dp" />
 
             <View
-                android:background="@color/orange_normal"
+                android:background="@color/orange_main"
                 android:layout_height="1dp"
                 android:layout_width="343dp"
                 android:layout_marginTop="18dp"
@@ -124,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nanum_square_bold"
                         android:textSize="10dp"
-                        android:textColor="@color/orange_normal"
+                        android:textColor="@color/orange_main"
                         tools:text="123명" />
 
                     <TextView

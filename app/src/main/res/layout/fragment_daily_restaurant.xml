@@ -65,7 +65,7 @@
                         android:padding="10dp"
                         android:text="..."
                         android:textAlignment="center"
-                        android:textColor="@color/orange_500"
+                        android:textColor="@color/orange_main"
                         android:textSize="15dp"
                         tools:text="2021-03-28 (일)" />
 

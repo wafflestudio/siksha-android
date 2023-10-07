@@ -14,17 +14,8 @@
     <color name="light_gray_500">#FFEDE9E6</color>
     <color name="light_gray_300">#FFFAFAFA</color>
 
-    <color name="orange_300">#FFFF9A44</color>
-    <color name="orange_500">#FFFC9D6B</color>
-    <color name="orange_700">#FFFE8B5A</color>
+    <color name="orange_main">#FF9522</color>
     <color name="pink_500">#FFFD7878</color>
-
-    <color name="orange_dark">#FFE15618</color>
-    <color name="orange_normal">#FFFE8C59</color>
-
-    <color name="rate_red">#FFF47156</color>
-    <color name="rate_orange">#FFF58625</color>
-    <color name="rate_yellow">#FFF5B52C</color>
 
     <color name="kakao_yellow">#FFFAE44D</color>
     <color name="kakao_yellow_dim">#DFCC48</color>

@@ -120,7 +120,7 @@
         android:fontFamily="@font/nanum_square_regular"
         android:textSize="15dp"
         android:maxLines="1"
-        android:textColor="@color/orange_700"
+        android:textColor="@color/orange_main"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="20dp"
         android:paddingHorizontal="18dp"
