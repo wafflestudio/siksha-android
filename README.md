@@ -14,7 +14,7 @@
 
 ## secrets
 - `app/google-services.json` 
-- `app/staging/src/main/res/values/secrets.xml`
+- `app/src/staging/main/res/values/secrets.xml`
 - maintainer 에게 요청하기
 
 ## Maintainers (Contacts)
