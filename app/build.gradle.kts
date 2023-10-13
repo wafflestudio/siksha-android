@@ -72,6 +72,11 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
@@ -142,4 +147,16 @@ dependencies {
     testImplementation("junit:junit:4.+")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Compose
+    implementation("androidx.compose.runtime:runtime:${Deps.Version.Compose}")
+    implementation("androidx.compose.ui:ui:${Deps.Version.Compose}")
+    implementation("androidx.compose.ui:ui-tooling:${Deps.Version.Compose}")
+    implementation("androidx.compose.material:material:${Deps.Version.Compose}")
+    implementation("androidx.compose.foundation:foundation:${Deps.Version.ComposeFoundation}")
+    implementation("androidx.compose.foundation:foundation-layout:${Deps.Version.ComposeFoundation}")
+    implementation("androidx.compose.runtime:runtime-livedata:${Deps.Version.Compose}")
+    implementation("androidx.paging:paging-compose:${Deps.Version.PagingCompose}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Deps.Version.ComposeViewModel}")
+    implementation("androidx.hilt:hilt-navigation-compose:${Deps.Version.ComposeHiltNavigation}")
 }
