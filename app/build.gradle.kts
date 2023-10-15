@@ -3,7 +3,7 @@ import java.io.FileInputStream
 
 plugins {
     id("com.android.application") version "8.1.0"
-    id("org.jetbrains.kotlin.android") version "1.8.0"
+    id("org.jetbrains.kotlin.android") version "1.9.0"
     id("org.jetbrains.kotlin.plugin.parcelize") version "1.8.0"
     id("org.jetbrains.kotlin.kapt") version "1.8.0"
     id("com.google.dagger.hilt.android") version "2.44"
@@ -34,7 +34,7 @@ val versionProps = Properties().apply {
 
 android {
     namespace = "com.wafflestudio.siksha2"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.wafflestudio.siksha2"
