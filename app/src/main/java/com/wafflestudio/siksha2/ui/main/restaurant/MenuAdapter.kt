@@ -41,17 +41,17 @@ class MenuAdapter(
                 }
 
                 override fun onScroll(
-                    e1: MotionEvent,
-                    p1: MotionEvent,
-                    p2: Float,
-                    p3: Float
+                    e1: MotionEvent?,
+                    e2: MotionEvent,
+                    distanceX: Float,
+                    distanceY: Float
                 ): Boolean {
                     return false
                 }
 
                 override fun onLongPress(e1: MotionEvent) {}
                 override fun onFling(
-                    e1: MotionEvent,
+                    e1: MotionEvent?,
                     e2: MotionEvent,
                     velocityX: Float,
                     velocityY: Float
