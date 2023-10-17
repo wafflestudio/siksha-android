@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">식샤</string>
     <string name="splash_login_kakao_button">카카오로 로그인하기</string>
     <string name="splash_login_google_button">구글로 로그인하기</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
