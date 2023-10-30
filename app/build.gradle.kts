@@ -1,3 +1,4 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -11,6 +12,7 @@ plugins {
     id("com.google.gms.google-services") version "4.3.15"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
     id("androidx.navigation.safeargs") version "2.5.3"
+    id("com.google.firebase.appdistribution") version "4.0.0"
 }
 
 ktlint {
@@ -50,12 +52,22 @@ android {
             val propertyVersionName = versionProps.getProperty("sikshaVersion")
             versionCode = SemVer.sementicVersionToSerializedCode(propertyVersionName).toInt()
             versionName = propertyVersionName
+
+            firebaseAppDistribution {
+                artifactType = "AAB"
+                serviceCredentialsFile = "siksha-306012-9f825641f163.json"
+            }
         }
 
         create("live") {
             val propertyVersionName = versionProps.getProperty("sikshaVersion")
             versionCode = SemVer.sementicVersionToSerializedCode(propertyVersionName).toInt()
             versionName = propertyVersionName
+
+            firebaseAppDistribution {
+                artifactType = "AAB"
+                serviceCredentialsFile = "siksha-306012-9f825641f163.json"
+            }
         }
     }
 
