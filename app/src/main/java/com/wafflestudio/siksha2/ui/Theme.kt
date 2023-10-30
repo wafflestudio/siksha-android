@@ -34,23 +34,23 @@ fun SikshaTheme(
 
 @Preview
 @Composable
-fun Test() {
+fun Example() {
     SikshaTheme {
         Column {
             Text(
                 modifier = Modifier.background(MaterialTheme.colors.primary),
-                text = "h6",
+                text = "this is h6",
                 style = MaterialTheme.typography.h6,
                 color = MaterialTheme.colors.onPrimary,
             )
             Surface {
                 Column {
                     Text(
-                        text = "body2",
+                        text = "this is body2",
                         style = MaterialTheme.typography.body2
                     )
                     Text(
-                        text = "subtitle1",
+                        text = "this is subtitle1",
                         style = MaterialTheme.typography.subtitle1
                     )
                 }
