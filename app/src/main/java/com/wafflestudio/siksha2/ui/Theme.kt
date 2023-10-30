@@ -18,12 +18,12 @@ private val lightThemeColors = lightColors(
     background = SikshaColors.White900,
     onBackground = SikshaColors.Black900,
     surface = SikshaColors.White900,
-    onSurface = SikshaColors.Black900,
+    onSurface = SikshaColors.Black900
 )
 
 @Composable
 fun SikshaTheme(
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
     MaterialTheme(
         colors = lightThemeColors,
@@ -41,7 +41,7 @@ fun Example() {
                 modifier = Modifier.background(MaterialTheme.colors.primary),
                 text = "this is h6",
                 style = MaterialTheme.typography.h6,
-                color = MaterialTheme.colors.onPrimary,
+                color = MaterialTheme.colors.onPrimary
             )
             Surface {
                 Column {
