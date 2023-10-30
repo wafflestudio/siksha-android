@@ -31,10 +31,10 @@ interface SikshaApi {
         @Query("etc") etc: Boolean = true
     ): FetchReviewsResult
 
-    @GET("/restaurants")
+    @GET("/restaurants/")
     suspend fun fetchRestaurants(): FetchRestaurantsResult
 
-    @POST("/reviews")
+    @POST("/reviews/")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): LeaveReviewResult
 
     @Multipart
@@ -52,7 +52,7 @@ interface SikshaApi {
     @POST("/auth/login/google")
     suspend fun loginGoogle(@Header("google-token") googleToken: String): LoginOAuthResult
 
-    @DELETE("/auth")
+    @DELETE("/auth/")
     suspend fun deleteAccount()
 
     @POST("/auth/refresh")
@@ -66,7 +66,7 @@ interface SikshaApi {
     suspend fun fetchReviewDistribution(@Query("menu_id") menuId: Long):
         FetchReviewDistributionResult
 
-    @POST("/voc")
+    @POST("/voc/")
     suspend fun sendVoc(
         @Body req: VocParam
     )
