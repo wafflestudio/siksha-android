@@ -16,7 +16,7 @@ import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoDialogFragment
 import com.wafflestudio.siksha2.utils.toPrettyString
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -192,8 +192,8 @@ class DailyRestaurantFragment : Fragment() {
 
         vm.favoriteRestaurantExists.observe(viewLifecycleOwner) {
             if (isFavorite) {
-                binding.emptyFavorite.root.visibleOrGone(it.not())
-                binding.content.visibleOrGone(it)
+                binding.emptyFavorite.root.setVisibleOrGone(it.not())
+                binding.content.setVisibleOrGone(it)
             }
         }
 
@@ -206,8 +206,8 @@ class DailyRestaurantFragment : Fragment() {
         lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
-                    binding.menuGroupList.visibleOrGone(it.isNotEmpty())
-                    binding.emptyText.visibleOrGone(it.isEmpty())
+                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    binding.emptyText.setVisibleOrGone(it.isEmpty())
                     menuGroupAdapter.submitList(it)
                 }
         }
@@ -304,9 +304,9 @@ class DailyRestaurantFragment : Fragment() {
         }
 
         vm.isCalendarVisible.observe(viewLifecycleOwner) { visibility ->
-            binding.calendarLayout.visibleOrGone(visibility)
-            binding.dateAfter.visibleOrGone(!visibility)
-            binding.dateBefore.visibleOrGone(!visibility)
+            binding.calendarLayout.setVisibleOrGone(visibility)
+            binding.dateAfter.setVisibleOrGone(!visibility)
+            binding.dateBefore.setVisibleOrGone(!visibility)
         }
 
         binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }

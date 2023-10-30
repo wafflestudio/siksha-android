@@ -47,9 +47,9 @@ class MenuDetailViewModel @Inject constructor(
     val reviewDistribution: LiveData<List<Long>>
         get() = _reviewDistribution
 
-    private val _uriList = MutableLiveData<List<Uri>>()
-    val uriList: LiveData<List<Uri>>
-        get() = _uriList
+    private val _imageUriList = MutableLiveData<List<Uri>>()
+    val imageUriList: LiveData<List<Uri>>
+        get() = _imageUriList
 
     private val _imageUrlList = MutableLiveData<List<String>>()
     val imageUrlList: LiveData<List<String>>
@@ -125,24 +125,28 @@ class MenuDetailViewModel @Inject constructor(
         }
     }
 
-    fun addUri(uri: Uri): Boolean {
-        val list = _uriList.value?.toMutableList() ?: mutableListOf()
-        if (list.size >= 3) return false
-        list.add(uri)
-        _uriList.value = list.toList()
-        return true
+    fun addImageUri(uri: Uri, onFailure: () -> Unit) {
+        val list = _imageUriList.value?.toMutableList() ?: mutableListOf()
+        if (list.size < 3) {
+            list.add(uri)
+            _imageUriList.value = list.toList()
+        } else {
+            onFailure()
+        }
     }
 
-    fun deleteUri(index: Int): Boolean {
-        val list = _uriList.value?.toMutableList() ?: mutableListOf()
-        if (list.size < index + 1) return false
-        list.removeAt(index)
-        _uriList.value = list.toList()
-        return true
+    fun deleteImageUri(index: Int, onFailure: () -> Unit = {}) {
+        val list = _imageUriList.value?.toMutableList() ?: mutableListOf()
+        if (index < list.size) {
+            list.removeAt(index)
+            _imageUriList.value = list.toList()
+        } else {
+            onFailure()
+        }
     }
 
     fun refreshUriList() {
-        _uriList.value = listOf()
+        _imageUriList.value = listOf()
     }
 
     fun notifySendReviewEnd() {
@@ -168,11 +172,11 @@ class MenuDetailViewModel @Inject constructor(
 
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
         _menu.value?.id?.let { id ->
-            if (_uriList.value?.isNotEmpty() == true) {
+            if (_imageUriList.value?.isNotEmpty() == true) {
                 context.showToast("이미지 압축 중입니다.")
                 _leaveReviewState.value = ReviewState.COMPRESSING
                 val imageList = mutableListOf<MultipartBody.Part>()
-                _uriList.value?.forEach {
+                _imageUriList.value?.forEach {
                     val path = PathUtil.getPath(context, it)
                     var file = File(path)
                     file = Compressor.compress(context, file) {

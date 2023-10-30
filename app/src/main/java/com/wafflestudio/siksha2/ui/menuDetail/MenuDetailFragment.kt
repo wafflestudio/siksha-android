@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
 import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.showToast
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -53,8 +53,8 @@ class MenuDetailFragment : Fragment() {
                 .collectLatest {
                     if (it.refresh is LoadState.NotLoading) {
                         (reviewsAdapter.itemCount < 1).let { empty ->
-                            binding.emptyList.visibleOrGone(empty)
-                            binding.reviewList.visibleOrGone(empty.not())
+                            binding.emptyList.setVisibleOrGone(empty)
+                            binding.reviewList.setVisibleOrGone(empty.not())
                         }
                     }
                 }
@@ -65,9 +65,9 @@ class MenuDetailFragment : Fragment() {
         vm.refreshReviewDistribution(args.menuId)
 
         vm.networkResultState.observe(viewLifecycleOwner) {
-            binding.menuInfoContainer.visibleOrGone(it == MenuDetailViewModel.State.SUCCESS)
-            binding.onErrorContainer.root.visibleOrGone(it == MenuDetailViewModel.State.FAILED)
-            binding.onLoadingContainer.root.visibleOrGone(it == MenuDetailViewModel.State.LOADING)
+            binding.menuInfoContainer.setVisibleOrGone(it == MenuDetailViewModel.State.SUCCESS)
+            binding.onErrorContainer.root.setVisibleOrGone(it == MenuDetailViewModel.State.FAILED)
+            binding.onLoadingContainer.root.setVisibleOrGone(it == MenuDetailViewModel.State.LOADING)
         }
 
         vm.menu.observe(viewLifecycleOwner) { menu ->
@@ -114,7 +114,7 @@ class MenuDetailFragment : Fragment() {
         }
 
         vm.imageCount.observe(viewLifecycleOwner) { imageCount ->
-            binding.layoutPhotoReview.visibleOrGone(imageCount > 0)
+            binding.layoutPhotoReview.setVisibleOrGone(imageCount > 0)
             if (imageCount > 3) {
                 binding.reviewImageView3.showMorePhotos(imageCount - 3)
                 binding.reviewImageView3.setOnClickListener {
@@ -134,7 +134,7 @@ class MenuDetailFragment : Fragment() {
                 if (i < imageUrlList.size) {
                     imageReviewList[i].run {
                         setImage(imageUrlList[i])
-                        visibleOrGone(true)
+                        setVisibleOrGone(true)
                     }
                 }
             }

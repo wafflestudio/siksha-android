@@ -10,7 +10,7 @@ import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.toKoreanDate
 import com.wafflestudio.siksha2.utils.toLocalDateTime
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class MenuReviewsAdapter constructor(
     private val showImage: Boolean = true,
@@ -28,7 +28,7 @@ class MenuReviewsAdapter constructor(
                 item?.etc?.images?.let {
                     if (it.isNotEmpty()) {
                         val imageViewList = listOf(this.reviewImageView1, this.reviewImageView2, this.reviewImageView3)
-                        this.reviewImageLayout.visibleOrGone(true)
+                        this.reviewImageLayout.setVisibleOrGone(true)
 
                         for (i in 0 until 3) {
                             if (i < it.size) {
@@ -40,7 +40,7 @@ class MenuReviewsAdapter constructor(
                                             dialog.show(fragmentManager, "review_image_$url")
                                         }
                                     }
-                                    visibleOrGone(true)
+                                    setVisibleOrGone(true)
                                 }
                             }
                         }

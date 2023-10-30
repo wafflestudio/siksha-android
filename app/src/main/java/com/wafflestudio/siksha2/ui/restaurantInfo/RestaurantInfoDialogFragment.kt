@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentRestaurantInfoBinding
 import com.wafflestudio.siksha2.models.RestaurantInfo
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -86,21 +86,21 @@ class RestaurantInfoDialogFragment private constructor() :
         val items = listOf(binding.timeLayoutWeekday, binding.timeLayoutSaturday, binding.timeLayoutHoliday)
         if (operatingHour.weekdays.isNotEmpty()) {
             items[0].apply {
-                visibleOrGone(true)
+                setVisibleOrGone(true)
                 val operating = modifyOperatingHour(operatingHour.weekdays)
                 operating.forEachIndexed { index, s ->
                     if (s.isNotBlank()) {
                         when (index) {
                             0 -> {
-                                binding.layoutWeekdayBreakfast.visibleOrGone(true)
+                                binding.layoutWeekdayBreakfast.setVisibleOrGone(true)
                                 binding.textWeekdayBreakfastTime.text = s
                             }
                             1 -> {
-                                binding.layoutWeekdayLunch.visibleOrGone(true)
+                                binding.layoutWeekdayLunch.setVisibleOrGone(true)
                                 binding.textWeekdayLunchTime.text = s
                             }
                             2 -> {
-                                binding.layoutWeekdayDinner.visibleOrGone(true)
+                                binding.layoutWeekdayDinner.setVisibleOrGone(true)
                                 binding.textWeekdayDinnerTime.text = s
                             }
                         }
@@ -111,7 +111,7 @@ class RestaurantInfoDialogFragment private constructor() :
 
         if (operatingHour.saturday.isNotEmpty()) {
             items[1].apply {
-                visibleOrGone(true)
+                setVisibleOrGone(true)
                 binding.lineDivFirst.visibility = View.VISIBLE
 
                 val operating = modifyOperatingHour(operatingHour.saturday)
@@ -119,15 +119,15 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (s.isNotBlank()) {
                         when (index) {
                             0 -> {
-                                binding.layoutSaturdayBreakfast.visibleOrGone(true)
+                                binding.layoutSaturdayBreakfast.setVisibleOrGone(true)
                                 binding.textSaturdayBreakfastTime.text = s
                             }
                             1 -> {
-                                binding.layoutSaturdayLunch.visibleOrGone(true)
+                                binding.layoutSaturdayLunch.setVisibleOrGone(true)
                                 binding.textSaturdayLunchTime.text = s
                             }
                             2 -> {
-                                binding.layoutSaturdayDinner.visibleOrGone(true)
+                                binding.layoutSaturdayDinner.setVisibleOrGone(true)
                                 binding.textSaturdayDinnerTime.text = s
                             }
                         }
@@ -138,7 +138,7 @@ class RestaurantInfoDialogFragment private constructor() :
 
         if (operatingHour.holiday.isNotEmpty()) {
             items[2].apply {
-                visibleOrGone(true)
+                setVisibleOrGone(true)
                 binding.lineDivSecond.visibility = View.VISIBLE
 
                 val operating = modifyOperatingHour(operatingHour.holiday)
@@ -146,15 +146,15 @@ class RestaurantInfoDialogFragment private constructor() :
                     if (s.isNotBlank()) {
                         when (index) {
                             0 -> {
-                                binding.layoutHolidayBreakfast.visibleOrGone(true)
+                                binding.layoutHolidayBreakfast.setVisibleOrGone(true)
                                 binding.textHolidayBreakfastTime.text = s
                             }
                             1 -> {
-                                binding.layoutHolidayLunch.visibleOrGone(true)
+                                binding.layoutHolidayLunch.setVisibleOrGone(true)
                                 binding.textHolidayLunchTime.text = s
                             }
                             2 -> {
-                                binding.layoutHolidayDinner.visibleOrGone(true)
+                                binding.layoutHolidayDinner.setVisibleOrGone(true)
                                 binding.textHolidayDinnerTime.text = s
                             }
                         }

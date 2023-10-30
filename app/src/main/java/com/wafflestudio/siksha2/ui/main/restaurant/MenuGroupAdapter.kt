@@ -9,7 +9,7 @@ import com.wafflestudio.siksha2.databinding.ItemMenuGroupBinding
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.utils.getInflater
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class MenuGroupAdapter(
     private val onMenuGroupInfoClickListener: (Long) -> Unit,
@@ -49,8 +49,8 @@ class MenuGroupAdapter(
             }
             favoriteToggle.isSelected = menuGroup.isFavorite
 
-            menuList.visibleOrGone(menuGroup.menus.isEmpty().not())
-            menuEmpty.visibleOrGone(menuGroup.menus.isEmpty())
+            menuList.setVisibleOrGone(menuGroup.menus.isEmpty().not())
+            menuEmpty.setVisibleOrGone(menuGroup.menus.isEmpty())
             (menuList.adapter as? MenuAdapter)?.submitList(menuGroup.menus)
         }
     }

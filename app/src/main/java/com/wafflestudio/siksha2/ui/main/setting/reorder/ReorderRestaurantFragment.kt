@@ -14,7 +14,7 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentReorderRestaurantBinding
 import com.wafflestudio.siksha2.models.RestaurantOrder
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.woxthebox.draglistview.DragListView
 import kotlinx.coroutines.launch
 import java.util.*
@@ -93,8 +93,8 @@ class ReorderRestaurantFragment : Fragment() {
                 }
             order.clear()
             order.addAll(list.map { it.id })
-            binding.emptyOrder.visibleOrGone(list.isEmpty())
-            binding.orderList.visibleOrGone(list.isNotEmpty())
+            binding.emptyOrder.setVisibleOrGone(list.isEmpty())
+            binding.orderList.setVisibleOrGone(list.isNotEmpty())
             reorderItemAdapter.submitList(list.map { Pair(it.id, it.nameKr ?: "") })
         }
     }
