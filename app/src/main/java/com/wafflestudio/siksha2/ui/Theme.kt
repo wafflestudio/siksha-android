@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -40,20 +41,27 @@ fun Example() {
             Text(
                 modifier = Modifier.background(MaterialTheme.colors.primary),
                 text = "this is h6",
-                style = MaterialTheme.typography.h6,
+                style = SikshaTypography.h6,
                 color = MaterialTheme.colors.onPrimary
             )
             Surface {
                 Column {
                     Text(
                         text = "this is body2",
-                        style = MaterialTheme.typography.body2
+                        style = SikshaTypography.body2
                     )
                     Text(
                         text = "this is subtitle1",
-                        style = MaterialTheme.typography.subtitle1
+                        style = SikshaTypography.subtitle1
                     )
                 }
+            }
+            Button(
+                onClick = {}
+            ) {
+                Text(
+                    text = "this is button"
+                )
             }
         }
     }
