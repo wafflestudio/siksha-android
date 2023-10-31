@@ -62,11 +62,6 @@ class CalendarSelectView : LinearLayout {
                     return false
                 }
 
-//                override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
-//                    Timber.d("scroll velocity x : $p2 y : $p3")
-//                    if (abs(p2) > 100) return true
-//                    return false
-//                }
                 override fun onLongPress(p0: MotionEvent) {}
                 override fun onFling(
                     e1: MotionEvent?,
@@ -92,31 +87,6 @@ class CalendarSelectView : LinearLayout {
 
                     return false
                 }
-
-//                override fun onFling(
-//                    p0: MotionEvent,
-//                    p1: MotionEvent,
-//                    velocityX: Float,
-//                    velocityY: Float
-//                ): Boolean {
-//                    Timber.d(velocityX.toString())
-//
-//                    if (Math.abs(velocityY) > Math.abs(velocityX)) return false
-//
-//                    if (velocityX > 250) {
-//                        val localDate = LocalDate.of(year, month, 1)
-//                        setDate(localDate.minusMonths(1))
-//                        return true
-//                    }
-//
-//                    if (velocityX < -250) {
-//                        val localDate = LocalDate.of(year, month, 1)
-//                        setDate(localDate.plusMonths(1))
-//                        return true
-//                    }
-//
-//                    return false
-//                }
             }
         )
 

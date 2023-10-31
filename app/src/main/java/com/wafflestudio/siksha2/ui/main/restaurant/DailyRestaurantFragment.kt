@@ -127,47 +127,6 @@ class DailyRestaurantFragment : Fragment() {
 
                     return false
                 }
-
-//                override fun onFling(
-//                    p0: MotionEvent,
-//                    p1: MotionEvent,
-//                    velocityX: Float,
-//                    velocityY: Float
-//                ): Boolean {
-//                    if (Math.abs(velocityY) > Math.abs(velocityX)) return false
-//
-//                    if (velocityX > 2000) {
-//                        when (vm.mealsOfDayFilter.value) {
-//                            MealsOfDay.BR -> {
-//                                vm.addDateOffset(-1L)
-//                                vm.setMealsOfDayFilter(MealsOfDay.DN)
-//                            }
-//
-//                            MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.BR)
-//                            MealsOfDay.DN -> vm.setMealsOfDayFilter(MealsOfDay.LU)
-//                            else -> {}
-//                        }
-//
-//                        return true
-//                    }
-//
-//                    if (velocityX < -2000) {
-//                        when (vm.mealsOfDayFilter.value) {
-//                            MealsOfDay.BR -> vm.setMealsOfDayFilter(MealsOfDay.LU)
-//                            MealsOfDay.LU -> vm.setMealsOfDayFilter(MealsOfDay.DN)
-//                            MealsOfDay.DN -> {
-//                                vm.addDateOffset(1L)
-//                                vm.setMealsOfDayFilter(MealsOfDay.BR)
-//                            }
-//
-//                            else -> {}
-//                        }
-//
-//                        return true
-//                    }
-//
-//                    return false
-//                }
             }
         )
 
