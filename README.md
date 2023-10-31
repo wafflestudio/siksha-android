@@ -13,10 +13,6 @@
 - 출시된 버전 == release 브랜치 유지하기
 
 ## secrets
-- `app/google-services.json` 
-- `app/src/staging/main/res/values/secrets.xml`
+- `app/staging/google-services.json` 
+- `app/staging/src/main/res/values/secrets.xml`
 - maintainer 에게 요청하기
-
-## Maintainers (Contacts)
-- **current** [veldic](https://github.com/veldic)
-- [sanggggg](https://github.com/sanggggg)
