@@ -16,7 +16,7 @@ interface SikshaApi {
     @GET("/menus/{menu_id}")
     suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): Menu
 
-    @GET("/reviews")
+    @GET("/reviews/")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
@@ -66,7 +66,7 @@ interface SikshaApi {
     suspend fun fetchReviewDistribution(@Query("menu_id") menuId: Long):
         FetchReviewDistributionResult
 
-    @POST("/voc/")
+    @POST("/voc")
     suspend fun sendVoc(
         @Body req: VocParam
     )
