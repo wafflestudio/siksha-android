@@ -171,30 +171,32 @@ class MenuDetailViewModel @Inject constructor(
     }
 
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
-        _menu.value?.id?.let { id ->
-            if (_imageUriList.value?.isNotEmpty() == true) {
-                context.showToast("이미지 압축 중입니다.")
-                _leaveReviewState.value = ReviewState.COMPRESSING
-                val imageList = mutableListOf<MultipartBody.Part>()
-                _imageUriList.value?.forEach {
-                    val path = PathUtil.getPath(context, it)
-                    var file = File(path)
-                    file = Compressor.compress(context, file) {
-                        resolution(300, 300)
-                        size(100000)
-                        format(Bitmap.CompressFormat.JPEG)
-                    }
-                    val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                    val multipartBody =
-                        MultipartBody.Part.createFormData("images", file.name, requestBody)
-                    imageList.add(multipartBody)
-                }
-                val commentBody = MultipartBody.Part.createFormData("comment", comment)
-                menuRepository.leaveMenuReviewImage(id, score.toLong(), commentBody, imageList)
-            } else {
-                menuRepository.leaveMenuReview(id, score, comment)
+        val menuId = _menu.value?.id ?: return
+        if (_imageUriList.value?.isNotEmpty() == true) {
+            context.showToast("이미지 압축 중입니다.")
+            _leaveReviewState.value = ReviewState.COMPRESSING
+            val imageList = _imageUriList.value?.map {
+                getCompressedImage(context, it)
             }
+            val commentBody = MultipartBody.Part.createFormData("comment", comment)
+            imageList?.let {
+                menuRepository.leaveMenuReviewImage(menuId, score.toLong(), commentBody, imageList)
+            }
+        } else {
+            menuRepository.leaveMenuReview(menuId, score, comment)
         }
+    }
+
+    private suspend fun getCompressedImage(context: Context, uri: Uri): MultipartBody.Part {
+        val path = PathUtil.getPath(context, uri)
+        var file = File(path)
+        file = Compressor.compress(context, file) {
+            resolution(300, 300)
+            size(100000)
+            format(Bitmap.CompressFormat.JPEG)
+        }
+        val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("images", file.name, requestBody)
     }
 
     enum class State {
