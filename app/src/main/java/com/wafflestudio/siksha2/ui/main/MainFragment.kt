@@ -27,7 +27,7 @@ class MainFragment : Fragment() {
         binding.viewPager.apply {
             adapter = stateAdapter
             isUserInputEnabled = false
-            setCurrentItem(vm.getVpState(), false)
+            setCurrentItem(vm.getTabState().ordinal, false)
         }
 
         TabLayoutMediator(
@@ -35,9 +35,10 @@ class MainFragment : Fragment() {
             binding.viewPager
         ) { tab: TabLayout.Tab, i: Int ->
             tab.icon = when (i) {
-                0 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_favorite, null)
-                1 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_main, null)
-                2 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_setting, null)
+                MainTabState.FAVORITE.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_favorite, null)
+                MainTabState.MAIN.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_main, null)
+                MainTabState.COMMUNITY.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_community, null)
+                MainTabState.SETTINGS.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_setting, null)
                 else -> throw IllegalStateException("no such tab with index $i")
             }
         }.attach()
@@ -54,7 +55,6 @@ class MainFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-
-        vm.setVpState(binding.viewPager.currentItem)
+        vm.setTabState(MainTabState.values()[binding.viewPager.currentItem])
     }
 }
