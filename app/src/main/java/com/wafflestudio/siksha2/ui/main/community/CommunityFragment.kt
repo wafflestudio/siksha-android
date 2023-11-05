@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.wafflestudio.siksha2.R
@@ -23,7 +25,7 @@ class CommunityFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                CommunityScreen()
+                CommunityScreen(modifier = Modifier.fillMaxSize())
             }
         }
     }
