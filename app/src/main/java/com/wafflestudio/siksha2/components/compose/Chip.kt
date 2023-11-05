@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,7 +18,7 @@ import com.wafflestudio.siksha2.ui.SikshaTypography
 fun Chip(
     text: String,
     modifier: Modifier = Modifier,
-    selected: Boolean = false,
+    selected: Boolean = false
 ) {
     Text(
         text = text,
@@ -28,7 +27,7 @@ fun Chip(
             .background(if (selected) SikshaColors.OrangeMain else SikshaColors.Gray100)
             .padding(horizontal = 12.dp, vertical = 9.dp),
         color = if (selected) SikshaColors.White900 else SikshaColors.Gray400,
-        style = SikshaTypography.body1,
+        style = SikshaTypography.body1
     )
 }
 
@@ -42,11 +41,11 @@ fun ChipPreview() {
     ) {
         Chip(
             text = "자유 게시판",
-            selected = false,
+            selected = false
         )
         Chip(
             text = "리뷰 게시판",
-            selected = true,
+            selected = true
         )
     }
 }
