@@ -3,9 +3,9 @@ import java.io.FileInputStream
 
 plugins {
     id("com.android.application") version "8.1.0"
-    id("org.jetbrains.kotlin.android") version "1.8.0"
-    id("org.jetbrains.kotlin.plugin.parcelize") version "1.8.0"
-    id("org.jetbrains.kotlin.kapt") version "1.8.0"
+    id("org.jetbrains.kotlin.android") version "1.8.10"
+    id("org.jetbrains.kotlin.plugin.parcelize") version "1.8.10"
+    id("org.jetbrains.kotlin.kapt") version "1.8.10"
     id("com.google.dagger.hilt.android") version "2.44"
     id("com.google.firebase.crashlytics") version "2.9.5"
     id("com.google.gms.google-services") version "4.3.15"
@@ -34,7 +34,7 @@ val versionProps = Properties().apply {
 
 android {
     namespace = "com.wafflestudio.siksha2"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.wafflestudio.siksha2"
@@ -72,19 +72,24 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.3"
     }
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.0")
-    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Android arch lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -99,8 +104,8 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
     // AAC Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
 
     // Room
     implementation("androidx.room:room-runtime:2.5.1")
@@ -108,9 +113,9 @@ dependencies {
     kapt("androidx.room:room-compiler:2.5.1")
 
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
+    implementation("com.google.dagger:hilt-android:2.47")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.47")
 
     // Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
@@ -142,4 +147,16 @@ dependencies {
     testImplementation("junit:junit:4.+")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Compose
+    implementation("androidx.compose.runtime:runtime:${Deps.Version.Compose}")
+    implementation("androidx.compose.ui:ui:${Deps.Version.Compose}")
+    implementation("androidx.compose.ui:ui-tooling:${Deps.Version.Compose}")
+    implementation("androidx.compose.material:material:${Deps.Version.Compose}")
+    implementation("androidx.compose.foundation:foundation:${Deps.Version.ComposeFoundation}")
+    implementation("androidx.compose.foundation:foundation-layout:${Deps.Version.ComposeFoundation}")
+    implementation("androidx.compose.runtime:runtime-livedata:${Deps.Version.Compose}")
+    implementation("androidx.paging:paging-compose:${Deps.Version.PagingCompose}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Deps.Version.ComposeViewModel}")
+    implementation("androidx.hilt:hilt-navigation-compose:${Deps.Version.ComposeHiltNavigation}")
 }

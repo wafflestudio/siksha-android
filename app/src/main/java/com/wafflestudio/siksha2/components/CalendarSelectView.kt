@@ -51,21 +51,27 @@ class CalendarSelectView : LinearLayout {
                 override fun onDown(p0: MotionEvent): Boolean { return false }
                 override fun onShowPress(p0: MotionEvent) {}
                 override fun onSingleTapUp(p0: MotionEvent): Boolean { return false }
-                override fun onScroll(p0: MotionEvent, p1: MotionEvent, p2: Float, p3: Float): Boolean {
-                    Timber.d("scroll velocity x : $p2 y : $p3")
-                    if (abs(p2) > 100) return true
+                override fun onScroll(
+                    e1: MotionEvent?,
+                    e2: MotionEvent,
+                    distanceX: Float,
+                    distanceY: Float
+                ): Boolean {
+                    Timber.d("scroll velocity x : $distanceX y : $distanceY")
+                    if (abs(distanceX) > 100) return true
                     return false
                 }
+
                 override fun onLongPress(p0: MotionEvent) {}
                 override fun onFling(
-                    p0: MotionEvent,
-                    p1: MotionEvent,
+                    e1: MotionEvent?,
+                    e2: MotionEvent,
                     velocityX: Float,
                     velocityY: Float
                 ): Boolean {
                     Timber.d(velocityX.toString())
 
-                    if (Math.abs(velocityY) > Math.abs(velocityX)) return false
+                    if (abs(velocityY) > abs(velocityX)) return false
 
                     if (velocityX > 250) {
                         val localDate = LocalDate.of(year, month, 1)
