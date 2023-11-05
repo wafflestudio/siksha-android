@@ -7,23 +7,23 @@ import retrofit2.http.*
 import java.time.LocalDate
 
 interface SikshaApi {
-    @GET("menus/lo")
+    @GET("/menus/lo")
     suspend fun fetchMenuGroups(
         @Query("start_date") startDate: LocalDate,
         @Query("end_date") endDate: LocalDate
     ): FetchMenuGroupsResult
 
-    @GET("menus/{menu_id}")
+    @GET("/menus/{menu_id}")
     suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): Menu
 
-    @GET("reviews/")
+    @GET("/reviews/")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
         @Query("perPage") perPage: Long
     ): FetchReviewsResult
 
-    @GET("reviews/filter")
+    @GET("/reviews/filter")
     suspend fun fetchReviewsWithImage(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
@@ -31,14 +31,14 @@ interface SikshaApi {
         @Query("etc") etc: Boolean = true
     ): FetchReviewsResult
 
-    @GET("restaurants/")
+    @GET("/restaurants/")
     suspend fun fetchRestaurants(): FetchRestaurantsResult
 
-    @POST("reviews/")
+    @POST("/reviews/")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): LeaveReviewResult
 
     @Multipart
-    @POST("reviews/images/")
+    @POST("/reviews/images")
     suspend fun leaveMenuReviewImages(
         @Part("menu_id") menuId: Long,
         @Part("score") score: Long,
@@ -46,35 +46,35 @@ interface SikshaApi {
         @Part images: List<MultipartBody.Part>
     ): LeaveReviewResult
 
-    @POST("auth/login/kakao")
+    @POST("/auth/login/kakao")
     suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): LoginOAuthResult
 
-    @POST("auth/login/google")
+    @POST("/auth/login/google")
     suspend fun loginGoogle(@Header("google-token") googleToken: String): LoginOAuthResult
 
-    @DELETE("auth/")
+    @DELETE("/auth/")
     suspend fun deleteAccount()
 
-    @POST("auth/refresh")
+    @POST("/auth/refresh")
     suspend fun refreshToken(@Header("authorization-token") token: String): LoginOAuthResult
 
-    @GET("reviews/comments/recommendation")
+    @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):
         FetchRecommendationReviewCommentsResult
 
-    @GET("reviews/dist")
+    @GET("/reviews/dist")
     suspend fun fetchReviewDistribution(@Query("menu_id") menuId: Long):
         FetchReviewDistributionResult
 
-    @POST("voc/")
+    @POST("/voc")
     suspend fun sendVoc(
         @Body req: VocParam
     )
 
-    @GET("auth/me")
+    @GET("/auth/me")
     suspend fun getUserData(): GetUserDataResult
 
-    @GET("versions/android")
+    @GET("/versions/android")
     suspend fun getVersion(): GetVersionResult
 
     @POST("/menus/{menu_id}/like")

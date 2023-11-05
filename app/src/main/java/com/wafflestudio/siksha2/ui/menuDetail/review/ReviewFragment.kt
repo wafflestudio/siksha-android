@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.databinding.FragmentReviewBinding
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewsAdapter
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -48,8 +48,8 @@ class ReviewFragment : Fragment() {
                 .collectLatest {
                     if (it.refresh is LoadState.NotLoading) {
                         (reviewsAdapter.itemCount < 1).let { empty ->
-                            binding.reviewList.visibleOrGone(empty.not())
-                            binding.textNoReviews.visibleOrGone(empty)
+                            binding.reviewList.setVisibleOrGone(empty.not())
+                            binding.textNoReviews.setVisibleOrGone(empty)
                         }
                     }
                 }

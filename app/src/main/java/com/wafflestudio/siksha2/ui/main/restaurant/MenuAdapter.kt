@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMenuBinding
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.utils.toPrettyString
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class MenuAdapter(
     private val onMenuItemClickListener: (Long) -> Unit,
@@ -66,7 +66,7 @@ class MenuAdapter(
             // Context 제대로 파악하기 (no fork? no meat?)
             val noMeat = menu.etc?.contains("No meat") == true
             menuTitleText.text = menu.nameKr
-            iconNoFork.visibleOrGone(noMeat)
+            iconNoFork.setVisibleOrGone(noMeat)
             priceText.text = menu.price.toPrettyString()
             rateText.rate = menu.score ?: 0.0
             likeButton.isSelected = menu.isLiked ?: false

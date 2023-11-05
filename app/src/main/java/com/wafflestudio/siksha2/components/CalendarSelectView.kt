@@ -11,7 +11,7 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemCalendarSelectViewBinding
 import com.wafflestudio.siksha2.databinding.ItemWeekBinding
 import com.wafflestudio.siksha2.utils.getInflater
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import timber.log.Timber
 import java.time.LocalDate
 import kotlin.math.abs
@@ -199,7 +199,7 @@ class CalendarSelectView : LinearLayout {
                     days[index].dayText.visibility = View.INVISIBLE
                 } else {
                     days[index].dayText.apply {
-                        visibleOrGone(true)
+                        setVisibleOrGone(true)
                         text = data.toString()
                         if (focusingDate.year == year &&
                             focusingDate.monthValue == month &&

@@ -1,17 +1,19 @@
 package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.Manifest
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEachIndexed
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -22,15 +24,34 @@ import com.wafflestudio.siksha2.components.OnRatingChangeListener
 import com.wafflestudio.siksha2.components.ReviewImageView
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
-import com.wafflestudio.siksha2.utils.visibleOrGone
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
 
 class LeaveReviewFragment : Fragment() {
     private lateinit var binding: FragmentLeaveReviewBinding
+
     private val vm: MenuDetailViewModel by activityViewModels()
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.data?.let {
+                vm.addImageUri(it, onFailure = {
+                    requireContext().showToast(getString(R.string.leave_review_max_image_toast))
+                })
+            }
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            launchGalleryIntent()
+        } else {
+            showToast("사진 업로드를 위해 사진 권한을 허용해 주세요.")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,28 +108,29 @@ class LeaveReviewFragment : Fragment() {
             }
         )
 
-        vm.uriList.observe(viewLifecycleOwner) {
-            val reviewImageViewList = listOf(binding.reviewImageView1, binding.reviewImageView2, binding.reviewImageView3)
-
-            for (i in 0 until 3) {
-                if (i < it.size) {
-                    reviewImageViewList[i].setImage(it[i])
-                    reviewImageViewList[i].visibility = View.VISIBLE
-                    reviewImageViewList[i].setOnDeleteClickListener(
-                        object : ReviewImageView.OnDeleteClickListener {
-                            override fun onClick() { vm.deleteUri(i) }
-                        }
-                    )
-                } else {
-                    reviewImageViewList[i].visibility = View.GONE
+        vm.imageUriList.observe(viewLifecycleOwner) { imageUriList ->
+            binding.imageLayout.forEachIndexed { index, view ->
+                (view as ReviewImageView).run {
+                    if (index < imageUriList.size) {
+                        setImage(imageUriList[index])
+                        visibility = View.VISIBLE
+                        setOnDeleteClickListener(
+                            object : ReviewImageView.OnDeleteClickListener {
+                                override fun onClick() {
+                                    vm.deleteImageUri(index)
+                                }
+                            }
+                        )
+                    } else {
+                        visibility = View.GONE
+                    }
                 }
             }
-
-            binding.imageLayout.visibleOrGone(it.isNotEmpty())
+            binding.imageLayout.setVisibleOrGone(imageUriList.isNotEmpty())
         }
 
         vm.leaveReviewState.observe(viewLifecycleOwner) {
-            binding.onLoadingContainer.root.visibleOrGone(it == MenuDetailViewModel.ReviewState.COMPRESSING)
+            binding.onLoadingContainer.root.setVisibleOrGone(it == MenuDetailViewModel.ReviewState.COMPRESSING)
         }
 
         binding.closeButton.setOnClickListener {
@@ -116,72 +138,51 @@ class LeaveReviewFragment : Fragment() {
         }
 
         binding.submitButton.setOnClickListener {
-            if (vm.imageCount.value!! > 0 && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                showToast("저장공간 권한이 없으면 사진을 업로드할 수 없습니다.")
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    REQUEST_STORAGE_PERMISSION
-                )
-
-                return@setOnClickListener
-            }
-
             lifecycleScope.launch {
                 try {
-                    val comment = binding.commentEdit.text
                     vm.leaveReview(
-                        requireContext(),
-                        binding.rating.rating.toDouble(),
-                        (
-                            if (comment.isNullOrBlank()) {
-                                binding.commentEdit.hint
-                            } else {
-                                comment
-                            }
-                            ).toString()
+                        context = requireContext(),
+                        score = binding.rating.rating.toDouble(),
+                        comment = binding.commentEdit.text.toString().ifEmpty {
+                            binding.commentEdit.hint.toString()
+                        }
                     )
                     showToast("평가가 등록되었습니다.")
-                    vm.notifySendReviewEnd()
                     findNavController().popBackStack()
                 } catch (e: HttpException) {
                     // TODO: 서버에 400 이 더 적절하지 않을 지 믈어보기
                     if (e.code() == 403) {
                         showToast("같은 메뉴에 리뷰를 여러 번 남길 수 없습니다.")
-                        vm.notifySendReviewEnd()
                     }
                 } catch (e: IOException) {
+                    e.printStackTrace()
                     showToast("네트워크 연결이 불안정합니다.")
+                } finally {
                     vm.notifySendReviewEnd()
                 }
             }
         }
 
         binding.addImageButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                showToast("저장공간 권한이 없으면 사진을 등록할 수 없습니다.")
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    REQUEST_STORAGE_PERMISSION
-                )
-
-                return@setOnClickListener
-            }
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-            startActivityForResult(intent, GET_GALLERY_IMAGE)
+            requestPermission(onGranted = {
+                launchGalleryIntent()
+            })
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == GET_GALLERY_IMAGE && resultCode == Activity.RESULT_OK) {
-            data?.data?.let {
-                if (!vm.addUri(it)) {
-                    requireContext().showToast(getString(R.string.leave_review_max_image_toast))
-                }
-            }
+    private fun requestPermission(onGranted: () -> Unit) {
+        val permission = if (Build.VERSION.SDK_INT >= 33) Manifest.permission.READ_MEDIA_IMAGES else Manifest.permission.READ_EXTERNAL_STORAGE
+        if (ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
+            onGranted()
+        } else {
+            requestPermissionLauncher.launch(permission)
         }
+    }
+
+    private fun launchGalleryIntent() {
+        val intent = Intent(Intent.ACTION_PICK)
+            .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+        galleryLauncher.launch(intent)
     }
 
     companion object {

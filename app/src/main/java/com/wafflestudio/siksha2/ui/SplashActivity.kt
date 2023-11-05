@@ -23,7 +23,7 @@ import com.wafflestudio.siksha2.databinding.ActivitySplashBinding
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.showToast
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -61,8 +61,8 @@ class SplashActivity : AppCompatActivity() {
             }
 
             if (checkLoginStatus().not()) {
-                binding.googleLoginButton.visibleOrGone(true)
-                binding.kakaoLoginButton.visibleOrGone(true)
+                binding.googleLoginButton.setVisibleOrGone(true)
+                binding.kakaoLoginButton.setVisibleOrGone(true)
 
                 return@launch
             }

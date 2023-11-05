@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemReviewImageViewBinding
 import com.wafflestudio.siksha2.utils.setImageUrl
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class ReviewImageView : ConstraintLayout {
 
@@ -42,7 +42,7 @@ class ReviewImageView : ConstraintLayout {
             0
         ).apply {
             try {
-                binding.deleteImageButton.visibleOrGone(getBoolean(R.styleable.ReviewImageView_showDeleteIcon, true))
+                binding.deleteImageButton.setVisibleOrGone(getBoolean(R.styleable.ReviewImageView_showDeleteIcon, true))
             } finally {
                 recycle()
             }

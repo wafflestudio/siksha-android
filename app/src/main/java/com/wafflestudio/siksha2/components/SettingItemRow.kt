@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemSettingRowBinding
 import com.wafflestudio.siksha2.utils.dp
-import com.wafflestudio.siksha2.utils.visibleOrGone
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class SettingItemRow : LinearLayout {
 
@@ -37,19 +37,19 @@ class SettingItemRow : LinearLayout {
     }
 
     fun setNewIcon(visible: Boolean) {
-        binding.newIcon.visibleOrGone(visible)
+        binding.newIcon.setVisibleOrGone(visible)
         requestLayout()
         invalidate()
     }
 
     fun setArrowIcon(visible: Boolean) {
-        binding.arrowIcon.visibleOrGone(visible)
+        binding.arrowIcon.setVisibleOrGone(visible)
         requestLayout()
         invalidate()
     }
 
     fun setShowCheckbox(visible: Boolean) {
-        binding.checkbox.visibleOrGone(visible)
+        binding.checkbox.setVisibleOrGone(visible)
         requestLayout()
         invalidate()
     }

@@ -8,8 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 
-fun View.visibleOrGone(flag: Boolean) {
-    visibility = if (flag) View.VISIBLE else View.GONE
+fun View.setVisibleOrGone(visible: Boolean) {
+    visibility = if (visible) View.VISIBLE else View.GONE
 }
 
 fun View.getInflater(): LayoutInflater {
