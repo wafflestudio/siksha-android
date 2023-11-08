@@ -41,7 +41,7 @@ jobs:
       - name: Setup Secrets
         run:  |
           cat << EOF > ./app/src/main/res/values/secrets.xml
-          ${{ secrets.secrets_xml }}
+          ${{ secrets.secrets_xml_staging }}
           EOF
       - name: Setup google-services.json
         run:  |
