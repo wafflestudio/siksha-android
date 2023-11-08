@@ -66,7 +66,7 @@ jobs:
         run: |
           mkdir -p ./app/src/staging
           cat << EOF > ./app/src/staging/google-services.json
-          ${{ secrets.google_services_json_staging }}
+          ${{ secrets.google_services_json }}
           EOF
       - name: Setup app-distribution-service-account.json
         run: |
