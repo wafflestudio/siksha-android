@@ -20,13 +20,13 @@ jobs:
           distribution: 'adopt'
       - name: Clean build
         run: ./gradlew clean
-      - name: Setup google-services.json (Live)
+      - name: Setup google-services.json
         run: |
           mkdir -p ./app/src/live
           cat << EOF > ./app/google-services.json
-          ${{ secrets.google_services_json_live }}
+          ${{ secrets.google_services_json }}
           EOF
-      - name: Setup app-distribution-service-account.json (Live)
+      - name: Setup app-distribution-service-account.json
         run: |
           cat << EOF > ./app-distribution-service-account.json
           ${{ secrets.app_distribution_service_account }}
