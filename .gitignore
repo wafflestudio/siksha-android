@@ -245,3 +245,5 @@ fabric.properties
 .idea/codeStyles/Project.xml
 .idea/codeStyles/codeStyleConfig.xml
 .idea/runConfigurations.xml
+
+app-distribution-service-account.json
