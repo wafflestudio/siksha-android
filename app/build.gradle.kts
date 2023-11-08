@@ -1,4 +1,5 @@
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+import org.gradle.kotlin.dsl.resolver.SourceDistributionResolver.Companion.artifactType
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -54,8 +55,8 @@ android {
             versionName = propertyVersionName
 
             firebaseAppDistribution {
-                artifactType = "AAB"
-                serviceCredentialsFile = "siksha-306012-9f825641f163.json"
+                artifactType = "APK"
+                serviceCredentialsFile = "app-distribution-service-account.json"
             }
         }
 
@@ -65,8 +66,8 @@ android {
             versionName = propertyVersionName
 
             firebaseAppDistribution {
-                artifactType = "AAB"
-                serviceCredentialsFile = "siksha-306012-9f825641f163.json"
+                artifactType = "APK"
+                serviceCredentialsFile = "app-distribution-service-account.json"
             }
         }
     }
