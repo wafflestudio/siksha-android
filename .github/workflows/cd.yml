@@ -20,13 +20,13 @@ jobs:
           distribution: 'adopt'
       - name: Clean build
         run: ./gradlew clean
-      - name: Setup google-services.json (Live)
+      - name: Setup google-services.json
         run: |
           mkdir -p ./app/src/live
           cat << EOF > ./app/google-services.json
-          ${{ secrets.google_services_json_live }}
+          ${{ secrets.google_services_json }}
           EOF
-      - name: Setup app-distribution-service-account.json (Live)
+      - name: Setup app-distribution-service-account.json
         run: |
           cat << EOF > ./app-distribution-service-account.json
           ${{ secrets.app_distribution_service_account }}
@@ -66,7 +66,7 @@ jobs:
         run: |
           mkdir -p ./app/src/staging
           cat << EOF > ./app/src/staging/google-services.json
-          ${{ secrets.google_services_json_staging }}
+          ${{ secrets.google_services_json }}
           EOF
       - name: Setup app-distribution-service-account.json
         run: |
@@ -85,7 +85,7 @@ jobs:
         run: |
           mkdir -p ./app/keystore
           echo $ENCODED_STRING | base64 -di > ./app/keystore/android.jks
-      - name: Build production apk
+      - name: Build staging apk
         run: ./gradlew assembleStagingRelease
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}

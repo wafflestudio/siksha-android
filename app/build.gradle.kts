@@ -1,10 +1,9 @@
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
-import org.gradle.kotlin.dsl.resolver.SourceDistributionResolver.Companion.artifactType
 import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    id("com.android.application") version "8.1.0"
+    id("com.android.application") version "8.1.1"
     id("org.jetbrains.kotlin.android") version "1.8.10"
     id("org.jetbrains.kotlin.plugin.parcelize") version "1.8.10"
     id("org.jetbrains.kotlin.kapt") version "1.8.10"
@@ -57,6 +56,7 @@ android {
             firebaseAppDistribution {
                 artifactType = "APK"
                 serviceCredentialsFile = "app-distribution-service-account.json"
+                releaseNotes = "Staging build"
             }
         }
 
@@ -68,7 +68,17 @@ android {
             firebaseAppDistribution {
                 artifactType = "APK"
                 serviceCredentialsFile = "app-distribution-service-account.json"
+                releaseNotes = "Live build"
             }
+        }
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("keystore/android.jks")
+            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
         }
     }
 
@@ -76,6 +86,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             isMinifyEnabled = false
