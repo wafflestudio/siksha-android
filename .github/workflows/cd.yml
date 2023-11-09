@@ -42,7 +42,7 @@ jobs:
           ENCODED_STRING: ${{ secrets.KEYSTORE }}
         run: |
           mkdir -p ./app/keystore
-          echo $ENCODED_STRING | base64 -d > ./app/keystore/android.keystore
+          echo $ENCODED_STRING | base64 -di > ./app/keystore/android.jks
       - name: Build production apk and upload
         run: ./gradlew assembleLiveRelease appDistributionUploadLiveRelease
         env:
