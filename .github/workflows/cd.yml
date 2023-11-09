@@ -85,7 +85,7 @@ jobs:
         run: |
           mkdir -p ./app/keystore
           echo $ENCODED_STRING | base64 -di > ./app/keystore/android.jks
-      - name: Build production apk
+      - name: Build staging apk
         run: ./gradlew assembleStagingRelease
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
