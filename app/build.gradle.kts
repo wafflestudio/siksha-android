@@ -56,6 +56,7 @@ android {
             firebaseAppDistribution {
                 artifactType = "APK"
                 serviceCredentialsFile = "app-distribution-service-account.json"
+                releaseNotes = "Staging build"
             }
         }
 
@@ -67,6 +68,7 @@ android {
             firebaseAppDistribution {
                 artifactType = "APK"
                 serviceCredentialsFile = "app-distribution-service-account.json"
+                releaseNotes = "Live build"
             }
         }
     }
