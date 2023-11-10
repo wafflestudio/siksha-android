@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.compose.ui.community.CommunityScreen
 import com.wafflestudio.siksha2.ui.SikshaTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CommunityFragment : Fragment() {
 
     override fun onCreateView(

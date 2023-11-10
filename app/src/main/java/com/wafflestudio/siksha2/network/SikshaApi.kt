@@ -82,4 +82,14 @@ interface SikshaApi {
 
     @POST("/menus/{menu_id}/unlike")
     suspend fun unlikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+
+    @GET("/community/boards")
+    suspend fun getBoards(): GetBoardsResult
+
+    @GET("/community/posts")
+    suspend fun getPosts(
+        @Query("board_id") boardId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Int
+    ): GetPostsResult
 }
