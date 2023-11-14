@@ -7,13 +7,18 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Board
-import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource.Companion.ITEMS_PER_PAGE
+import com.wafflestudio.siksha2.utils.Selectable
+import com.wafflestudio.siksha2.utils.toDataWithState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,16 +27,23 @@ class CommunityViewModel @Inject constructor(
     private val communityRepository: CommunityRepository
 ) : ViewModel() {
 
-    private val _boards = MutableStateFlow<List<Board>>(emptyList())
-    val boards: StateFlow<List<Board>> get() = _boards
+    private val _boards = MutableStateFlow<List<Selectable<Board>>>(emptyList())
+    val boards: StateFlow<List<Selectable<Board>>> get() = _boards
 
-    val posts: Flow<PagingData<Post>> = Pager(
-        config = PagingConfig(
-            pageSize = ITEMS_PER_PAGE,
-            enablePlaceholders = false
-        ),
-        pagingSourceFactory = { communityRepository.postPagingSource(1L) }
-    ).flow.cachedIn(viewModelScope)
+    private val selectedBoard = _boards.map { list ->
+        list.find { it.state }?.data
+    }.filterNotNull()
+
+    private val _postPagingData = selectedBoard.map { board ->
+        Pager(
+            config = PagingConfig(
+                pageSize = ITEMS_PER_PAGE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { communityRepository.postPagingSource(board.id) }
+        ).flow.cachedIn(viewModelScope)
+    }
+    val postPagingData = _postPagingData.stateIn(viewModelScope, SharingStarted.Eagerly, flowOf(PagingData.empty()))
 
     init {
         viewModelScope.launch {
@@ -40,9 +52,15 @@ class CommunityViewModel @Inject constructor(
     }
 
     suspend fun getBoards() {
-        _boards.value = communityRepository.getBoards()
+        _boards.value = communityRepository.getBoards().map { board ->
+            board.toDataWithState(false)
+        }
+        selectBoard(0)
     }
 
-    suspend fun selectBoard(boardId: Long) {
+    fun selectBoard(boardIndex: Int) {
+        _boards.value = _boards.value.mapIndexed { idx, board ->
+            board.data.toDataWithState(idx == boardIndex)
+        }
     }
 }

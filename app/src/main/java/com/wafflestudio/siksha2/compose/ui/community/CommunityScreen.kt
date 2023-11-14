@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,7 +27,8 @@ fun CommunityScreen(
     communityViewModel: CommunityViewModel = hiltViewModel()
 ) {
     val boards by communityViewModel.boards.collectAsState()
-    val posts = communityViewModel.posts.collectAsLazyPagingItems()
+    val postPagingData by communityViewModel.postPagingData.collectAsState()
+    val posts = postPagingData.collectAsLazyPagingItems()
 
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -35,12 +37,15 @@ fun CommunityScreen(
             modifier = Modifier.padding(horizontal = 28.dp, vertical = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            items(
+            itemsIndexed(
                 items = boards
-            ) {
+            ) { idx, item ->
                 Chip(
-                    text = it.name,
-                    selected = false
+                    text = item.data.name,
+                    selected = item.state,
+                    onClick = {
+                        communityViewModel.selectBoard(idx)
+                    }
                 )
             }
         }
