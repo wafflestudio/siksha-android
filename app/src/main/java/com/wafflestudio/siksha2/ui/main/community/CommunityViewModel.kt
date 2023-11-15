@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,10 +53,14 @@ class CommunityViewModel @Inject constructor(
     }
 
     suspend fun getBoards() {
-        _boards.value = communityRepository.getBoards().map { board ->
-            board.toDataWithState(false)
+        try {
+            _boards.value = communityRepository.getBoards().map { board ->
+                board.toDataWithState(false)
+            }
+            selectBoard(0)
+        } catch (e: IOException) {
+            // TODO: error handler
         }
-        selectBoard(0)
     }
 
     fun selectBoard(boardIndex: Int) {
