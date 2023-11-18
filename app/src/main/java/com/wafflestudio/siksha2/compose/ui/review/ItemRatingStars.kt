@@ -15,7 +15,7 @@ import com.wafflestudio.siksha2.R
 import kotlin.math.roundToInt
 
 @Composable
-fun ItemReviewSingleStar(
+private fun ItemReviewSingleStar(
     modifier: Modifier = Modifier,
     flag: Int
 ){
@@ -64,7 +64,7 @@ fun ItemReviewStars(
 
 @Composable
 @Preview
-fun StarsPreview(){
+private fun StarsPreview(){
     Column() {
         ItemReviewStars(rating = 0.0f)
         ItemReviewStars(rating = 1.0f, size = 2)
