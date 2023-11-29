@@ -18,7 +18,7 @@ import kotlin.math.roundToInt
 private fun ItemReviewSingleStar(
     modifier: Modifier = Modifier,
     flag: Int
-){
+) {
     Image(
         painter = painterResource(
             when {
@@ -39,22 +39,22 @@ fun ItemRatingStars(
     size: Int = 0
 ) {
     val rounds = (rating * 2).roundToInt()
-    val starMeasure = when(size) {
+    val starMeasure = when (size) {
         2 -> 48.dp
         1 -> 33.dp
         else -> 18.dp
     }
-    val gap = when(size) {
+    val gap = when (size) {
         2 -> 12.dp
         1 -> 8.dp
         else -> 4.dp
     }
-    LazyRow (
+    LazyRow(
         horizontalArrangement = Arrangement.spacedBy(gap)
     ) {
         items(count = 5) { index ->
             ItemReviewSingleStar(
-                flag = index*2 - rounds,
+                flag = index * 2 - rounds,
                 modifier = Modifier.width(starMeasure)
                     .height(starMeasure)
             )
@@ -64,7 +64,7 @@ fun ItemRatingStars(
 
 @Composable
 @Preview
-private fun StarsPreview(){
+private fun StarsPreview() {
     Column() {
         ItemRatingStars(rating = 0.0f)
         ItemRatingStars(rating = 1.0f, size = 2)
