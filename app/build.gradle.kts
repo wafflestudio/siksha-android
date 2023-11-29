@@ -185,4 +185,8 @@ dependencies {
     implementation("androidx.paging:paging-compose:${Deps.Version.PagingCompose}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Deps.Version.ComposeViewModel}")
     implementation("androidx.hilt:hilt-navigation-compose:${Deps.Version.ComposeHiltNavigation}")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
