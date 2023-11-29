@@ -33,7 +33,7 @@ private fun ItemReviewSingleStar(
 }
 
 @Composable
-fun ItemReviewStars(
+fun ItemRatingStars(
     rating: Float,
     dragEnabled: Boolean = false,
     size: Int = 0
@@ -66,10 +66,10 @@ fun ItemReviewStars(
 @Preview
 private fun StarsPreview(){
     Column() {
-        ItemReviewStars(rating = 0.0f)
-        ItemReviewStars(rating = 1.0f, size = 2)
-        ItemReviewStars(rating = 2.5f, size = 1)
-        ItemReviewStars(rating = 3.5f)
-        ItemReviewStars(rating = 5.0f)
+        ItemRatingStars(rating = 0.0f)
+        ItemRatingStars(rating = 1.0f, size = 2)
+        ItemRatingStars(rating = 2.5f, size = 1)
+        ItemRatingStars(rating = 3.5f)
+        ItemRatingStars(rating = 5.0f)
     }
 }
