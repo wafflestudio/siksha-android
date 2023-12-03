@@ -4,40 +4,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.compose.ui.community.CommunityPostScreen
 import com.wafflestudio.siksha2.compose.ui.community.CommunityScreen
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
-import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CommunityFragment : Fragment() {
+class CommunityPostFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_community, container, false)
+    ): View? {
+        return inflater.inflate(R.layout.fragment_community_post, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val args: CommunityPostFragmentArgs by navArgs()
+
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                CommunityScreen(
-                    modifier = Modifier.fillMaxSize(),
-                    onClickPost = { postId ->
-                        findNavController().navigate(
-                            MainFragmentDirections.actionMainFragmentToCommunityPostFragment(
-                                postId
-                            )
-                        )
-                    }
+                CommunityPostScreen(
+                    postId = args.postId,
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }

@@ -35,3 +35,15 @@ fun ThumbIcon(
         colorFilter = colorFilter
     )
 }
+
+@Composable
+fun EtcIcon(
+    modifier: Modifier = Modifier,
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+) {
+    Image(
+        modifier = modifier.size(12.dp),
+        painter = painterResource(R.drawable.ic_etc),
+        contentDescription = null,
+        colorFilter = colorFilter)
+}
