@@ -22,14 +22,14 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/orange_normal"
+        android:background="@color/orange_main"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="42dp"
+        android:layout_height="21dp"
         android:elevation="1dp"
-        android:src="@drawable/ic_siksha_rice_bowl_with_spoon"
+        android:src="@drawable/siksha_plain_text"
         app:layout_constraintBottom_toBottomOf="@id/top_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
