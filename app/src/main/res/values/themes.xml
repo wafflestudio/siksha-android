@@ -3,6 +3,7 @@
     <style name="Theme.Siksha.Splash" parent="Theme.Siksha">
         <item name="android:windowBackground">@drawable/frame_splash</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/orange_main</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="Theme.Siksha" parent="Theme.MaterialComponents.DayNight.NoActionBar">
