@@ -17,7 +17,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="85.8dp"
-        android:layout_height="45.5dp"
+        android:layout_height="wrap_content"
         android:src="@drawable/siksha_plain_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
