@@ -33,7 +33,8 @@ import com.wafflestudio.siksha2.ui.main.community.CommunityViewModel
 @Composable
 fun CommunityScreen(
     modifier: Modifier = Modifier,
-    communityViewModel: CommunityViewModel = hiltViewModel()
+    communityViewModel: CommunityViewModel = hiltViewModel(),
+    onClickPost: (Long) -> Unit = {}
 ) {
     val boards by communityViewModel.boards.collectAsState()
     val postPagingData by communityViewModel.postPagingData.collectAsState()
@@ -76,7 +77,10 @@ fun CommunityScreen(
                                     content = post.content,
                                     likeCount = post.likeCount,
                                     commentCount = post.commentCount,
-                                    isLiked = post.isLiked
+                                    isLiked = post.isLiked,
+                                    onClick = {
+                                        onClickPost(post.id)
+                                    }
                                 )
                             }
                         }
