@@ -3,9 +3,9 @@ package com.wafflestudio.siksha2.compose.ui.review
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -49,13 +49,14 @@ fun ItemRatingStars(
         1 -> 8.dp
         else -> 4.dp
     }
-    LazyRow(
+    Row(
         horizontalArrangement = Arrangement.spacedBy(gap)
     ) {
-        items(count = 5) { index ->
+        for (i in 1..5){
             ItemReviewSingleStar(
-                flag = index * 2 - rounds,
-                modifier = Modifier.width(starMeasure)
+                flag = i * 2 - rounds,
+                modifier = Modifier
+                    .width(starMeasure)
                     .height(starMeasure)
             )
         }
