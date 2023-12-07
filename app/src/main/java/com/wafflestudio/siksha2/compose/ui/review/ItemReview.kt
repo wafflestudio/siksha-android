@@ -1,8 +1,10 @@
 package com.wafflestudio.siksha2.compose.ui.review
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.models.Etc
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
@@ -75,7 +78,7 @@ fun ItemReview(
         Box (
             modifier = Modifier
                 .fillMaxWidth()
-                .defaultMinSize(80.dp)
+                .defaultMinSize(minHeight = 80.dp)
                 .padding(horizontal = 16.dp, vertical = 2.dp)
         ) {
             ReviewSpeechBubble(
@@ -96,9 +99,15 @@ fun ItemReview(
         if (showImage) {
             Row(
                 modifier = Modifier
-                    .padding(start = 13.dp)
-                    .horizontalScroll(rememberScrollState())
+                    .padding(start = 20.dp)
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
+                for(imageUri in review?.etc?.images ?: listOf()){
+                    ItemReviewImage(
+                        imageUri = Uri.parse(imageUri)
+                    )
+                }
             }
         }
     }
@@ -116,7 +125,13 @@ fun ItemReviewPreview() {
                 score = 5.0,
                 comment = "그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 ",
                 createdAt = "2023-11-29T09:40:10.322Z",
-                etc = null
+                etc = Etc(
+                    images = listOf(
+                        "https://postfiles.pstatic.net/MjAyMzExMjZfMjcy/MDAxNzAwOTI3NTczMDY5.c9qVmjXE0nBVZpKukBxB9EB0LytpB5Olc6psLGQdWLQg.-D-zLjlG7bIPYm8XmYzK9-l1vitTZAGcimoHM57QATAg.JPEG.jyurisenpai/20231121203650_1.jpg?type=w773",
+                        "https://postfiles.pstatic.net/MjAyMzExMjZfMjU5/MDAxNzAwOTI3MjgxMjAz.f7jMVmS7vYGWKWswaOnnxCjgmaN0qgSt0_2VLB-XZrog.WMa7r-nHh9zw_QXO15bA4ts2NabuiEtQQkM6XYSiA1Ug.JPEG.jyurisenpai/20231118200550_1.jpg?type=w773",
+                        "https://postfiles.pstatic.net/MjAyMzExMjZfODAg/MDAxNzAwOTI5MDI4NDE3.kprldbXZmLtHlIh2AFuu9jCeWiXbXeO6pF5OpxpJB3Mg.U8aqpMqPJz4bORV05B8M8oVBF9KXTTJhY1oN17NlkaAg.JPEG.jyurisenpai/20231121211321_1.jpg?type=w773"
+                    )
+                )
             )
         )
         ItemReview(

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -37,7 +36,7 @@ fun ItemReviewImage(
     deletable: Boolean = false
 ) {
     Box(
-        modifier = modifier.padding(vertical = 4.dp)
+        modifier = modifier
             .width(100.dp).height(100.dp)
             .clip(shape = RoundedCornerShape(8.dp))
     ) {
