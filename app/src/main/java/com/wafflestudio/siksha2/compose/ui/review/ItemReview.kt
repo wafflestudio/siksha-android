@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha2.compose.ui.review
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,12 +11,11 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,62 +33,72 @@ fun ItemReview(
     showImage: Boolean = true
 ) {
     Column(
-        modifier = Modifier.padding(bottom = 9.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = SikshaColors.White900)
+            .padding(bottom = 10.dp)
+            .defaultMinSize(minHeight = 90.dp)
+            .padding(top = 2.dp, bottom = 10.dp)
     ) {
         Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 90.dp)
-                .padding(top = 2.dp, bottom = 10.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Column {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    ) {
-                        Image(
-                            modifier = Modifier.padding(bottom = 2.dp),
-                            painter = painterResource(R.drawable.ic_review_profile),
-                            contentDescription = "profilePic"
-                        )
-                        Spacer(modifier = Modifier.width(7.dp))
-                        Column(
-                            horizontalAlignment = Alignment.Start
-                        ) {
-                            Text(
-                                text = "ID" + (review?.userId ?: ""),
-                                color = SikshaColors.Black900,
-                                fontSize = dpToSp(12.dp)
-                            )
-                            ItemRatingStars(review?.score?.toFloat() ?: 0.0f)
-                        }
-                    }
-                    Text(
-                        text = review?.createdAt?.toLocalDateTime()?.toLocalDate()?.toKoreanDate() ?: "-",
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(end = 10.dp),
-                        fontSize = dpToSp(12.dp),
-                        color = SikshaColors.Gray500
-                    )
-                }
-                // TODO: 말풍선 테두리 strokeWidth 말고 shadow로 처리하기
-                Text(
-                    text = review?.comment ?: "",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .defaultMinSize(minHeight = 80.dp)
-                        .padding(horizontal = 16.dp, vertical = 2.dp)
-                        .paint(
-                            painterResource(R.drawable.ic_speech_bubble),
-                            contentScale = ContentScale.FillBounds
-                        )
-                        .padding(start = 30.dp, end = 10.dp, top = 10.dp, bottom = 10.dp),
-                    color = SikshaColors.Gray800,
-                    fontSize = dpToSp(dp = 12.dp)
+            Row(
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Image(
+                    modifier = Modifier.padding(bottom = 2.dp),
+                    painter = painterResource(R.drawable.ic_review_profile),
+                    contentDescription = "profilePic"
                 )
+                Spacer(modifier = Modifier.width(7.dp))
+                Column(
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(
+                        text = "ID" + (review?.userId ?: ""),
+                        color = SikshaColors.Black900,
+                        fontSize = dpToSp(12.dp)
+                    )
+                    ItemRatingStars(review?.score?.toFloat() ?: 0.0f)
+                }
+            }
+            Text(
+                text = review?.createdAt?.toLocalDateTime()?.toLocalDate()?.toKoreanDate() ?: "-",
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = 10.dp),
+                fontSize = dpToSp(12.dp),
+                color = SikshaColors.Gray500
+            )
+        }
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .defaultMinSize(80.dp)
+                .padding(horizontal = 16.dp, vertical = 2.dp)
+        ) {
+            ReviewSpeechBubble(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .matchParentSize()
+            )
+            Text(
+                text = review?.comment ?: "",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .fillMaxWidth()
+                    .padding(start = 30.dp, end = 10.dp, top = 13.dp, bottom = 15.dp),
+                color = SikshaColors.Gray800,
+                fontSize = dpToSp(dp = 12.dp)
+            )
+        }
+        if (showImage) {
+            Row(
+                modifier = Modifier
+                    .padding(start = 13.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
             }
         }
     }
@@ -96,15 +107,39 @@ fun ItemReview(
 @Preview
 @Composable
 fun ItemReviewPreview() {
-    ItemReview(
-        review = Review(
-            id = 0,
-            menuId = 0,
-            userId = 1234,
-            score = 5.0,
-            comment = "그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 ",
-            createdAt = "2023-11-29T09:40:10.322Z",
-            etc = null
+    Column {
+        ItemReview(
+            review = Review(
+                id = 0,
+                menuId = 0,
+                userId = 1234,
+                score = 5.0,
+                comment = "그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 ",
+                createdAt = "2023-11-29T09:40:10.322Z",
+                etc = null
+            )
         )
-    )
+        ItemReview(
+            review = Review(
+                id = 0,
+                menuId = 0,
+                userId = 1234,
+                score = 3.5,
+                comment = "그냥저냥 먹을만해요 ",
+                createdAt = "2023-11-29T09:40:10.322Z",
+                etc = null
+            )
+        )
+        ItemReview(
+            review = Review(
+                id = 0,
+                menuId = 0,
+                userId = 1234,
+                score = 1.0,
+                comment = "맛없어요\n\n\nㅠ",
+                createdAt = "2023-11-29T09:40:10.322Z",
+                etc = null
+            )
+        )
+    }
 }
