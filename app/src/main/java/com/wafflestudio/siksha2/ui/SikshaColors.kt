@@ -3,7 +3,7 @@ package com.wafflestudio.siksha2.ui
 import androidx.compose.ui.graphics.Color
 
 object SikshaColors {
-    val OrangeMain = Color(0xFFFF952B)
+    val OrangeMain = Color(0xFFFF9522)
 
     val White900 = Color(0xFFFFFFFF)
 
