@@ -99,7 +99,7 @@ fun ItemReview(
         if (showImage) {
             Row(
                 modifier = Modifier
-                    .padding(start = 20.dp)
+                    .padding(start = 30.dp)
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
