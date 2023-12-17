@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.compose.ui.review
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.models.Etc
 import com.wafflestudio.siksha2.models.Review
@@ -28,10 +30,10 @@ import com.wafflestudio.siksha2.utils.dpToSp
 fun ReviewScreen(
     modifier: Modifier = Modifier,
     //menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
-    showImages: Boolean = false
+    showImages: Boolean = false,
+    navController: NavController
 ) {
     // val reviews = menuDetailViewModel.getReviews(0).collectAsState(PagingData.empty())
-
     // temporary reviews
     val reviews = listOf(
         Review(
@@ -127,7 +129,10 @@ fun ReviewScreen(
                     review = review,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .clickable{
+                                  navController.popBackStack()
+                        },
                     showImage = showImages
                 )
             }
@@ -148,8 +153,8 @@ fun ReviewScreen(
 //        }
 }
 
-@Preview
-@Composable
-fun ReviewScreenPreview(){
-    ReviewScreen()
-}
+//@Preview
+//@Composable
+//fun ReviewScreenPreview(){
+//    ReviewScreen()
+//}

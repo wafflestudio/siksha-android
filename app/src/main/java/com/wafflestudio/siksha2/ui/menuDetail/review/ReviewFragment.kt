@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.wafflestudio.siksha2.compose.ui.review.ReviewScreen
 import com.wafflestudio.siksha2.databinding.FragmentReviewBinding
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewsAdapter
@@ -38,31 +39,35 @@ class ReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         reviewsAdapter = MenuReviewsAdapter(false, childFragmentManager)
 
-        binding.reviewList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = reviewsAdapter
-        }
-
-        lifecycleScope.launch {
-            reviewsAdapter.loadStateFlow
-                .collectLatest {
-                    if (it.refresh is LoadState.NotLoading) {
-                        (reviewsAdapter.itemCount < 1).let { empty ->
-                            binding.reviewList.setVisibleOrGone(empty.not())
-                            binding.textNoReviews.setVisibleOrGone(empty)
-                        }
-                    }
-                }
-        }
-
-        lifecycleScope.launch {
-            vm.getReviews(args.menuId).collectLatest {
-                reviewsAdapter.submitData(it)
-            }
-        }
-
-        binding.closeButton.setOnClickListener {
-            findNavController().popBackStack()
+//        binding.reviewList.apply {
+//            layoutManager = LinearLayoutManager(context)
+//            adapter = reviewsAdapter
+//        }
+//
+//        lifecycleScope.launch {
+//            reviewsAdapter.loadStateFlow
+//                .collectLatest {
+//                    if (it.refresh is LoadState.NotLoading) {
+//                        (reviewsAdapter.itemCount < 1).let { empty ->
+//                            binding.reviewList.setVisibleOrGone(empty.not())
+//                            binding.textNoReviews.setVisibleOrGone(empty)
+//                        }
+//                    }
+//                }
+//        }
+//
+//        lifecycleScope.launch {
+//            vm.getReviews(args.menuId).collectLatest {
+//                reviewsAdapter.submitData(it)
+//            }
+//        }
+//
+//        binding.closeButton.setOnClickListener {
+//            findNavController().popBackStack()
+//        }
+        
+        binding.reviewComposeView.setContent { 
+            ReviewScreen(navController = findNavController())
         }
     }
 }
