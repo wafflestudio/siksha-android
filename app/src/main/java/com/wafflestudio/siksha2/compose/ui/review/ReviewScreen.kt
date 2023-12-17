@@ -90,7 +90,7 @@ fun ReviewScreen(
     )
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Box(
             modifier = Modifier
@@ -116,7 +116,7 @@ fun ReviewScreen(
         }
 
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 //.padding(horizontal = 16.dp)
                 .background(color = SikshaColors.White900)
