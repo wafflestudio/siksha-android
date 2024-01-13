@@ -18,7 +18,7 @@ class MenuReviewWithImagePagingSource(
         return try {
             val response = api.fetchReviewsWithImage(menuId, key, params.loadSize.toLong())
             val prevKey = if (key == 1L) null else key - 1
-            val nextKey = if (response.result.isEmpty()) null else key + 1
+            val nextKey = if (response.result.isEmpty()) null else if (key == 1L) 4 else key + 1
 
             LoadResult.Page(
                 response.result,
