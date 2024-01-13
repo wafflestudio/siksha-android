@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.repositories.MenuRepository
@@ -98,6 +99,7 @@ class MenuDetailViewModel @Inject constructor(
 
     fun getReviews(menuId: Long): Flow<PagingData<Review>> {
         return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
+            .cachedIn(viewModelScope)
     }
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {

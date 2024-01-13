@@ -14,80 +14,31 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.models.Etc
-import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.dpToSp
 
 @Composable
 fun ReviewScreen(
+    navController: NavController,
+    menuId: Long,
     modifier: Modifier = Modifier,
-    //menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
+    menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
     showImages: Boolean = false,
-    navController: NavController
 ) {
-    // val reviews = menuDetailViewModel.getReviews(0).collectAsState(PagingData.empty())
-    // temporary reviews
-    val reviews = listOf(
-        Review(
-            id = 0,
-            menuId = 0,
-            userId = 1234,
-            score = 5.0,
-            comment = "그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 ",
-            createdAt = "2023-11-29T09:40:10.322Z",
-            etc = Etc(
-                images = listOf(
-                    "https://postfiles.pstatic.net/MjAyMzExMjZfMjcy/MDAxNzAwOTI3NTczMDY5.c9qVmjXE0nBVZpKukBxB9EB0LytpB5Olc6psLGQdWLQg.-D-zLjlG7bIPYm8XmYzK9-l1vitTZAGcimoHM57QATAg.JPEG.jyurisenpai/20231121203650_1.jpg?type=w773",
-                    "https://postfiles.pstatic.net/MjAyMzExMjZfMjU5/MDAxNzAwOTI3MjgxMjAz.f7jMVmS7vYGWKWswaOnnxCjgmaN0qgSt0_2VLB-XZrog.WMa7r-nHh9zw_QXO15bA4ts2NabuiEtQQkM6XYSiA1Ug.JPEG.jyurisenpai/20231118200550_1.jpg?type=w773",
-                    "https://postfiles.pstatic.net/MjAyMzExMjZfODAg/MDAxNzAwOTI5MDI4NDE3.kprldbXZmLtHlIh2AFuu9jCeWiXbXeO6pF5OpxpJB3Mg.U8aqpMqPJz4bORV05B8M8oVBF9KXTTJhY1oN17NlkaAg.JPEG.jyurisenpai/20231121211321_1.jpg?type=w773"
-                )
-            )
-        ),
-        Review(
-            id = 0,
-            menuId = 0,
-            userId = 1234,
-            score = 3.5,
-            comment = "그냥저냥 먹을만해요 ",
-            createdAt = "2023-11-29T09:40:10.322Z",
-            etc = null
-        ),
-        Review(
-            id = 0,
-            menuId = 0,
-            userId = 1234,
-            score = 1.0,
-            comment = "맛없어요\n\n\nㅠ",
-            createdAt = "2023-11-29T09:40:10.322Z",
-            etc = null
-        ),
-        Review(
-            id = 0,
-            menuId = 0,
-            userId = 1234,
-            score = 1.0,
-            comment = "맛없어요\n\n\nㅠ",
-            createdAt = "2023-11-29T09:40:10.322Z",
-            etc = null
-        ),
-        Review(
-            id = 0,
-            menuId = 0,
-            userId = 1234,
-            score = 1.0,
-            comment = "맛없어요\n\n\nㅠ",
-            createdAt = "2023-11-29T09:40:10.322Z",
-            etc = null
-        )
-    )
+    val reviewsFlow by remember(menuId) { mutableStateOf(menuDetailViewModel.getReviews(menuId)) }
+    val reviews = reviewsFlow.collectAsLazyPagingItems()
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -115,46 +66,45 @@ fun ReviewScreen(
             )
         }
 
-        LazyColumn(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                //.padding(horizontal = 16.dp)
-                .background(color = SikshaColors.White900)
+                .fillMaxWidth()
+                .weight(1f)
         ) {
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-            items(reviews) { review ->
-                ItemReview(
-                    review = review,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clickable{
-                                  navController.popBackStack()
-                        },
-                    showImage = showImages
+
+            if (reviews.itemCount == 0) {
+                Text(
+                    text = "리뷰가 없습니다.",
+                    fontSize = dpToSp(18.dp),
+                    modifier = Modifier.align(Alignment.Center),
+                    color = SikshaColors.Gray600
                 )
-            }
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = SikshaColors.White900)
+                ) {
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    items(reviews.itemSnapshotList) { review ->
+                        ItemReview(
+                            review = review,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .clickable {
+                                    navController.popBackStack()
+                                },
+                            showImage = showImages
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                }
             }
         }
     }
-
-
-//        item {
-//            Text(
-//                text = "리뷰가 없습니다.",
-//                fontSize = dpToSp(18.dp),
-//                //modifier = Modifier.fillMaxSize(),
-//                color = SikshaColors.Gray600
-//            )
-//        }
 }
-
-//@Preview
-//@Composable
-//fun ReviewScreenPreview(){
-//    ReviewScreen()
-//}
