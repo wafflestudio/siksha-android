@@ -99,7 +99,6 @@ class MenuDetailViewModel @Inject constructor(
 
     fun getReviews(menuId: Long): Flow<PagingData<Review>> {
         return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
-            .cachedIn(viewModelScope)
     }
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {

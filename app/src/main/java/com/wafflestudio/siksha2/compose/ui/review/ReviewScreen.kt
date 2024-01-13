@@ -37,7 +37,7 @@ fun ReviewScreen(
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
     showImages: Boolean = false,
 ) {
-    val reviewsFlow by remember(menuId) { mutableStateOf(menuDetailViewModel.getReviews(menuId)) }
+    val reviewsFlow by remember{ mutableStateOf(menuDetailViewModel.getReviews(menuId)) }
     val reviews = reviewsFlow.collectAsLazyPagingItems()
 
     Column(
