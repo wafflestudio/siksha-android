@@ -71,7 +71,6 @@ fun ReviewScreen(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-
             if (reviews.itemCount == 0) {
                 Text(
                     text = "리뷰가 없습니다.",
