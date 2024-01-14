@@ -27,7 +27,6 @@ class MenuRepository @Inject constructor(
     private val sikshaApi: SikshaApi,
     private val dailyMenusDao: DailyMenusDao
 ) {
-
     // Client Heuristic: 앞 뒤 1일 정도를 캐싱해둔다.
     suspend fun syncWithServer(date: LocalDate) {
         withContext(Dispatchers.IO) {
@@ -56,6 +55,7 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchMenuById(menuId)
     }
 
+    // TODO: 리포지토리에서 Pager 제거
     fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
             config = MenuReviewPagingSource.Config,
@@ -69,6 +69,12 @@ class MenuRepository @Inject constructor(
             pagingSourceFactory = { MenuReviewWithImagePagingSource(sikshaApi, menuId) }
         ).flow
     }
+
+    fun menuReviewPagingSource(menuId: Long): MenuReviewPagingSource
+        = MenuReviewPagingSource(sikshaApi, menuId)
+
+    fun menuReviewWithImagePagingSource(menuId: Long): MenuReviewWithImagePagingSource
+        = MenuReviewWithImagePagingSource(sikshaApi, menuId)
 
     suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): LeaveReviewResult {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))

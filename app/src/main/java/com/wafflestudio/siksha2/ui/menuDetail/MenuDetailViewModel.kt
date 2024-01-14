@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Menu
@@ -71,7 +72,23 @@ class MenuDetailViewModel @Inject constructor(
 
     val reviews: StateFlow<Flow<PagingData<Review>>?>
     = _menu.asFlow().map { menu ->
-        if(menu != null) getReviews(menu.id)
+        if(menu != null) Pager(
+            config = MenuReviewPagingSource.Config,
+            pagingSourceFactory = {
+                menuRepository.menuReviewPagingSource(menu.id)
+            }
+        ).flow
+        else    null
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
+
+    val reviewsWithImage: StateFlow<Flow<PagingData<Review>>?>
+        = _menu.asFlow().map { menu ->
+        if(menu != null) Pager(
+            config = MenuReviewWithImagePagingSource.Config,
+            pagingSourceFactory = {
+                menuRepository.menuReviewWithImagePagingSource(menu.id)
+            }
+        ).flow
         else    null
     }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
 

@@ -11,14 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -39,9 +36,12 @@ fun ReviewScreen(
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
     showImages: Boolean = false,
 ) {
-    val reviewsState by menuDetailViewModel.reviews.collectAsState()
-    val reviews = reviewsState?.collectAsLazyPagingItems()
+    val reviewFlow by
+     if(!showImages) menuDetailViewModel.reviews.collectAsState()
+     else menuDetailViewModel.reviewsWithImage.collectAsState()
+    val reviews = reviewFlow?.collectAsLazyPagingItems()
 
+    // TODO: MenuDetailScreen에서만 리프레시하도록 바꾸기
     LaunchedEffect(menuDetailViewModel){
         menuDetailViewModel.refreshMenu(menuId)
     }
@@ -93,9 +93,9 @@ fun ReviewScreen(
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
-                    items(reviews.itemSnapshotList) { review ->
+                    items(reviews.itemCount) {
                         ItemReview(
-                            review = review,
+                            review = reviews[it],
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
