@@ -20,14 +20,14 @@ interface SikshaApi {
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
-        @Query("perPage") perPage: Long
+        @Query("per_page") perPage: Long
     ): FetchReviewsResult
 
     @GET("/reviews/filter")
     suspend fun fetchReviewsWithImage(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
-        @Query("perPage") perPage: Long,
+        @Query("per_page") perPage: Long,
         @Query("etc") etc: Boolean = true
     ): FetchReviewsResult
 
