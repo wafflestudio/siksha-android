@@ -14,6 +14,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,8 +39,12 @@ fun ReviewScreen(
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
     showImages: Boolean = false,
 ) {
-    val reviewsFlow by remember{ mutableStateOf(menuDetailViewModel.getReviews(menuId)) }
-    val reviews = reviewsFlow.collectAsLazyPagingItems()
+    val reviewsState by menuDetailViewModel.reviews.collectAsState()
+    val reviews = reviewsState?.collectAsLazyPagingItems()
+
+    LaunchedEffect(menuDetailViewModel){
+        menuDetailViewModel.refreshMenu(menuId)
+    }
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -71,7 +77,7 @@ fun ReviewScreen(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            if (reviews.itemCount == 0) {
+            if (reviews == null || reviews.itemCount == 0) {
                 Text(
                     text = "리뷰가 없습니다.",
                     fontSize = dpToSp(18.dp),

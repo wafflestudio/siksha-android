@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -20,6 +21,10 @@ import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -64,6 +69,12 @@ class MenuDetailViewModel @Inject constructor(
     val leaveReviewState: LiveData<ReviewState>
         get() = _leaveReviewState
 
+    val reviews: StateFlow<Flow<PagingData<Review>>?>
+    = _menu.asFlow().map { menu ->
+        if(menu != null) getReviews(menu.id)
+        else    null
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -98,7 +109,7 @@ class MenuDetailViewModel @Inject constructor(
     }
 
     fun getReviews(menuId: Long): Flow<PagingData<Review>> {
-        return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
+        return menuRepository.getPagedReviewsByMenuIdFlow(menuId).cachedIn(viewModelScope)
     }
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {
