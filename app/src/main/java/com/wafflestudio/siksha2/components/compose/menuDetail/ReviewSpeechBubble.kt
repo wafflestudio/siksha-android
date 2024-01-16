@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.compose.ui.review
+package com.wafflestudio.siksha2.components.compose.menuDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

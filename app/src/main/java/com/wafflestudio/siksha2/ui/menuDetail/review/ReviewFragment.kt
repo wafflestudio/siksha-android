@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.wafflestudio.siksha2.compose.ui.review.ReviewScreen
+import com.wafflestudio.siksha2.compose.ui.menuDetail.review.ReviewScreen
 import com.wafflestudio.siksha2.databinding.FragmentReviewBinding
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 
