@@ -69,7 +69,7 @@ android {
 
             firebaseAppDistribution {
                 artifactType = "APK"
-                serviceCredentialsFile = "/app/src/live/app-distribution-service-account.json"
+                serviceCredentialsFile = "app/src/live/app-distribution-service-account.json"
                 releaseNotes = "Live build"
             }
         }
