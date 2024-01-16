@@ -27,11 +27,15 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
 
+
+//TODO: 이미지를 클릭하면 이전 프래그먼트로 돌아간다???
 @Composable
 fun ItemReviewImage(
     imageUri: Uri,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
+    onDelete: () -> Unit = {},
+    onShowMore: () -> Unit = {},
     showMore: Int? = null,
     deletable: Boolean = false
 ) {
@@ -42,7 +46,8 @@ fun ItemReviewImage(
     ) {
         Image(
             modifier = Modifier.fillMaxSize()
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .clickable { if(showMore == null) onClick() },
             painter = rememberAsyncImagePainter(imageUri),
             contentDescription = null,
             contentScale = ContentScale.Crop
@@ -51,7 +56,7 @@ fun ItemReviewImage(
             Image(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .clickable { onClick() },
+                    .clickable { onDelete() },
                 painter = painterResource(id = R.drawable.ic_image_delete),
                 contentDescription = null
             )
@@ -63,6 +68,7 @@ fun ItemReviewImage(
                     .background(color = Color(0x80000000))
                     .zIndex(1f)
                     .align(Alignment.Center)
+                    .clickable { onShowMore() }
             ) {
                 Column(
                     modifier = Modifier.align(Alignment.Center),

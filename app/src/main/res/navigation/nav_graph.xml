@@ -100,6 +100,10 @@
         <argument
             android:name="menuId"
             app:argType="long" />
+        <argument
+            android:name="showImages"
+            android:defaultValue="false"
+            app:argType="boolean"/>
     </fragment>
 
     <fragment

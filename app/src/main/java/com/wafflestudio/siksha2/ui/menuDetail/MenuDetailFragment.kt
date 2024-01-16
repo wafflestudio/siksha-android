@@ -160,13 +160,13 @@ class MenuDetailFragment : Fragment() {
 
         binding.layoutCollectPhotoReviews.setOnClickListener {
             val action =
-                MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(args.menuId)
+                MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(args.menuId, true)
             findNavController().navigate(action)
         }
 
         binding.layoutCollectReviews.setOnClickListener {
             val action =
-                MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(args.menuId)
+                MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(args.menuId, false)
             findNavController().navigate(action)
         }
 

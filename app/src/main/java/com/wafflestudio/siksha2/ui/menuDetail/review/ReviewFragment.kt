@@ -33,6 +33,7 @@ class ReviewFragment : Fragment() {
             ReviewScreen(
                 navController = findNavController(),
                 menuId = args.menuId,
+                showImages = args.showImages,
                 menuDetailViewModel = vm
             )
         }
