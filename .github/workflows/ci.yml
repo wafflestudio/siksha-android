@@ -52,7 +52,7 @@ jobs:
       - name: Build debug APK
         run: ./gradlew assembleStagingDebug --stacktrace
       - name: Run test
-        run: ./gradlew test --stacktrace
+        run: ./gradlew testStagingDebug --stacktrace
       - name: Upload test report
         uses: actions/upload-artifact@v2
         if: failure()
