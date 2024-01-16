@@ -165,6 +165,9 @@ Temporary Items
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 
+# Firebase app distribution service account
+app-distribution-service-account.json
+
 # Android Patch
 
 # External native build folder generated in Android Studio 2.2 and later
@@ -239,11 +242,7 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,macos
 
-/app/src/main/res/values/secrets.xml
-/app/google-services.json
 
 .idea/codeStyles/Project.xml
 .idea/codeStyles/codeStyleConfig.xml
 .idea/runConfigurations.xml
-
-app-distribution-service-account.json

@@ -49,13 +49,15 @@ android {
 
     productFlavors {
         create("staging") {
+            applicationIdSuffix = ".staging"
+
             val propertyVersionName = versionProps.getProperty("sikshaVersion")
             versionCode = SemVer.sementicVersionToSerializedCode(propertyVersionName).toInt()
             versionName = propertyVersionName
 
             firebaseAppDistribution {
                 artifactType = "APK"
-                serviceCredentialsFile = "app-distribution-service-account.json"
+                serviceCredentialsFile = "app/src/staging/app-distribution-service-account.json"
                 releaseNotes = "Staging build"
             }
         }
@@ -67,7 +69,7 @@ android {
 
             firebaseAppDistribution {
                 artifactType = "APK"
-                serviceCredentialsFile = "app-distribution-service-account.json"
+                serviceCredentialsFile = "app/src/live/app-distribution-service-account.json"
                 releaseNotes = "Live build"
             }
         }

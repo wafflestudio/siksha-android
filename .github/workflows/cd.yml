@@ -20,15 +20,15 @@ jobs:
           distribution: 'adopt'
       - name: Clean build
         run: ./gradlew clean
-      - name: Setup google-services.json
+      - name: Setup google-services.json (Live)
         run: |
           mkdir -p ./app/src/live
-          cat << EOF > ./app/google-services.json
+          cat << EOF > ./app/src/live/google-services.json
           ${{ secrets.google_services_json }}
           EOF
-      - name: Setup app-distribution-service-account.json
+      - name: Setup app-distribution-service-account.json (Live)
         run: |
-          cat << EOF > ./app-distribution-service-account.json
+          cat << EOF > ./app/src/live/app-distribution-service-account.json
           ${{ secrets.app_distribution_service_account }}
           EOF
       - name: Setup secrets.xml (Live)
@@ -62,16 +62,16 @@ jobs:
           distribution: 'adopt'
       - name: Clean build
         run: ./gradlew clean
-      - name: Setup google-services.json
+      - name: Setup google-services.json (Staging)
         run: |
           mkdir -p ./app/src/staging
           cat << EOF > ./app/src/staging/google-services.json
-          ${{ secrets.google_services_json }}
+          ${{ secrets.google_services_json_staging }}
           EOF
-      - name: Setup app-distribution-service-account.json
+      - name: Setup app-distribution-service-account.json (Staging)
         run: |
-          cat << EOF > ./app-distribution-service-account.json
-          ${{ secrets.app_distribution_service_account }}
+          cat << EOF > ./app/src/staging/app-distribution-service-account.json
+          ${{ secrets.app_distribution_service_account_staging }}
           EOF
       - name: Setup secrets.xml (Staging)
         run: |
