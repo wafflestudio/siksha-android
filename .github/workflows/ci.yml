@@ -38,15 +38,15 @@ jobs:
         with:
           name: ktlint-result
           path: ./**/build/reports/ktlint/**/*.html
-      - name: Setup Secrets
+      - name: Setup Secrets (Staging)
         run:  |
-          cat << EOF > ./app/src/main/res/values/secrets.xml
+          cat << EOF > ./app/src/staging/res/values/secrets.xml
           ${{ secrets.secrets_xml_staging }}
           EOF
-      - name: Setup google-services.json
+      - name: Setup google-services.json (Staging)
         run:  |
-          cat << EOF > ./app/google-services.json
-          ${{ secrets.google_services_json }}
+          cat << EOF > ./app/src/staging/google-services.json
+          ${{ secrets.google_services_json_staging }}
           EOF
       - name: Build debug APK
         run: ./gradlew assembleStagingDebug --stacktrace
