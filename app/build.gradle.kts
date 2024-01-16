@@ -11,7 +11,7 @@ plugins {
     id("com.google.firebase.crashlytics") version "2.9.5"
     id("com.google.gms.google-services") version "4.3.15"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
-    id("androidx.navigation.safeargs") version "2.5.3"
+    id("androidx.navigation.safeargs.kotlin") version "2.5.3"
     id("com.google.firebase.appdistribution") version "4.0.0"
 }
 

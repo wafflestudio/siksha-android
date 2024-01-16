@@ -28,7 +28,6 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
 
 
-//TODO: 이미지를 클릭하면 이전 프래그먼트로 돌아간다???
 @Composable
 fun ItemReviewImage(
     imageUri: Uri,

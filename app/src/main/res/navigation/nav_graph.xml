@@ -103,7 +103,7 @@
         <argument
             android:name="showImages"
             android:defaultValue="false"
-            app:argType="boolean"/>
+            app:argType="boolean" />
     </fragment>
 
     <fragment
