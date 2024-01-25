@@ -36,9 +36,11 @@
 Staging 빌드를 위해 다음 파일들이 필요합니다.
   - `app/src/staging/google-services.json`
   - `app/src/staging/res/values/secrets.xml`
+
 Live 빌드를 위해 다음 파일들이 필요합니다.
   - `app/src/live/google-services.json` 
   - `app/src/live/res/values/secrets.xml`
+
 필요시 maintainer에게 요청해주세요.
 
 ### Installation
@@ -56,7 +58,7 @@ Live 빌드를 위해 다음 파일들이 필요합니다.
 
 ## Branch Conventions
 - default branch는 `develop`입니다.
-- PR 브랜치 이름은 `${username}/${changes}`(e.g. `sanggggg/renewal-table-ui`)으로 합니다.
+- PR 브랜치 이름은 `${username}/${changes}`(e.g. `eastshine2741/add-postlist-screen`)으로 합니다.
 - 머지 시 squash merge만을 사용합니다.
 
 ## Maintainers
