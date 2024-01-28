@@ -8,36 +8,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.compose.ui.community.CommunityScreen
+import com.wafflestudio.siksha2.compose.ui.community.PostDetailScreen
 import com.wafflestudio.siksha2.ui.SikshaTheme
-import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CommunityFragment : Fragment() {
+class PostDetailFragment : Fragment() {
+
+    private val postListViewModel: PostListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_community, container, false)
+    ): View? {
+        return inflater.inflate(R.layout.fragment_post_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                CommunityScreen(
+                PostDetailScreen(
+                    onNavigateUp = { findNavController().navigateUp() },
                     modifier = Modifier.fillMaxSize(),
-                    onClickPost = { postId ->
-                        findNavController().navigate(
-                            MainFragmentDirections.actionMainFragmentToCommunityPostFragment(
-                                postId
-                            )
-                        )
-                    }
+                    postListViewModel = postListViewModel
                 )
             }
         }

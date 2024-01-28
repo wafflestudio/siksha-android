@@ -24,16 +24,18 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class CommunityViewModel @Inject constructor(
+class PostListViewModel @Inject constructor(
     private val communityRepository: CommunityRepository
 ) : ViewModel() {
 
     private val _boards = MutableStateFlow<List<Selectable<Board>>>(emptyList())
     val boards: StateFlow<List<Selectable<Board>>> get() = _boards
 
-    private val selectedBoard = _boards.map { list ->
+    val selectedBoard = _boards.map { list ->
         list.find { it.state }?.data
-    }.filterNotNull()
+    }
+        .filterNotNull()
+        .stateIn(viewModelScope, SharingStarted.Eagerly, Board.Empty)
 
     private val _postPagingData = selectedBoard.map { board ->
         Pager(
@@ -44,7 +46,8 @@ class CommunityViewModel @Inject constructor(
             pagingSourceFactory = { communityRepository.postPagingSource(board.id) }
         ).flow.cachedIn(viewModelScope)
     }
-    val postPagingData = _postPagingData.stateIn(viewModelScope, SharingStarted.Eagerly, flowOf(PagingData.empty()))
+    val postPagingData =
+        _postPagingData.stateIn(viewModelScope, SharingStarted.Eagerly, flowOf(PagingData.empty()))
 
     init {
         viewModelScope.launch {

@@ -1,20 +1,19 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
-import android.widget.EditText
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,28 +27,25 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wafflestudio.siksha2.components.compose.EditText
 import com.wafflestudio.siksha2.components.compose.TopBar
-import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.CommentIcon
 import com.wafflestudio.siksha2.ui.EtcIcon
+import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.ThumbIcon
-import com.wafflestudio.siksha2.ui.main.community.CommunityPostViewModel
-import com.wafflestudio.siksha2.ui.main.community.CommunityViewModel
+import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
+import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 
 @Composable
-fun CommunityPostScreen(
-    postId: Long,
+fun PostDetailScreen(
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    communityViewModel: CommunityViewModel = hiltViewModel(),
-    postViewModel: CommunityPostViewModel = hiltViewModel()
+    postListViewModel: PostListViewModel = hiltViewModel(),
+    postViewModel: PostDetailViewModel = hiltViewModel()
 ) {
     val post by postViewModel.post.collectAsState()
+    val board by postListViewModel.selectedBoard.collectAsState()
     var commentInput by remember { mutableStateOf("") }
-
-    LaunchedEffect(Unit) {
-        postViewModel.initialize(postId)
-    }
 
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -58,7 +54,14 @@ fun CommunityPostScreen(
             modifier = Modifier.weight(1f)
         ) {
             TopBar(
-                title = "hello"
+                title = board.name,
+                navigationButton = {
+                    NavigateUpIcon(
+                        modifier = Modifier.clickable {
+                            onNavigateUp()
+                        }
+                    )
+                }
             )
             Column(
                 modifier = Modifier.padding(start = 35.dp, end = 35.dp, top = 30.dp)
@@ -84,12 +87,12 @@ fun CommunityPostScreen(
                 Text(
                     text = post.title,
                     style = SikshaTypography.subtitle2,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontWeight = FontWeight.ExtraBold
                 )
                 Spacer(modifier = Modifier.height(13.dp))
                 Text(
                     text = post.content,
-                    style = SikshaTypography.body2,
+                    style = SikshaTypography.body2
                 )
 //            Image()
                 Row(
@@ -131,7 +134,6 @@ fun CommunityPostScreen(
             }
             Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
             Column {
-
             }
         }
         Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
@@ -145,7 +147,24 @@ fun CommunityPostScreen(
                     commentInput = it
                 },
                 modifier = Modifier.fillMaxWidth(),
-                textStyle = SikshaTypography.body2,
+                leadingIcon = {
+                },
+                trailingIcon = {
+                    Box(
+                        modifier = Modifier
+                            .background(color = SikshaColors.White900, shape = RoundedCornerShape(16.dp))
+                            .padding(horizontal = 6.dp, vertical = 5.dp)
+                    ) {
+                        Text(
+                            text = "올리기",
+                            style = SikshaTypography.body2.copy(
+                                fontWeight = FontWeight.SemiBold,
+                                color = SikshaColors.OrangeMain
+                            )
+                        )
+                    }
+                },
+                textStyle = SikshaTypography.body2
             )
         }
     }

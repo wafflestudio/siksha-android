@@ -40,8 +40,8 @@
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
         <action
-            android:id="@+id/action_mainFragment_to_communityPostFragment"
-            app:destination="@id/communityPostFragment"
+            android:id="@+id/action_mainFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
@@ -139,9 +139,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/communityPostFragment"
-        android:name="com.wafflestudio.siksha2.ui.main.community.CommunityPostFragment"
-        android:label="CommunityPostFragment">
+        android:id="@+id/postDetailFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostDetailFragment"
+        android:label="PostDetailFragment">
         <argument
             android:name="post_id"
             app:argType="long" />

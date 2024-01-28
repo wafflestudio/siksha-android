@@ -28,16 +28,16 @@ import com.wafflestudio.siksha2.components.compose.Chip
 import com.wafflestudio.siksha2.components.compose.PostListItem
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
-import com.wafflestudio.siksha2.ui.main.community.CommunityViewModel
+import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 
 @Composable
-fun CommunityScreen(
+fun PostListScreen(
+    onClickPost: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    communityViewModel: CommunityViewModel = hiltViewModel(),
-    onClickPost: (Long) -> Unit = {}
+    postListViewModel: PostListViewModel = hiltViewModel()
 ) {
-    val boards by communityViewModel.boards.collectAsState()
-    val postPagingData by communityViewModel.postPagingData.collectAsState()
+    val boards by postListViewModel.boards.collectAsState()
+    val postPagingData by postListViewModel.postPagingData.collectAsState()
     val posts = postPagingData.collectAsLazyPagingItems()
 
     Column(
@@ -54,7 +54,7 @@ fun CommunityScreen(
                     text = item.data.name,
                     selected = item.state,
                     onClick = {
-                        communityViewModel.selectBoard(idx)
+                        postListViewModel.selectBoard(idx)
                     }
                 )
             }
