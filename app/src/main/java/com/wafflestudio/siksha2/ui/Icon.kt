@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -45,5 +46,19 @@ fun EtcIcon(
         modifier = modifier.size(12.dp),
         painter = painterResource(R.drawable.ic_etc),
         contentDescription = null,
-        colorFilter = colorFilter)
+        colorFilter = colorFilter
+    )
+}
+
+@Composable
+fun NavigateUpIcon(
+    modifier: Modifier = Modifier,
+    color: Color = SikshaColors.White900
+) {
+    Image(
+        modifier = modifier.size(16.dp),
+        painter = painterResource(R.drawable.ic_back_arrow),
+        contentDescription = "navigate up",
+        colorFilter = ColorFilter.tint(color)
+    )
 }

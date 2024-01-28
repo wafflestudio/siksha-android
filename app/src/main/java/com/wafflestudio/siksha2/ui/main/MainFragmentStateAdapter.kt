@@ -2,7 +2,7 @@ package com.wafflestudio.siksha2.ui.main
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.wafflestudio.siksha2.ui.main.community.CommunityFragment
+import com.wafflestudio.siksha2.ui.main.community.PostListFragment
 import com.wafflestudio.siksha2.ui.main.restaurant.DailyRestaurantFragment
 import com.wafflestudio.siksha2.ui.main.setting.SettingFragment
 
@@ -15,7 +15,7 @@ class MainFragmentStateAdapter(mainFragment: MainFragment) : FragmentStateAdapte
         return when (position) {
             MainTabState.FAVORITE.ordinal -> DailyRestaurantFragment.newInstance(true)
             MainTabState.MAIN.ordinal -> DailyRestaurantFragment.newInstance(false)
-            MainTabState.COMMUNITY.ordinal -> CommunityFragment()
+            MainTabState.COMMUNITY.ordinal -> PostListFragment()
             MainTabState.SETTINGS.ordinal -> SettingFragment()
             else -> throw IllegalStateException("no such fragment with position $position")
         }
