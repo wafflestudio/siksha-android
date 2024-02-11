@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.compose.ui.menuDetail.review
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,11 +28,9 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.dpToSp
 
-// TODO: menuId 없애기?
 @Composable
 fun ReviewScreen(
     navController: NavController,
-    menuId: Long,
     modifier: Modifier = Modifier,
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
     showImages: Boolean = false,
@@ -41,11 +39,6 @@ fun ReviewScreen(
      if(!showImages) menuDetailViewModel.reviews.collectAsState()
      else menuDetailViewModel.reviewsWithImage.collectAsState()
     val reviews = reviewFlow?.collectAsLazyPagingItems()
-
-    // TODO: MenuDetailScreen에서만 리프레시하도록 바꾸기
-    LaunchedEffect(menuDetailViewModel){
-        menuDetailViewModel.refreshMenu(menuId)
-    }
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -62,6 +55,9 @@ fun ReviewScreen(
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 16.dp)
                     .align(Alignment.CenterStart)
+                    .clickable{
+                        navController.popBackStack()
+                    }
             )
             Text(
                 text = "리뷰",

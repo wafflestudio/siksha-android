@@ -32,7 +32,6 @@ class ReviewFragment : Fragment() {
         binding.reviewComposeView.setContent { 
             ReviewScreen(
                 navController = findNavController(),
-                menuId = args.menuId,
                 showImages = args.showImages,
                 menuDetailViewModel = vm
             )
