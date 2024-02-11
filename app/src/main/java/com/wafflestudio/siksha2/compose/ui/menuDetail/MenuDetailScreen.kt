@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.compose.ErrorComponent
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingBars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReview
@@ -135,7 +136,12 @@ fun MenuDetailScreen(
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(top = 15.dp, bottom = 15.dp, start = 45.dp, end = 25.dp)
+                                    .padding(
+                                        top = 15.dp,
+                                        bottom = 15.dp,
+                                        start = 45.dp,
+                                        end = 25.dp
+                                    )
                             ) {
                                 Row(
                                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -206,8 +212,9 @@ fun MenuDetailScreen(
                                         text = "나의 평가 남기기",
                                         fontSize = dpToSp(14.dp),
                                         color = SikshaColors.White900,
-                                        modifier = Modifier.align(Alignment.Center)
-                                            .clickable{
+                                        modifier = Modifier
+                                            .align(Alignment.Center)
+                                            .clickable {
                                                 navController.navigate(MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment())
                                             }
                                     )
@@ -318,7 +325,10 @@ fun MenuDetailScreen(
 
             }
             MenuDetailViewModel.State.FAILED -> {
-
+                ErrorComponent(
+                    modifier = Modifier.fillMaxWidth()
+                        .weight(1f)
+                )
             }
             else -> {}
         }
