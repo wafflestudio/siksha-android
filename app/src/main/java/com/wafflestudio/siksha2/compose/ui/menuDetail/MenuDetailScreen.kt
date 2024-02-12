@@ -34,8 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.ErrorComponent
+import com.wafflestudio.siksha2.components.compose.LoadingComponent
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingBars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReview
@@ -322,11 +327,16 @@ fun MenuDetailScreen(
                 }
             }
             MenuDetailViewModel.State.LOADING -> {
-
+                LoadingComponent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
             }
             MenuDetailViewModel.State.FAILED -> {
                 ErrorComponent(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .weight(1f)
                 )
             }
