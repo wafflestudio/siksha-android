@@ -1,8 +1,10 @@
 package com.wafflestudio.siksha2.compose.ui.menuDetail
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -25,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -40,11 +44,13 @@ import com.wafflestudio.siksha2.components.compose.LoadingComponent
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingBars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReview
+import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReviewImage
 import com.wafflestudio.siksha2.components.compose.menuDetail.LikeButton
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailFragmentDirections
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.dpToSp
+import kotlin.math.min
 import kotlin.math.round
 
 @Composable
@@ -60,6 +66,7 @@ fun MenuDetailScreen(
     val imageReviewFlow by menuDetailViewModel.reviewsWithImage.collectAsState()
     val imageReviews = imageReviewFlow?.collectAsLazyPagingItems()
     val loadingState = menuDetailViewModel.networkResultState.observeAsState()
+    val imagePreviewScrollState = rememberScrollState()
 
     LaunchedEffect(menuDetailViewModel) {
         menuDetailViewModel.refreshMenu(menuId)
@@ -258,6 +265,48 @@ fun MenuDetailScreen(
                                             )
                                         }
                                 )
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .horizontalScroll(imagePreviewScrollState),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ){
+                                for(i: Int in 1..min(imageReviews.itemCount,3)){
+                                    when(val it = imageReviews.itemSnapshotList.items[i-1].etc?.images?.get(0)){
+                                        null -> Box(modifier= Modifier
+                                            .size(120.dp)
+                                            .background(SikshaColors.Gray100)
+                                            .clip(RoundedCornerShape(10.dp)))
+                                        else -> {
+                                            if(i==3) {
+                                                ItemReviewImage(
+                                                    imageUri = Uri.parse(it),
+                                                    modifier = Modifier
+                                                        .size(120.dp)
+                                                        .clip(RoundedCornerShape(10.dp)),
+                                                    showMore = imageReviews.itemCount - 2,
+                                                    onShowMore = {
+                                                        navController.navigate(
+                                                            MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(
+                                                                menuId,
+                                                                true
+                                                            )
+                                                        )
+                                                    }
+                                                )
+                                            }
+                                            else{
+                                                ItemReviewImage(
+                                                    imageUri = Uri.parse(it),
+                                                    modifier = Modifier
+                                                        .size(120.dp)
+                                                        .clip(RoundedCornerShape(10.dp))
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
