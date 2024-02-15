@@ -197,8 +197,8 @@ class MenuDetailFragment : Fragment() {
         }
     }
 
-    companion object {
-        private const val NO_REVIEW_DIST_BAR_WIDTH_DP = 8
-        private const val MAX_REVIEW_DIST_BAR_WIDTH_DP = 180
-    }
+//    companion object {
+//        private const val NO_REVIEW_DIST_BAR_WIDTH_DP = 8
+//        private const val MAX_REVIEW_DIST_BAR_WIDTH_DP = 180
+//    }
 }

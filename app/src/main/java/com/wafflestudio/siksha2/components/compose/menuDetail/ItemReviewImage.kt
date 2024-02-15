@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,19 +32,26 @@ import com.wafflestudio.siksha2.utils.dpToSp
 fun ItemReviewImage(
     imageUri: Uri,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
     onDelete: () -> Unit = {},
     onShowMore: () -> Unit = {},
     showMore: Int? = null,
     deletable: Boolean = false
 ) {
+    var imageDialogState by remember{ mutableStateOf(false) }
+
     Box(
         modifier = modifier
     ) {
+        if(imageDialogState && showMore == null){
+            ItemReviewImageDialog(url = imageUri, onDismiss = { imageDialogState = false })
+        }
         Image(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .align(Alignment.Center)
-                .clickable { if(showMore == null) onClick() },
+                .clickable {
+                    if (showMore == null) imageDialogState = true
+                },
             painter = rememberAsyncImagePainter(imageUri),
             contentDescription = null,
             contentScale = ContentScale.Crop
