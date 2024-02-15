@@ -26,7 +26,6 @@ class MenuDetailFragment : Fragment() {
     private val vm: MenuDetailViewModel by activityViewModels()
 
     private lateinit var binding: FragmentMenuDetailBinding
-    private lateinit var reviewsAdapter: MenuReviewsAdapter
 
     private val args: MenuDetailFragmentArgs by navArgs()
 
@@ -192,6 +191,7 @@ class MenuDetailFragment : Fragment() {
             MenuDetailScreen(
                 navController = findNavController(),
                 menuId = args.menuId,
+                isTodayMenu = args.isTodayMenu,
                 menuDetailViewModel = vm
             )
         }
