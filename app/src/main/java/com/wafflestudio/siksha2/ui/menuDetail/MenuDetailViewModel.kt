@@ -104,30 +104,30 @@ class MenuDetailViewModel @Inject constructor(
         }
     }
 
-    fun refreshImages(menuId: Long) {
-        viewModelScope.launch {
-            try {
-                val data = menuRepository.getFirstReviewPhotoByMenuId(menuId)
-                _imageCount.value = data.totalCount
-                val urlList = emptyList<String>().toMutableList()
-                for (i in 0 until 3) {
-                    if (i < data.result.size) {
-                        data.result[i].etc?.images?.get(0)?.let {
-                            urlList.add(it)
-                        }
-                    }
-                }
-                _imageUrlList.value = urlList
-            } catch (e: IOException) {
-                _imageUrlList.value = emptyList()
-                _networkResultState.value = State.FAILED
-            }
-        }
-    }
+//    fun refreshImages(menuId: Long) {
+//        viewModelScope.launch {
+//            try {
+//                val data = menuRepository.getFirstReviewPhotoByMenuId(menuId)
+//                _imageCount.value = data.totalCount
+//                val urlList = emptyList<String>().toMutableList()
+//                for (i in 0 until 3) {
+//                    if (i < data.result.size) {
+//                        data.result[i].etc?.images?.get(0)?.let {
+//                            urlList.add(it)
+//                        }
+//                    }
+//                }
+//                _imageUrlList.value = urlList
+//            } catch (e: IOException) {
+//                _imageUrlList.value = emptyList()
+//                _networkResultState.value = State.FAILED
+//            }
+//        }
+//    }
 
-    fun getReviews(menuId: Long): Flow<PagingData<Review>> {
-        return menuRepository.getPagedReviewsByMenuIdFlow(menuId).cachedIn(viewModelScope)
-    }
+//    fun getReviews(menuId: Long): Flow<PagingData<Review>> {
+//        return menuRepository.getPagedReviewsByMenuIdFlow(menuId).cachedIn(viewModelScope)
+//    }
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {
         return menuRepository.getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId)

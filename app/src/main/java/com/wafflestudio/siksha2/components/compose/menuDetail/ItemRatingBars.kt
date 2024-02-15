@@ -17,9 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
 
@@ -38,6 +40,8 @@ fun ItemRatingBar(
             text = ratingIndex.toString(),
             modifier = Modifier.padding(end = 3.dp),
             fontSize = dpToSp(8.dp),
+            fontFamily = NanumSquareFontFamily,
+            fontWeight = FontWeight.Bold,
             color = SikshaColors.Gray500
         )
         Image(

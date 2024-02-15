@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.ui.SikshaColors
@@ -34,6 +35,8 @@ fun ErrorComponent(
         Text(
             text = "네트워크 연결이 불안정합니다.",
             fontSize = dpToSp(20.dp),
+            fontFamily = NanumSquareFontFamily,
+            fontWeight = FontWeight.Light,
             modifier = Modifier.padding(top = 20.dp)
         )
     }

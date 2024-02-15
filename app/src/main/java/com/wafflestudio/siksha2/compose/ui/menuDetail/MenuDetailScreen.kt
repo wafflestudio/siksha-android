@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.compose.ui.menuDetail
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +32,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,6 +44,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.ErrorComponent
 import com.wafflestudio.siksha2.components.compose.LoadingComponent
+import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingBars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReview
@@ -57,6 +61,7 @@ import kotlin.math.round
 fun MenuDetailScreen(
     navController: NavController,
     menuId: Long,
+    isTodayMenu: Boolean,
     modifier: Modifier = Modifier,
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
 ) {
@@ -67,6 +72,7 @@ fun MenuDetailScreen(
     val imageReviews = imageReviewFlow?.collectAsLazyPagingItems()
     val loadingState = menuDetailViewModel.networkResultState.observeAsState()
     val imagePreviewScrollState = rememberScrollState()
+    val context = LocalContext.current
 
     LaunchedEffect(menuDetailViewModel) {
         menuDetailViewModel.refreshMenu(menuId)
@@ -99,6 +105,8 @@ fun MenuDetailScreen(
                     .fillMaxWidth(0.72f)
                     .align(Alignment.Center),
                 fontSize = dpToSp(20.dp),
+                fontFamily = NanumSquareFontFamily,
+                fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
                 color = SikshaColors.White900
@@ -131,7 +139,9 @@ fun MenuDetailScreen(
                                 )
                                 Text(
                                     text = "좋아요 " + (menu?.likeCount ?: 0).toString() + "개",
-                                    fontSize = dpToSp(14.dp)
+                                    fontSize = dpToSp(14.dp),
+                                    fontFamily = NanumSquareFontFamily,
+                                    fontWeight = FontWeight.Normal
                                 )
                             }
 
@@ -158,22 +168,30 @@ fun MenuDetailScreen(
                                     Text(
                                         text = "총 ",
                                         color = SikshaColors.Gray800,
-                                        fontSize = dpToSp(10.dp)
+                                        fontSize = dpToSp(10.dp),
+                                        fontFamily = NanumSquareFontFamily,
+                                        fontWeight = FontWeight.Bold
                                     )
                                     Text(
                                         text = reviews?.itemCount.toString(),
                                         color = SikshaColors.OrangeMain,
-                                        fontSize = dpToSp(10.dp)
+                                        fontSize = dpToSp(10.dp),
+                                        fontFamily = NanumSquareFontFamily,
+                                        fontWeight = FontWeight.Bold
                                     )
                                     Text(
                                         text = "명",
                                         color = SikshaColors.OrangeMain,
-                                        fontSize = dpToSp(10.dp)
+                                        fontSize = dpToSp(10.dp),
+                                        fontFamily = NanumSquareFontFamily,
+                                        fontWeight = FontWeight.Bold
                                     )
                                     Text(
                                         text = "이 평가했어요!",
                                         color = SikshaColors.Gray800,
-                                        fontSize = dpToSp(10.dp)
+                                        fontSize = dpToSp(10.dp),
+                                        fontFamily = NanumSquareFontFamily,
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
 
@@ -191,7 +209,9 @@ fun MenuDetailScreen(
                                             text = "${
                                                 menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
                                             }",
-                                            fontSize = dpToSp(32.dp)
+                                            fontSize = dpToSp(32.dp),
+                                            fontFamily = NanumSquareFontFamily,
+                                            fontWeight = FontWeight.ExtraBold
                                         )
                                         ItemRatingStars(
                                             rating = menu?.score?.toFloat() ?: 0.0f
@@ -219,11 +239,20 @@ fun MenuDetailScreen(
                                     Text(
                                         text = "나의 평가 남기기",
                                         fontSize = dpToSp(14.dp),
+                                        fontFamily = NanumSquareFontFamily,
+                                        fontWeight = FontWeight.ExtraBold,
                                         color = SikshaColors.White900,
                                         modifier = Modifier
                                             .align(Alignment.Center)
                                             .clickable {
-                                                navController.navigate(MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment())
+                                                if(isTodayMenu)
+                                                    navController.navigate(MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment())
+                                                else
+                                                    Toast.makeText(
+                                                        context,
+                                                        "오늘 메뉴만 평가할 수 있습니다.",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
                                             }
                                     )
                                 }
@@ -247,6 +276,8 @@ fun MenuDetailScreen(
                                 Text(
                                     text = "사진 리뷰 모아보기",
                                     fontSize = dpToSp(14.dp),
+                                    fontFamily = NanumSquareFontFamily,
+                                    fontWeight = FontWeight.Normal,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                                 Image(
@@ -323,6 +354,8 @@ fun MenuDetailScreen(
                                 Text(
                                     text = "리뷰",
                                     fontSize = dpToSp(14.dp),
+                                    fontFamily = NanumSquareFontFamily,
+                                    fontWeight = FontWeight.Normal,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                                 Image(
@@ -363,6 +396,8 @@ fun MenuDetailScreen(
                                 Text(
                                     text = "리뷰가 없습니다.",
                                     fontSize = dpToSp(18.dp),
+                                    fontFamily = NanumSquareFontFamily,
+                                    fontWeight = FontWeight.Light,
                                     modifier = Modifier.align(Alignment.Center),
                                     color = SikshaColors.Gray600
                                 )

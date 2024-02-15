@@ -55,13 +55,12 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchMenuById(menuId)
     }
 
-    // TODO: 리포지토리에서 Pager 제거
-    fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
-        return Pager(
-            config = MenuReviewPagingSource.Config,
-            pagingSourceFactory = { MenuReviewPagingSource(sikshaApi, menuId) }
-        ).flow
-    }
+//    fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
+//        return Pager(
+//            config = MenuReviewPagingSource.Config,
+//            pagingSourceFactory = { MenuReviewPagingSource(sikshaApi, menuId) }
+//        ).flow
+//    }
 
     fun getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
@@ -92,9 +91,9 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewDistribution(menuId).dist
     }
 
-    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
-        return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
-    }
+//    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
+//        return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
+//    }
 
     suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeOrUnlikeResponse {
         return if (isCurrentlyLiked) {
