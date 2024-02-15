@@ -7,7 +7,6 @@ import com.wafflestudio.siksha2.models.DailyMenu
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
-import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
 import com.wafflestudio.siksha2.network.dto.MenuLikeOrUnlikeResponse
@@ -69,11 +68,11 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
-    fun menuReviewPagingSource(menuId: Long): MenuReviewPagingSource
-        = MenuReviewPagingSource(sikshaApi, menuId)
+    fun menuReviewPagingSource(menuId: Long): MenuReviewPagingSource =
+        MenuReviewPagingSource(sikshaApi, menuId)
 
-    fun menuReviewWithImagePagingSource(menuId: Long): MenuReviewWithImagePagingSource
-        = MenuReviewWithImagePagingSource(sikshaApi, menuId)
+    fun menuReviewWithImagePagingSource(menuId: Long): MenuReviewWithImagePagingSource =
+        MenuReviewWithImagePagingSource(sikshaApi, menuId)
 
     suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): LeaveReviewResult {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))

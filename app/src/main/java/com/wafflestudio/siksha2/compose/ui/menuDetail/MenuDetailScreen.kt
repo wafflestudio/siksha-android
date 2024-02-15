@@ -63,7 +63,7 @@ fun MenuDetailScreen(
     menuId: Long,
     isTodayMenu: Boolean,
     modifier: Modifier = Modifier,
-    menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
+    menuDetailViewModel: MenuDetailViewModel = hiltViewModel()
 ) {
     val menu by menuDetailViewModel.menu.observeAsState()
     val reviewFlow by menuDetailViewModel.reviews.collectAsState()
@@ -112,8 +112,8 @@ fun MenuDetailScreen(
                 color = SikshaColors.White900
             )
         }
-                
-        when(loadingState.value){
+
+        when (loadingState.value) {
             MenuDetailViewModel.State.SUCCESS -> {
                 LazyColumn(
                     modifier = Modifier
@@ -207,7 +207,7 @@ fun MenuDetailScreen(
                                     ) {
                                         Text(
                                             text = "${
-                                                menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
+                                            menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
                                             }",
                                             fontSize = dpToSp(32.dp),
                                             fontFamily = NanumSquareFontFamily,
@@ -245,28 +245,31 @@ fun MenuDetailScreen(
                                         modifier = Modifier
                                             .align(Alignment.Center)
                                             .clickable {
-                                                if(isTodayMenu)
+                                                if (isTodayMenu) {
                                                     navController.navigate(MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment())
-                                                else
+                                                } else {
                                                     Toast.makeText(
                                                         context,
                                                         "오늘 메뉴만 평가할 수 있습니다.",
                                                         Toast.LENGTH_SHORT
                                                     ).show()
+                                                }
                                             }
                                     )
                                 }
                             }
-                            Spacer(modifier = Modifier
-                                .fillMaxWidth()
-                                .height(10.dp)
-                                .background(SikshaColors.Gray100))
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(10.dp)
+                                    .background(SikshaColors.Gray100)
+                            )
                         }
                     }
 
                     // 사진 리뷰
                     if (imageReviews != null && imageReviews.itemCount > 0) {
-                        item{
+                        item {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -302,15 +305,17 @@ fun MenuDetailScreen(
                                     .padding(horizontal = 16.dp)
                                     .horizontalScroll(imagePreviewScrollState),
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ){
-                                for(i: Int in 1..min(imageReviews.itemCount,3)){
-                                    when(val it = imageReviews.itemSnapshotList.items[i-1].etc?.images?.get(0)){
-                                        null -> Box(modifier= Modifier
-                                            .size(120.dp)
-                                            .background(SikshaColors.Gray100)
-                                            .clip(RoundedCornerShape(10.dp)))
+                            ) {
+                                for (i: Int in 1..min(imageReviews.itemCount, 3)) {
+                                    when (val it = imageReviews.itemSnapshotList.items[i - 1].etc?.images?.get(0)) {
+                                        null -> Box(
+                                            modifier = Modifier
+                                                .size(120.dp)
+                                                .background(SikshaColors.Gray100)
+                                                .clip(RoundedCornerShape(10.dp))
+                                        )
                                         else -> {
-                                            if(i==3) {
+                                            if (i == 3) {
                                                 ItemReviewImage(
                                                     imageUri = Uri.parse(it),
                                                     modifier = Modifier
@@ -326,8 +331,7 @@ fun MenuDetailScreen(
                                                         )
                                                     }
                                                 )
-                                            }
-                                            else{
+                                            } else {
                                                 ItemReviewImage(
                                                     imageUri = Uri.parse(it),
                                                     modifier = Modifier
@@ -343,7 +347,7 @@ fun MenuDetailScreen(
                     }
 
                     // 일반 리뷰
-                    if(reviews != null && reviews.itemCount > 0) {
+                    if (reviews != null && reviews.itemCount > 0) {
                         item {
                             Box(
                                 modifier = Modifier
@@ -385,8 +389,7 @@ fun MenuDetailScreen(
                                 showImage = true
                             )
                         }
-                    }
-                    else{
+                    } else {
                         item {
                             Box(
                                 modifier = Modifier

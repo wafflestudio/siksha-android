@@ -10,7 +10,6 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.repositories.MenuRepository
@@ -70,27 +69,33 @@ class MenuDetailViewModel @Inject constructor(
     val leaveReviewState: LiveData<ReviewState>
         get() = _leaveReviewState
 
-    val reviews: StateFlow<Flow<PagingData<Review>>?>
-    = _menu.asFlow().map { menu ->
-        if(menu != null) Pager(
-            config = MenuReviewPagingSource.Config,
-            pagingSourceFactory = {
-                menuRepository.menuReviewPagingSource(menu.id)
+    val reviews: StateFlow<Flow<PagingData<Review>>?> =
+        _menu.asFlow().map { menu ->
+            if (menu != null) {
+                Pager(
+                    config = MenuReviewPagingSource.Config,
+                    pagingSourceFactory = {
+                        menuRepository.menuReviewPagingSource(menu.id)
+                    }
+                ).flow
+            } else {
+                null
             }
-        ).flow
-        else    null
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
 
-    val reviewsWithImage: StateFlow<Flow<PagingData<Review>>?>
-        = _menu.asFlow().map { menu ->
-        if(menu != null) Pager(
-            config = MenuReviewWithImagePagingSource.Config,
-            pagingSourceFactory = {
-                menuRepository.menuReviewWithImagePagingSource(menu.id)
+    val reviewsWithImage: StateFlow<Flow<PagingData<Review>>?> =
+        _menu.asFlow().map { menu ->
+            if (menu != null) {
+                Pager(
+                    config = MenuReviewWithImagePagingSource.Config,
+                    pagingSourceFactory = {
+                        menuRepository.menuReviewWithImagePagingSource(menu.id)
+                    }
+                ).flow
+            } else {
+                null
             }
-        ).flow
-        else    null
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
 
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
@@ -182,8 +187,8 @@ class MenuDetailViewModel @Inject constructor(
         _leaveReviewState.value = ReviewState.WAITING
     }
 
-    fun toggleLike(){
-        if(menu.value != null) {
+    fun toggleLike() {
+        if (menu.value != null) {
             toggleLike(menu.value!!.id, menu.value!!.isLiked ?: false)
         }
     }

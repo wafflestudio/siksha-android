@@ -52,7 +52,7 @@ fun ItemRatingBar(
                 .width(8.dp)
                 .height(8.dp)
         )
-        if(ratio > 0.0f)
+        if (ratio > 0.0f) {
             Box(
                 modifier = Modifier
                     .weight(ratio)
@@ -66,9 +66,11 @@ fun ItemRatingBar(
                             bottomStart = CornerSize(0.dp)
                         )
                     )
-            ){}
-        if(ratio < 1.0f)
+            ) {}
+        }
+        if (ratio < 1.0f) {
             Spacer(modifier = Modifier.weight(1.0f - ratio))
+        }
     }
 }
 
@@ -83,9 +85,9 @@ fun ItemRatingBars(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        distList.reversed().forEachIndexed{ index, cnt ->
+        distList.reversed().forEachIndexed { index, cnt ->
             ItemRatingBar(
-                ratingIndex = 5-index,
+                ratingIndex = 5 - index,
                 ratio = cnt.toFloat() / maxCount.toFloat()
             )
         }

@@ -27,7 +27,6 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
 
-
 @Composable
 fun ItemReviewImage(
     imageUri: Uri,
@@ -37,12 +36,12 @@ fun ItemReviewImage(
     showMore: Int? = null,
     deletable: Boolean = false
 ) {
-    var imageDialogState by remember{ mutableStateOf(false) }
+    var imageDialogState by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
     ) {
-        if(imageDialogState && showMore == null){
+        if (imageDialogState && showMore == null) {
             ItemReviewImageDialog(url = imageUri, onDismiss = { imageDialogState = false })
         }
         Image(

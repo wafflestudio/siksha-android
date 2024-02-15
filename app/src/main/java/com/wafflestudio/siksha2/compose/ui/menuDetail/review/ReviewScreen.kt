@@ -35,11 +35,14 @@ fun ReviewScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
-    showImages: Boolean = false,
+    showImages: Boolean = false
 ) {
     val reviewFlow by
-     if(!showImages) menuDetailViewModel.reviews.collectAsState()
-     else menuDetailViewModel.reviewsWithImage.collectAsState()
+    if (!showImages) {
+        menuDetailViewModel.reviews.collectAsState()
+    } else {
+        menuDetailViewModel.reviewsWithImage.collectAsState()
+    }
     val reviews = reviewFlow?.collectAsLazyPagingItems()
 
     Column(
@@ -57,7 +60,7 @@ fun ReviewScreen(
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 16.dp)
                     .align(Alignment.CenterStart)
-                    .clickable{
+                    .clickable {
                         navController.popBackStack()
                     }
             )

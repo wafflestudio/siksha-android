@@ -84,7 +84,7 @@ fun ItemReview(
                 color = SikshaColors.Gray500
             )
         }
-        Box (
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 80.dp)
@@ -114,7 +114,7 @@ fun ItemReview(
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                for(imageUri in review?.etc?.images ?: listOf()){
+                for (imageUri in review?.etc?.images ?: listOf()) {
                     ItemReviewImage(
                         imageUri = Uri.parse(imageUri),
                         modifier = Modifier.size(100.dp)

@@ -22,7 +22,7 @@ fun LoadingComponent(
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
-    ){
+    ) {
         LottieAnimation(
             composition = composition,
             progress = { progress },

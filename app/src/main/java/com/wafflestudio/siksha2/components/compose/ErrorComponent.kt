@@ -20,12 +20,12 @@ import com.wafflestudio.siksha2.utils.dpToSp
 @Composable
 fun ErrorComponent(
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-    ){
+    ) {
         Image(
             painter = painterResource(R.drawable.ic_warning),
             contentDescription = null,

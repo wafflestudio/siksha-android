@@ -52,7 +52,7 @@ fun ItemRatingStars(
     Row(
         horizontalArrangement = Arrangement.spacedBy(gap)
     ) {
-        for (i in 1..5){
+        for (i in 1..5) {
             ItemReviewSingleStar(
                 flag = i * 2 - rounds,
                 modifier = Modifier

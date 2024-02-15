@@ -29,7 +29,7 @@ class ReviewFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.reviewComposeView.setContent { 
+        binding.reviewComposeView.setContent {
             ReviewScreen(
                 navController = findNavController(),
                 showImages = args.showImages,

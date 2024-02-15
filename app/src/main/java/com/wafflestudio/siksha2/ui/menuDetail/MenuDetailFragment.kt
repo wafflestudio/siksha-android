@@ -6,20 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.compose.ui.menuDetail.MenuDetailScreen
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
-import com.wafflestudio.siksha2.utils.dp
-import com.wafflestudio.siksha2.utils.showToast
-import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import kotlin.math.round
 
 @AndroidEntryPoint
 class MenuDetailFragment : Fragment() {
@@ -185,7 +176,6 @@ class MenuDetailFragment : Fragment() {
 //                vm.toggleLike(args.menuId, it)
 //            }
 //        }
-
 
         binding.menuDetailComposeView.setContent {
             MenuDetailScreen(

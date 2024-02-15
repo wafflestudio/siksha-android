@@ -11,12 +11,15 @@ import com.wafflestudio.siksha2.R
 fun LikeButton(
     isChecked: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit = {}
 ) {
     Image(
         painter = painterResource(
-            if(isChecked) R.drawable.ic_full_heart_small
-            else R.drawable.ic_empty_heart_small
+            if (isChecked) {
+                R.drawable.ic_full_heart_small
+            } else {
+                R.drawable.ic_empty_heart_small
+            }
         ),
         contentDescription = "좋아요",
         modifier = modifier.clickable { onClick() }
