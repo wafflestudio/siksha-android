@@ -8,15 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.wafflestudio.siksha2.ui.CommentIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
-import com.wafflestudio.siksha2.ui.ThumbIcon
 
 @Composable
 fun PostListItem(
@@ -52,30 +48,13 @@ fun PostListItem(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        ThumbIcon(isSelected = isLiked)
-                        Text(
-                            text = likeCount.toString(),
-                            fontSize = 8.sp,
-                            color = SikshaColors.OrangeMain,
-                            style = SikshaTypography.body2
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CommentIcon()
-                        Text(
-                            text = commentCount.toString(),
-                            fontSize = 8.sp,
-                            color = SikshaColors.Gray600,
-                            style = SikshaTypography.body2
-                        )
-                    }
+                    LikeIconWithCount(
+                        likeCount = likeCount,
+                        isLiked = isLiked
+                    )
+                    CommentIconWithCount(
+                        commentCount = commentCount
+                    )
                 }
             }
         }

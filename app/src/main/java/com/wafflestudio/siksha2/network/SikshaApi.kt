@@ -97,4 +97,11 @@ interface SikshaApi {
     suspend fun getPost(
         @Path("post_id") postId: Long
     ): GetPostResult
+
+    @GET("/community/comments")
+    suspend fun getComments(
+        @Query("post_id") postId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Int
+    ): GetCommentsResult
 }
