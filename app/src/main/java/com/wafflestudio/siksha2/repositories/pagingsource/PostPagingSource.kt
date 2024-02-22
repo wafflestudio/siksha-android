@@ -21,7 +21,7 @@ class PostPagingSource(
             )
 
             LoadResult.Page(
-                data = response.result,
+                data = response.result.map { it.toPost() },
                 prevKey = when (page) {
                     STARTING_KEY -> null
                     else -> page - 1
