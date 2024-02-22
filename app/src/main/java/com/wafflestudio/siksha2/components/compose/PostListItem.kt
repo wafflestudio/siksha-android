@@ -26,7 +26,7 @@ fun PostListItem(
     commentCount: Long,
     isLiked: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {},
+    onClick: () -> Unit = {}
 ) {
     Column {
         Row(
