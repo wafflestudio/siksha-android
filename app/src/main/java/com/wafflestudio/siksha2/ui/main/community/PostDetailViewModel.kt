@@ -61,4 +61,12 @@ class PostDetailViewModel @Inject constructor(
     suspend fun unlikePost() {
         _post.value = communityRepository.unlikePost(_post.value.id)
     }
+
+    suspend fun likeComment(commentId: Long) {
+        communityRepository.likeComment(commentId)
+    }
+
+    suspend fun unlikeComment(commentId: Long) {
+        communityRepository.unlikeComment(commentId)
+    }
 }

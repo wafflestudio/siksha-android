@@ -164,7 +164,20 @@ fun PostDetailScreen(
             Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
             LazyColumn {
                 items(comments.itemCount) {
-                    comments[it]?.let { it1 -> CommentItem(it1) }
+                    comments[it]?.let { comment ->
+                        CommentItem(
+                            comment = comment,
+                            onClickLike = {
+                                scope.launch {
+                                    when (comment.isLiked) {
+                                        true -> postDetailViewModel.unlikeComment(comment.id)
+                                        false -> postDetailViewModel.likeComment(comment.id)
+                                    }
+                                    comments.refresh()
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -215,7 +228,8 @@ fun PostDetailScreen(
 @Composable
 fun CommentItem(
     comment: Comment,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClickLike: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -246,7 +260,8 @@ fun CommentItem(
             Row {
                 LikeIconWithCount(
                     likeCount = comment.likeCount,
-                    isLiked = comment.isLiked
+                    isLiked = comment.isLiked,
+                    onClick = onClickLike
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 EtcIcon()

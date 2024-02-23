@@ -36,4 +36,12 @@ class CommunityRepository @Inject constructor(
     suspend fun unlikePost(postId: Long): Post {
         return api.postUnlikePost(postId).toPost()
     }
+
+    suspend fun likeComment(commentId: Long) {
+        api.postLikeComment(commentId)
+    }
+
+    suspend fun unlikeComment(commentId: Long) {
+        api.postUnlikeComment(commentId)
+    }
 }
