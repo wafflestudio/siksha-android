@@ -42,6 +42,6 @@ class PostPagingSource(
 
     companion object {
         const val STARTING_KEY = 1L
-        const val ITEMS_PER_PAGE = 30
+        const val ITEMS_PER_PAGE = 20
     }
 }

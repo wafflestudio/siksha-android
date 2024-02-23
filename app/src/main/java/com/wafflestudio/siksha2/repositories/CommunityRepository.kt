@@ -3,6 +3,7 @@ package com.wafflestudio.siksha2.repositories
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
 import javax.inject.Inject
@@ -23,4 +24,8 @@ class CommunityRepository @Inject constructor(
     }
 
     fun commentPagingSource(postId: Long) = CommentPagingSource(postId, api)
+
+    suspend fun addComment(postId: Long, content: String) {
+        api.postComment(PostCommentRequestBody(postId, content))
+    }
 }

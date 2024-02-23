@@ -31,8 +31,8 @@ class PostDetailViewModel @Inject constructor(
     private val _post = MutableStateFlow<Post>(Post())
     val post: StateFlow<Post> = _post
 
-    private val _querySignal = MutableSharedFlow<Unit>()
-    val commentPagingData = _querySignal.flatMapLatest {
+    private val _loadCommentSignal = MutableSharedFlow<Unit>()
+    val commentPagingData = _loadCommentSignal.flatMapLatest {
         Pager(
             config = PagingConfig(
                 pageSize = CommentPagingSource.ITEMS_PER_PAGE
@@ -46,7 +46,11 @@ class PostDetailViewModel @Inject constructor(
             _post.value = communityRepository.getPost(
                 PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
             )
-            _querySignal.emit(Unit)
+            _loadCommentSignal.emit(Unit)
         }
+    }
+
+    suspend fun addComment(content: String) {
+        communityRepository.addComment(_post.value.id, content)
     }
 }
