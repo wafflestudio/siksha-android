@@ -51,6 +51,14 @@ class PostDetailViewModel @Inject constructor(
     }
 
     suspend fun addComment(content: String) {
-        communityRepository.addComment(_post.value.id, content)
+        communityRepository.addCommentToPost(_post.value.id, content)
+    }
+
+    suspend fun likePost() {
+        _post.value = communityRepository.likePost(_post.value.id)
+    }
+
+    suspend fun unlikePost() {
+        _post.value = communityRepository.unlikePost(_post.value.id)
     }
 }

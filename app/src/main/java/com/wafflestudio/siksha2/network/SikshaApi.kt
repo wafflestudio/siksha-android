@@ -109,4 +109,14 @@ interface SikshaApi {
     suspend fun postComment(
         @Body body: PostCommentRequestBody
     ): PostCommentResponse
+
+    @POST("/community/posts/{post_id}/like")
+    suspend fun postLikePost(
+        @Path("post_id") postId: Long
+    ): PostLikePostResponse
+
+    @POST("/community/posts/{post_id}/unlike")
+    suspend fun postUnlikePost(
+        @Path("post_id") postId: Long
+    ): PostUnlikePostResponse
 }
