@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -45,8 +46,10 @@ import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun PostDetailScreen(
     onNavigateUp: () -> Unit,
@@ -58,6 +61,7 @@ fun PostDetailScreen(
     val board by postListViewModel.selectedBoard.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
     var commentInput by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -172,6 +176,13 @@ fun PostDetailScreen(
                 trailingIcon = {
                     Box(
                         modifier = Modifier
+                            .clickable {
+                                scope.launch {
+                                    postDetailViewModel.addComment(commentInput)
+                                    comments.refresh()
+                                    commentInput = ""
+                                }
+                            }
                             .background(
                                 color = SikshaColors.White900,
                                 shape = RoundedCornerShape(16.dp)

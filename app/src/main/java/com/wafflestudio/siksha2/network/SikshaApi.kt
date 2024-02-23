@@ -104,4 +104,9 @@ interface SikshaApi {
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
     ): GetCommentsResult
+
+    @POST("/community/comments")
+    suspend fun postComment(
+        @Body body: PostCommentRequestBody
+    ): PostCommentResponse
 }
