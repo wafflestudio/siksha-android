@@ -39,6 +39,7 @@ import com.wafflestudio.siksha2.components.compose.EditText
 import com.wafflestudio.siksha2.components.compose.LikeIconWithCount
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.models.Comment
+import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.EtcIcon
 import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
@@ -79,90 +80,21 @@ fun PostDetailScreen(
                     )
                 }
             )
-            Column(
-                modifier = Modifier.padding(start = 35.dp, end = 35.dp, top = 30.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = post.nickname,
-                        color = SikshaColors.Gray400,
-                        fontSize = 12.sp,
-                        style = SikshaTypography.body2
-                    )
-                    Text(
-                        text = post.updatedAt.toParsedTimeString(),
-                        color = SikshaColors.Gray400,
-                        fontSize = 12.sp,
-                        style = SikshaTypography.body2
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = post.title,
-                    style = SikshaTypography.subtitle2,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Spacer(modifier = Modifier.height(13.dp))
-                Text(
-                    text = post.content,
-                    style = SikshaTypography.body2
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                post.etc?.images?.let { images ->
-                    HorizontalPager(
-                        state = rememberPagerState(initialPage = 0, pageCount = { images.size }),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        images.forEach {
-                            SubcomposeAsyncImage(
-                                model = it,
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .aspectRatio(1f),
-                                loading = {
-                                    CircularProgressIndicator()
-                                },
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-                    }
-                }
-                Spacer(modifier = Modifier.height(18.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        LikeIconWithCount(
-                            likeCount = post.likeCount,
-                            isLiked = post.isLiked,
-                            onClick = {
-                                scope.launch {
-                                    when (post.isLiked) {
-                                        true -> postDetailViewModel.unlikePost()
-                                        false -> postDetailViewModel.likePost()
-                                    }
+            LazyColumn {
+                item {
+                    PostBody(
+                        post = post,
+                        onClickLike = {
+                            scope.launch {
+                                when (post.isLiked) {
+                                    true -> postDetailViewModel.unlikePost()
+                                    false -> postDetailViewModel.likePost()
                                 }
                             }
-                        )
-                        CommentIconWithCount(
-                            commentCount = post.commentCount
-                        )
-                    }
-                    EtcIcon()
+                        }
+                    )
+                    Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
                 }
-            }
-            Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
-            LazyColumn {
                 items(comments.itemCount) {
                     comments[it]?.let { comment ->
                         CommentItem(
@@ -225,11 +157,95 @@ fun PostDetailScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun PostBody(
+    post: Post,
+    modifier: Modifier = Modifier,
+    onClickLike: () -> Unit = {}
+) {
+    Column(
+        modifier = modifier.padding(start = 35.dp, end = 35.dp, top = 30.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = post.nickname,
+                color = SikshaColors.Gray400,
+                fontSize = 12.sp,
+                style = SikshaTypography.body2
+            )
+            Text(
+                text = post.updatedAt.toParsedTimeString(),
+                color = SikshaColors.Gray400,
+                fontSize = 12.sp,
+                style = SikshaTypography.body2
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = post.title,
+            style = SikshaTypography.subtitle2,
+            fontWeight = FontWeight.ExtraBold
+        )
+        Spacer(modifier = Modifier.height(13.dp))
+        Text(
+            text = post.content,
+            style = SikshaTypography.body2
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        post.etc?.images?.let { images ->
+            HorizontalPager(
+                state = rememberPagerState(initialPage = 0, pageCount = { images.size }),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                images.forEach {
+                    SubcomposeAsyncImage(
+                        model = it,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f),
+                        loading = {
+                            CircularProgressIndicator()
+                        },
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(18.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                LikeIconWithCount(
+                    likeCount = post.likeCount,
+                    isLiked = post.isLiked,
+                    onClick = onClickLike
+                )
+                CommentIconWithCount(
+                    commentCount = post.commentCount
+                )
+            }
+            EtcIcon()
+        }
+    }
+}
+
 @Composable
 fun CommentItem(
     comment: Comment,
     modifier: Modifier = Modifier,
-    onClickLike: () -> Unit = {},
+    onClickLike: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -243,11 +259,15 @@ fun CommentItem(
             Row {
                 Text(
                     text = comment.nickname,
+                    color = SikshaColors.Gray400,
+                    fontSize = 12.sp,
                     style = SikshaTypography.body2
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = comment.updatedAt.toParsedTimeString(),
+                    color = SikshaColors.Gray400,
+                    fontSize = 12.sp,
                     style = SikshaTypography.body2
                 )
             }
