@@ -144,7 +144,15 @@ fun PostDetailScreen(
                     ) {
                         LikeIconWithCount(
                             likeCount = post.likeCount,
-                            isLiked = post.isLiked
+                            isLiked = post.isLiked,
+                            onClick = {
+                                scope.launch {
+                                    when (post.isLiked) {
+                                        true -> postDetailViewModel.unlikePost()
+                                        false -> postDetailViewModel.likePost()
+                                    }
+                                }
+                            }
                         )
                         CommentIconWithCount(
                             commentCount = post.commentCount
