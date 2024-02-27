@@ -20,7 +20,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.wafflestudio.siksha2.R
 
 @Composable
-fun ItemReviewImageDialog(
+fun MenuReviewImageDialog(
     url: Uri,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
@@ -29,7 +29,7 @@ fun ItemReviewImageDialog(
         onDismissRequest = onDismiss,
         content = {
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .padding(20.dp)
                     .heightIn(0.dp, 330.dp)
                     .widthIn(0.dp, 300.dp)

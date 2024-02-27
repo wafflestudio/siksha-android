@@ -18,7 +18,7 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
 
 @Composable
-fun ErrorComponent(
+fun ErrorPlaceHolder(
     modifier: Modifier = Modifier
 ) {
     Column(

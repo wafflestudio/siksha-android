@@ -14,7 +14,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.wafflestudio.siksha2.R
 
 @Composable
-fun LoadingComponent(
+fun LoadingPlaceHolder(
     modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.ani_loading))

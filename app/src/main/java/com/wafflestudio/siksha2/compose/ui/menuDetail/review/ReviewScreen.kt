@@ -48,6 +48,7 @@ fun ReviewScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
+        // TODO: 커뮤니티탭 머지 후 TopBar로 수정
         Box(
             modifier = Modifier
                 .fillMaxWidth()

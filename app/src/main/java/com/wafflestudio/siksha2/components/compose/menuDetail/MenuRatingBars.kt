@@ -24,9 +24,10 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
+import kotlin.math.max
 
 @Composable
-fun ItemRatingBar(
+fun MenuRatingBar(
     ratingIndex: Int,
     ratio: Float,
     modifier: Modifier = Modifier
@@ -75,30 +76,20 @@ fun ItemRatingBar(
 }
 
 @Composable
-fun ItemRatingBars(
-    distList: List<Long>,
+fun MenuRatingBars(
+    distributions: List<Long>,
     modifier: Modifier = Modifier
 ) {
-    var maxCount = 1L
-    distList.forEach { if (maxCount < it) maxCount = it }
+    val maxCount = max(distributions.max(), 1L)
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        distList.reversed().forEachIndexed { index, cnt ->
-            ItemRatingBar(
+        distributions.reversed().forEachIndexed { index, cnt ->
+            MenuRatingBar(
                 ratingIndex = 5 - index,
                 ratio = cnt.toFloat() / maxCount.toFloat()
             )
         }
     }
-}
-
-@Composable
-@Preview
-fun ItemRatingBarsPreview() {
-    ItemRatingBars(
-        distList = listOf(5L, 2L, 1L, 0L, 2L),
-        modifier = Modifier.width(160.dp)
-    )
 }

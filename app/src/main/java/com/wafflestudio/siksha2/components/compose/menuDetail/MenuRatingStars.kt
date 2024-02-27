@@ -15,7 +15,7 @@ import com.wafflestudio.siksha2.R
 import kotlin.math.roundToInt
 
 @Composable
-private fun ItemReviewSingleStar(
+private fun MenuReviewSingleStar(
     modifier: Modifier = Modifier,
     flag: Int
 ) {
@@ -33,7 +33,7 @@ private fun ItemReviewSingleStar(
 }
 
 @Composable
-fun ItemRatingStars(
+fun MenuRatingStars(
     rating: Float,
     dragEnabled: Boolean = false,
     size: Int = 0
@@ -53,24 +53,12 @@ fun ItemRatingStars(
         horizontalArrangement = Arrangement.spacedBy(gap)
     ) {
         for (i in 1..5) {
-            ItemReviewSingleStar(
+            MenuReviewSingleStar(
                 flag = i * 2 - rounds,
                 modifier = Modifier
                     .width(starMeasure)
                     .height(starMeasure)
             )
         }
-    }
-}
-
-@Composable
-@Preview
-private fun StarsPreview() {
-    Column() {
-        ItemRatingStars(rating = 0.0f)
-        ItemRatingStars(rating = 1.0f, size = 2)
-        ItemRatingStars(rating = 2.5f, size = 1)
-        ItemRatingStars(rating = 3.5f)
-        ItemRatingStars(rating = 5.0f)
     }
 }

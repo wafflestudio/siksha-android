@@ -70,7 +70,7 @@ fun ItemReview(
                         fontFamily = NanumSquareFontFamily,
                         fontWeight = FontWeight.Bold
                     )
-                    ItemRatingStars(review?.score?.toFloat() ?: 0.0f)
+                    MenuRatingStars(review?.score?.toFloat() ?: 0.0f)
                 }
             }
             Text(
@@ -115,7 +115,7 @@ fun ItemReview(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 for (imageUri in review?.etc?.images ?: listOf()) {
-                    ItemReviewImage(
+                    MenuReviewImage(
                         imageUri = Uri.parse(imageUri),
                         modifier = Modifier.size(100.dp)
                             .clip(shape = RoundedCornerShape(8.dp))

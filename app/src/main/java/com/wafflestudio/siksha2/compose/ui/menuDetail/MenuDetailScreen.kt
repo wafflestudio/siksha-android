@@ -42,13 +42,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.components.compose.ErrorComponent
-import com.wafflestudio.siksha2.components.compose.LoadingComponent
+import com.wafflestudio.siksha2.components.compose.ErrorPlaceHolder
+import com.wafflestudio.siksha2.components.compose.LoadingPlaceHolder
 import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
-import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingBars
-import com.wafflestudio.siksha2.components.compose.menuDetail.ItemRatingStars
+import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingBars
+import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReview
-import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReviewImage
+import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImage
 import com.wafflestudio.siksha2.components.compose.menuDetail.LikeButton
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailFragmentDirections
@@ -213,13 +213,13 @@ fun MenuDetailScreen(
                                             fontFamily = NanumSquareFontFamily,
                                             fontWeight = FontWeight.ExtraBold
                                         )
-                                        ItemRatingStars(
+                                        MenuRatingStars(
                                             rating = menu?.score?.toFloat() ?: 0.0f
                                         )
                                     }
                                     menuDetailViewModel.reviewDistribution.value?.let {
-                                        ItemRatingBars(
-                                            distList = it,
+                                        MenuRatingBars(
+                                            distributions = it,
                                             modifier = Modifier.weight(1f)
                                         )
                                     }
@@ -316,7 +316,7 @@ fun MenuDetailScreen(
                                         )
                                         else -> {
                                             if (i == 3) {
-                                                ItemReviewImage(
+                                                MenuReviewImage(
                                                     imageUri = Uri.parse(it),
                                                     modifier = Modifier
                                                         .size(120.dp)
@@ -332,7 +332,7 @@ fun MenuDetailScreen(
                                                     }
                                                 )
                                             } else {
-                                                ItemReviewImage(
+                                                MenuReviewImage(
                                                     imageUri = Uri.parse(it),
                                                     modifier = Modifier
                                                         .size(120.dp)
@@ -410,14 +410,14 @@ fun MenuDetailScreen(
                 }
             }
             MenuDetailViewModel.State.LOADING -> {
-                LoadingComponent(
+                LoadingPlaceHolder(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 )
             }
             MenuDetailViewModel.State.FAILED -> {
-                ErrorComponent(
+                ErrorPlaceHolder(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
