@@ -49,6 +49,7 @@ import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImage
 import com.wafflestudio.siksha2.components.compose.menuDetail.LikeButton
+import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImageShowMore
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailFragmentDirections
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
@@ -306,12 +307,12 @@ fun MenuDetailScreen(
                                         )
                                         else -> {
                                             if (i == 3) {
-                                                MenuReviewImage(
+                                                MenuReviewImageShowMore(
                                                     imageUri = Uri.parse(it),
                                                     modifier = Modifier
                                                         .size(120.dp)
                                                         .clip(RoundedCornerShape(10.dp)),
-                                                    showMore = imageReviews.itemCount - 2,
+                                                    showMoreCount = imageReviews.itemCount - 2,
                                                     onShowMore = {
                                                         navController.navigate(
                                                             MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(
