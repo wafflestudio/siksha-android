@@ -44,7 +44,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.ErrorPlaceHolder
 import com.wafflestudio.siksha2.components.compose.LoadingPlaceHolder
-import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingBars
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
@@ -105,7 +104,6 @@ fun MenuDetailScreen(
                     .fillMaxWidth(0.72f)
                     .align(Alignment.Center),
                 fontSize = dpToSp(20.dp),
-                fontFamily = NanumSquareFontFamily,
                 fontWeight = FontWeight.Bold,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
@@ -140,7 +138,6 @@ fun MenuDetailScreen(
                                 Text(
                                     text = "좋아요 " + (menu?.likeCount ?: 0).toString() + "개",
                                     fontSize = dpToSp(14.dp),
-                                    fontFamily = NanumSquareFontFamily,
                                     fontWeight = FontWeight.Normal
                                 )
                             }
@@ -169,28 +166,24 @@ fun MenuDetailScreen(
                                         text = "총 ",
                                         color = SikshaColors.Gray800,
                                         fontSize = dpToSp(10.dp),
-                                        fontFamily = NanumSquareFontFamily,
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
                                         text = reviews?.itemCount.toString(),
                                         color = SikshaColors.OrangeMain,
                                         fontSize = dpToSp(10.dp),
-                                        fontFamily = NanumSquareFontFamily,
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
                                         text = "명",
                                         color = SikshaColors.OrangeMain,
                                         fontSize = dpToSp(10.dp),
-                                        fontFamily = NanumSquareFontFamily,
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
                                         text = "이 평가했어요!",
                                         color = SikshaColors.Gray800,
                                         fontSize = dpToSp(10.dp),
-                                        fontFamily = NanumSquareFontFamily,
                                         fontWeight = FontWeight.Bold
                                     )
                                 }
@@ -210,7 +203,6 @@ fun MenuDetailScreen(
                                             menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
                                             }",
                                             fontSize = dpToSp(32.dp),
-                                            fontFamily = NanumSquareFontFamily,
                                             fontWeight = FontWeight.ExtraBold
                                         )
                                         MenuRatingStars(
@@ -239,7 +231,6 @@ fun MenuDetailScreen(
                                     Text(
                                         text = "나의 평가 남기기",
                                         fontSize = dpToSp(14.dp),
-                                        fontFamily = NanumSquareFontFamily,
                                         fontWeight = FontWeight.ExtraBold,
                                         color = SikshaColors.White900,
                                         modifier = Modifier
@@ -279,7 +270,6 @@ fun MenuDetailScreen(
                                 Text(
                                     text = "사진 리뷰 모아보기",
                                     fontSize = dpToSp(14.dp),
-                                    fontFamily = NanumSquareFontFamily,
                                     fontWeight = FontWeight.Normal,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
@@ -358,7 +348,6 @@ fun MenuDetailScreen(
                                 Text(
                                     text = "리뷰",
                                     fontSize = dpToSp(14.dp),
-                                    fontFamily = NanumSquareFontFamily,
                                     fontWeight = FontWeight.Normal,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
@@ -401,7 +390,6 @@ fun MenuDetailScreen(
                                 Text(
                                     text = "리뷰가 없습니다.",
                                     fontSize = dpToSp(18.dp),
-                                    fontFamily = NanumSquareFontFamily,
                                     fontWeight = FontWeight.Light,
                                     modifier = Modifier.align(Alignment.Center),
                                     color = SikshaColors.Gray600

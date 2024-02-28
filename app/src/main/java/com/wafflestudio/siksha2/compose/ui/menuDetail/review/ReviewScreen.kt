@@ -24,7 +24,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
@@ -71,7 +70,6 @@ fun ReviewScreen(
                     .padding(horizontal = 10.dp, vertical = 12.dp)
                     .align(Alignment.Center),
                 fontSize = dpToSp(20.dp),
-                fontFamily = NanumSquareFontFamily,
                 fontWeight = FontWeight.Bold,
                 color = SikshaColors.White900
             )
@@ -86,7 +84,6 @@ fun ReviewScreen(
                 Text(
                     text = "리뷰가 없습니다.",
                     fontSize = dpToSp(18.dp),
-                    fontFamily = NanumSquareFontFamily,
                     fontWeight = FontWeight.Normal,
                     modifier = Modifier.align(Alignment.Center),
                     color = SikshaColors.Gray600

@@ -31,8 +31,7 @@ fun MenuReviewImageDialog(
             Column(
                 modifier = modifier
                     .padding(20.dp)
-                    .heightIn(0.dp, 330.dp)
-                    .widthIn(0.dp, 300.dp)
+                    .size(width = 300.dp, height = 300.dp)
                     .fillMaxSize()
             ) {
                 Image(

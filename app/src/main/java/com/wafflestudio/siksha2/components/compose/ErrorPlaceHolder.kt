@@ -35,7 +35,6 @@ fun ErrorPlaceHolder(
         Text(
             text = "네트워크 연결이 불안정합니다.",
             fontSize = dpToSp(20.dp),
-            fontFamily = NanumSquareFontFamily,
             fontWeight = FontWeight.Light,
             modifier = Modifier.padding(top = 20.dp)
         )

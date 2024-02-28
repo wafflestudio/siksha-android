@@ -25,7 +25,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
@@ -65,7 +64,6 @@ fun MenuReview(
                         text = "ID" + (review.userId),
                         color = SikshaColors.Black900,
                         fontSize = dpToSp(12.dp),
-                        fontFamily = NanumSquareFontFamily,
                         fontWeight = FontWeight.Bold
                     )
                     MenuRatingStars(
@@ -79,7 +77,6 @@ fun MenuReview(
                     .align(Alignment.TopEnd)
                     .padding(end = 10.dp),
                 fontSize = dpToSp(12.dp),
-                fontFamily = NanumSquareFontFamily,
                 fontWeight = FontWeight.Bold,
                 color = SikshaColors.Gray500
             )
@@ -98,12 +95,11 @@ fun MenuReview(
             Text(
                 text = review.comment ?: "",
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.TopCenter)
                     .fillMaxWidth()
                     .padding(start = 30.dp, end = 10.dp, top = 13.dp, bottom = 15.dp),
                 color = SikshaColors.Gray800,
                 fontSize = dpToSp(dp = 12.dp),
-                fontFamily = NanumSquareFontFamily,
                 fontWeight = FontWeight.Normal
             )
         }
