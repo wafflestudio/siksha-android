@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,7 +66,7 @@ fun ReviewScreen(
                     }
             )
             Text(
-                text = "리뷰",
+                text = stringResource(R.string.review_title),
                 modifier = Modifier
                     .padding(horizontal = 10.dp, vertical = 12.dp)
                     .align(Alignment.Center),
@@ -82,7 +83,7 @@ fun ReviewScreen(
         ) {
             if (reviews == null || reviews.itemCount == 0) {
                 Text(
-                    text = "리뷰가 없습니다.",
+                    text = stringResource(R.string.review_nothing),
                     fontSize = dpToSp(18.dp),
                     fontWeight = FontWeight.Normal,
                     modifier = Modifier.align(Alignment.Center),

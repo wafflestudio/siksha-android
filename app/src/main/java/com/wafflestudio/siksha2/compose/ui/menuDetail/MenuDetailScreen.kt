@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -74,7 +75,7 @@ fun MenuDetailScreen(
     val imagePreviewScrollState = rememberScrollState()
     val context = LocalContext.current
 
-    LaunchedEffect(menuDetailViewModel) {
+    LaunchedEffect(Unit) {
         menuDetailViewModel.refreshMenu(menuId)
         menuDetailViewModel.refreshReviewDistribution(menuId)
     }
@@ -99,7 +100,7 @@ fun MenuDetailScreen(
                     }
             )
             Text(
-                text = menu?.nameKr ?: "리뷰",
+                text = menu?.nameKr ?: stringResource(R.string.review_title),
                 modifier = Modifier
                     .padding(horizontal = 10.dp, vertical = 12.dp)
                     .fillMaxWidth(0.72f)
@@ -137,7 +138,9 @@ fun MenuDetailScreen(
                                     modifier = Modifier.size(21.dp)
                                 )
                                 Text(
-                                    text = "좋아요 " + (menu?.likeCount ?: 0).toString() + "개",
+                                    text = stringResource(R.string.review_like_prefix)
+                                        + (menu?.likeCount ?: 0).toString()
+                                        + stringResource(R.string.review_like_suffix),
                                     fontSize = dpToSp(14.dp),
                                     fontWeight = FontWeight.Normal
                                 )
@@ -164,7 +167,7 @@ fun MenuDetailScreen(
                                     horizontalArrangement = Arrangement.Center
                                 ) {
                                     Text(
-                                        text = "총 ",
+                                        text = stringResource(R.string.review_count_prefix),
                                         color = SikshaColors.Gray800,
                                         fontSize = dpToSp(10.dp),
                                         fontWeight = FontWeight.Bold
@@ -176,13 +179,13 @@ fun MenuDetailScreen(
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = "명",
+                                        text = stringResource(R.string.review_count_suffix_orange),
                                         color = SikshaColors.OrangeMain,
                                         fontSize = dpToSp(10.dp),
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = "이 평가했어요!",
+                                        text = stringResource(R.string.review_count_suffix_black),
                                         color = SikshaColors.Gray800,
                                         fontSize = dpToSp(10.dp),
                                         fontWeight = FontWeight.Bold
@@ -230,7 +233,7 @@ fun MenuDetailScreen(
                                         .align(Alignment.CenterHorizontally)
                                 ) {
                                     Text(
-                                        text = "나의 평가 남기기",
+                                        text = stringResource(R.string.menu_detail_leave_review_button),
                                         fontSize = dpToSp(14.dp),
                                         fontWeight = FontWeight.ExtraBold,
                                         color = SikshaColors.White900,
@@ -238,13 +241,17 @@ fun MenuDetailScreen(
                                             .align(Alignment.Center)
                                             .clickable {
                                                 if (isTodayMenu) {
-                                                    navController.navigate(MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment())
+                                                    navController.navigate(
+                                                        MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()
+                                                    )
                                                 } else {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "오늘 메뉴만 평가할 수 있습니다.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    Toast
+                                                        .makeText(
+                                                            context,
+                                                            "오늘 메뉴만 평가할 수 있습니다.",
+                                                            Toast.LENGTH_SHORT
+                                                        )
+                                                        .show()
                                                 }
                                             }
                                     )
@@ -269,14 +276,14 @@ fun MenuDetailScreen(
                                     .height(50.dp)
                             ) {
                                 Text(
-                                    text = "사진 리뷰 모아보기",
+                                    text = stringResource(R.string.menu_detail_photo_review_gather),
                                     fontSize = dpToSp(14.dp),
                                     fontWeight = FontWeight.Normal,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                                 Image(
                                     painter = painterResource(R.drawable.ic_back_arrow),
-                                    contentDescription = "사진 리뷰 모아보기",
+                                    contentDescription = stringResource(R.string.menu_detail_photo_review_gather),
                                     colorFilter = ColorFilter.tint(SikshaColors.Gray400),
                                     modifier = Modifier
                                         .align(Alignment.CenterEnd)
@@ -347,7 +354,7 @@ fun MenuDetailScreen(
                                     .height(50.dp)
                             ) {
                                 Text(
-                                    text = "리뷰",
+                                    text = stringResource(R.string.menu_detail_review_gather),
                                     fontSize = dpToSp(14.dp),
                                     fontWeight = FontWeight.Normal,
                                     modifier = Modifier.align(Alignment.CenterStart)
@@ -389,7 +396,7 @@ fun MenuDetailScreen(
                                     .fillMaxWidth()
                             ) {
                                 Text(
-                                    text = "리뷰가 없습니다.",
+                                    text = stringResource(R.string.review_nothing),
                                     fontSize = dpToSp(18.dp),
                                     fontWeight = FontWeight.Light,
                                     modifier = Modifier.align(Alignment.Center),
