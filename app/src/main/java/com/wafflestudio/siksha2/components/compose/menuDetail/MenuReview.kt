@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,11 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
-import com.wafflestudio.siksha2.models.Etc
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.utils.dpToSp
@@ -36,8 +33,8 @@ import com.wafflestudio.siksha2.utils.toKoreanDate
 import com.wafflestudio.siksha2.utils.toLocalDateTime
 
 @Composable
-fun ItemReview(
-    review: Review?,
+fun MenuReview(
+    review: Review,
     modifier: Modifier = Modifier,
     showImage: Boolean = true
 ) {
@@ -65,19 +62,19 @@ fun ItemReview(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "ID" + (review?.userId ?: ""),
+                        text = "ID" + (review.userId),
                         color = SikshaColors.Black900,
                         fontSize = dpToSp(12.dp),
                         fontFamily = NanumSquareFontFamily,
                         fontWeight = FontWeight.Bold
                     )
                     MenuRatingStars(
-                        rating = review?.score?.toFloat() ?: 0.0f
+                        rating = review.score.toFloat()
                     )
                 }
             }
             Text(
-                text = review?.createdAt?.toLocalDateTime()?.toLocalDate()?.toKoreanDate() ?: "-",
+                text = review.createdAt.toLocalDateTime().toLocalDate()?.toKoreanDate() ?: "-",
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = 10.dp),
@@ -99,7 +96,7 @@ fun ItemReview(
                     .matchParentSize()
             )
             Text(
-                text = review?.comment ?: "",
+                text = review.comment ?: "",
                 modifier = Modifier
                     .align(Alignment.Center)
                     .fillMaxWidth()
@@ -117,7 +114,7 @@ fun ItemReview(
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                for (imageUri in review?.etc?.images ?: listOf()) {
+                for (imageUri in review.etc?.images ?: listOf()) {
                     MenuReviewImage(
                         imageUri = Uri.parse(imageUri),
                         modifier = Modifier.size(100.dp)
@@ -126,51 +123,5 @@ fun ItemReview(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun ItemReviewPreview() {
-    Column {
-        ItemReview(
-            review = Review(
-                id = 0,
-                menuId = 0,
-                userId = 1234,
-                score = 5.0,
-                comment = "그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 그냥저냥 먹을만해요 ",
-                createdAt = "2023-11-29T09:40:10.322Z",
-                etc = Etc(
-                    images = listOf(
-                        "https://postfiles.pstatic.net/MjAyMzExMjZfMjcy/MDAxNzAwOTI3NTczMDY5.c9qVmjXE0nBVZpKukBxB9EB0LytpB5Olc6psLGQdWLQg.-D-zLjlG7bIPYm8XmYzK9-l1vitTZAGcimoHM57QATAg.JPEG.jyurisenpai/20231121203650_1.jpg?type=w773",
-                        "https://postfiles.pstatic.net/MjAyMzExMjZfMjU5/MDAxNzAwOTI3MjgxMjAz.f7jMVmS7vYGWKWswaOnnxCjgmaN0qgSt0_2VLB-XZrog.WMa7r-nHh9zw_QXO15bA4ts2NabuiEtQQkM6XYSiA1Ug.JPEG.jyurisenpai/20231118200550_1.jpg?type=w773",
-                        "https://postfiles.pstatic.net/MjAyMzExMjZfODAg/MDAxNzAwOTI5MDI4NDE3.kprldbXZmLtHlIh2AFuu9jCeWiXbXeO6pF5OpxpJB3Mg.U8aqpMqPJz4bORV05B8M8oVBF9KXTTJhY1oN17NlkaAg.JPEG.jyurisenpai/20231121211321_1.jpg?type=w773"
-                    )
-                )
-            )
-        )
-        ItemReview(
-            review = Review(
-                id = 0,
-                menuId = 0,
-                userId = 1234,
-                score = 3.5,
-                comment = "그냥저냥 먹을만해요 ",
-                createdAt = "2023-11-29T09:40:10.322Z",
-                etc = null
-            )
-        )
-        ItemReview(
-            review = Review(
-                id = 0,
-                menuId = 0,
-                userId = 1234,
-                score = 1.0,
-                comment = "맛없어요\n\n\nㅠ",
-                createdAt = "2023-11-29T09:40:10.322Z",
-                etc = null
-            )
-        )
     }
 }

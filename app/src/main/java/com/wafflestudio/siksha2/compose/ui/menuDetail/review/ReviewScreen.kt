@@ -25,7 +25,7 @@ import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
-import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReview
+import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.dpToSp
@@ -101,13 +101,15 @@ fun ReviewScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                     items(reviews.itemCount) {
-                        ItemReview(
-                            review = reviews[it],
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            showImage = showImages
-                        )
+                        reviews[it]?.let { review ->
+                            MenuReview(
+                                review = review,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
+                                showImage = showImages
+                            )
+                        }
                     }
                     item {
                         Spacer(modifier = Modifier.height(20.dp))

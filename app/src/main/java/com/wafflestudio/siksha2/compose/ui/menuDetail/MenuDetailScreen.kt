@@ -47,7 +47,7 @@ import com.wafflestudio.siksha2.components.compose.LoadingPlaceHolder
 import com.wafflestudio.siksha2.components.compose.NanumSquareFontFamily
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingBars
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingStars
-import com.wafflestudio.siksha2.components.compose.menuDetail.ItemReview
+import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImage
 import com.wafflestudio.siksha2.components.compose.menuDetail.LikeButton
 import com.wafflestudio.siksha2.ui.SikshaColors
@@ -381,13 +381,15 @@ fun MenuDetailScreen(
                             }
                         }
                         items(reviews.itemCount) {
-                            ItemReview(
-                                review = reviews[it],
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                showImage = true
-                            )
+                            reviews[it]?.let { review ->
+                                MenuReview(
+                                    review = review,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
+                                    showImage = true
+                                )
+                            }
                         }
                     } else {
                         item {
