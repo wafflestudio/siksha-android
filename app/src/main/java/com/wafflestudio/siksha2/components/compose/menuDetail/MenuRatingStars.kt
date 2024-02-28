@@ -4,7 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,36 +31,24 @@ private fun MenuReviewSingleStar(
             }
         ),
         contentDescription = null,
-        modifier = modifier
+        modifier = modifier.heightIn(max = 48.dp).fillMaxHeight().aspectRatio(1f)
     )
 }
 
 @Composable
 fun MenuRatingStars(
     rating: Float,
-    dragEnabled: Boolean = false,
-    size: Int = 0
+    modifier: Modifier = Modifier.width(100.dp).height(18.dp),
+    dragEnabled: Boolean = false
 ) {
     val rounds = (rating * 2).roundToInt()
-    val starMeasure = when (size) {
-        2 -> 48.dp
-        1 -> 33.dp
-        else -> 18.dp
-    }
-    val gap = when (size) {
-        2 -> 12.dp
-        1 -> 8.dp
-        else -> 4.dp
-    }
     Row(
-        horizontalArrangement = Arrangement.spacedBy(gap)
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         for (i in 1..5) {
             MenuReviewSingleStar(
-                flag = i * 2 - rounds,
-                modifier = Modifier
-                    .width(starMeasure)
-                    .height(starMeasure)
+                flag = i * 2 - rounds
             )
         }
     }
