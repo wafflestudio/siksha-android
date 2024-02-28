@@ -65,12 +65,6 @@ class DailyRestaurantFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            vm.featureEnabled.collect {
-                binding.featureTest.setVisibleOrGone(it)
-            }
-        }
-
         gestureDetector = GestureDetector(
             requireContext(),
             object : GestureDetector.OnGestureListener {
