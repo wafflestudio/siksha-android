@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
 import androidx.lifecycle.*
+import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
@@ -16,8 +17,12 @@ import javax.inject.Inject
 @HiltViewModel
 class DailyRestaurantViewModel @Inject constructor(
     private val menuRepository: MenuRepository,
-    private val restaurantRepository: RestaurantRepository
+    private val restaurantRepository: RestaurantRepository,
+    private val featureChecker: FeatureChecker
 ) : ViewModel() {
+
+    val featureEnabled = featureChecker.observeFeatureFlagChanges("communityFeatureEnabled")
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
     private val _dateFilter = MutableLiveData<LocalDate>(LocalDate.now())
     val dateFilter: LiveData<LocalDate> = _dateFilter
