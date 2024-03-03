@@ -130,7 +130,7 @@ class LeaveReviewFragment : Fragment() {
         }
 
         vm.leaveLeaveReviewState.observe(viewLifecycleOwner) {
-            binding.onLoadingContainer.root.setVisibleOrGone(it == MenuDetailViewModel.ReviewState.COMPRESSING)
+            binding.onLoadingContainer.root.setVisibleOrGone(it == LeaveReviewState.COMPRESSING)
         }
 
         binding.closeButton.setOnClickListener {

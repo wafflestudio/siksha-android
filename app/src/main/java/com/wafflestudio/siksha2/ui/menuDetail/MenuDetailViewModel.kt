@@ -96,7 +96,7 @@ class MenuDetailViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reviewsWithImage: StateFlow<PagingData<Review>> =
-        _menu.asFlow().filterNotNull().flatMapLatest {menu ->
+        _menu.asFlow().filterNotNull().flatMapLatest { menu ->
             Pager(
                 config = MenuReviewWithImagePagingSource.Config,
                 pagingSourceFactory = {

@@ -136,9 +136,9 @@ fun MenuDetailScreen(
                                     modifier = Modifier.size(21.dp)
                                 )
                                 Text(
-                                    text = stringResource(R.string.review_like_prefix)
-                                        + (menu?.likeCount ?: 0).toString()
-                                        + stringResource(R.string.review_like_suffix),
+                                    text = stringResource(R.string.review_like_prefix) +
+                                        (menu?.likeCount ?: 0).toString() +
+                                        stringResource(R.string.review_like_suffix),
                                     fontSize = dpToSp(14.dp),
                                     fontWeight = FontWeight.Medium
                                 )
@@ -171,7 +171,7 @@ fun MenuDetailScreen(
                                         fontWeight = FontWeight.Bold
                                     )
                                     Text(
-                                        text = reviews?.itemCount.toString(),
+                                        text = reviews.itemCount.toString(),
                                         color = SikshaColors.OrangeMain,
                                         fontSize = dpToSp(10.dp),
                                         fontWeight = FontWeight.Bold
