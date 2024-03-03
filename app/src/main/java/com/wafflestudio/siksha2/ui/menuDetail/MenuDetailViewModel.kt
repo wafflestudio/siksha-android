@@ -10,6 +10,7 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.repositories.MenuRepository
@@ -20,9 +21,13 @@ import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -69,33 +74,27 @@ class MenuDetailViewModel @Inject constructor(
     val leaveReviewState: LiveData<ReviewState>
         get() = _leaveReviewState
 
-    val reviews: StateFlow<Flow<PagingData<Review>>?> =
-        _menu.asFlow().map { menu ->
-            if (menu != null) {
-                Pager(
-                    config = MenuReviewPagingSource.Config,
-                    pagingSourceFactory = {
-                        menuRepository.menuReviewPagingSource(menu.id)
-                    }
-                ).flow
-            } else {
-                null
-            }
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviews: StateFlow<PagingData<Review>> =
+        _menu.asFlow().filterNotNull().flatMapLatest { menu ->
+            Pager(
+                config = MenuReviewPagingSource.Config,
+                pagingSourceFactory = {
+                    menuRepository.menuReviewPagingSource(menu.id)
+                }
+            ).flow.cachedIn(viewModelScope)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = PagingData.empty())
 
-    val reviewsWithImage: StateFlow<Flow<PagingData<Review>>?> =
-        _menu.asFlow().map { menu ->
-            if (menu != null) {
-                Pager(
-                    config = MenuReviewWithImagePagingSource.Config,
-                    pagingSourceFactory = {
-                        menuRepository.menuReviewWithImagePagingSource(menu.id)
-                    }
-                ).flow
-            } else {
-                null
-            }
-        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = null)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviewsWithImage: StateFlow<PagingData<Review>> =
+        _menu.asFlow().filterNotNull().flatMapLatest {menu ->
+            Pager(
+                config = MenuReviewWithImagePagingSource.Config,
+                pagingSourceFactory = {
+                    menuRepository.menuReviewWithImagePagingSource(menu.id)
+                }
+            ).flow.cachedIn(viewModelScope)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = PagingData.empty())
 
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING

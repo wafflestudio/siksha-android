@@ -37,13 +37,11 @@ fun ReviewScreen(
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
     showImages: Boolean = false
 ) {
-    val reviewFlow by
-    if (!showImages) {
-        menuDetailViewModel.reviews.collectAsState()
+    val reviews = if (!showImages) {
+        menuDetailViewModel.reviews.collectAsLazyPagingItems()
     } else {
-        menuDetailViewModel.reviewsWithImage.collectAsState()
+        menuDetailViewModel.reviewsWithImage.collectAsLazyPagingItems()
     }
-    val reviews = reviewFlow?.collectAsLazyPagingItems()
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -81,7 +79,7 @@ fun ReviewScreen(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            if (reviews == null || reviews.itemCount == 0) {
+            if (reviews.itemCount == 0) {
                 Text(
                     text = stringResource(R.string.review_nothing),
                     fontSize = dpToSp(18.dp),

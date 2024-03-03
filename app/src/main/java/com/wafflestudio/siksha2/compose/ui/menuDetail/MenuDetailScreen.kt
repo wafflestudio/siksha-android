@@ -67,10 +67,8 @@ fun MenuDetailScreen(
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel()
 ) {
     val menu by menuDetailViewModel.menu.observeAsState()
-    val reviewFlow by menuDetailViewModel.reviews.collectAsState()
-    val reviews = reviewFlow?.collectAsLazyPagingItems()
-    val imageReviewFlow by menuDetailViewModel.reviewsWithImage.collectAsState()
-    val imageReviews = imageReviewFlow?.collectAsLazyPagingItems()
+    val reviews = menuDetailViewModel.reviews.collectAsLazyPagingItems()
+    val imageReviews = menuDetailViewModel.reviewsWithImage.collectAsLazyPagingItems()
     val loadingState = menuDetailViewModel.networkResultState.observeAsState()
     val imagePreviewScrollState = rememberScrollState()
     val context = LocalContext.current
@@ -267,7 +265,7 @@ fun MenuDetailScreen(
                     }
 
                     // 사진 리뷰
-                    if (imageReviews != null && imageReviews.itemCount > 0) {
+                    if (imageReviews.itemCount > 0) {
                         item {
                             Box(
                                 modifier = Modifier
@@ -345,7 +343,7 @@ fun MenuDetailScreen(
                     }
 
                     // 일반 리뷰
-                    if (reviews != null && reviews.itemCount > 0) {
+                    if (reviews.itemCount > 0) {
                         item {
                             Box(
                                 modifier = Modifier
