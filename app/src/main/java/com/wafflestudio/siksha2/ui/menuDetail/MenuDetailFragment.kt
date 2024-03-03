@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wafflestudio.siksha2.compose.ui.menuDetail.MenuDetailScreen
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,12 +32,14 @@ class MenuDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.menuDetailComposeView.setContent {
-            MenuDetailScreen(
-                navController = findNavController(),
-                menuId = args.menuId,
-                isTodayMenu = args.isTodayMenu,
-                menuDetailViewModel = vm
-            )
+            SikshaTheme {
+                MenuDetailScreen(
+                    navController = findNavController(),
+                    menuId = args.menuId,
+                    isTodayMenu = args.isTodayMenu,
+                    menuDetailViewModel = vm
+                )
+            }
         }
     }
 }
