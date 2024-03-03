@@ -25,10 +25,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -37,6 +35,17 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
+
+enum class MenuLoadingState {
+    LOADING,
+    SUCCESS,
+    FAILED
+}
+
+enum class LeaveReviewState {
+    WAITING,
+    COMPRESSING
+}
 
 @HiltViewModel
 class MenuDetailViewModel @Inject constructor(
@@ -50,9 +59,9 @@ class MenuDetailViewModel @Inject constructor(
     val commentHint: LiveData<String>
         get() = _commentHint
 
-    private val _networkResultState = MutableLiveData<State>()
-    val networkResultState: LiveData<State>
-        get() = _networkResultState
+    private val _networkResultMenuLoadingState = MutableLiveData<MenuLoadingState>()
+    val networkResultMenuLoadingState: LiveData<MenuLoadingState>
+        get() = _networkResultMenuLoadingState
 
     private val _reviewDistribution = MutableLiveData<List<Long>>()
     val reviewDistribution: LiveData<List<Long>>
@@ -70,9 +79,9 @@ class MenuDetailViewModel @Inject constructor(
     val imageCount: LiveData<Long>
         get() = _imageCount
 
-    private val _leaveReviewState = MutableLiveData<ReviewState>(ReviewState.WAITING)
-    val leaveReviewState: LiveData<ReviewState>
-        get() = _leaveReviewState
+    private val _leaveLeaveReviewState = MutableLiveData<LeaveReviewState>(LeaveReviewState.WAITING)
+    val leaveLeaveReviewState: LiveData<LeaveReviewState>
+        get() = _leaveLeaveReviewState
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reviews: StateFlow<PagingData<Review>> =
@@ -97,13 +106,13 @@ class MenuDetailViewModel @Inject constructor(
         }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = PagingData.empty())
 
     fun refreshMenu(menuId: Long) {
-        _networkResultState.value = State.LOADING
+        _networkResultMenuLoadingState.value = MenuLoadingState.LOADING
         viewModelScope.launch {
             try {
                 _menu.value = menuRepository.getMenuById(menuId)
-                _networkResultState.value = State.SUCCESS
+                _networkResultMenuLoadingState.value = MenuLoadingState.SUCCESS
             } catch (e: IOException) {
-                _networkResultState.value = State.FAILED
+                _networkResultMenuLoadingState.value = MenuLoadingState.FAILED
             }
         }
     }
@@ -158,16 +167,16 @@ class MenuDetailViewModel @Inject constructor(
     }
 
     fun notifySendReviewEnd() {
-        _leaveReviewState.value = ReviewState.WAITING
+        _leaveLeaveReviewState.value = LeaveReviewState.WAITING
     }
 
     fun toggleLike() {
         if (menu.value != null) {
-            toggleLike(menu.value!!.id, menu.value!!.isLiked ?: false)
+            _toggleLike(menu.value!!.id, menu.value!!.isLiked ?: false)
         }
     }
 
-    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+    private fun _toggleLike(id: Long, isCurrentlyLiked: Boolean) {
         viewModelScope.launch {
             val menuItem = menuRepository.getMenuById(id)
             menuItem.isLiked = !isCurrentlyLiked
@@ -188,7 +197,7 @@ class MenuDetailViewModel @Inject constructor(
         val menuId = _menu.value?.id ?: return
         if (_imageUriList.value?.isNotEmpty() == true) {
             context.showToast("이미지 압축 중입니다.")
-            _leaveReviewState.value = ReviewState.COMPRESSING
+            _leaveLeaveReviewState.value = LeaveReviewState.COMPRESSING
             val imageList = _imageUriList.value?.map {
                 getCompressedImage(context, it)
             }
@@ -211,16 +220,5 @@ class MenuDetailViewModel @Inject constructor(
         }
         val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("images", file.name, requestBody)
-    }
-
-    enum class State {
-        LOADING,
-        SUCCESS,
-        FAILED
-    }
-
-    enum class ReviewState {
-        WAITING,
-        COMPRESSING
     }
 }

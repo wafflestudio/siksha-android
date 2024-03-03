@@ -24,7 +24,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -54,6 +53,7 @@ import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImageSho
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailFragmentDirections
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
+import com.wafflestudio.siksha2.ui.menuDetail.MenuLoadingState
 import com.wafflestudio.siksha2.utils.dpToSp
 import kotlin.math.min
 import kotlin.math.round
@@ -69,7 +69,7 @@ fun MenuDetailScreen(
     val menu by menuDetailViewModel.menu.observeAsState()
     val reviews = menuDetailViewModel.reviews.collectAsLazyPagingItems()
     val imageReviews = menuDetailViewModel.reviewsWithImage.collectAsLazyPagingItems()
-    val loadingState = menuDetailViewModel.networkResultState.observeAsState()
+    val loadingState = menuDetailViewModel.networkResultMenuLoadingState.observeAsState()
     val imagePreviewScrollState = rememberScrollState()
     val context = LocalContext.current
 
@@ -112,7 +112,7 @@ fun MenuDetailScreen(
         }
 
         when (loadingState.value) {
-            MenuDetailViewModel.State.SUCCESS -> {
+            MenuLoadingState.SUCCESS -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -405,14 +405,14 @@ fun MenuDetailScreen(
                     }
                 }
             }
-            MenuDetailViewModel.State.LOADING -> {
+            MenuLoadingState.LOADING -> {
                 LoadingPlaceHolder(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 )
             }
-            MenuDetailViewModel.State.FAILED -> {
+            MenuLoadingState.FAILED -> {
                 ErrorPlaceHolder(
                     modifier = Modifier
                         .fillMaxWidth()
