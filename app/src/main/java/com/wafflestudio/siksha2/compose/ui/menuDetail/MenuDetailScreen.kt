@@ -142,7 +142,7 @@ fun MenuDetailScreen(
                                         + (menu?.likeCount ?: 0).toString()
                                         + stringResource(R.string.review_like_suffix),
                                     fontSize = dpToSp(14.dp),
-                                    fontWeight = FontWeight.Normal
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
 
@@ -278,7 +278,7 @@ fun MenuDetailScreen(
                                 Text(
                                     text = stringResource(R.string.menu_detail_photo_review_gather),
                                     fontSize = dpToSp(14.dp),
-                                    fontWeight = FontWeight.Normal,
+                                    fontWeight = FontWeight.Medium,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                                 Image(
@@ -356,7 +356,7 @@ fun MenuDetailScreen(
                                 Text(
                                     text = stringResource(R.string.menu_detail_review_gather),
                                     fontSize = dpToSp(14.dp),
-                                    fontWeight = FontWeight.Normal,
+                                    fontWeight = FontWeight.Medium,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                                 Image(

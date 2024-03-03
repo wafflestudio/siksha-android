@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wafflestudio.siksha2.compose.ui.menuDetail.review.ReviewScreen
 import com.wafflestudio.siksha2.databinding.FragmentReviewBinding
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 
 class ReviewFragment : Fragment() {
@@ -30,11 +31,13 @@ class ReviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.reviewComposeView.setContent {
-            ReviewScreen(
-                navController = findNavController(),
-                showImages = args.showImages,
-                menuDetailViewModel = vm
-            )
+            SikshaTheme {
+                ReviewScreen(
+                    navController = findNavController(),
+                    showImages = args.showImages,
+                    menuDetailViewModel = vm
+                )
+            }
         }
     }
 }

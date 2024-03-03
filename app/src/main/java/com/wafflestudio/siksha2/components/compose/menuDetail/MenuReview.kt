@@ -100,7 +100,7 @@ fun MenuReview(
                     .padding(start = 30.dp, end = 10.dp, top = 13.dp, bottom = 15.dp),
                 color = SikshaColors.Gray800,
                 fontSize = dpToSp(dp = 12.dp),
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Medium
             )
         }
         if (showImage) {

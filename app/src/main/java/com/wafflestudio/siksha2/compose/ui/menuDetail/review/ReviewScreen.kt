@@ -85,7 +85,7 @@ fun ReviewScreen(
                 Text(
                     text = stringResource(R.string.review_nothing),
                     fontSize = dpToSp(18.dp),
-                    fontWeight = FontWeight.Normal,
+                    fontWeight = FontWeight.Medium,
                     modifier = Modifier.align(Alignment.Center),
                     color = SikshaColors.Gray600
                 )
