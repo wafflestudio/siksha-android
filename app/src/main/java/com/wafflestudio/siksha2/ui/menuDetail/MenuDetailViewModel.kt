@@ -60,14 +60,6 @@ class MenuDetailViewModel @Inject constructor(
     val imageUriList: LiveData<List<Uri>>
         get() = _imageUriList
 
-    private val _imageUrlList = MutableLiveData<List<String>>()
-    val imageUrlList: LiveData<List<String>>
-        get() = _imageUrlList
-
-    private val _imageCount = MutableLiveData<Long>(0)
-    val imageCount: LiveData<Long>
-        get() = _imageCount
-
     private val _leaveLeaveReviewState = MutableLiveData<LeaveReviewState>(LeaveReviewState.WAITING)
     val leaveLeaveReviewState: LiveData<LeaveReviewState>
         get() = _leaveLeaveReviewState
