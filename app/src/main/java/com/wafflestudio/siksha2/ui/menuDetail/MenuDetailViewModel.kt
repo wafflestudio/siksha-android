@@ -36,17 +36,6 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-enum class MenuLoadingState {
-    LOADING,
-    SUCCESS,
-    FAILED
-}
-
-enum class LeaveReviewState {
-    WAITING,
-    COMPRESSING
-}
-
 @HiltViewModel
 class MenuDetailViewModel @Inject constructor(
     private val menuRepository: MenuRepository
