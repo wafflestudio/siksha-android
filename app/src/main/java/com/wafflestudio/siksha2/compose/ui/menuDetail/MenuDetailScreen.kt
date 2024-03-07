@@ -155,7 +155,6 @@ fun MenuDetailContent(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val imagePreviewScrollState = rememberScrollState()
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -163,223 +162,36 @@ fun MenuDetailContent(
     ) {
         // 상단 별점 정보 + a
         item {
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 18.dp),
-                    verticalArrangement = Arrangement.spacedBy(9.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    LikeButton(
-                        isChecked = menu?.isLiked ?: false,
-                        onClick = { menuDetailViewModel.toggleLike() },
-                        modifier = Modifier.size(21.dp)
-                    )
-                    Text(
-                        text = stringResource(R.string.review_like_prefix) +
-                            (menu?.likeCount ?: 0).toString() +
-                            stringResource(R.string.review_like_suffix),
-                        fontSize = dpToSp(14.dp),
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-
-                Divider(
-                    modifier = Modifier.padding(horizontal = 17.dp),
-                    color = SikshaColors.OrangeMain,
-                    thickness = 1.dp
-                )
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = 15.dp,
-                            bottom = 15.dp,
-                            start = 45.dp,
-                            end = 25.dp
+            MenuStatistics(
+                menu,
+                reviews,
+                menuDetailViewModel,
+                {
+                    if (isTodayMenu) {
+                        navController.navigate(
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()
                         )
-                ) {
-                    Row(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.review_count_prefix),
-                            color = SikshaColors.Gray800,
-                            fontSize = dpToSp(10.dp),
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = reviews.itemCount.toString(),
-                            color = SikshaColors.OrangeMain,
-                            fontSize = dpToSp(10.dp),
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = stringResource(R.string.review_count_suffix_orange),
-                            color = SikshaColors.OrangeMain,
-                            fontSize = dpToSp(10.dp),
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = stringResource(R.string.review_count_suffix_black),
-                            color = SikshaColors.Gray800,
-                            fontSize = dpToSp(10.dp),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(20.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "${
-                                    menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
-                                }",
-                                fontSize = dpToSp(32.dp),
-                                fontWeight = FontWeight.ExtraBold
+                    } else {
+                        Toast
+                            .makeText(
+                                context,
+                                "오늘 메뉴만 평가할 수 있습니다.",
+                                Toast.LENGTH_SHORT
                             )
-                            MenuRatingStars(
-                                rating = menu?.score?.toFloat() ?: 0.0f
-                            )
-                        }
-                        menuDetailViewModel.reviewDistribution.value?.let {
-                            MenuRatingBars(
-                                distributions = it,
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .width(200.dp)
-                            .height(32.dp)
-                            .background(
-                                color = SikshaColors.OrangeMain,
-                                shape = RoundedCornerShape(50.dp)
-                            )
-                            .clickable { }
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.menu_detail_leave_review_button),
-                            fontSize = dpToSp(14.dp),
-                            fontWeight = FontWeight.ExtraBold,
-                            color = SikshaColors.White900,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .clickable {
-                                    if (isTodayMenu) {
-                                        navController.navigate(
-                                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()
-                                        )
-                                    } else {
-                                        Toast
-                                            .makeText(
-                                                context,
-                                                "오늘 메뉴만 평가할 수 있습니다.",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                            .show()
-                                    }
-                                }
-                        )
+                            .show()
                     }
                 }
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(10.dp)
-                        .background(SikshaColors.Gray100)
-                )
-            }
+            )
         }
 
         // 사진 리뷰
         if (imageReviews.itemCount > 0) {
             item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .height(50.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.menu_detail_photo_review_gather),
-                        fontSize = dpToSp(14.dp),
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier.align(Alignment.CenterStart)
-                    )
-                    Image(
-                        painter = painterResource(R.drawable.ic_back_arrow),
-                        contentDescription = stringResource(R.string.menu_detail_photo_review_gather),
-                        colorFilter = ColorFilter.tint(SikshaColors.Gray400),
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .rotate(180f)
-                            .clickable {
-                                navController.navigate(
-                                    MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(
-                                        menuId
-                                    )
-                                )
-                            }
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .horizontalScroll(imagePreviewScrollState),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    for (i: Int in 1..min(imageReviews.itemCount, 3)) {
-                        when (val it = imageReviews.itemSnapshotList.items[i - 1].etc?.images?.get(0)) {
-                            null -> Box(
-                                modifier = Modifier
-                                    .size(120.dp)
-                                    .background(SikshaColors.Gray100)
-                                    .clip(RoundedCornerShape(10.dp))
-                            )
-                            else -> {
-                                if (i == 3) {
-                                    MenuReviewImageShowMore(
-                                        imageUri = Uri.parse(it),
-                                        modifier = Modifier
-                                            .size(120.dp)
-                                            .clip(RoundedCornerShape(10.dp)),
-                                        showMoreCount = imageReviews.itemCount - 2,
-                                        onShowMore = {
-                                            navController.navigate(
-                                                MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(
-                                                    menuId
-                                                )
-                                            )
-                                        }
-                                    )
-                                } else {
-                                    MenuReviewImage(
-                                        imageUri = Uri.parse(it),
-                                        modifier = Modifier
-                                            .size(120.dp)
-                                            .clip(RoundedCornerShape(10.dp))
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
+                MenuPhotoPreview(
+                    menuId,
+                    imageReviews,
+                    navController
+                )
             }
         }
 
@@ -440,6 +252,225 @@ fun MenuDetailContent(
                         modifier = Modifier.align(Alignment.Center),
                         color = SikshaColors.Gray600
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MenuStatistics(
+    menu: Menu?,
+    reviews: LazyPagingItems<Review>,
+    menuDetailViewModel: MenuDetailViewModel,
+    onLeaveReview: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(9.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            LikeButton(
+                isChecked = menu?.isLiked ?: false,
+                onClick = { menuDetailViewModel.toggleLike() },
+                modifier = Modifier.size(21.dp)
+            )
+            Text(
+                text = stringResource(R.string.review_like_prefix) +
+                    (menu?.likeCount ?: 0).toString() +
+                    stringResource(R.string.review_like_suffix),
+                fontSize = dpToSp(14.dp),
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        Divider(
+            modifier = Modifier.padding(horizontal = 17.dp),
+            color = SikshaColors.OrangeMain,
+            thickness = 1.dp
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 15.dp,
+                    bottom = 15.dp,
+                    start = 45.dp,
+                    end = 25.dp
+                )
+        ) {
+            Row(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.review_count_prefix),
+                    color = SikshaColors.Gray800,
+                    fontSize = dpToSp(10.dp),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = reviews.itemCount.toString(),
+                    color = SikshaColors.OrangeMain,
+                    fontSize = dpToSp(10.dp),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(R.string.review_count_suffix_orange),
+                    color = SikshaColors.OrangeMain,
+                    fontSize = dpToSp(10.dp),
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(R.string.review_count_suffix_black),
+                    color = SikshaColors.Gray800,
+                    fontSize = dpToSp(10.dp),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "${
+                        menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
+                        }",
+                        fontSize = dpToSp(32.dp),
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    MenuRatingStars(
+                        rating = menu?.score?.toFloat() ?: 0.0f
+                    )
+                }
+                menuDetailViewModel.reviewDistribution.value?.let {
+                    MenuRatingBars(
+                        distributions = it,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(32.dp)
+                    .background(
+                        color = SikshaColors.OrangeMain,
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                    .clickable {
+                        onLeaveReview()
+                    }
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = stringResource(R.string.menu_detail_leave_review_button),
+                    fontSize = dpToSp(14.dp),
+                    fontWeight = FontWeight.ExtraBold,
+                    color = SikshaColors.White900,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
+            }
+        }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(10.dp)
+                .background(SikshaColors.Gray100)
+        )
+    }
+}
+
+@Composable
+fun MenuPhotoPreview(
+    menuId: Long,
+    imageReviews: LazyPagingItems<Review>,
+    navController: NavController,
+    modifier: Modifier = Modifier
+) {
+    val imagePreviewScrollState = rememberScrollState()
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(50.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.menu_detail_photo_review_gather),
+            fontSize = dpToSp(14.dp),
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.align(Alignment.CenterStart)
+        )
+        Image(
+            painter = painterResource(R.drawable.ic_back_arrow),
+            contentDescription = stringResource(R.string.menu_detail_photo_review_gather),
+            colorFilter = ColorFilter.tint(SikshaColors.Gray400),
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .rotate(180f)
+                .clickable {
+                    navController.navigate(
+                        MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(
+                            menuId
+                        )
+                    )
+                }
+        )
+    }
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .horizontalScroll(imagePreviewScrollState),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        for (i: Int in 1..min(imageReviews.itemCount, 3)) {
+            when (val it = imageReviews.itemSnapshotList.items[i - 1].etc?.images?.get(0)) {
+                null -> Box(
+                    modifier = Modifier
+                        .size(120.dp)
+                        .background(SikshaColors.Gray100)
+                        .clip(RoundedCornerShape(10.dp))
+                )
+                else -> {
+                    if (i == 3) {
+                        MenuReviewImageShowMore(
+                            imageUri = Uri.parse(it),
+                            modifier = Modifier
+                                .size(120.dp)
+                                .clip(RoundedCornerShape(10.dp)),
+                            showMoreCount = imageReviews.itemCount - 2,
+                            onShowMore = {
+                                navController.navigate(
+                                    MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(
+                                        menuId
+                                    )
+                                )
+                            }
+                        )
+                    } else {
+                        MenuReviewImage(
+                            imageUri = Uri.parse(it),
+                            modifier = Modifier
+                                .size(120.dp)
+                                .clip(RoundedCornerShape(10.dp))
+                        )
+                    }
                 }
             }
         }
