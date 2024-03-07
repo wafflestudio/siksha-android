@@ -60,9 +60,9 @@ class MenuDetailViewModel @Inject constructor(
     val imageUriList: LiveData<List<Uri>>
         get() = _imageUriList
 
-    private val _leaveLeaveReviewState = MutableLiveData<LeaveReviewState>(LeaveReviewState.WAITING)
-    val leaveLeaveReviewState: LiveData<LeaveReviewState>
-        get() = _leaveLeaveReviewState
+    private val _leaveReviewState = MutableLiveData<LeaveReviewState>(LeaveReviewState.WAITING)
+    val leaveReviewState: LiveData<LeaveReviewState>
+        get() = _leaveReviewState
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reviews: StateFlow<PagingData<Review>> =
@@ -148,7 +148,7 @@ class MenuDetailViewModel @Inject constructor(
     }
 
     fun notifySendReviewEnd() {
-        _leaveLeaveReviewState.value = LeaveReviewState.WAITING
+        _leaveReviewState.value = LeaveReviewState.WAITING
     }
 
     fun toggleLike() {
@@ -178,7 +178,7 @@ class MenuDetailViewModel @Inject constructor(
         val menuId = _menu.value?.id ?: return
         if (_imageUriList.value?.isNotEmpty() == true) {
             context.showToast("이미지 압축 중입니다.")
-            _leaveLeaveReviewState.value = LeaveReviewState.COMPRESSING
+            _leaveReviewState.value = LeaveReviewState.COMPRESSING
             val imageList = _imageUriList.value?.map {
                 getCompressedImage(context, it)
             }
