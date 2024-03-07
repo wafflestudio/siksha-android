@@ -36,12 +36,14 @@ private fun MenuReviewSingleStar(
 @Composable
 fun MenuRatingStars(
     rating: Float,
-    modifier: Modifier = Modifier.width(100.dp).height(18.dp),
-    dragEnabled: Boolean = false
+    modifier: Modifier = Modifier,
+    dragEnabled: Boolean = false,
+    width: Int = 100,
+    height: Int = 18
 ) {
     val rounds = (rating * 2).roundToInt()
     Row(
-        modifier = modifier,
+        modifier = modifier.width(width.dp).height(height.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         for (i in 1..5) {
