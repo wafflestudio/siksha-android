@@ -129,8 +129,8 @@ class LeaveReviewFragment : Fragment() {
             binding.imageLayout.setVisibleOrGone(imageUriList.isNotEmpty())
         }
 
-        vm.leaveReviewState.observe(viewLifecycleOwner) {
-            binding.onLoadingContainer.root.setVisibleOrGone(it == MenuDetailViewModel.ReviewState.COMPRESSING)
+        vm.leaveLeaveReviewState.observe(viewLifecycleOwner) {
+            binding.onLoadingContainer.root.setVisibleOrGone(it == LeaveReviewState.COMPRESSING)
         }
 
         binding.closeButton.setOnClickListener {
