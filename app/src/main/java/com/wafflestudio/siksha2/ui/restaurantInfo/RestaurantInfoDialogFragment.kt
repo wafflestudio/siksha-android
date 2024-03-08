@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -25,15 +26,11 @@ import java.util.*
 
 // TODO: 전반적으로 대충 짬 나중에 날잡고 고치기
 @AndroidEntryPoint
-class RestaurantInfoDialogFragment private constructor() :
-    BottomSheetDialogFragment(),
-    OnMapReadyCallback {
+class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentRestaurantInfoBinding
     private val restaurantInfo: RestaurantInfo by lazy {
-        arguments?.getParcelable<RestaurantInfo>(
-            RESTAURANT_INFO
-        )!!
+        BundleCompat.getParcelable(requireArguments(), RESTAURANT_INFO, RestaurantInfo::class.java)!!
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
