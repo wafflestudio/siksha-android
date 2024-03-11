@@ -34,7 +34,7 @@ class ReviewFragment : Fragment() {
             SikshaTheme {
                 ReviewScreen(
                     navController = findNavController(),
-                    showImages = args.showImages,
+                    showImages = true,
                     menuDetailViewModel = vm
                 )
             }
