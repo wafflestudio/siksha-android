@@ -51,15 +51,13 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
-    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
-        viewModelScope.launch {
-            val menuItem = menuRepository.getMenuById(id)
-            menuItem.isLiked = !isCurrentlyLiked
-            _updatedMenuItemStream.postValue(menuItem)
-            val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
-            if (serverMenuItem.isLiked != menuItem.isLiked) {
-                _updatedMenuItemStream.postValue(serverMenuItem)
-            }
+    suspend fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+        val menuItem = menuRepository.getMenuById(id)
+        menuItem.isLiked = !isCurrentlyLiked
+        _updatedMenuItemStream.postValue(menuItem)
+        val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
+        if (serverMenuItem.isLiked != menuItem.isLiked) {
+            _updatedMenuItemStream.postValue(serverMenuItem)
         }
     }
 

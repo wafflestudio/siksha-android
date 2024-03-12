@@ -3,6 +3,7 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +20,7 @@ import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.math.abs
@@ -144,7 +146,13 @@ class DailyRestaurantFragment : Fragment() {
                 vm.toggleFavorite(it)
             },
             onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
-                vm.toggleLike(menuId, isCurrentlyLiked)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        vm.toggleLike(menuId, isCurrentlyLiked)
+                    } catch (e: IOException) {
+                        Toast.makeText(requireActivity(), getString(R.string.common_network_error), Toast.LENGTH_SHORT).show()
+                    }
+                }
             },
             onMenuItemClickListener = {
                 val action =

@@ -56,7 +56,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch(Dispatchers.Main) {
-            featureChecker.fetchFeaturesConfig()
+//            featureChecker.fetchFeaturesConfig()
 
             if (checkInternetConnection().not()) {
                 showToast("네트워크 연결이 불안정합니다.")
