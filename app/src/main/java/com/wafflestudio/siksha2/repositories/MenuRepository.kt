@@ -10,7 +10,6 @@ import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
-import com.wafflestudio.siksha2.network.dto.MenuLikeOrUnlikeResponse
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -90,12 +89,12 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
-    suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeOrUnlikeResponse {
-        return if (isCurrentlyLiked) {
-            sikshaApi.unlikeMenu(menuId)
-        } else {
-            sikshaApi.likeMenu(menuId)
-        }
+    suspend fun likeMenuById(menuId: Long): Menu {
+        return sikshaApi.postLikeMenu(menuId)
+    }
+
+    suspend fun unlikeMenuById(menuId: Long): Menu {
+        return sikshaApi.postUnlikeMenu(menuId)
     }
 
     companion object {

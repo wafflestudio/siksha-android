@@ -78,8 +78,8 @@ interface SikshaApi {
     suspend fun getVersion(): GetVersionResult
 
     @POST("/menus/{menu_id}/like")
-    suspend fun likeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+    suspend fun postLikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
 
     @POST("/menus/{menu_id}/unlike")
-    suspend fun unlikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+    suspend fun postUnlikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
 }

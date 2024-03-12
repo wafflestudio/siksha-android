@@ -18,6 +18,7 @@ import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoDialogFragment
 import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
+import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -143,14 +144,14 @@ class DailyRestaurantFragment : Fragment() {
                 }
             },
             onMenuGroupToggleFavoriteClickListener = {
-                vm.toggleFavorite(it)
+                vm.toggleRestaurantFavorite(it)
             },
             onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     try {
-                        vm.toggleLike(menuId, isCurrentlyLiked)
+                        vm.toggleMenuLike(menuId, isCurrentlyLiked)
                     } catch (e: IOException) {
-                        Toast.makeText(requireActivity(), getString(R.string.common_network_error), Toast.LENGTH_SHORT).show()
+                        showToast(getString(R.string.common_network_error), Toast.LENGTH_SHORT)
                     }
                 }
             },

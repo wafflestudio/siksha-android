@@ -45,20 +45,18 @@ class DailyRestaurantViewModel @Inject constructor(
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
     private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
 
-    fun toggleFavorite(id: Long) {
+    fun toggleRestaurantFavorite(id: Long) {
         viewModelScope.launch {
             restaurantRepository.toggleRestaurantFavoriteById(id)
         }
     }
 
-    suspend fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
-        val menuItem = menuRepository.getMenuById(id)
-        menuItem.isLiked = !isCurrentlyLiked
-        _updatedMenuItemStream.postValue(menuItem)
-        val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
-        if (serverMenuItem.isLiked != menuItem.isLiked) {
-            _updatedMenuItemStream.postValue(serverMenuItem)
+    suspend fun toggleMenuLike(id: Long, isCurrentlyLiked: Boolean) {
+        val updatedMenu = when (isCurrentlyLiked) {
+            true -> menuRepository.unlikeMenuById(id)
+            false -> menuRepository.likeMenuById(id)
         }
+        _updatedMenuItemStream.postValue(updatedMenu)
     }
 
     fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
