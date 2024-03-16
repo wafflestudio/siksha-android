@@ -1,14 +1,21 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.MealsOfDay
-import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -37,65 +44,18 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _favoriteRestaurantExists = MutableLiveData(false)
     val favoriteRestaurantExists: LiveData<Boolean> = _favoriteRestaurantExists
 
-    private val _updatedMenuItemStream = MutableLiveData<Menu?>(null)
-    val updatedMenuItemStream: LiveData<Menu?> = _updatedMenuItemStream
-
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
     private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
 
-    fun toggleRestaurantFavorite(id: Long) {
-        viewModelScope.launch {
-            restaurantRepository.toggleRestaurantFavoriteById(id)
-        }
+    init {
+        startRefreshingMenus()
     }
 
-    suspend fun toggleMenuLike(id: Long, isCurrentlyLiked: Boolean) {
-        val updatedMenu = when (isCurrentlyLiked) {
-            true -> menuRepository.unlikeMenuById(id)
-            false -> menuRepository.likeMenuById(id)
-        }
-        _updatedMenuItemStream.postValue(updatedMenu)
-    }
-
-    fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
-        viewModelScope.launch {
-            _mealsOfDayFilter.value = mealsOfDay
-            startRefreshingData()
-        }
-    }
-
-    fun addDateOffset(offset: Long) {
-        viewModelScope.launch {
-            _dateFilter.value = _dateFilter.value?.plusDays(offset)
-            startRefreshingData()
-        }
-    }
-
-    fun setDateFilter(date: LocalDate) {
-        viewModelScope.launch {
-            _dateFilter.value = date
-            startRefreshingData()
-        }
-    }
-
-    fun toggleCalendarVisibility() {
-        viewModelScope.launch {
-            _isCalendarVisible.value = _isCalendarVisible.value?.not()
-        }
-    }
-
-    fun setCalendarVisibility(visibility: Boolean) {
-        viewModelScope.launch {
-            _isCalendarVisible.value = visibility
-        }
-    }
-
-    fun startRefreshingData() {
+    private fun startRefreshingMenus() {
         viewModelScope.launch {
             try {
-                restaurantRepository.syncWithServer()
                 dateFilter.asFlow()
                     .conflate()
                     .collect {
@@ -105,6 +65,45 @@ class DailyRestaurantViewModel @Inject constructor(
                 _networkError.value = true
             }
         }
+    }
+
+    fun syncRestaurantWithServer() { // TODO: local인지 remote인지 뷰 단에 노출하지 말기
+        viewModelScope.launch {
+            restaurantRepository.syncWithServer()
+        }
+    }
+
+    fun toggleRestaurantFavorite(id: Long) {
+        viewModelScope.launch {
+            restaurantRepository.toggleRestaurantFavoriteById(id)
+        }
+    }
+
+    suspend fun toggleMenuLike(id: Long, isCurrentlyLiked: Boolean) {
+        when (isCurrentlyLiked) {
+            true -> menuRepository.unlikeMenuById(id)
+            false -> menuRepository.likeMenuById(id)
+        }
+    }
+
+    fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
+        _mealsOfDayFilter.value = mealsOfDay
+    }
+
+    fun addDateOffset(offset: Long) {
+        _dateFilter.value = _dateFilter.value?.plusDays(offset)
+    }
+
+    fun setDateFilter(date: LocalDate) {
+        _dateFilter.value = date
+    }
+
+    fun toggleCalendarVisibility() {
+        _isCalendarVisible.value = _isCalendarVisible.value?.not()
+    }
+
+    fun setCalendarVisibility(visibility: Boolean) {
+        _isCalendarVisible.value = visibility
     }
 
     fun checkFavoriteRestaurantExists() {

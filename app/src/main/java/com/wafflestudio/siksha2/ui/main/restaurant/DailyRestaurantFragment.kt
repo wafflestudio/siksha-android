@@ -61,7 +61,7 @@ class DailyRestaurantFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        vm.startRefreshingData()
+        vm.syncRestaurantWithServer()
         vm.checkFavoriteRestaurantExists()
     }
 
@@ -206,14 +206,9 @@ class DailyRestaurantFragment : Fragment() {
                 binding.content.setVisibleOrGone(it)
             }
         }
+        binding.menuGroupList.itemAnimator = null
 
-        vm.updatedMenuItemStream.observe(viewLifecycleOwner) { updatedMenuItem ->
-            updatedMenuItem?.let { menuItem ->
-                menuGroupAdapter.refreshMenuItem(menuItem)
-            }
-        }
-
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
                     binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())

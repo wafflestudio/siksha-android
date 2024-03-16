@@ -45,14 +45,6 @@ class MenuAdapter(
 
     class MenuViewHolder(val binding: ItemMenuBinding) : RecyclerView.ViewHolder(binding.root)
 
-    fun refreshMenuItem(updatedMenuItem: Menu) {
-        val updatedMenus = currentList.map { menu ->
-            if (menu.id == updatedMenuItem.id) updatedMenuItem else menu
-        }
-
-        submitList(updatedMenus)
-    }
-
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<Menu>() {
             override fun areItemsTheSame(oldItem: Menu, newItem: Menu): Boolean {
