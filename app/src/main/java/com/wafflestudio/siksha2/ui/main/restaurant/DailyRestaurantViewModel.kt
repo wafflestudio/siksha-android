@@ -55,21 +55,25 @@ class DailyRestaurantViewModel @Inject constructor(
 
     private fun startRefreshingMenus() {
         viewModelScope.launch {
-            try {
-                dateFilter.asFlow()
-                    .conflate()
-                    .collect {
+            _dateFilter.asFlow()
+                .conflate()
+                .collect {
+                    try {
                         menuRepository.syncWithServer(_dateFilter.value ?: LocalDate.now())
+                    } catch (e: Exception) {
+                        _networkError.value = true
                     }
-            } catch (e: Exception) {
-                _networkError.value = true
-            }
+                }
         }
     }
 
     fun syncRestaurantWithServer() { // TODO: local인지 remote인지 뷰 단에 노출하지 말기
         viewModelScope.launch {
-            restaurantRepository.syncWithServer()
+            try {
+                restaurantRepository.syncWithServer()
+            } catch (e: Exception) {
+                _networkError.value = true
+            }
         }
     }
 
