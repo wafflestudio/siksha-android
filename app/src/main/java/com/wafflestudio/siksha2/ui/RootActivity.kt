@@ -17,6 +17,7 @@ import javax.inject.Inject
 class RootActivity : AppCompatActivity() {
     @Inject
     lateinit var menuRepository: MenuRepository
+
     @Inject
     lateinit var restaurantRepository: RestaurantRepository
 
