@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.community
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -48,6 +49,11 @@ class PostListViewModel @Inject constructor(
     }
     val postPagingData =
         _postPagingData.stateIn(viewModelScope, SharingStarted.Eagerly, flowOf(PagingData.empty()))
+
+    val postListState = LazyListState(
+        firstVisibleItemIndex = 0,
+        firstVisibleItemScrollOffset = 0
+    )
 
     init {
         viewModelScope.launch {
