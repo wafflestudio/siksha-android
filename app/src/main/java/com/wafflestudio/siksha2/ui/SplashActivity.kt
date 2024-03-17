@@ -56,8 +56,6 @@ class SplashActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch(Dispatchers.Main) {
-            featureChecker.fetchFeaturesConfig()
-
             if (checkInternetConnection().not()) {
                 showToast("네트워크 연결이 불안정합니다.")
                 delay(1000L)
@@ -65,6 +63,8 @@ class SplashActivity : AppCompatActivity() {
                 finish()
                 return@launch
             }
+
+            featureChecker.fetchFeaturesConfig()
 
             if (checkLoginStatus().not()) {
                 binding.googleLoginButton.setVisibleOrGone(true)

@@ -4,18 +4,20 @@ import androidx.paging.Pager
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.db.DailyMenusDao
 import com.wafflestudio.siksha2.models.DailyMenu
+import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu
+import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
-import com.wafflestudio.siksha2.network.dto.MenuLikeOrUnlikeResponse
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import java.time.LocalDate
@@ -90,11 +92,63 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
-    suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeOrUnlikeResponse {
-        return if (isCurrentlyLiked) {
-            sikshaApi.unlikeMenu(menuId)
-        } else {
-            sikshaApi.likeMenu(menuId)
+    suspend fun likeMenuById(menuId: Long): Menu {
+        return withContext(Dispatchers.IO) {
+            val menu = sikshaApi.postLikeMenu(menuId)
+            updateMenuInLocal(menu)
+            return@withContext menu
+        }
+    }
+
+    suspend fun unlikeMenuById(menuId: Long): Menu {
+        return withContext(Dispatchers.IO) {
+            val menu = sikshaApi.postUnlikeMenu(menuId)
+            updateMenuInLocal(menu)
+            return@withContext menu
+        }
+    }
+
+    private suspend fun updateMenuInLocal(menu: Menu) {
+        if (menu.date != null) {
+            val dailyMenu = dailyMenusDao.getDailyMenuByDate(menu.date).first()
+            if (dailyMenu != null) {
+                val updatedDailyMenu = withContext(Dispatchers.Default) {
+                    dailyMenu.copy(
+                        data = when (menu.type) {
+                            MealsOfDay.BR -> {
+                                dailyMenu.data.copy(
+                                    breakfast = dailyMenu.data.breakfast.toUpdatedMenuGroups(menu)
+                                )
+                            }
+
+                            MealsOfDay.LU -> {
+                                dailyMenu.data.copy(
+                                    lunch = dailyMenu.data.lunch.toUpdatedMenuGroups(menu)
+                                )
+                            }
+
+                            MealsOfDay.DN -> {
+                                dailyMenu.data.copy(
+                                    dinner = dailyMenu.data.dinner.toUpdatedMenuGroups(menu)
+                                )
+                            }
+
+                            else -> dailyMenu.data
+                        }
+                    )
+                }
+                dailyMenusDao.insertDailyMenus(listOf(updatedDailyMenu))
+            }
+        }
+    }
+
+    private fun List<MenuGroup>.toUpdatedMenuGroups(menu: Menu): List<MenuGroup> {
+        return this.map { menuGroup ->
+            if (menuGroup.menus.find { it.id == menu.id } != null) {
+                menuGroup.copy(menus = menuGroup.menus.map { if (it.id == menu.id) menu else it })
+            } else {
+                menuGroup
+            }
         }
     }
 
