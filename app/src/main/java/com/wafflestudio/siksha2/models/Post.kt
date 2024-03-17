@@ -11,6 +11,8 @@ data class Post(
     val id: Long = 0L,
     val nickname: String = "",
     val available: Boolean = true,
+    val anonymous: Boolean = true,
+    val isMine: Boolean = true,
     val etc: Etc? = null,
     val likeCount: Long = 0L,
     val commentCount: Long = 0L,

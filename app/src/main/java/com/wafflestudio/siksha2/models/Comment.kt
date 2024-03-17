@@ -10,6 +10,8 @@ data class Comment(
     val id: Long = 0L,
     val nickname: String = "",
     val available: Boolean = true,
+    val anonymous: Boolean = true,
+    val isMine: Boolean = false,
     val likeCount: Long = 0L,
     val isLiked: Boolean = true
 )

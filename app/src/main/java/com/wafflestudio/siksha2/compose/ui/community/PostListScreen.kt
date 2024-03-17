@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -67,7 +68,9 @@ fun PostListScreen(
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    LazyColumn {
+                    LazyColumn(
+                        state = rememberLazyListState()
+                    ) {
                         items(
                             count = posts.itemCount
                         ) {

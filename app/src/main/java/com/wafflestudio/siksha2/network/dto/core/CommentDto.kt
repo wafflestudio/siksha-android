@@ -11,8 +11,10 @@ data class CommentDto(
     val created_at: String = "",
     val updated_at: String = "",
     val id: Long = 0L,
-    val nickname: String = "",
+    val nickname: String? = "",
     val available: Boolean = true,
+    val anonymous: Boolean = true,
+    val is_mine: Boolean = false,
     val like_cnt: Long = 0L,
     val is_liked: Boolean = true
 ) {
@@ -22,8 +24,10 @@ data class CommentDto(
         createdAt = created_at.toLocalDateTime(),
         updatedAt = updated_at.toLocalDateTime(),
         id = id,
-        nickname = nickname,
+        nickname = nickname ?: "익명",
         available = available,
+        anonymous = anonymous,
+        isMine = is_mine,
         likeCount = like_cnt,
         isLiked = is_liked
     )

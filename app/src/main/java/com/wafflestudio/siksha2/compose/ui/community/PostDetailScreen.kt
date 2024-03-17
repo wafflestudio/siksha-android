@@ -172,7 +172,7 @@ fun PostBody(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = post.nickname,
+                text = post.nickname ?: "",
                 color = SikshaColors.Gray400,
                 fontSize = 12.sp,
                 style = SikshaTypography.body2
