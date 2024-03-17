@@ -61,7 +61,6 @@ class DailyRestaurantFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        vm.syncRestaurantWithServer()
         vm.checkFavoriteRestaurantExists()
     }
 

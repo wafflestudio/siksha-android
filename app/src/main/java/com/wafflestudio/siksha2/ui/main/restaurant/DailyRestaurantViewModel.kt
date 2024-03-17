@@ -67,16 +67,6 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
-    fun syncRestaurantWithServer() { // TODO: local인지 remote인지 뷰 단에 노출하지 말기
-        viewModelScope.launch {
-            try {
-                restaurantRepository.syncWithServer()
-            } catch (e: Exception) {
-                _networkError.value = true
-            }
-        }
-    }
-
     fun toggleRestaurantFavorite(id: Long) {
         viewModelScope.launch {
             restaurantRepository.toggleRestaurantFavoriteById(id)
