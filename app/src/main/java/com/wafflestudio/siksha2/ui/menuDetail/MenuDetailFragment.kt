@@ -50,7 +50,7 @@ class MenuDetailFragment : Fragment() {
             adapter = reviewsAdapter
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             reviewsAdapter.loadStateFlow
                 .collectLatest {
                     if (it.refresh is LoadState.NotLoading) {
@@ -150,7 +150,7 @@ class MenuDetailFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             vm.getReviews(args.menuId).collectLatest {
                 reviewsAdapter.submitData(it)
             }
