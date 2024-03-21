@@ -211,14 +211,6 @@ class DailyRestaurantFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
-                    Timber.tag("asdf").d(vm.dateFilter.value.toString())
-                    Timber.tag("asdf").d(
-                        it.find { menuGroup ->
-                            menuGroup.nameKr == "220동식당"
-                        }?.menus?.subList(0, 3)?.joinToString("\n") {
-                            "${it.nameKr} id=${it.id}"
-                        }
-                    )
                     binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
                     binding.emptyText.setVisibleOrGone(it.isEmpty())
                     menuGroupAdapter.submitList(it)
