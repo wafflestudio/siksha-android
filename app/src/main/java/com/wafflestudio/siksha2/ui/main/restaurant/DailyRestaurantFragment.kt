@@ -21,7 +21,6 @@ import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalTime
