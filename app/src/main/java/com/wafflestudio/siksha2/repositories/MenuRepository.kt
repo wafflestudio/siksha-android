@@ -106,7 +106,7 @@ class MenuRepository @Inject constructor(
         }
     }
 
-    private suspend fun updateMenuInLocal(menu: Menu) {
+    private suspend fun updateMenuInLocal(menu: Menu) { // DB에 저장된 메뉴 중 같은 code인 메뉴들에 좋아요를 반영한다.
         if (menu.date != null) {
             val dailyMenus = dailyMenusDao.getDailyMenuAll()
             val updatedDailyMenus = withContext(Dispatchers.Default) { // TODO: DB 구조, UX 개선
@@ -127,7 +127,15 @@ class MenuRepository @Inject constructor(
     private fun List<MenuGroup>.toUpdatedMenuGroups(menu: Menu): List<MenuGroup> {
         return this.map { menuGroup ->
             if (menuGroup.menus.find { it.code == menu.code } != null) {
-                menuGroup.copy(menus = menuGroup.menus.map { if (it.code == menu.code) menu else it })
+                menuGroup.copy(
+                    menus = menuGroup.menus.map {
+                        if (it.code == menu.code) {
+                            it.copy(isLiked = menu.isLiked)
+                        } else {
+                            it
+                        }
+                    }
+                )
             } else {
                 menuGroup
             }
