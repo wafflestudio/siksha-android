@@ -36,7 +36,7 @@ class MenuReviewsAdapter constructor(
                                     setImage(it[i])
                                     fragmentManager?.let {
                                         setImageClickListener { url ->
-                                            val dialog = ReviewImageDialog(url)
+                                            val dialog = ReviewImageDialog.newInstance(url)
                                             dialog.show(fragmentManager, "review_image_$url")
                                         }
                                     }

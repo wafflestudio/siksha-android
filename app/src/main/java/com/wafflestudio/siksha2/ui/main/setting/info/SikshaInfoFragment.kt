@@ -60,7 +60,7 @@ class SikshaInfoFragment : Fragment() {
 
         binding.withdrawalText.setOnClickListener {
             // TODO: SikshaDialogController 만들기
-            val dialog = SikshaDialog("앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.")
+            val dialog = SikshaDialog.newInstance("앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.")
             dialog.setListener(
                 object : SikshaDialogListener {
                     override fun onPositive() {

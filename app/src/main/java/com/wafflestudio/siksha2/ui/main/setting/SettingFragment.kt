@@ -94,7 +94,7 @@ class SettingFragment : Fragment() {
 
         binding.logoutRow.setOnClickListener {
             // TODO: SikshaDialogController 만들기
-            val dialog = SikshaDialog("정말로 로그아웃 하시겠습니까?")
+            val dialog = SikshaDialog.newInstance("정말로 로그아웃 하시겠습니까?")
             dialog.setListener(
                 object : SikshaDialogListener {
                     override fun onPositive() {

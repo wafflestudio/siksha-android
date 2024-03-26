@@ -10,8 +10,10 @@ import androidx.fragment.app.DialogFragment
 import com.wafflestudio.siksha2.databinding.DialogReviewImageBinding
 import com.wafflestudio.siksha2.utils.setImageUrl
 
-class ReviewImageDialog(private val url: String) : DialogFragment() {
+class ReviewImageDialog : DialogFragment() {
+
     private lateinit var binding: DialogReviewImageBinding
+    private val url by lazy { arguments?.getString(ARG_URL)!! }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,5 +32,17 @@ class ReviewImageDialog(private val url: String) : DialogFragment() {
         binding.closeButton.setOnClickListener {
             dismiss()
         }
+    }
+
+    companion object {
+        private const val ARG_URL = "url"
+
+        @JvmStatic
+        fun newInstance(url: String) =
+            ReviewImageDialog().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_URL, url)
+                }
+            }
     }
 }
