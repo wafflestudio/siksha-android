@@ -64,7 +64,20 @@ class SplashActivity : AppCompatActivity() {
                 return@launch
             }
 
-            featureChecker.fetchFeaturesConfig()
+            runCatching {
+                featureChecker.fetchFeaturesConfig()
+            }.onFailure {
+                when (it) {
+                    is IOException -> {
+                        showToast("네트워크 연결이 불안정합니다.")
+                        delay(1000L)
+                        startActivity(Intent(this@SplashActivity, RootActivity::class.java))
+                        finish()
+                        return@launch
+                    }
+                    else -> throw it
+                }
+            }
 
             if (checkLoginStatus().not()) {
                 binding.googleLoginButton.setVisibleOrGone(true)
