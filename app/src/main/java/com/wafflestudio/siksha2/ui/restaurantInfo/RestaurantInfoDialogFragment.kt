@@ -30,7 +30,7 @@ class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCall
 
     private lateinit var binding: FragmentRestaurantInfoBinding
     private val restaurantInfo: RestaurantInfo by lazy {
-        BundleCompat.getParcelable(requireArguments(), RESTAURANT_INFO, RestaurantInfo::class.java)!!
+        BundleCompat.getParcelable(requireArguments(), ARG_RESTAURANT_INFO, RestaurantInfo::class.java)!!
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -231,7 +231,7 @@ class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCall
     }
 
     companion object {
-        const val RESTAURANT_INFO = "restaurant_info"
+        private const val ARG_RESTAURANT_INFO = "restaurant_info"
 
         private const val BREAKFAST_TIME_AS_MINUTE = 510
         private const val LUNCH_TIME_AS_MINUTE = 750
@@ -241,7 +241,7 @@ class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCall
         fun newInstance(restaurantInfo: RestaurantInfo) =
             RestaurantInfoDialogFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(RESTAURANT_INFO, restaurantInfo)
+                    putParcelable(ARG_RESTAURANT_INFO, restaurantInfo)
                 }
             }
     }

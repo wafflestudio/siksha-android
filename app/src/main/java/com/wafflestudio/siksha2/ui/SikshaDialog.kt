@@ -12,12 +12,13 @@ import androidx.fragment.app.DialogFragment
 import com.wafflestudio.siksha2.databinding.DialogDefaultBinding
 
 // TODO: 전반적으로 대충 짬 나중에 날잡고 고치기
-class SikshaDialog(private val message: CharSequence) : DialogFragment() {
+class SikshaDialog : DialogFragment() {
     private lateinit var binding: DialogDefaultBinding
 
     private var listener: SikshaDialogListener? = null
+    private val message by lazy { arguments?.getCharSequence(ARG_MESSAGE) }
 
-    fun setListener(listener: SikshaDialogListener) {
+    fun setListener(listener: SikshaDialogListener) { // TODO: 구성 변경 후에도 listener 유지되도록 고치기
         this.listener = listener
     }
 
@@ -48,6 +49,18 @@ class SikshaDialog(private val message: CharSequence) : DialogFragment() {
         binding.content.text = message
         binding.positive.setOnClickListener { listener?.onPositive() }
         binding.negative.setOnClickListener { listener?.onNegative() }
+    }
+
+    companion object {
+        private const val ARG_MESSAGE = "message"
+
+        @JvmStatic
+        fun newInstance(message: CharSequence) =
+            SikshaDialog().apply {
+                arguments = Bundle().apply {
+                    putCharSequence(ARG_MESSAGE, message)
+                }
+            }
     }
 }
 

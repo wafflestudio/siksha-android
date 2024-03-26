@@ -143,7 +143,7 @@ class MenuDetailFragment : Fragment() {
             for (i in 0 until 2) {
                 if (i < imageUrlList.size) {
                     imageReviewList[i].setOnClickListener {
-                        val dialog = ReviewImageDialog(imageUrlList[i])
+                        val dialog = ReviewImageDialog.newInstance(imageUrlList[i])
                         dialog.show(childFragmentManager, "review_image_${imageUrlList[i]}")
                     }
                 }
