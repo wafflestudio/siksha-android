@@ -18,13 +18,12 @@ import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ActivitySplashBinding
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
+import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -46,9 +45,6 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var kakaoSignInLauncher: () -> Unit
 
-    @Inject
-    lateinit var featureChecker: FeatureChecker
-
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,21 +58,6 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(Intent(this@SplashActivity, RootActivity::class.java))
                 finish()
                 return@launch
-            }
-
-            runCatching {
-                featureChecker.fetchFeaturesConfig()
-            }.onFailure {
-                when (it) {
-                    is IOException -> {
-                        showToast("네트워크 연결이 불안정합니다.")
-                        delay(1000L)
-                        startActivity(Intent(this@SplashActivity, RootActivity::class.java))
-                        finish()
-                        return@launch
-                    }
-                    else -> throw it
-                }
             }
 
             if (checkLoginStatus().not()) {
