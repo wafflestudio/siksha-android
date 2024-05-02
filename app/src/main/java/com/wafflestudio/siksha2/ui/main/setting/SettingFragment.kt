@@ -94,7 +94,7 @@ class SettingFragment : Fragment(), SikshaDialogListener {
 
         binding.logoutRow.setOnClickListener {
             // TODO: SikshaDialogController 만들기
-            SikshaDialog.newInstance("정말로 로그아웃 하시겠습니까?")
+            SikshaDialog.newInstance(getString(R.string.setting_dialog_logout_content))
                 .show(childFragmentManager, "logout dialog")
         }
 

@@ -23,7 +23,10 @@ import kotlin.math.pow
 
 @AndroidEntryPoint
 class SikshaInfoFragment : Fragment(), SikshaDialogListener {
-    private lateinit var binding: FragmentSikshaInfoBinding
+
+    private var _binding: FragmentSikshaInfoBinding? = null
+    private val binding get() = _binding!!
+
     private val args: SikshaInfoFragmentArgs by navArgs()
 
     @Inject
@@ -34,13 +37,18 @@ class SikshaInfoFragment : Fragment(), SikshaDialogListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSikshaInfoBinding.inflate(inflater, container, false)
+        _binding = FragmentSikshaInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+        initOnClickListener()
+    }
+
+    private fun initView() {
         var currVersionNum = 0
         val latestVersionNum = args.latestVersionNum.toInt()
         BuildConfig.VERSION_NAME.split('.').forEachIndexed { idx, s ->
@@ -54,15 +62,25 @@ class SikshaInfoFragment : Fragment(), SikshaDialogListener {
         }
 
         binding.version.text = BuildConfig.VERSION_NAME
-        binding.backButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
+    }
 
-        binding.withdrawalText.setOnClickListener {
-            // TODO: SikshaDialogController 만들기
-            SikshaDialog.newInstance("앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.")
-                .show(childFragmentManager, "withdrawal dialog")
+    private fun initOnClickListener() {
+        with(binding) {
+            backButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            withdrawalText.setOnClickListener {
+                // TODO: SikshaDialogController 만들기
+                SikshaDialog.newInstance(getString(R.string.siksha_info_dialog_withdrawal_content))
+                    .show(childFragmentManager, "withdrawal dialog")
+            }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onDialogNegativeClick() {}
