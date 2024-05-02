@@ -12,19 +12,19 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.ui.SikshaDialog
-import com.wafflestudio.siksha2.ui.SikshaDialogListener
+import com.wafflestudio.siksha2.ui.common.SikshaDialog
+import com.wafflestudio.siksha2.ui.common.SikshaDialogListener
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
-import kotlin.math.*
+import kotlin.math.pow
 
 @AndroidEntryPoint
-class SettingFragment : Fragment() {
+class SettingFragment : Fragment(), SikshaDialogListener {
+
     private lateinit var binding: FragmentSettingBinding
     private val vm: SettingViewModel by activityViewModels()
 
@@ -94,20 +94,8 @@ class SettingFragment : Fragment() {
 
         binding.logoutRow.setOnClickListener {
             // TODO: SikshaDialogController 만들기
-            val dialog = SikshaDialog.newInstance("정말로 로그아웃 하시겠습니까?")
-            dialog.setListener(
-                object : SikshaDialogListener {
-                    override fun onPositive() {
-                        val logoutCallback = { activity?.finish() }
-                        userStatusManager.logoutUser(requireContext(), logoutCallback)
-                    }
-
-                    override fun onNegative() {
-                        dialog.dismiss()
-                    }
-                }
-            )
-            dialog.show(childFragmentManager, "logout")
+            SikshaDialog.newInstance("정말로 로그아웃 하시겠습니까?")
+                .show(childFragmentManager, "logout dialog")
         }
 
         binding.vocRow.setOnClickListener {
@@ -121,5 +109,12 @@ class SettingFragment : Fragment() {
                 binding.showEmptyCheckRow.checked = it.not()
             }
         }
+    }
+
+    override fun onDialogNegativeClick() {}
+
+    override fun onDialogPositiveClick() {
+        val logoutCallback = { activity?.finish() }
+        userStatusManager.logoutUser(requireContext(), logoutCallback)
     }
 }

@@ -12,8 +12,8 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSikshaInfoBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.ui.SikshaDialog
-import com.wafflestudio.siksha2.ui.SikshaDialogListener
+import com.wafflestudio.siksha2.ui.common.SikshaDialog
+import com.wafflestudio.siksha2.ui.common.SikshaDialogListener
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ import javax.inject.Inject
 import kotlin.math.pow
 
 @AndroidEntryPoint
-class SikshaInfoFragment : Fragment() {
+class SikshaInfoFragment : Fragment(), SikshaDialogListener {
     private lateinit var binding: FragmentSikshaInfoBinding
     private val args: SikshaInfoFragmentArgs by navArgs()
 
@@ -60,26 +60,21 @@ class SikshaInfoFragment : Fragment() {
 
         binding.withdrawalText.setOnClickListener {
             // TODO: SikshaDialogController 만들기
-            val dialog = SikshaDialog.newInstance("앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.")
-            dialog.setListener(
-                object : SikshaDialogListener {
-                    override fun onPositive() {
-                        lifecycleScope.launch {
-                            try {
-                                val withdrawCallback = { activity?.finish() }
-                                userStatusManager.deleteUser(requireContext(), withdrawCallback)
-                            } catch (e: IOException) {
-                                showToast(getString(R.string.common_network_error))
-                            }
-                        }
-                    }
+            SikshaDialog.newInstance("앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.")
+                .show(childFragmentManager, "withdrawal dialog")
+        }
+    }
 
-                    override fun onNegative() {
-                        dialog.dismiss()
-                    }
-                }
-            )
-            dialog.show(childFragmentManager, "withdrawal")
+    override fun onDialogNegativeClick() {}
+
+    override fun onDialogPositiveClick() {
+        lifecycleScope.launch {
+            try {
+                val withdrawCallback = { activity?.finish() }
+                userStatusManager.deleteUser(requireContext(), withdrawCallback)
+            } catch (e: IOException) {
+                showToast(getString(R.string.common_network_error))
+            }
         }
     }
 }
