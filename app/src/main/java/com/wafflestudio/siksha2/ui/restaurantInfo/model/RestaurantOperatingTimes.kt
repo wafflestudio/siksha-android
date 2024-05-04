@@ -67,7 +67,6 @@ private fun parseDailyOperatingTimes(dailyOperatingTimesString: List<String>): D
     }
 }
 
-
 private fun parseOperatingTime(operatingTimeString: String): OperatingTime =
     operatingTimeString
         .split("-")

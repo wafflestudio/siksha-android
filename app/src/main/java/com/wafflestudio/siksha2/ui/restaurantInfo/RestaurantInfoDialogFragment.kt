@@ -86,7 +86,7 @@ class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCall
     }
 
     private fun initData() {
-        binding.restaurantOperatingTimes = restaurantInfo.etc?.operatingHours?.toRestaurantOperatingTimes()
+        binding.restaurantOperatingTimes = restaurantInfo.etc?.operatingHours?.toRestaurantOperatingTimes() // TODO: RestaurantInfo단부터 DTO 대신 UiState 만들어 사용하기
     }
 
     private fun initClickListener() {
