@@ -59,8 +59,10 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
         _binding = BottomsheetRestaurantInfoBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.map.onCreate(null)
-        binding.map.getMapAsync(this)
+        with(binding.mvMap) {
+            onCreate(null)
+            getMapAsync(this@RestaurantInfoBottomSheet)
+        }
 
         return binding.root
     }
@@ -81,8 +83,10 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
     }
 
     private fun initView() {
-        binding.title.text = restaurantInfo.nameKr
-        binding.subtitle.text = restaurantInfo.address?.replace("서울 관악구 관악로 1", "") ?: ""
+        with(binding) {
+            tvTitle.text = restaurantInfo.nameKr
+            tvLocationContent.text = restaurantInfo.address?.replace("서울 관악구 관악로 1", "") ?: ""
+        }
     }
 
     private fun initData() {
@@ -90,7 +94,7 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
     }
 
     private fun initClickListener() {
-        binding.closeButton.setOnClickListener { dismiss() }
+        binding.ivCloseButton.setOnClickListener { dismiss() }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
