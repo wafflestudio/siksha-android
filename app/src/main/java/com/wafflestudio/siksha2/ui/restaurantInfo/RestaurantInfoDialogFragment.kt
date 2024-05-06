@@ -28,7 +28,7 @@ import java.util.*
 class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     companion object {
-        private const val ARG_RESTAURANT_INFO = "restaurant_info"
+        private const val ARG_RESTAURANT_INFO = "ARG_RESTAURANT_INFO"
 
         @JvmStatic
         fun newInstance(restaurantInfo: RestaurantInfo) =
