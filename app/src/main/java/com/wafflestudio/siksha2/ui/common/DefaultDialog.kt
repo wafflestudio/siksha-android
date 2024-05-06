@@ -12,12 +12,12 @@ import com.wafflestudio.siksha2.databinding.DialogDefaultBinding
 class DefaultDialog : DialogFragment() {
 
     companion object {
-        private const val ARG_CONTENT = "ARG_CONTENT"
+        private const val ARG_MESSAGE = "ARG_MESSAGE"
 
         fun newInstance(message: CharSequence) =
             DefaultDialog().apply {
                 arguments = Bundle().apply {
-                    putCharSequence(ARG_CONTENT, message)
+                    putCharSequence(ARG_MESSAGE, message)
                 }
             }
     }
@@ -27,7 +27,7 @@ class DefaultDialog : DialogFragment() {
 
     private var listener: DefaultDialogListener? = null
 
-    private val content by lazy { arguments?.getCharSequence(ARG_CONTENT) }
+    private val message by lazy { arguments?.getCharSequence(ARG_MESSAGE) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +63,7 @@ class DefaultDialog : DialogFragment() {
     }
 
     private fun initView() {
-        binding.tvContent.text = content
+        binding.tvMessage.text = message
     }
 
     override fun onResume() {
