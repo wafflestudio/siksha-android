@@ -2,13 +2,13 @@ package com.wafflestudio.siksha2.ui.restaurantInfo.model
 
 import com.wafflestudio.siksha2.models.RestaurantInfo
 
-class RestaurantOperatingTimes(
+data class RestaurantOperatingTimes(
     val weekdays: DailyOperatingTimes?,
     val saturday: DailyOperatingTimes?,
     val holiday: DailyOperatingTimes?
 )
 
-class DailyOperatingTimes(
+data class DailyOperatingTimes(
     val breakfast: OperatingTime?,
     val lunch: OperatingTime?,
     val dinner: OperatingTime?
