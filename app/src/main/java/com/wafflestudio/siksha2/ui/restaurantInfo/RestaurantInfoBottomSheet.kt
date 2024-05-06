@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha2.ui.restaurantInfo
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -22,7 +21,6 @@ import com.wafflestudio.siksha2.databinding.BottomsheetRestaurantInfoBinding
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.ui.restaurantInfo.model.toRestaurantOperatingTimes
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallback {
@@ -30,7 +28,6 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
     companion object {
         private const val ARG_RESTAURANT_INFO = "ARG_RESTAURANT_INFO"
 
-        @JvmStatic
         fun newInstance(restaurantInfo: RestaurantInfo) =
             RestaurantInfoBottomSheet().apply {
                 arguments = Bundle().apply {
@@ -50,7 +47,6 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
         setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -15,7 +15,6 @@ class ReviewImageDialog : DialogFragment() {
     companion object {
         private const val ARG_URL = "ARG_URL"
 
-        @JvmStatic
         fun newInstance(url: String) =
             ReviewImageDialog().apply {
                 arguments = Bundle().apply {
