@@ -12,7 +12,7 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSikshaInfoBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.ui.common.SikshaDialog
+import com.wafflestudio.siksha2.ui.common.DefaultDialog
 import com.wafflestudio.siksha2.ui.common.SikshaDialogListener
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,7 +72,7 @@ class SikshaInfoFragment : Fragment(), SikshaDialogListener {
 
             withdrawalText.setOnClickListener {
                 // TODO: SikshaDialogController 만들기
-                SikshaDialog.newInstance(getString(R.string.siksha_info_dialog_withdrawal_content))
+                DefaultDialog.newInstance(getString(R.string.siksha_info_dialog_withdrawal_content))
                     .show(childFragmentManager, "withdrawal dialog")
             }
         }

@@ -18,28 +18,28 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.databinding.FragmentRestaurantInfoBinding
+import com.wafflestudio.siksha2.databinding.BottomsheetRestaurantInfoBinding
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.ui.restaurantInfo.model.toRestaurantOperatingTimes
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCallback {
+class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallback {
 
     companion object {
         private const val ARG_RESTAURANT_INFO = "ARG_RESTAURANT_INFO"
 
         @JvmStatic
         fun newInstance(restaurantInfo: RestaurantInfo) =
-            RestaurantInfoDialogFragment().apply {
+            RestaurantInfoBottomSheet().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARG_RESTAURANT_INFO, restaurantInfo)
                 }
             }
     }
 
-    private var _binding: FragmentRestaurantInfoBinding? = null
+    private var _binding: BottomsheetRestaurantInfoBinding? = null
     private val binding get() = _binding!!
     private val restaurantInfo: RestaurantInfo by lazy {
         BundleCompat.getParcelable(requireArguments(), ARG_RESTAURANT_INFO, RestaurantInfo::class.java)!!
@@ -56,7 +56,7 @@ class RestaurantInfoDialogFragment : BottomSheetDialogFragment(), OnMapReadyCall
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRestaurantInfoBinding.inflate(inflater, container, false)
+        _binding = BottomsheetRestaurantInfoBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         binding.map.onCreate(null)

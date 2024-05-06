@@ -18,7 +18,7 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingBottom="36dp"
-        tools:context=".ui.restaurantInfo.RestaurantInfoDialogFragment">
+        tools:context=".ui.restaurantInfo.RestaurantInfoBottomSheet">
 
 
         <LinearLayout

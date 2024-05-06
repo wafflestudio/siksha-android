@@ -12,7 +12,7 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.ui.common.SikshaDialog
+import com.wafflestudio.siksha2.ui.common.DefaultDialog
 import com.wafflestudio.siksha2.ui.common.SikshaDialogListener
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.utils.showToast
@@ -94,7 +94,7 @@ class SettingFragment : Fragment(), SikshaDialogListener {
 
         binding.logoutRow.setOnClickListener {
             // TODO: SikshaDialogController 만들기
-            SikshaDialog.newInstance(getString(R.string.setting_dialog_logout_content))
+            DefaultDialog.newInstance(getString(R.string.setting_dialog_logout_content))
                 .show(childFragmentManager, "logout dialog")
         }
 

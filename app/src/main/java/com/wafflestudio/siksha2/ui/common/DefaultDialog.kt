@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.wafflestudio.siksha2.databinding.DialogDefaultBinding
 
-class SikshaDialog : DialogFragment() {
+class DefaultDialog : DialogFragment() {
 
     companion object {
         private const val ARG_CONTENT = "ARG_CONTENT"
 
         fun newInstance(message: CharSequence) =
-            SikshaDialog().apply {
+            DefaultDialog().apply {
                 arguments = Bundle().apply {
                     putCharSequence(ARG_CONTENT, message)
                 }
