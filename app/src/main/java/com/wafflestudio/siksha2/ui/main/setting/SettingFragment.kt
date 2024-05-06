@@ -13,7 +13,7 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.ui.common.DefaultDialog
-import com.wafflestudio.siksha2.ui.common.SikshaDialogListener
+import com.wafflestudio.siksha2.ui.common.DefaultDialogListener
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +23,7 @@ import javax.inject.Inject
 import kotlin.math.pow
 
 @AndroidEntryPoint
-class SettingFragment : Fragment(), SikshaDialogListener {
+class SettingFragment : Fragment(), DefaultDialogListener {
 
     private lateinit var binding: FragmentSettingBinding
     private val vm: SettingViewModel by activityViewModels()

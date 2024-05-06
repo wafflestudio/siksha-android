@@ -25,7 +25,7 @@ class DefaultDialog : DialogFragment() {
     private var _binding: DialogDefaultBinding? = null
     private val binding: DialogDefaultBinding get() = _binding!!
 
-    private var listener: SikshaDialogListener? = null
+    private var listener: DefaultDialogListener? = null
 
     private val content by lazy { arguments?.getCharSequence(ARG_CONTENT) }
 
@@ -47,8 +47,8 @@ class DefaultDialog : DialogFragment() {
     }
 
     private fun initClickListener() {
-        listener = parentFragment as? SikshaDialogListener
-            ?: activity as? SikshaDialogListener
+        listener = parentFragment as? DefaultDialogListener
+            ?: activity as? DefaultDialogListener
 
         with(binding) {
             tvNegativeButton.setOnClickListener {
