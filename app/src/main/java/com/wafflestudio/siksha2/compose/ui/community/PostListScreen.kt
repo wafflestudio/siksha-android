@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState.Companion.Saver
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
@@ -17,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,11 +37,8 @@ fun PostListScreen(
     postListViewModel: PostListViewModel = hiltViewModel()
 ) {
     val boards by postListViewModel.boards.collectAsState()
-    val postPagingData by postListViewModel.postPagingData.collectAsState()
-    val posts = postPagingData.collectAsLazyPagingItems()
-    val postListState = rememberSaveable(saver = Saver) {
-        postListViewModel.postListState
-    }
+    val posts = postListViewModel.postPagingData.collectAsLazyPagingItems()
+    val postListState = postListViewModel.postListState
 
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -94,11 +89,13 @@ fun PostListScreen(
                     }
                 }
             }
+
             is LoadState.Loading -> {
                 PostsLoadingPlaceHolder(
                     modifier = Modifier.fillMaxSize()
                 )
             }
+
             is LoadState.Error -> {
                 PostsErrorPlaceHolder(
                     onClickRetry = {

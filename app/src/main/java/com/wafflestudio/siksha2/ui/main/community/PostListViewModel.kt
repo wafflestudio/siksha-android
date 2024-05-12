@@ -13,17 +13,19 @@ import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource.Compa
 import com.wafflestudio.siksha2.utils.Selectable
 import com.wafflestudio.siksha2.utils.toDataWithState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PostListViewModel @Inject constructor(
     private val communityRepository: CommunityRepository
@@ -38,7 +40,7 @@ class PostListViewModel @Inject constructor(
         .filterNotNull()
         .stateIn(viewModelScope, SharingStarted.Eagerly, Board.Empty)
 
-    private val _postPagingData = selectedBoard.map { board ->
+    private val _postPagingData = selectedBoard.flatMapLatest { board ->
         Pager(
             config = PagingConfig(
                 pageSize = ITEMS_PER_PAGE,
@@ -48,7 +50,7 @@ class PostListViewModel @Inject constructor(
         ).flow.cachedIn(viewModelScope)
     }
     val postPagingData =
-        _postPagingData.stateIn(viewModelScope, SharingStarted.Eagerly, flowOf(PagingData.empty()))
+        _postPagingData.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
     val postListState = LazyListState(
         firstVisibleItemIndex = 0,
