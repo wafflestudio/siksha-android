@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,19 +18,66 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private lateinit var stateAdapter: MainFragmentStateAdapter
+    private lateinit var stateAdapter: FragmentStateAdapter
 
     private val vm: MainViewModel by activityViewModels()
+
+    private var currentTabState = MainTabState.MAIN
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentMainBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (FeatureChecker.isFeatureEnabled(FeatureChecker.Feature.COMMUNITY_TAB)) {
+            initTabWithCommunity()
+        } else {
+            initTab()
+        }
+    }
+
+    private fun initTab() {
         stateAdapter = MainFragmentStateAdapter(this)
         binding.viewPager.apply {
             adapter = stateAdapter
             isUserInputEnabled = false
-            setCurrentItem(vm.getTabState().ordinal, false)
+            setCurrentItem(vm.getVpState(), false)
         }
+
+        TabLayoutMediator(
+            binding.tabLayout,
+            binding.viewPager
+        ) { tab: TabLayout.Tab, i: Int ->
+            tab.icon = when (i) {
+                0 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_favorite, null)
+                1 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_main, null)
+                2 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_setting, null)
+                else -> throw IllegalStateException("no such tab with index $i")
+            }
+        }.attach()
+    }
+
+    private fun initTabWithCommunity() {
+        stateAdapter = MainCommunityFragmentStateAdapter(this)
+        binding.viewPager.apply {
+            adapter = stateAdapter
+            isUserInputEnabled = false
+            setCurrentItem(currentTabState.ordinal, false)
+        }
+
+        binding.tabLayout.addTab(
+            binding.tabLayout.newTab()
+                .setIcon(ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_community, null)),
+            2,
+            false
+        )
 
         TabLayoutMediator(
             binding.tabLayout,
@@ -44,17 +93,9 @@ class MainFragment : Fragment() {
         }.attach()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onPause() {
-        super.onPause()
-        vm.setTabState(MainTabState.values()[binding.viewPager.currentItem])
+    override fun onStop() {
+        super.onStop()
+        vm.setVpState(binding.viewPager.currentItem)
+        currentTabState = MainTabState.fromPosition(binding.viewPager.currentItem)
     }
 }

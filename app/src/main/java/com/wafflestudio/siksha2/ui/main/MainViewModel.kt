@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
 
-    private var tabState = MainTabState.MAIN
+    private var vpState = 1
 
-    fun getTabState() = tabState
-    fun setTabState(tabState: MainTabState) {
-        this.tabState = tabState
+    fun getVpState() = vpState
+    fun setVpState(vpState: Int) {
+        this.vpState = vpState
     }
 }

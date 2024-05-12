@@ -2,19 +2,22 @@ package com.wafflestudio.siksha2.ui.main
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.wafflestudio.siksha2.ui.main.community.PostListFragment
 import com.wafflestudio.siksha2.ui.main.restaurant.DailyRestaurantFragment
 import com.wafflestudio.siksha2.ui.main.setting.SettingFragment
 
-class MainFragmentStateAdapter(mainFragment: MainFragment) : FragmentStateAdapter(mainFragment) {
+class MainCommunityFragmentStateAdapter(mainFragment: MainFragment) : FragmentStateAdapter(mainFragment) {
+
     override fun getItemCount(): Int {
-        return 3
+        return MainTabState.values().size
     }
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> DailyRestaurantFragment.newInstance(true)
-            1 -> DailyRestaurantFragment.newInstance(false)
-            2 -> SettingFragment()
+            MainTabState.FAVORITE.ordinal -> DailyRestaurantFragment.newInstance(true)
+            MainTabState.MAIN.ordinal -> DailyRestaurantFragment.newInstance(false)
+            MainTabState.COMMUNITY.ordinal -> PostListFragment()
+            MainTabState.SETTINGS.ordinal -> SettingFragment()
             else -> throw IllegalStateException("no such fragment with position $position")
         }
     }

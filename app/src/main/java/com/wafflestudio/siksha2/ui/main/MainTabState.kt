@@ -4,5 +4,11 @@ enum class MainTabState {
     FAVORITE,
     MAIN,
     COMMUNITY,
-    SETTINGS
+    SETTINGS;
+
+    companion object {
+        fun fromPosition(position: Int): MainTabState {
+            return values()[position]
+        }
+    }
 }
