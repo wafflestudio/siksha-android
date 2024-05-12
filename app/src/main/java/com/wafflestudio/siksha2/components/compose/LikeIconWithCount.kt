@@ -19,12 +19,19 @@ fun LikeIconWithCount(
     modifier: Modifier = Modifier,
     likeCount: Long = 0L,
     isLiked: Boolean = false,
-    onClick: () -> Unit = {}
+    onClick: (() -> Unit)? = null
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable(onClick = onClick)
+                } else {
+                    Modifier
+                }
+            )
     ) {
         ThumbIcon(isSelected = isLiked)
         Text(
