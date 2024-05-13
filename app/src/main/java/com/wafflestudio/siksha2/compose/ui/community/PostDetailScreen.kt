@@ -90,6 +90,7 @@ fun PostDetailScreen(
                                     true -> postDetailViewModel.unlikePost()
                                     false -> postDetailViewModel.likePost()
                                 }
+                                postListViewModel.updateListWithLikedPost(post)
                             }
                         }
                     )

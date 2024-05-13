@@ -7,7 +7,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.wafflestudio.siksha2.models.Board
+import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource.Companion.ITEMS_PER_PAGE
 import com.wafflestudio.siksha2.utils.Selectable
@@ -17,6 +19,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -49,8 +52,13 @@ class PostListViewModel @Inject constructor(
             pagingSourceFactory = { communityRepository.postPagingSource(board.id) }
         ).flow.cachedIn(viewModelScope)
     }
+    private val modifiedPosts = MutableStateFlow(mapOf<Long, Post>())
     val postPagingData =
-        _postPagingData.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
+        combine(_postPagingData, modifiedPosts) { pagingData, modifiedPosts ->
+            pagingData.map { post ->
+                modifiedPosts[post.id] ?: post
+            }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
     val postListState = LazyListState(
         firstVisibleItemIndex = 0,
@@ -77,6 +85,16 @@ class PostListViewModel @Inject constructor(
     fun selectBoard(boardIndex: Int) {
         _boards.value = _boards.value.mapIndexed { idx, board ->
             board.data.toDataWithState(idx == boardIndex)
+        }
+    }
+
+    fun updateListWithLikedPost(post: Post) {
+        val modifiedPost = post.copy(
+            isLiked = post.isLiked.not(),
+            likeCount = if (post.isLiked) post.likeCount - 1 else post.likeCount + 1
+        )
+        modifiedPosts.value = modifiedPosts.value.toMutableMap().apply {
+            put(post.id, modifiedPost)
         }
     }
 }
