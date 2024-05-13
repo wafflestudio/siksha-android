@@ -48,7 +48,7 @@ fun PostListScreen(
         posts.refresh()
         postListViewModel.invalidateCache()
     }
-    val pullRefreshState = rememberPullRefreshState(false, refresh) // 로딩 상태 표시는 PostsLoadingPlaceHolder 이용
+    val pullRefreshState = rememberPullRefreshState(false, refresh) // 로딩 상태 표시는 PostsLoadingPlaceHolder를 이용하므로 refreshing=false
 
     Column(
         modifier = modifier
@@ -76,7 +76,7 @@ fun PostListScreen(
                 .pullRefresh(pullRefreshState)
         ) {
             PullRefreshIndicator(
-                refreshing = false, // 로딩 상태 표시는 PostsLoadingPlaceHolder 이용
+                refreshing = false, // 로딩 상태 표시는 PostsLoadingPlaceHolder를 이용하므로 refreshing=false
                 state = pullRefreshState,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
