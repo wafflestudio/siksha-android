@@ -12,7 +12,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +34,7 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PostListScreen(
     onClickPost: (Long) -> Unit,
@@ -39,9 +44,15 @@ fun PostListScreen(
     val boards by postListViewModel.boards.collectAsState()
     val posts = postListViewModel.postPagingData.collectAsLazyPagingItems()
     val postListState = postListViewModel.postListState
+    val refresh: () -> Unit = {
+        posts.refresh()
+        postListViewModel.invalidateCache()
+    }
+    val pullRefreshState = rememberPullRefreshState(false, refresh) // 로딩 상태 표시는 PostsLoadingPlaceHolder 이용
 
     Column(
-        modifier = modifier.background(SikshaColors.White900)
+        modifier = modifier
+            .background(SikshaColors.White900)
     ) {
         LazyRow(
             modifier = Modifier.padding(horizontal = 28.dp, vertical = 20.dp),
@@ -60,49 +71,59 @@ fun PostListScreen(
             }
         }
         Divider(color = SikshaColors.Gray400, thickness = 0.5.dp)
-        when (posts.loadState.refresh) {
-            is LoadState.NotLoading -> {
-                if (posts.itemCount == 0) {
-                    PostsEmptyPlaceHolder(
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    LazyColumn(
-                        state = postListState
-                    ) {
-                        items(
-                            count = posts.itemCount
+        Box(
+            modifier = Modifier
+                .pullRefresh(pullRefreshState)
+        ) {
+            PullRefreshIndicator(
+                refreshing = false, // 로딩 상태 표시는 PostsLoadingPlaceHolder 이용
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+            when (posts.loadState.refresh) {
+                is LoadState.NotLoading -> {
+                    if (posts.itemCount == 0) {
+                        PostsEmptyPlaceHolder(
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        LazyColumn(
+                            state = postListState
                         ) {
-                            posts[it]?.let { post ->
-                                PostListItem(
-                                    title = post.title,
-                                    content = post.content,
-                                    likeCount = post.likeCount,
-                                    commentCount = post.commentCount,
-                                    isLiked = post.isLiked,
-                                    onClick = {
-                                        onClickPost(post.id)
-                                    }
-                                )
+                            items(
+                                count = posts.itemCount
+                            ) {
+                                posts[it]?.let { post ->
+                                    PostListItem(
+                                        title = post.title,
+                                        content = post.content,
+                                        likeCount = post.likeCount,
+                                        commentCount = post.commentCount,
+                                        isLiked = post.isLiked,
+                                        onClick = {
+                                            onClickPost(post.id)
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            is LoadState.Loading -> {
-                PostsLoadingPlaceHolder(
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+                is LoadState.Loading -> {
+                    PostsLoadingPlaceHolder(
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
 
-            is LoadState.Error -> {
-                PostsErrorPlaceHolder(
-                    onClickRetry = {
-                        posts.refresh()
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
+                is LoadState.Error -> {
+                    PostsErrorPlaceHolder(
+                        onClickRetry = {
+                            posts.refresh()
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
         }
     }

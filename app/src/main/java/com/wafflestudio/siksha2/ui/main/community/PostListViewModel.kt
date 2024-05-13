@@ -52,9 +52,9 @@ class PostListViewModel @Inject constructor(
             pagingSourceFactory = { communityRepository.postPagingSource(board.id) }
         ).flow.cachedIn(viewModelScope)
     }
-    private val modifiedPosts = MutableStateFlow(mapOf<Long, Post>())
+    private val modifiedPostsCache = MutableStateFlow(mapOf<Long, Post>())
     val postPagingData =
-        combine(_postPagingData, modifiedPosts) { pagingData, modifiedPosts ->
+        combine(_postPagingData, modifiedPostsCache) { pagingData, modifiedPosts ->
             pagingData.map { post ->
                 modifiedPosts[post.id] ?: post
             }
@@ -88,13 +88,20 @@ class PostListViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 데이터셋 전체를 invalidate하는 대신, 변화가 생긴 게시글을 map으로 캐시한다. UI에서 게시글 목록 조회 시 반영된다.
+     */
     fun updateListWithLikedPost(post: Post) {
         val modifiedPost = post.copy(
             isLiked = post.isLiked.not(),
             likeCount = if (post.isLiked) post.likeCount - 1 else post.likeCount + 1
         )
-        modifiedPosts.value = modifiedPosts.value.toMutableMap().apply {
+        modifiedPostsCache.value = modifiedPostsCache.value.toMutableMap().apply {
             put(post.id, modifiedPost)
         }
+    }
+
+    fun invalidateCache() {
+        modifiedPostsCache.value = emptyMap()
     }
 }
