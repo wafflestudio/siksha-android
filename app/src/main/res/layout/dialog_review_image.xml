@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="300dp"
-    android:layout_height="330dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/close_button"
+        android:id="@+id/iv_close_button"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_close_white" />
+        android:src="@drawable/ic_close_white"
+        app:layout_constraintBottom_toTopOf="@id/iv_review_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/review_image"
+        android:id="@+id/iv_review_image"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
-        tools:src="@color/black"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_close_button"
+        tools:src="@color/black" />
 
-
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
