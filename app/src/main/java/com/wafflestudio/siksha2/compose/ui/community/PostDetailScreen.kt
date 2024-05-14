@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
@@ -166,10 +168,12 @@ fun PostBody(
     onClickLike: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.padding(start = 35.dp, end = 35.dp, top = 30.dp)
+        modifier = modifier.padding(top = 30.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(horizontal = 35.dp)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
@@ -188,41 +192,46 @@ fun PostBody(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = post.title,
+            modifier = Modifier.padding(horizontal = 35.dp),
             style = SikshaTypography.subtitle2,
             fontWeight = FontWeight.ExtraBold
         )
         Spacer(modifier = Modifier.height(13.dp))
         Text(
             text = post.content,
+            modifier = Modifier.padding(horizontal = 35.dp),
             style = SikshaTypography.body2
         )
         Spacer(modifier = Modifier.height(16.dp))
         post.etc?.images?.let { images ->
             HorizontalPager(
-                state = rememberPagerState(initialPage = 0, pageCount = { images.size }),
+                state = rememberPagerState(pageCount = { images.size }),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 35.dp),
+                pageSize = PageSize.Fill
             ) {
-                images.forEach {
-                    SubcomposeAsyncImage(
-                        model = it,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f),
-                        loading = {
-                            CircularProgressIndicator()
-                        },
-                        contentScale = ContentScale.Crop
-                    )
-                }
+                val startPadding = if (it == 0) 0.dp else 8.dp
+                val endPadding = if (it == images.size - 1) 0.dp else 8.dp
+                SubcomposeAsyncImage(
+                    model = images[it],
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1f)
+                        .padding(start = startPadding, end = endPadding),
+                    contentDescription = "",
+                    loading = {
+                        CircularProgressIndicator()
+                    },
+                    contentScale = ContentScale.Crop
+                )
             }
         }
         Spacer(modifier = Modifier.height(18.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 10.dp),
+                .padding(horizontal = 35.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
