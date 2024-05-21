@@ -12,8 +12,8 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSikshaInfoBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.ui.SikshaDialog
-import com.wafflestudio.siksha2.ui.SikshaDialogListener
+import com.wafflestudio.siksha2.ui.common.DefaultDialog
+import com.wafflestudio.siksha2.ui.common.DefaultDialogListener
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,8 +22,11 @@ import javax.inject.Inject
 import kotlin.math.pow
 
 @AndroidEntryPoint
-class SikshaInfoFragment : Fragment() {
-    private lateinit var binding: FragmentSikshaInfoBinding
+class SikshaInfoFragment : Fragment(), DefaultDialogListener {
+
+    private var _binding: FragmentSikshaInfoBinding? = null
+    private val binding get() = _binding!!
+
     private val args: SikshaInfoFragmentArgs by navArgs()
 
     @Inject
@@ -34,13 +37,18 @@ class SikshaInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSikshaInfoBinding.inflate(inflater, container, false)
+        _binding = FragmentSikshaInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+        initOnClickListener()
+    }
+
+    private fun initView() {
         var currVersionNum = 0
         val latestVersionNum = args.latestVersionNum.toInt()
         BuildConfig.VERSION_NAME.split('.').forEachIndexed { idx, s ->
@@ -54,32 +62,37 @@ class SikshaInfoFragment : Fragment() {
         }
 
         binding.version.text = BuildConfig.VERSION_NAME
-        binding.backButton.setOnClickListener {
-            findNavController().popBackStack()
+    }
+
+    private fun initOnClickListener() {
+        with(binding) {
+            backButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            withdrawalText.setOnClickListener {
+                // TODO: SikshaDialogController 만들기
+                DefaultDialog.newInstance(getString(R.string.siksha_info_dialog_withdrawal_content))
+                    .show(childFragmentManager, "withdrawal dialog")
+            }
         }
+    }
 
-        binding.withdrawalText.setOnClickListener {
-            // TODO: SikshaDialogController 만들기
-            val dialog = SikshaDialog.newInstance("앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.")
-            dialog.setListener(
-                object : SikshaDialogListener {
-                    override fun onPositive() {
-                        lifecycleScope.launch {
-                            try {
-                                val withdrawCallback = { activity?.finish() }
-                                userStatusManager.deleteUser(requireContext(), withdrawCallback)
-                            } catch (e: IOException) {
-                                showToast(getString(R.string.common_network_error))
-                            }
-                        }
-                    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-                    override fun onNegative() {
-                        dialog.dismiss()
-                    }
-                }
-            )
-            dialog.show(childFragmentManager, "withdrawal")
+    override fun onDialogNegativeClick() {}
+
+    override fun onDialogPositiveClick() {
+        lifecycleScope.launch {
+            try {
+                val withdrawCallback = { activity?.finish() }
+                userStatusManager.deleteUser(requireContext(), withdrawCallback)
+            } catch (e: IOException) {
+                showToast(getString(R.string.common_network_error))
+            }
         }
     }
 }

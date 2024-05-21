@@ -12,15 +12,29 @@ import com.wafflestudio.siksha2.utils.setImageUrl
 
 class ReviewImageDialog : DialogFragment() {
 
-    private lateinit var binding: DialogReviewImageBinding
-    private val url by lazy { arguments?.getString(ARG_URL)!! }
+    companion object {
+        private const val ARG_URL = "ARG_URL"
+
+        fun newInstance(url: String) =
+            ReviewImageDialog().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_URL, url)
+                }
+            }
+    }
+
+    private var _binding: DialogReviewImageBinding? = null
+    private val binding get() = _binding!!
+    private val url by lazy {
+        arguments?.getString(ARG_URL)!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = DialogReviewImageBinding.inflate(layoutInflater)
+    ): View {
+        _binding = DialogReviewImageBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -28,21 +42,22 @@ class ReviewImageDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        binding.reviewImage.setImageUrl(url)
-        binding.closeButton.setOnClickListener {
+        initView()
+        initClickListener()
+    }
+
+    private fun initView() {
+        binding.ivReviewImage.setImageUrl(url)
+    }
+
+    private fun initClickListener() {
+        binding.ivCloseButton.setOnClickListener {
             dismiss()
         }
     }
 
-    companion object {
-        private const val ARG_URL = "url"
-
-        @JvmStatic
-        fun newInstance(url: String) =
-            ReviewImageDialog().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_URL, url)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

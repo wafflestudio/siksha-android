@@ -15,7 +15,7 @@ import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
-import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoDialogFragment
+import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoBottomSheet
 import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
@@ -137,7 +137,7 @@ class DailyRestaurantFragment : Fragment() {
                 lifecycleScope.launch {
                     vm.getRestaurantInfo(it)?.let {
                         // TODO: BottomSheetController 따로 만들어 Inject 받아쓰기
-                        val bottomSheet = RestaurantInfoDialogFragment.newInstance(it)
+                        val bottomSheet = RestaurantInfoBottomSheet.newInstance(it)
                         bottomSheet.showNow(parentFragmentManager, "restaurant_info_${it.id}")
                     }
                 }

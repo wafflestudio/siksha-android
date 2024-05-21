@@ -49,6 +49,7 @@ android {
 
     productFlavors {
         create("staging") {
+            isDefault = true
             applicationIdSuffix = ".staging"
 
             val propertyVersionName = versionProps.getProperty("sikshaVersion")
@@ -91,6 +92,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
         debug {
+            isDefault = true
             isMinifyEnabled = false
         }
     }
@@ -98,6 +100,7 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        dataBinding = true
         compose = true
     }
 
