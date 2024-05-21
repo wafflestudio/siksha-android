@@ -39,6 +39,13 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
 
     </fragment>
 
@@ -129,5 +136,14 @@
         android:label="fragment_voc"
         tools:layout="@layout/fragment_voc">
 
+    </fragment>
+
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostDetailFragment"
+        android:label="PostDetailFragment">
+        <argument
+            android:name="post_id"
+            app:argType="long" />
     </fragment>
 </navigation>

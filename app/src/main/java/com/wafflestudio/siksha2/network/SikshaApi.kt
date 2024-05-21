@@ -82,4 +82,51 @@ interface SikshaApi {
 
     @POST("/menus/{menu_id}/unlike")
     suspend fun postUnlikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+
+    @GET("/community/boards")
+    suspend fun getBoards(): GetBoardsResult
+
+    @GET("/community/posts")
+    suspend fun getPosts(
+        @Query("board_id") boardId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Int
+    ): GetPostsResult
+
+    @GET("/community/posts/{post_id}")
+    suspend fun getPost(
+        @Path("post_id") postId: Long
+    ): GetPostResult
+
+    @GET("/community/comments")
+    suspend fun getComments(
+        @Query("post_id") postId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Int
+    ): GetCommentsResult
+
+    @POST("/community/comments")
+    suspend fun postComment(
+        @Body body: PostCommentRequestBody
+    ): PostCommentResponse
+
+    @POST("/community/posts/{post_id}/like")
+    suspend fun postLikePost(
+        @Path("post_id") postId: Long
+    ): PostLikePostResponse
+
+    @POST("/community/posts/{post_id}/unlike")
+    suspend fun postUnlikePost(
+        @Path("post_id") postId: Long
+    ): PostUnlikePostResponse
+
+    @POST("/community/comments/{comment_id}/like")
+    suspend fun postLikeComment(
+        @Path("comment_id") commentId: Long
+    ): PostLikeCommentResponse
+
+    @POST("/community/comments/{comment_id}/unlike")
+    suspend fun postUnlikeComment(
+        @Path("comment_id") commentId: Long
+    ): PostUnlikeCommentResponse
 }
