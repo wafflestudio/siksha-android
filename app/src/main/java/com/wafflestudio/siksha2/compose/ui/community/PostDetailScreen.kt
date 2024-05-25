@@ -20,6 +20,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,14 +31,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.CommentIconWithCount
-import com.wafflestudio.siksha2.components.compose.EditText
 import com.wafflestudio.siksha2.components.compose.LikeIconWithCount
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.models.Comment
@@ -45,6 +48,7 @@ import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.EtcIcon
 import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
@@ -120,7 +124,11 @@ fun PostDetailScreen(
         CommentInputRow(
             commentInput = commentInput,
             onCommentInputChanged = { commentInput = it },
-            addComment = postDetailViewModel::addComment
+            addComment = postDetailViewModel::addComment,
+            modifier = Modifier
+                .padding(horizontal = 9.dp, vertical = 5.dp)
+                .height(40.dp)
+                .fillMaxWidth()
         )
     }
 }
@@ -270,16 +278,17 @@ fun CommentItem(
 fun CommentInputRow(
     commentInput: String,
     onCommentInputChanged: (String) -> Unit,
-    addComment: (String) -> Unit
+    addComment: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 9.dp)
+        modifier = modifier
     ) {
-        EditText(
+        CommentEditText(
             value = commentInput,
             onValueChange = onCommentInputChanged,
             modifier = Modifier.fillMaxWidth(),
+            hint = stringResource(R.string.community_comment_hint),
             leadingIcon = {},
             trailingIcon = {
                 Box(
@@ -289,21 +298,38 @@ fun CommentInputRow(
                             onCommentInputChanged("")
                         }
                         .background(
-                            color = SikshaColors.White900,
-                            shape = RoundedCornerShape(16.dp)
+                            color = MaterialTheme.colors.primary,
+                            shape = RoundedCornerShape(6.dp)
                         )
                         .padding(horizontal = 6.dp, vertical = 5.dp)
                 ) {
                     Text(
-                        text = "올리기",
+                        text = stringResource(R.string.community_comment_send_button),
                         style = SikshaTypography.body2.copy(
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = SikshaColors.OrangeMain
+                            color = SikshaColors.White900
                         )
                     )
                 }
             },
             textStyle = SikshaTypography.body2
         )
+    }
+}
+
+@Preview
+@Composable
+fun CommentInputRowPreview() {
+    SikshaTheme {
+        CommentInputRow(commentInput = "test", onCommentInputChanged = {}, addComment = {})
+    }
+}
+
+@Preview
+@Composable
+fun CommentInputRowHintPreview() {
+    SikshaTheme {
+        CommentInputRow(commentInput = "", onCommentInputChanged = {}, addComment = {})
     }
 }
