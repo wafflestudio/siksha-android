@@ -50,8 +50,13 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    suspend fun addComment(content: String) {
-        communityRepository.addCommentToPost(_post.value.id, content)
+    fun addComment(content: String) {
+        viewModelScope.launch {
+            runCatching {
+                communityRepository.addCommentToPost(_post.value.id, content)
+                _loadCommentSignal.emit(Unit)
+            } // TODO: error handling
+        }
     }
 
     suspend fun likePost() {

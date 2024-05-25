@@ -117,46 +117,11 @@ fun PostDetailScreen(
             }
         }
         Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 9.dp)
-        ) {
-            EditText(
-                value = commentInput,
-                onValueChange = {
-                    commentInput = it
-                },
-                modifier = Modifier.fillMaxWidth(),
-                leadingIcon = {
-                },
-                trailingIcon = {
-                    Box(
-                        modifier = Modifier
-                            .clickable {
-                                scope.launch {
-                                    postDetailViewModel.addComment(commentInput)
-                                    comments.refresh()
-                                    commentInput = ""
-                                }
-                            }
-                            .background(
-                                color = SikshaColors.White900,
-                                shape = RoundedCornerShape(16.dp)
-                            )
-                            .padding(horizontal = 6.dp, vertical = 5.dp)
-                    ) {
-                        Text(
-                            text = "올리기",
-                            style = SikshaTypography.body2.copy(
-                                fontWeight = FontWeight.SemiBold,
-                                color = SikshaColors.OrangeMain
-                            )
-                        )
-                    }
-                },
-                textStyle = SikshaTypography.body2
-            )
-        }
+        CommentInputRow(
+            commentInput = commentInput,
+            onCommentInputChanged = { commentInput = it },
+            addComment = postDetailViewModel::addComment
+        )
     }
 }
 
@@ -298,5 +263,47 @@ fun CommentItem(
             }
         }
         Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
+    }
+}
+
+@Composable
+fun CommentInputRow(
+    commentInput: String,
+    onCommentInputChanged: (String) -> Unit,
+    addComment: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 9.dp)
+    ) {
+        EditText(
+            value = commentInput,
+            onValueChange = onCommentInputChanged,
+            modifier = Modifier.fillMaxWidth(),
+            leadingIcon = {},
+            trailingIcon = {
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            addComment(commentInput)
+                            onCommentInputChanged("")
+                        }
+                        .background(
+                            color = SikshaColors.White900,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(horizontal = 6.dp, vertical = 5.dp)
+                ) {
+                    Text(
+                        text = "올리기",
+                        style = SikshaTypography.body2.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = SikshaColors.OrangeMain
+                        )
+                    )
+                }
+            },
+            textStyle = SikshaTypography.body2
+        )
     }
 }
