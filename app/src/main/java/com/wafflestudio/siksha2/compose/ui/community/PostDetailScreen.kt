@@ -3,6 +3,7 @@ package com.wafflestudio.siksha2.compose.ui.community
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
@@ -29,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -40,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.compose.Checkbox
 import com.wafflestudio.siksha2.components.compose.CommentIconWithCount
 import com.wafflestudio.siksha2.components.compose.LikeIconWithCount
 import com.wafflestudio.siksha2.components.compose.TopBar
@@ -68,6 +73,7 @@ fun PostDetailScreen(
     val board by postListViewModel.selectedBoard.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
     var commentInput by remember { mutableStateOf("") }
+    var isAnonymousInput by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
 
     Column(
@@ -124,6 +130,8 @@ fun PostDetailScreen(
         CommentInputRow(
             commentInput = commentInput,
             onCommentInputChanged = { commentInput = it },
+            isAnonymous = isAnonymousInput,
+            onIsAnonymousChanged = { isAnonymousInput = it },
             addComment = postDetailViewModel::addComment,
             modifier = Modifier
                 .padding(horizontal = 9.dp, vertical = 5.dp)
@@ -278,7 +286,9 @@ fun CommentItem(
 fun CommentInputRow(
     commentInput: String,
     onCommentInputChanged: (String) -> Unit,
-    addComment: (String) -> Unit,
+    addComment: (String, Boolean) -> Unit,
+    isAnonymous: Boolean,
+    onIsAnonymousChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -289,12 +299,39 @@ fun CommentInputRow(
             onValueChange = onCommentInputChanged,
             modifier = Modifier.fillMaxWidth(),
             hint = stringResource(R.string.community_comment_hint),
-            leadingIcon = {},
+            leadingIcon = {
+                Row(
+                    modifier = Modifier
+                        .padding(start = 5.dp, end = 12.dp)
+                        .clickable(
+                            onClick = {
+                                onIsAnonymousChanged(isAnonymous.not())
+                            },
+                            interactionSource = MutableInteractionSource(),
+                            indication = null
+                        ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = isAnonymous,
+                        onCheckedChange = null,
+                        modifier = Modifier.size(13.dp)
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = stringResource(R.string.community_comment_anonymous),
+                        style = MaterialTheme.typography.body2.copy(
+                            fontSize = 10.sp,
+                            color = if (isAnonymous) MaterialTheme.colors.primary else SikshaColors.Gray400
+                        )
+                    )
+                }
+            },
             trailingIcon = {
                 Box(
                     modifier = Modifier
                         .clickable {
-                            addComment(commentInput)
+                            addComment(commentInput, isAnonymous)
                             onCommentInputChanged("")
                         }
                         .background(
@@ -322,7 +359,13 @@ fun CommentInputRow(
 @Composable
 fun CommentInputRowPreview() {
     SikshaTheme {
-        CommentInputRow(commentInput = "test", onCommentInputChanged = {}, addComment = {})
+        CommentInputRow(
+            commentInput = "test",
+            onCommentInputChanged = {},
+            isAnonymous = true,
+            onIsAnonymousChanged = {},
+            addComment = { _, _ -> }
+        )
     }
 }
 
@@ -330,6 +373,12 @@ fun CommentInputRowPreview() {
 @Composable
 fun CommentInputRowHintPreview() {
     SikshaTheme {
-        CommentInputRow(commentInput = "", onCommentInputChanged = {}, addComment = {})
+        CommentInputRow(
+            commentInput = "",
+            onCommentInputChanged = {},
+            isAnonymous = false,
+            onIsAnonymousChanged = {},
+            addComment = { _, _ -> }
+        )
     }
 }

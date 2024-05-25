@@ -50,11 +50,11 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun addComment(content: String) {
+    fun addComment(content: String, isAnonymous: Boolean) {
         if (content.isEmpty()) return
         viewModelScope.launch {
             runCatching {
-                communityRepository.addCommentToPost(_post.value.id, content)
+                communityRepository.addCommentToPost(_post.value.id, content, isAnonymous)
                 _loadCommentSignal.emit(Unit)
             } // TODO: error handling
         }
