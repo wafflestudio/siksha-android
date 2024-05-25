@@ -51,6 +51,7 @@ class PostDetailViewModel @Inject constructor(
     }
 
     fun addComment(content: String) {
+        if (content.isEmpty()) return
         viewModelScope.launch {
             runCatching {
                 communityRepository.addCommentToPost(_post.value.id, content)
