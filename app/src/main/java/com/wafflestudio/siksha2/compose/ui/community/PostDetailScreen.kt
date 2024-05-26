@@ -30,7 +30,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +58,6 @@ import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalCoroutinesApi::class)
 @Composable
@@ -74,7 +72,6 @@ fun PostDetailScreen(
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
-    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -97,13 +94,8 @@ fun PostDetailScreen(
                     PostBody(
                         post = post,
                         onClickLike = {
-                            scope.launch {
-                                when (post.isLiked) {
-                                    true -> postDetailViewModel.unlikePost()
-                                    false -> postDetailViewModel.likePost()
-                                }
-                                postListViewModel.updateListWithLikedPost(post)
-                            }
+                            postDetailViewModel.togglePostLike()
+                            postListViewModel.updateListWithLikedPost(post)
                         }
                     )
                     Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
@@ -113,13 +105,7 @@ fun PostDetailScreen(
                         CommentItem(
                             comment = comment,
                             onClickLike = {
-                                scope.launch {
-                                    when (comment.isLiked) {
-                                        true -> postDetailViewModel.unlikeComment(comment.id)
-                                        false -> postDetailViewModel.likeComment(comment.id)
-                                    }
-                                    comments.refresh()
-                                }
+                                postDetailViewModel.toggleCommentLike(comment)
                             }
                         )
                     }
@@ -132,7 +118,10 @@ fun PostDetailScreen(
             onCommentInputChanged = { commentInput = it },
             isAnonymous = isAnonymousInput,
             onIsAnonymousChanged = { isAnonymousInput = it },
-            addComment = postDetailViewModel::addComment,
+            addComment = { content, isAnonymous ->
+                postDetailViewModel.addComment(content, isAnonymous)
+                postListViewModel.updateListWithCommentAddedPost(post)
+            },
             modifier = Modifier
                 .padding(horizontal = 9.dp, vertical = 5.dp)
                 .height(40.dp)

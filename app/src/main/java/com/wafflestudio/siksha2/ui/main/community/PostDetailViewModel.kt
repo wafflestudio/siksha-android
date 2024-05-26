@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
@@ -60,19 +61,22 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    suspend fun likePost() {
-        _post.value = communityRepository.likePost(_post.value.id)
+    fun togglePostLike() {
+        viewModelScope.launch {
+            when (post.value.isLiked) {
+                true -> _post.value = communityRepository.likePost(post.value.id)
+                false -> _post.value = communityRepository.unlikePost(post.value.id)
+            }
+        }
     }
 
-    suspend fun unlikePost() {
-        _post.value = communityRepository.unlikePost(_post.value.id)
-    }
-
-    suspend fun likeComment(commentId: Long) {
-        communityRepository.likeComment(commentId)
-    }
-
-    suspend fun unlikeComment(commentId: Long) {
-        communityRepository.unlikeComment(commentId)
+    fun toggleCommentLike(comment: Comment) {
+        viewModelScope.launch {
+            when (comment.isLiked) {
+                true -> communityRepository.likeComment(comment.id)
+                false -> communityRepository.unlikeComment(comment.id)
+            }
+            _loadCommentSignal.emit(Unit)
+        }
     }
 }

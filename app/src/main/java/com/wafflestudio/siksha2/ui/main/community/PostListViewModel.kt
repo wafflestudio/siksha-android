@@ -101,6 +101,15 @@ class PostListViewModel @Inject constructor(
         }
     }
 
+    fun updateListWithCommentAddedPost(post: Post) {
+        val modifiedPost = post.copy(
+            commentCount = post.commentCount + 1
+        )
+        modifiedPostsCache.value = modifiedPostsCache.value.toMutableMap().apply {
+            put(post.id, modifiedPost)
+        }
+    }
+
     fun invalidateCache() {
         modifiedPostsCache.value = emptyMap()
     }
