@@ -120,6 +120,25 @@ interface SikshaApi {
         @Path("post_id") postId: Long
     ): PostUnlikePostResponse
 
+    @Multipart
+    @POST("/community/posts")
+    suspend fun postCreatePost(
+        @Part("board_id") boardId: Long,
+        @Part title: String,
+        @Part content: String,
+        @Part images: List<MultipartBody.Part>
+    ): CreatePostResponse
+
+    @Multipart
+    @PATCH("/community/posts/{post_id}")
+    suspend fun postPatchPost(
+        @Path("post_id") postId: Long,
+        @Part("board_id") boardId: Long,
+        @Part title: String,
+        @Part content: String,
+        @Part images: List<MultipartBody.Part>
+    ): PatchPostResponse
+
     @POST("/community/comments/{comment_id}/like")
     suspend fun postLikeComment(
         @Path("comment_id") commentId: Long

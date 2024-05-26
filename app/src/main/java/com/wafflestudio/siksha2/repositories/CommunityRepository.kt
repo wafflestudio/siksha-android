@@ -6,6 +6,7 @@ import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,6 +36,14 @@ class CommunityRepository @Inject constructor(
 
     suspend fun unlikePost(postId: Long): Post {
         return api.postUnlikePost(postId).toPost()
+    }
+
+    suspend fun createPost(boardId: Long, title: String, content: String, images: List<MultipartBody.Part>): Post {
+        return api.postCreatePost(boardId, title, content, images).toPost()
+    }
+
+    suspend fun patchPost(postId: Long, boardId: Long, title: String, content: String, images: List<MultipartBody.Part>): Post {
+        return api.postPatchPost(postId, boardId, title, content, images).toPost()
     }
 
     suspend fun likeComment(commentId: Long) {
