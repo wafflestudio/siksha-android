@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
@@ -23,20 +24,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.Chip
 import com.wafflestudio.siksha2.components.compose.PostListItem
+import com.wafflestudio.siksha2.models.Board
+import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
+import com.wafflestudio.siksha2.utils.DataWithState
+import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PostListScreen(
+fun PostListRoute(
     onClickPost: (Long) -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel()
@@ -44,11 +52,33 @@ fun PostListScreen(
     val boards by postListViewModel.boards.collectAsState()
     val posts = postListViewModel.postPagingData.collectAsLazyPagingItems()
     val postListState = postListViewModel.postListState
-    val refresh: () -> Unit = {
-        posts.refresh()
-        postListViewModel.invalidateCache()
-    }
-    val pullRefreshState = rememberPullRefreshState(false, refresh) // 로딩 상태 표시는 PostsLoadingPlaceHolder를 이용하므로 refreshing=false
+
+    PostListScreen(
+        boards = boards,
+        posts = posts,
+        postListState = postListState,
+        onClickPost = onClickPost,
+        refreshPosts = {
+            posts.refresh()
+            postListViewModel.invalidateCache()
+        },
+        selectBoard = postListViewModel::selectBoard,
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PostListScreen(
+    boards: List<DataWithState<Board, Boolean>>,
+    posts: LazyPagingItems<Post>,
+    postListState: LazyListState,
+    onClickPost: (Long) -> Unit,
+    refreshPosts: () -> Unit,
+    selectBoard: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val pullRefreshState = rememberPullRefreshState(false, refreshPosts) // 로딩 상태 표시는 PostsLoadingPlaceHolder를 이용하므로 refreshing=false
 
     Column(
         modifier = modifier
@@ -65,7 +95,7 @@ fun PostListScreen(
                     text = item.data.name,
                     selected = item.state,
                     onClick = {
-                        postListViewModel.selectBoard(idx)
+                        selectBoard(idx)
                     }
                 )
             }
@@ -186,5 +216,21 @@ fun PostsErrorPlaceHolder(
                 )
             }
         }
+    }
+}
+
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Composable
+fun PostListScreenPreview() {
+    SikshaTheme {
+        PostListScreen(
+            boards = emptyList(),
+            posts = flowOf(PagingData.empty<Post>()).collectAsLazyPagingItems(),
+            postListState = LazyListState(0, 0),
+            onClickPost = {},
+            refreshPosts = {},
+            selectBoard = {},
+            modifier = Modifier
+        )
     }
 }
