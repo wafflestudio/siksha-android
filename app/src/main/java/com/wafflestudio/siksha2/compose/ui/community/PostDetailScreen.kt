@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -40,6 +41,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
 import com.wafflestudio.siksha2.R
@@ -47,6 +50,7 @@ import com.wafflestudio.siksha2.components.compose.Checkbox
 import com.wafflestudio.siksha2.components.compose.CommentIconWithCount
 import com.wafflestudio.siksha2.components.compose.LikeIconWithCount
 import com.wafflestudio.siksha2.components.compose.TopBar
+import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.EtcIcon
@@ -58,10 +62,11 @@ import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
-fun PostDetailScreen(
+fun PostDetailRoute(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel(),
@@ -70,6 +75,34 @@ fun PostDetailScreen(
     val post by postDetailViewModel.post.collectAsState()
     val board by postListViewModel.selectedBoard.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
+
+    PostDetailScreen(
+        post = post,
+        board = board,
+        comments = comments,
+        onNavigateUp = onNavigateUp,
+        togglePostLike = postDetailViewModel::togglePostLike,
+        toggleCommentLike = postDetailViewModel::toggleCommentLike,
+        updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
+        updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
+        addComment = postDetailViewModel::addComment,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun PostDetailScreen(
+    post: Post,
+    board: Board,
+    comments: LazyPagingItems<Comment>,
+    onNavigateUp: () -> Unit,
+    togglePostLike: () -> Unit,
+    toggleCommentLike: (Comment) -> Unit,
+    updateListWithLikedPost: (Post) -> Unit,
+    updateListWithCommentAddedPost: (Post) -> Unit,
+    addComment: (String, Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
 
@@ -94,8 +127,8 @@ fun PostDetailScreen(
                     PostBody(
                         post = post,
                         onClickLike = {
-                            postDetailViewModel.togglePostLike()
-                            postListViewModel.updateListWithLikedPost(post)
+                            togglePostLike()
+                            updateListWithLikedPost(post)
                         }
                     )
                     Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
@@ -105,7 +138,7 @@ fun PostDetailScreen(
                         CommentItem(
                             comment = comment,
                             onClickLike = {
-                                postDetailViewModel.toggleCommentLike(comment)
+                                toggleCommentLike(comment)
                             }
                         )
                     }
@@ -118,9 +151,9 @@ fun PostDetailScreen(
             onCommentInputChanged = { commentInput = it },
             isAnonymous = isAnonymousInput,
             onIsAnonymousChanged = { isAnonymousInput = it },
-            addComment = { content, isAnonymous ->
-                postDetailViewModel.addComment(content, isAnonymous)
-                postListViewModel.updateListWithCommentAddedPost(post)
+            addComment = { ->
+                addComment(commentInput, isAnonymousInput)
+                updateListWithCommentAddedPost(post)
             },
             modifier = Modifier
                 .padding(horizontal = 9.dp, vertical = 5.dp)
@@ -275,9 +308,9 @@ fun CommentItem(
 fun CommentInputRow(
     commentInput: String,
     onCommentInputChanged: (String) -> Unit,
-    addComment: (String, Boolean) -> Unit,
     isAnonymous: Boolean,
     onIsAnonymousChanged: (Boolean) -> Unit,
+    addComment: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -320,7 +353,7 @@ fun CommentInputRow(
                 Box(
                     modifier = Modifier
                         .clickable {
-                            addComment(commentInput, isAnonymous)
+                            addComment()
                             onCommentInputChanged("")
                         }
                         .background(
@@ -346,6 +379,25 @@ fun CommentInputRow(
 
 @Preview
 @Composable
+fun PostDetailScreenPreview() {
+    SikshaTheme {
+        PostDetailScreen(
+            post = Post(),
+            board = Board(),
+            comments = flowOf(PagingData.empty<Comment>()).collectAsLazyPagingItems(),
+            onNavigateUp = {},
+            togglePostLike = {},
+            updateListWithLikedPost = {},
+            toggleCommentLike = {},
+            addComment = { _, _ -> },
+            updateListWithCommentAddedPost = {},
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Preview
+@Composable
 fun CommentInputRowPreview() {
     SikshaTheme {
         CommentInputRow(
@@ -353,7 +405,7 @@ fun CommentInputRowPreview() {
             onCommentInputChanged = {},
             isAnonymous = true,
             onIsAnonymousChanged = {},
-            addComment = { _, _ -> }
+            addComment = {}
         )
     }
 }
@@ -367,7 +419,7 @@ fun CommentInputRowHintPreview() {
             onCommentInputChanged = {},
             isAnonymous = false,
             onIsAnonymousChanged = {},
-            addComment = { _, _ -> }
+            addComment = {}
         )
     }
 }
