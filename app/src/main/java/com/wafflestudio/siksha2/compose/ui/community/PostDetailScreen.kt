@@ -377,7 +377,7 @@ fun CommentInputRow(
     }
 }
 
-@Preview
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Composable
 fun PostDetailScreenPreview() {
     SikshaTheme {
