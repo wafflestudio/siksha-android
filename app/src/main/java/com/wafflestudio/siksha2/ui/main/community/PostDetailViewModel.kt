@@ -64,8 +64,8 @@ class PostDetailViewModel @Inject constructor(
     fun togglePostLike() {
         viewModelScope.launch {
             when (post.value.isLiked) {
-                true -> _post.value = communityRepository.likePost(post.value.id)
-                false -> _post.value = communityRepository.unlikePost(post.value.id)
+                true -> _post.value = communityRepository.unlikePost(post.value.id)
+                false -> _post.value = communityRepository.likePost(post.value.id)
             }
         }
     }
@@ -73,8 +73,8 @@ class PostDetailViewModel @Inject constructor(
     fun toggleCommentLike(comment: Comment) {
         viewModelScope.launch {
             when (comment.isLiked) {
-                true -> communityRepository.likeComment(comment.id)
-                false -> communityRepository.unlikeComment(comment.id)
+                true -> communityRepository.unlikeComment(comment.id)
+                false -> communityRepository.likeComment(comment.id)
             }
             _loadCommentSignal.emit(Unit)
         }
