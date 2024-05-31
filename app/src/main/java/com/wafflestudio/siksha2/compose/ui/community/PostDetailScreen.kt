@@ -175,7 +175,7 @@ fun PostHeader(
 ) {
     Row(
         modifier = modifier
-            .padding(horizontal = 35.dp)
+            .padding(horizontal = 20.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -206,14 +206,14 @@ fun PostBody(
     ) {
         Text(
             text = post.title,
-            modifier = Modifier.padding(horizontal = 35.dp),
+            modifier = Modifier.padding(horizontal = 20.dp),
             style = SikshaTypography.subtitle2,
             fontWeight = FontWeight.ExtraBold
         )
         Spacer(modifier = Modifier.height(13.dp))
         Text(
             text = post.content,
-            modifier = Modifier.padding(horizontal = 35.dp),
+            modifier = Modifier.padding(horizontal = 20.dp),
             style = SikshaTypography.body2
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -222,7 +222,7 @@ fun PostBody(
                 state = rememberPagerState(pageCount = { images.size }),
                 modifier = Modifier
                     .fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 35.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp),
                 pageSize = PageSize.Fill
             ) {
                 val startPadding = if (it == 0) 0.dp else 8.dp
@@ -245,7 +245,7 @@ fun PostBody(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 35.dp, vertical = 10.dp),
+                .padding(horizontal = 20.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
@@ -278,7 +278,7 @@ fun CommentItem(
     ) {
         Column(
             modifier = modifier
-                .padding(horizontal = 35.dp, vertical = 12.dp)
+                .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             Row {
                 Text(
