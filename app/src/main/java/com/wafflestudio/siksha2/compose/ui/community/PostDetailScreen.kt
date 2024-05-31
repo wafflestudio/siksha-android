@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +59,7 @@ import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
+import com.wafflestudio.siksha2.ui.ThumbIcon
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
@@ -216,7 +218,7 @@ fun PostBody(
             modifier = Modifier.padding(horizontal = 20.dp),
             style = SikshaTypography.body2
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         post.etc?.images?.let { images ->
             HorizontalPager(
                 state = rememberPagerState(pageCount = { images.size }),
@@ -240,12 +242,12 @@ fun PostBody(
                     contentScale = ContentScale.Crop
                 )
             }
+            Spacer(modifier = modifier.height(12.dp))
         }
-        Spacer(modifier = Modifier.height(18.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 10.dp),
+                .padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
@@ -253,8 +255,7 @@ fun PostBody(
             ) {
                 LikeIconWithCount(
                     likeCount = post.likeCount,
-                    isLiked = post.isLiked,
-                    onClick = onClickLike
+                    isLiked = post.isLiked
                 )
                 CommentIconWithCount(
                     commentCount = post.commentCount
@@ -262,6 +263,37 @@ fun PostBody(
             }
             EtcIcon()
         }
+        Spacer(modifier = Modifier.height(14.dp))
+        PostLikeButton(
+            modifier = Modifier.padding(start = 20.dp),
+            onClick = onClickLike
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+    }
+}
+
+@Composable
+fun PostLikeButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .border(width = 1.dp, color = SikshaColors.OrangeMain, shape = RoundedCornerShape(6.dp))
+            .clickable { onClick() }
+            .padding(horizontal = 9.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        ThumbIcon(
+            modifier = Modifier.size(11.dp)
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(
+            text = stringResource(R.string.community_post_like),
+            fontWeight = FontWeight.Bold,
+            fontSize = 10.sp,
+            color = SikshaColors.OrangeMain
+        )
     }
 }
 
@@ -304,8 +336,7 @@ fun CommentItem(
             Row {
                 LikeIconWithCount(
                     likeCount = comment.likeCount,
-                    isLiked = comment.isLiked,
-                    onClick = onClickLike
+                    isLiked = comment.isLiked
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 EtcIcon()
@@ -403,6 +434,14 @@ fun PostDetailScreenPreview() {
             updateListWithCommentAddedPost = {},
             modifier = Modifier.fillMaxSize()
         )
+    }
+}
+
+@Preview
+@Composable
+fun PostLikeButtonPreview() {
+    SikshaTheme {
+        PostLikeButton(onClick = {})
     }
 }
 
