@@ -124,6 +124,11 @@ fun PostDetailScreen(
             )
             LazyColumn {
                 item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    PostHeader(
+                        post = post
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
                     PostBody(
                         post = post,
                         onClickLike = {
@@ -163,6 +168,32 @@ fun PostDetailScreen(
     }
 }
 
+@Composable
+fun PostHeader(
+    post: Post,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .padding(horizontal = 35.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = post.nickname,
+            color = SikshaColors.Gray400,
+            fontSize = 12.sp,
+            style = SikshaTypography.body2
+        )
+        Text(
+            text = post.updatedAt.toParsedTimeString(),
+            color = SikshaColors.Gray400,
+            fontSize = 12.sp,
+            style = SikshaTypography.body2
+        )
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostBody(
@@ -171,28 +202,8 @@ fun PostBody(
     onClickLike: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.padding(top = 30.dp)
+        modifier = modifier
     ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 35.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = post.nickname ?: "",
-                color = SikshaColors.Gray400,
-                fontSize = 12.sp,
-                style = SikshaTypography.body2
-            )
-            Text(
-                text = post.updatedAt.toParsedTimeString(),
-                color = SikshaColors.Gray400,
-                fontSize = 12.sp,
-                style = SikshaTypography.body2
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = post.title,
             modifier = Modifier.padding(horizontal = 35.dp),
