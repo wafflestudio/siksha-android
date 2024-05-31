@@ -144,10 +144,18 @@ fun PostDetailScreen(
                     comments[it]?.let { comment ->
                         CommentItem(
                             comment = comment,
+                            modifier = Modifier.fillMaxWidth(),
                             onClickLike = {
                                 toggleCommentLike(comment)
                             }
                         )
+                        if (it < comments.itemCount - 1) {
+                            Divider(
+                                color = SikshaColors.Gray50,
+                                thickness = 1.dp,
+                                modifier = Modifier.padding(horizontal = 7.5.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -303,14 +311,12 @@ fun CommentItem(
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {}
 ) {
-    Column(
+    Row(
         modifier = modifier
-            .background(SikshaColors.White900)
-            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 12.dp)
     ) {
         Column(
-            modifier = modifier
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+            modifier = Modifier.weight(1f)
         ) {
             Row {
                 Text(
@@ -333,16 +339,40 @@ fun CommentItem(
                 style = SikshaTypography.body2
             )
             Spacer(modifier = Modifier.height(15.dp))
-            Row {
-                LikeIconWithCount(
-                    likeCount = comment.likeCount,
-                    isLiked = comment.isLiked
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                EtcIcon()
-            }
+            EtcIcon()
         }
-        Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
+        Spacer(modifier = Modifier.width(8.dp))
+        CommentLikeButton(
+            likeCount = comment.likeCount,
+            isLiked = comment.isLiked,
+            onClick = onClickLike,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
+    }
+}
+
+@Composable
+fun CommentLikeButton(
+    likeCount: Long,
+    isLiked: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .clickable { onClick() }
+            .background(color = SikshaColors.Gray100, shape = RoundedCornerShape(6.dp))
+            .padding(horizontal = 11.dp, vertical = 14.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ThumbIcon(isSelected = isLiked)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = likeCount.toString(),
+            fontSize = 10.sp,
+            color = SikshaColors.OrangeMain,
+            style = SikshaTypography.body2
+        )
     }
 }
 
@@ -442,6 +472,28 @@ fun PostDetailScreenPreview() {
 fun PostLikeButtonPreview() {
     SikshaTheme {
         PostLikeButton(onClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CommentItemPreview() {
+    SikshaTheme {
+        CommentItem(
+            comment = Comment(content = "댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 ", nickname = "유저이름")
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CommentLikeButtonPreview() {
+    SikshaTheme {
+        CommentLikeButton(
+            likeCount = 12,
+            isLiked = true,
+            onClick = {}
+        )
     }
 }
 
