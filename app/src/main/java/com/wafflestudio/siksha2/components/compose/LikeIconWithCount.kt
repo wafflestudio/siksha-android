@@ -42,7 +42,7 @@ fun LikeIconWithCount(
         ThumbIcon(isSelected = isLiked)
         Text(
             text = likeCount.toString(),
-            fontSize = 8.sp,
+            fontSize = 10.sp,
             color = SikshaColors.OrangeMain,
             style = SikshaTypography.body2
         )
