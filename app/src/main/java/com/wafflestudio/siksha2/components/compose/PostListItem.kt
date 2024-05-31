@@ -10,8 +10,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
 @Composable
@@ -30,7 +32,7 @@ fun PostListItem(
                 .clickable {
                     onClick()
                 }
-                .padding(start = 35.dp, end = 21.dp, top = 15.dp, bottom = 15.dp)
+                .padding(start = 20.dp, end = 20.dp, top = 15.dp, bottom = 15.dp)
         ) {
             Column(
                 modifier = Modifier.weight(1f),
@@ -59,5 +61,19 @@ fun PostListItem(
             }
         }
         Divider(color = SikshaColors.Gray400, thickness = 0.5.dp)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PostListItemPreview() {
+    SikshaTheme {
+        PostListItem(
+            title = "제목",
+            content = "본문 본문 본문 본문 본문 본문 본문 본문 본문 ",
+            likeCount = 10,
+            commentCount = 20,
+            isLiked = false
+        )
     }
 }

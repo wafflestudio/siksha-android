@@ -85,8 +85,8 @@ fun PostListScreen(
             .background(SikshaColors.White900)
     ) {
         LazyRow(
-            modifier = Modifier.padding(horizontal = 28.dp, vertical = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             itemsIndexed(
                 items = boards
