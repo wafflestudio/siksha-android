@@ -1,14 +1,11 @@
 package com.wafflestudio.siksha2.components.compose
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.wafflestudio.siksha2.ui.SikshaColors
+import androidx.compose.ui.res.painterResource
+import com.wafflestudio.siksha2.R
 
 @Composable
 fun Checkbox(
@@ -16,16 +13,14 @@ fun Checkbox(
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier
 ) {
-    Box( // TODO: 디자인 확정 후 수정
+    Image(
         modifier = modifier
-            .background(
-                color = if (checked) MaterialTheme.colors.primary else SikshaColors.Gray400,
-                shape = RoundedCornerShape(3.dp)
-            )
             .then(
                 onCheckedChange?.let {
                     Modifier.clickable { it(checked.not()) }
                 } ?: Modifier
-            )
+            ),
+        painter = painterResource(if (checked) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked),
+        contentDescription = ""
     )
 }
