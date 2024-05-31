@@ -15,6 +15,7 @@ object SikshaColors {
     val Gray400 = Color(0xFFB7B7B7)
     val Gray350 = Color(0xFFD9D9D9)
     val Gray100 = Color(0xFFF8F8F8)
+    val Gray50 = Color(0xFFF0F0F0)
 
     val Pink500 = Color(0xFFFD7878)
 

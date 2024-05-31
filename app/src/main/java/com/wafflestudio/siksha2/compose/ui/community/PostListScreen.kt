@@ -134,6 +134,13 @@ fun PostListScreen(
                                             onClickPost(post.id)
                                         }
                                     )
+                                    if (it < posts.itemCount - 1) {
+                                        Divider(
+                                            color = SikshaColors.Gray50,
+                                            thickness = 1.dp,
+                                            modifier = Modifier.padding(horizontal = 7.5.dp)
+                                        )
+                                    }
                                 }
                             }
                         }
