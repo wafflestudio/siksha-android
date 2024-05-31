@@ -342,10 +342,9 @@ fun CommentInputRow(
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = stringResource(R.string.community_comment_anonymous),
-                        style = MaterialTheme.typography.body2.copy(
-                            fontSize = 10.sp,
-                            color = if (isAnonymous) MaterialTheme.colors.primary else SikshaColors.Gray400
-                        )
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 10.sp,
+                        color = if (isAnonymous) MaterialTheme.colors.primary else SikshaColors.Gray400
                     )
                 }
             },
