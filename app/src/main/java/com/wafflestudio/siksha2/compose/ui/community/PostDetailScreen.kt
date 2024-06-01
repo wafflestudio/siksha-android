@@ -245,7 +245,9 @@ fun PostBody(
                         .padding(start = startPadding, end = endPadding),
                     contentDescription = "",
                     loading = {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(100.dp)
+                        )
                     },
                     contentScale = ContentScale.Crop
                 )
