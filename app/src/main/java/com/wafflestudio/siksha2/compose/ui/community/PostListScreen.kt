@@ -132,7 +132,8 @@ fun PostListScreen(
                                         isLiked = post.isLiked,
                                         onClick = {
                                             onClickPost(post.id)
-                                        }
+                                        },
+                                        thumbnailImage = post.etc?.images?.first()
                                     )
                                     if (it < posts.itemCount - 1) {
                                         Divider(
