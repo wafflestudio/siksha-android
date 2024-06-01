@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -157,7 +158,6 @@ fun PostDetailScreen(
             },
             modifier = Modifier
                 .padding(horizontal = 9.dp, vertical = 5.dp)
-                .height(40.dp)
                 .fillMaxWidth()
         )
     }
@@ -313,42 +313,48 @@ fun CommentInputRow(
     addComment: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    CommentEditText(
+        value = commentInput,
+        onValueChange = onCommentInputChanged,
         modifier = modifier
-    ) {
-        CommentEditText(
-            value = commentInput,
-            onValueChange = onCommentInputChanged,
-            modifier = Modifier.fillMaxWidth(),
-            hint = stringResource(R.string.community_comment_hint),
-            leadingIcon = {
-                Row(
-                    modifier = Modifier
-                        .padding(start = 5.dp, end = 12.dp)
-                        .clickable(
-                            onClick = {
-                                onIsAnonymousChanged(isAnonymous.not())
-                            },
-                            interactionSource = MutableInteractionSource(),
-                            indication = null
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Checkbox(
-                        checked = isAnonymous,
-                        onCheckedChange = null,
-                        modifier = Modifier.size(13.dp)
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = stringResource(R.string.community_comment_anonymous),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp,
-                        color = if (isAnonymous) MaterialTheme.colors.primary else SikshaColors.Gray400
-                    )
-                }
-            },
-            trailingIcon = {
+            .heightIn(max = 100.dp)
+            .fillMaxWidth(),
+        hint = stringResource(R.string.community_comment_hint),
+        leadingIcon = {
+            Row(
+                modifier = Modifier
+                    .padding(start = 11.dp, end = 12.dp)
+                    .height(40.dp)
+                    .clickable(
+                        onClick = {
+                            onIsAnonymousChanged(isAnonymous.not())
+                        },
+                        interactionSource = MutableInteractionSource(),
+                        indication = null
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = isAnonymous,
+                    onCheckedChange = null,
+                    modifier = Modifier.size(13.dp)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(
+                    text = stringResource(R.string.community_comment_anonymous),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 10.sp,
+                    color = if (isAnonymous) MaterialTheme.colors.primary else SikshaColors.Gray400
+                )
+            }
+        },
+        trailingIcon = {
+            Box(
+                modifier = Modifier
+                    .height(40.dp)
+                    .padding(start = 12.dp, end = 6.dp),
+                contentAlignment = Alignment.Center
+            ) {
                 Box(
                     modifier = Modifier
                         .clickable {
@@ -370,10 +376,10 @@ fun CommentInputRow(
                         )
                     )
                 }
-            },
-            textStyle = SikshaTypography.body2
-        )
-    }
+            }
+        },
+        textStyle = SikshaTypography.body2
+    )
 }
 
 @Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
@@ -417,6 +423,20 @@ fun CommentInputRowHintPreview() {
             commentInput = "",
             onCommentInputChanged = {},
             isAnonymous = false,
+            onIsAnonymousChanged = {},
+            addComment = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CommentInputMultiLinePreview() {
+    SikshaTheme {
+        CommentInputRow(
+            commentInput = "d\nd\nd\nd\nd\nd\nd\nd",
+            onCommentInputChanged = {},
+            isAnonymous = true,
             onIsAnonymousChanged = {},
             addComment = {}
         )
