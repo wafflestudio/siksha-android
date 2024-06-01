@@ -24,7 +24,6 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -138,7 +137,7 @@ fun PostDetailScreen(
                             updateListWithLikedPost(post)
                         }
                     )
-                    Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
+                    CommunityDivider()
                 }
                 items(comments.itemCount) {
                     comments[it]?.let { comment ->
@@ -150,17 +149,13 @@ fun PostDetailScreen(
                             }
                         )
                         if (it < comments.itemCount - 1) {
-                            Divider(
-                                color = SikshaColors.Gray50,
-                                thickness = 1.dp,
-                                modifier = Modifier.padding(horizontal = 7.5.dp)
-                            )
+                            CommunityDivider()
                         }
                     }
                 }
             }
         }
-        Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
+        CommunityDivider()
         CommentInputRow(
             commentInput = commentInput,
             onCommentInputChanged = { commentInput = it },

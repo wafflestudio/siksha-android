@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -100,7 +99,7 @@ fun PostListScreen(
                 )
             }
         }
-        Divider(color = SikshaColors.Gray400, thickness = 0.5.dp)
+        CommunityDivider()
         Box(
             modifier = Modifier
                 .pullRefresh(pullRefreshState)
@@ -136,11 +135,7 @@ fun PostListScreen(
                                         thumbnailImage = post.etc?.images?.first()
                                     )
                                     if (it < posts.itemCount - 1) {
-                                        Divider(
-                                            color = SikshaColors.Gray50,
-                                            thickness = 1.dp,
-                                            modifier = Modifier.padding(horizontal = 7.5.dp)
-                                        )
+                                        CommunityDivider()
                                     }
                                 }
                             }
