@@ -383,10 +383,14 @@ fun CommentLikeButton(
         modifier = modifier
             .clickable { onClick() }
             .background(color = SikshaColors.Gray100, shape = RoundedCornerShape(6.dp))
-            .padding(horizontal = 11.dp, vertical = 14.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .size(width = 35.dp, height = 53.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        ThumbIcon(isSelected = isLiked)
+        ThumbIcon(
+            isSelected = isLiked,
+            modifier = Modifier.size(13.dp)
+        )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = likeCount.toString(),
@@ -519,7 +523,7 @@ fun CommentItemPreview() {
 fun CommentLikeButtonPreview() {
     SikshaTheme {
         CommentLikeButton(
-            likeCount = 12,
+            likeCount = 123,
             isLiked = true,
             onClick = {}
         )
