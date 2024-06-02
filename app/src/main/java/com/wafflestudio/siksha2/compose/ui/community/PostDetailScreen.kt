@@ -8,10 +8,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -64,6 +66,7 @@ import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -181,21 +184,35 @@ fun PostHeader(
     Row(
         modifier = modifier
             .padding(horizontal = 20.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = post.nickname,
-            color = SikshaColors.Gray400,
-            fontSize = 12.sp,
-            style = SikshaTypography.body2
-        )
-        Text(
-            text = post.updatedAt.toParsedTimeString(),
-            color = SikshaColors.Gray400,
-            fontSize = 12.sp,
-            style = SikshaTypography.body2
-        )
+        CommunityProfilePicture(model = null) // TODO: 서버에서 프로필이미지 내려주면 반영하기
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .padding(top = 2.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = post.nickname,
+                color = SikshaColors.Black900,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                style = SikshaTypography.body2
+            )
+            Text(
+                text = post.updatedAt.toParsedTimeString(),
+                color = SikshaColors.Gray400,
+                fontSize = 10.sp,
+                style = SikshaTypography.body2
+            )
+        }
+        Spacer(modifier = Modifier.width(7.dp))
+        EtcIcon(modifier = Modifier.size(16.dp))
     }
 }
 
@@ -252,21 +269,16 @@ fun PostBody(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 20.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                LikeIconWithCount(
-                    likeCount = post.likeCount,
-                    isLiked = post.isLiked
-                )
-                CommentIconWithCount(
-                    commentCount = post.commentCount
-                )
-            }
-            EtcIcon()
+            LikeIconWithCount(
+                likeCount = post.likeCount,
+                isLiked = post.isLiked
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            CommentIconWithCount(
+                commentCount = post.commentCount
+            )
         }
         Spacer(modifier = Modifier.height(14.dp))
         PostLikeButton(
@@ -461,6 +473,14 @@ fun PostDetailScreenPreview() {
             updateListWithCommentAddedPost = {},
             modifier = Modifier.fillMaxSize()
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PostHeaderPreview() {
+    SikshaTheme {
+        PostHeader(post = Post(title = "제목", createdAt = LocalDateTime.now(), nickname = "닉네임"))
     }
 }
 
