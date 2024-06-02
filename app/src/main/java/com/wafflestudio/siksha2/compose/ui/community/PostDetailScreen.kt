@@ -327,18 +327,26 @@ fun CommentItem(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CommunityProfilePicture(
+                    model = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = comment.nickname,
-                    color = SikshaColors.Gray400,
-                    fontSize = 12.sp,
+                    color = SikshaColors.Black900,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 11.sp,
                     style = SikshaTypography.body2
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = comment.updatedAt.toParsedTimeString(),
                     color = SikshaColors.Gray400,
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     style = SikshaTypography.body2
                 )
             }
@@ -347,8 +355,12 @@ fun CommentItem(
                 text = comment.content,
                 style = SikshaTypography.body2
             )
-            Spacer(modifier = Modifier.height(15.dp))
-            EtcIcon()
+            Spacer(modifier = Modifier.height(10.dp))
+            EtcIcon(
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .size(16.dp)
+            )
         }
         Spacer(modifier = Modifier.width(8.dp))
         CommentLikeButton(
