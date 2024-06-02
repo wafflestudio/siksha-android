@@ -151,9 +151,7 @@ fun PostDetailScreen(
                                 toggleCommentLike(comment)
                             }
                         )
-                        if (it < comments.itemCount - 1) {
-                            CommunityDivider()
-                        }
+                        CommunityDivider()
                     }
                 }
             }
