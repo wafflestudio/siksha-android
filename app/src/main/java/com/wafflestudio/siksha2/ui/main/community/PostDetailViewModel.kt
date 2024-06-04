@@ -51,10 +51,12 @@ class PostDetailViewModel @Inject constructor(
     val postDetailEvent = _postDetailEvent.asSharedFlow()
 
     init {
+        refreshPost(PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId)
+    }
+
+    private fun refreshPost(postId: Long) {
         viewModelScope.launch {
-            _post.value = communityRepository.getPost(
-                PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
-            )
+            _post.value = communityRepository.getPost(postId)
         }
     }
 
@@ -65,6 +67,7 @@ class PostDetailViewModel @Inject constructor(
                 communityRepository.addCommentToPost(_post.value.id, content, isAnonymous)
             }.onSuccess {
                 _postDetailEvent.emit(PostDetailEvent.AddCommentSuccess)
+                refreshPost(post.value.id)
             }.onFailure {
                 _postDetailEvent.emit(PostDetailEvent.AddCommentFailed)
             }
