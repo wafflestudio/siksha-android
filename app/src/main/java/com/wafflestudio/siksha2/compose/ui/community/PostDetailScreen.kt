@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
@@ -125,7 +126,6 @@ fun PostDetailScreen(
             when (it) {
                 is PostDetailEvent.AddCommentSuccess -> {
                     refreshComments()
-                    commentListState.animateScrollToItem(commentListState.layoutInfo.totalItemsCount - 1)
                 }
 
                 is PostDetailEvent.AddCommentFailed -> {
@@ -142,6 +142,11 @@ fun PostDetailScreen(
             }
         }
     }
+
+    AutoScrollCommentsEffect(
+        commentPagingItems = comments,
+        commentsListState = commentListState
+    )
 
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -197,6 +202,32 @@ fun PostDetailScreen(
                 .fillMaxWidth()
         )
     }
+}
+
+/*
+ * 댓글이 추가되면 자동으로 스크롤해주는 Effect
+ */
+@Composable
+private fun AutoScrollCommentsEffect(
+    commentPagingItems: LazyPagingItems<Comment>,
+    commentsListState: LazyListState
+) {
+    var previousComments by remember { mutableStateOf(commentPagingItems.itemSnapshotList.map { it?.id }) }
+    val newComments = commentPagingItems.itemSnapshotList.map { it?.id }
+    LaunchedEffect(newComments) {
+        if (newComments == previousComments) return@LaunchedEffect
+
+        if (newComments.dropLast(1) == previousComments) { // 맨 끝에 하나만 추가된 상황이라면
+            commentsListState.animateScrollToLastItem() // 마지막 댓글으로 스크롤
+        }
+        previousComments = newComments
+    }
+}
+
+private suspend fun LazyListState.animateScrollToLastItem() {
+    val targetIndex = layoutInfo.totalItemsCount - 1
+    if (targetIndex < 0) return
+    animateScrollToItem(targetIndex)
 }
 
 @OptIn(ExperimentalFoundationApi::class)
