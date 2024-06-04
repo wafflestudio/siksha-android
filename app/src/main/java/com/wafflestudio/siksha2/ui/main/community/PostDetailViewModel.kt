@@ -63,20 +63,24 @@ class PostDetailViewModel @Inject constructor(
 
     fun togglePostLike() {
         viewModelScope.launch {
-            when (post.value.isLiked) {
-                true -> _post.value = communityRepository.unlikePost(post.value.id)
-                false -> _post.value = communityRepository.likePost(post.value.id)
-            }
+            runCatching {
+                when (post.value.isLiked) {
+                    true -> _post.value = communityRepository.unlikePost(post.value.id)
+                    false -> _post.value = communityRepository.likePost(post.value.id)
+                }
+            } // TODO: error handling
         }
     }
 
     fun toggleCommentLike(comment: Comment) {
         viewModelScope.launch {
-            when (comment.isLiked) {
-                true -> communityRepository.unlikeComment(comment.id)
-                false -> communityRepository.likeComment(comment.id)
-            }
-            _loadCommentSignal.emit(Unit)
+            runCatching {
+                when (comment.isLiked) {
+                    true -> communityRepository.unlikeComment(comment.id)
+                    false -> communityRepository.likeComment(comment.id)
+                }
+                _loadCommentSignal.emit(Unit)
+            } // TODO: error handling
         }
     }
 }
