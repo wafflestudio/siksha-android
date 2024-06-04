@@ -119,29 +119,11 @@ fun PostDetailScreen(
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
     val commentListState = rememberLazyListState()
-    val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        postDetailEvent.collect {
-            when (it) {
-                is PostDetailEvent.AddCommentSuccess -> {
-                    refreshComments()
-                }
-
-                is PostDetailEvent.AddCommentFailed -> {
-                    Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
-                }
-
-                is PostDetailEvent.ToggleCommentLikeSuccess -> {
-                    refreshComments()
-                }
-
-                is PostDetailEvent.ToggleCommentLikeFailed -> {
-                    Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
+    PostDetailViewEventEffect(
+        postDetailEvent = postDetailEvent,
+        refreshComments = refreshComments
+    )
 
     AutoScrollCommentsEffect(
         commentPagingItems = comments,
@@ -201,6 +183,35 @@ fun PostDetailScreen(
                 .padding(horizontal = 9.dp, vertical = 5.dp)
                 .fillMaxWidth()
         )
+    }
+}
+
+@Composable
+private fun PostDetailViewEventEffect(
+    postDetailEvent: SharedFlow<PostDetailEvent>,
+    refreshComments: () -> Unit
+) {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        postDetailEvent.collect {
+            when (it) {
+                is PostDetailEvent.AddCommentSuccess -> {
+                    refreshComments()
+                }
+
+                is PostDetailEvent.AddCommentFailed -> {
+                    Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+                is PostDetailEvent.ToggleCommentLikeSuccess -> {
+                    refreshComments()
+                }
+
+                is PostDetailEvent.ToggleCommentLikeFailed -> {
+                    Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }
 
