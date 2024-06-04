@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -28,6 +30,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,10 +63,13 @@ import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
+import com.wafflestudio.siksha2.ui.main.community.PostDetailEvent
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -81,7 +88,9 @@ fun PostDetailRoute(
         post = post,
         board = board,
         comments = comments,
+        postDetailEvent = postDetailViewModel.postDetailEvent,
         onNavigateUp = onNavigateUp,
+        refreshComments = { comments.refresh() },
         togglePostLike = postDetailViewModel::togglePostLike,
         toggleCommentLike = postDetailViewModel::toggleCommentLike,
         updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
@@ -96,8 +105,10 @@ fun PostDetailScreen(
     post: Post,
     board: Board,
     comments: LazyPagingItems<Comment>,
+    postDetailEvent: SharedFlow<PostDetailEvent>,
     onNavigateUp: () -> Unit,
     togglePostLike: () -> Unit,
+    refreshComments: () -> Unit,
     toggleCommentLike: (Comment) -> Unit,
     updateListWithLikedPost: (Post) -> Unit,
     updateListWithCommentAddedPost: (Post) -> Unit,
@@ -106,6 +117,31 @@ fun PostDetailScreen(
 ) {
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
+    val commentListState = rememberLazyListState()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        postDetailEvent.collect {
+            when (it) {
+                is PostDetailEvent.AddCommentSuccess -> {
+                    refreshComments()
+                    commentListState.animateScrollToItem(commentListState.layoutInfo.totalItemsCount - 1)
+                }
+
+                is PostDetailEvent.AddCommentFailed -> {
+                    Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+                is PostDetailEvent.ToggleCommentLikeSuccess -> {
+                    refreshComments()
+                }
+
+                is PostDetailEvent.ToggleCommentLikeFailed -> {
+                    Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -123,7 +159,7 @@ fun PostDetailScreen(
                     )
                 }
             )
-            LazyColumn {
+            LazyColumn(state = commentListState) {
                 item {
                     PostBody(
                         post = post,
@@ -390,8 +426,10 @@ fun PostDetailScreenPreview() {
             post = Post(),
             board = Board(),
             comments = flowOf(PagingData.empty<Comment>()).collectAsLazyPagingItems(),
+            postDetailEvent = MutableSharedFlow(),
             onNavigateUp = {},
             togglePostLike = {},
+            refreshComments = {},
             updateListWithLikedPost = {},
             toggleCommentLike = {},
             addComment = { _, _ -> },

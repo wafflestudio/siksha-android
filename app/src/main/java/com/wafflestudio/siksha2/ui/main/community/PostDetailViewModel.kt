@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,22 +32,29 @@ class PostDetailViewModel @Inject constructor(
     private val _post = MutableStateFlow<Post>(Post())
     val post: StateFlow<Post> = _post
 
-    private val _loadCommentSignal = MutableSharedFlow<Unit>()
-    val commentPagingData = _loadCommentSignal.flatMapLatest {
-        Pager(
-            config = PagingConfig(
-                pageSize = CommentPagingSource.ITEMS_PER_PAGE
-            ),
-            pagingSourceFactory = { communityRepository.commentPagingSource(_post.value.id) }
-        ).flow.cachedIn(viewModelScope)
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
+    val commentPagingData = Pager(
+        config = PagingConfig(
+            pageSize = CommentPagingSource.ITEMS_PER_PAGE
+        ),
+        pagingSourceFactory = {
+            communityRepository.commentPagingSource(
+                PostDetailFragmentArgs.fromSavedStateHandle(
+                    savedStateHandle
+                ).postId
+            )
+        }
+    ).flow
+        .cachedIn(viewModelScope)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
+
+    private val _postDetailEvent = MutableSharedFlow<PostDetailEvent>()
+    val postDetailEvent = _postDetailEvent.asSharedFlow()
 
     init {
         viewModelScope.launch {
             _post.value = communityRepository.getPost(
                 PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
             )
-            _loadCommentSignal.emit(Unit)
         }
     }
 
@@ -56,8 +63,11 @@ class PostDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 communityRepository.addCommentToPost(_post.value.id, content, isAnonymous)
-                _loadCommentSignal.emit(Unit)
-            } // TODO: error handling
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.AddCommentSuccess)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.AddCommentFailed)
+            }
         }
     }
 
@@ -68,7 +78,7 @@ class PostDetailViewModel @Inject constructor(
                     true -> _post.value = communityRepository.unlikePost(post.value.id)
                     false -> _post.value = communityRepository.likePost(post.value.id)
                 }
-            } // TODO: error handling
+            }
         }
     }
 
@@ -79,8 +89,18 @@ class PostDetailViewModel @Inject constructor(
                     true -> communityRepository.unlikeComment(comment.id)
                     false -> communityRepository.likeComment(comment.id)
                 }
-                _loadCommentSignal.emit(Unit)
-            } // TODO: error handling
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeSuccess)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeFailed)
+            }
         }
     }
+}
+
+sealed interface PostDetailEvent {
+    object AddCommentSuccess : PostDetailEvent
+    object AddCommentFailed : PostDetailEvent
+    object ToggleCommentLikeSuccess : PostDetailEvent
+    object ToggleCommentLikeFailed : PostDetailEvent
 }
