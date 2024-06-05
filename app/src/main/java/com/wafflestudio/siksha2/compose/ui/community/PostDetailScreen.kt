@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -302,9 +303,9 @@ fun PostLikeButton(
                 color = SikshaColors.OrangeMain,
                 shape = RoundedCornerShape(6.dp)
             )
+            .clip(RoundedCornerShape(6.dp))
             .background(
-                color = if (isLiked) SikshaColors.OrangeMain else SikshaColors.White900,
-                shape = RoundedCornerShape(6.dp)
+                color = if (isLiked) SikshaColors.OrangeMain else SikshaColors.White900
             )
             .clickable { onClick() }
             .padding(horizontal = 9.dp, vertical = 6.dp),
@@ -391,8 +392,9 @@ fun CommentLikeButton(
 ) {
     Column(
         modifier = modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(color = SikshaColors.Gray100)
             .clickable { onClick() }
-            .background(color = SikshaColors.Gray100, shape = RoundedCornerShape(6.dp))
             .size(width = 35.dp, height = 53.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
