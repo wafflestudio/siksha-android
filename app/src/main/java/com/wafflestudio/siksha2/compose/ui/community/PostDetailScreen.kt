@@ -480,7 +480,9 @@ fun CommentInputRow(
                     )
                 }
             },
-            textStyle = SikshaTypography.body2
+            textStyle = SikshaTypography.body2.copy(
+                fontSize = 12.sp
+            )
         )
     }
 }
