@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -281,6 +282,7 @@ fun PostBody(
         Spacer(modifier = Modifier.height(14.dp))
         PostLikeButton(
             modifier = Modifier.padding(start = 20.dp),
+            isLiked = post.isLiked,
             onClick = onClickLike
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -290,24 +292,34 @@ fun PostBody(
 @Composable
 fun PostLikeButton(
     onClick: () -> Unit,
+    isLiked: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
-            .border(width = 1.dp, color = SikshaColors.OrangeMain, shape = RoundedCornerShape(6.dp))
+            .border(
+                width = 1.dp,
+                color = SikshaColors.OrangeMain,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .background(
+                color = if (isLiked) SikshaColors.OrangeMain else SikshaColors.White900,
+                shape = RoundedCornerShape(6.dp)
+            )
             .clickable { onClick() }
             .padding(horizontal = 9.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         ThumbIcon(
-            modifier = Modifier.size(11.dp)
+            modifier = Modifier.size(11.dp),
+            colorFilter = ColorFilter.tint(if (isLiked) SikshaColors.White900 else SikshaColors.OrangeMain)
         )
         Spacer(modifier = Modifier.width(5.dp))
         Text(
             text = stringResource(R.string.community_post_like),
             fontWeight = FontWeight.Bold,
             fontSize = 10.sp,
-            color = SikshaColors.OrangeMain
+            color = if (isLiked) SikshaColors.White900 else SikshaColors.OrangeMain
         )
     }
 }
@@ -454,7 +466,7 @@ fun CommentInputRow(
                             color = MaterialTheme.colors.primary,
                             shape = RoundedCornerShape(6.dp)
                         )
-                        .padding(horizontal = 6.dp, vertical = 5.dp)
+                        .padding(horizontal = 11.dp, vertical = 6.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.community_comment_send_button),
@@ -502,7 +514,10 @@ fun PostHeaderPreview() {
 @Composable
 fun PostLikeButtonPreview() {
     SikshaTheme {
-        PostLikeButton(onClick = {})
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            PostLikeButton(onClick = {}, isLiked = true)
+            PostLikeButton(onClick = {}, isLiked = false)
+        }
     }
 }
 
