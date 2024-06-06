@@ -79,7 +79,7 @@ class ScalableImageView @JvmOverloads constructor(
                         val newDist = getDistance(event)
                         if (newDist > 10f) {
                             imageMatrix = savedMatrix
-                                .scaled(newDist / savedDist)
+                                .scaled(newDist / savedDist, savedMidPoint.x, savedMidPoint.y)
                                 .translated(
                                     (event.getX(0) + event.getX(1)) / 2 - savedMidPoint.x,
                                     (event.getY(0) + event.getY(1)) / 2 - savedMidPoint.y
@@ -113,13 +113,15 @@ class ScalableImageView @JvmOverloads constructor(
     }
 
     /**
-     * 원본 이미지보다 작게 축소하지 않는 한 requestedScale만큼 scale한 행렬을 반환합니다.
+     * 원본 이미지보다 작게 축소하지 않는 한 (pivotX, pivotY)를 기준으로 requestedScale만큼 scale한 행렬을 반환합니다.
      */
-    private fun Matrix.scaled(requestedScale: Float): Matrix {
+    private fun Matrix.scaled(requestedScale: Float, pivotX: Float, pivotY: Float): Matrix {
         val scale = requestedScale.coerceAtLeast(1f / this.scaleX)
         return Matrix().apply {
             set(this@scaled)
+            postTranslate(-pivotX, -pivotY)
             postScale(scale, scale)
+            postTranslate(pivotX, pivotY)
         }
     }
 
