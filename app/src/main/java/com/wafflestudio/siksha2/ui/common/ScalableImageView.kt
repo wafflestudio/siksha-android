@@ -94,24 +94,6 @@ class ScalableImageView @JvmOverloads constructor(
         return true
     }
 
-    private val Matrix.scaleX get() = run {
-        val values = FloatArray(9)
-        getValues(values)
-        values[Matrix.MSCALE_X]
-    }
-
-    private val Matrix.translationX get() = run {
-        val values = FloatArray(9)
-        getValues(values)
-        values[Matrix.MTRANS_X]
-    }
-
-    private val Matrix.translationY get() = run {
-        val values = FloatArray(9)
-        getValues(values)
-        values[Matrix.MTRANS_Y]
-    }
-
     /**
      * 원본 이미지보다 작게 축소하지 않는 한 (pivotX, pivotY)를 기준으로 requestedScale만큼 scale한 행렬을 반환합니다.
      */
@@ -163,4 +145,22 @@ class ScalableImageView @JvmOverloads constructor(
         val y = event.getY(0) + event.getY(1)
         point.set(x / 2, y / 2)
     }
+}
+
+private val Matrix.scaleX get() = run {
+    val values = FloatArray(9)
+    getValues(values)
+    values[Matrix.MSCALE_X]
+}
+
+private val Matrix.translationX get() = run {
+    val values = FloatArray(9)
+    getValues(values)
+    values[Matrix.MTRANS_X]
+}
+
+private val Matrix.translationY get() = run {
+    val values = FloatArray(9)
+    getValues(values)
+    values[Matrix.MTRANS_Y]
 }
