@@ -114,7 +114,7 @@ class ScalableImageView @JvmOverloads constructor(
         val imageWidth = drawable.intrinsicWidth
         val scaledImageWidth = imageWidth * this.scaleX
         val dxLimit = scaledImageWidth - imageWidth
-        if (dxLimit < 0) return this
+        if (dxLimit < 0) return this // FIXME: scaled()에서 coerceAtLeast 했음에도 불구하고 scaleX >= 1인 경우가 있다. scaled() 단에서 막도록 수정 필요
         val dx = requestedDx.coerceIn(-dxLimit - this.translationX, -this.translationX)
 
         val imageHeight = drawable.intrinsicHeight
