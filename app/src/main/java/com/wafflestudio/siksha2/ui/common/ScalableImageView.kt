@@ -46,6 +46,8 @@ class ScalableImageView @JvmOverloads constructor(
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return true
+        if (drawable == null) return true
+
         gestureDetector.onTouchEvent(event)
 
         when (event.action and MotionEvent.ACTION_MASK) {
