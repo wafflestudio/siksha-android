@@ -19,8 +19,7 @@ class ImageDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Glide.with(this)
-            .load("https://picsum.photos/200")
-            .centerInside()
+            .load("https://picsum.photos/200/300")
             .into(binding.sivImage)
     }
 

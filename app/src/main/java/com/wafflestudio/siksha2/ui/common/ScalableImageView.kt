@@ -24,33 +24,22 @@ class ScalableImageView @JvmOverloads constructor(
         ZOOM
     }
 
-    private val matrix = Matrix()
     private val savedMatrix = Matrix()
-    private val start = PointF()
-    private val startMid = PointF()
-    private var oldDist = 1f
+    private val savedPoint = PointF()
+    private val savedMidPoint = PointF()
+    private var savedDist = 1f
     private var mode = Mode.NONE
-
-    private val currentScale get() = run {
-        val values = FloatArray(9)
-        imageMatrix.getValues(values)
-        values[Matrix.MSCALE_X]
-    }
 
     private val gestureDetector = GestureDetector(
         context,
         object : SimpleOnGestureListener() {
             override fun onDoubleTap(e: MotionEvent): Boolean {
-                matrix.setScale(1f, 1f)
-                matrix.setTranslate(0f, 0f)
-                imageMatrix = matrix
                 return true
             }
         }
     )
 
     init {
-        imageMatrix = matrix
         scaleType = ScaleType.MATRIX
     }
 
@@ -61,16 +50,16 @@ class ScalableImageView @JvmOverloads constructor(
 
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
-                savedMatrix.set(matrix)
-                start.set(event.x, event.y)
+                savedMatrix.set(imageMatrix)
+                savedPoint.set(event.x, event.y)
                 mode = Mode.DRAG
             }
 
             MotionEvent.ACTION_POINTER_DOWN -> {
-                oldDist = getDistance(event)
-                if (oldDist > 10f) {
-                    savedMatrix.set(matrix)
-                    setMidPoint(startMid, event)
+                savedDist = getDistance(event)
+                if (savedDist > 10f) {
+                    savedMatrix.set(imageMatrix)
+                    setMidPoint(savedMidPoint, event)
                     mode = Mode.ZOOM
                 }
             }
@@ -83,20 +72,18 @@ class ScalableImageView @JvmOverloads constructor(
             MotionEvent.ACTION_MOVE -> {
                 when (mode) {
                     Mode.DRAG -> {
-                        matrix.set(savedMatrix)
-                        matrix.postTranslate(event.x - start.x, event.y - start.y)
+                        imageMatrix = savedMatrix.translated(event.x - savedPoint.x, event.y - savedPoint.y)
                     }
 
                     Mode.ZOOM -> {
                         val newDist = getDistance(event)
                         if (newDist > 10f) {
-                            matrix.set(savedMatrix)
-                            val scale = (newDist / oldDist).coerceAtLeast(1f / currentScale)
-                            matrix.postScale(scale, scale, startMid.x, startMid.y)
-
-                            val dx = (event.getX(0) + event.getX(1)) / 2 - startMid.x
-                            val dy = (event.getY(0) + event.getY(1)) / 2 - startMid.y
-                            matrix.postTranslate(dx, dy)
+                            imageMatrix = savedMatrix
+                                .scaled(newDist / savedDist)
+                                .translated(
+                                    (event.getX(0) + event.getX(1)) / 2 - savedMidPoint.x,
+                                    (event.getY(0) + event.getY(1)) / 2 - savedMidPoint.y
+                                )
                         }
                     }
 
@@ -104,8 +91,57 @@ class ScalableImageView @JvmOverloads constructor(
                 }
             }
         }
-        imageMatrix = matrix
         return true
+    }
+
+    private val Matrix.scaleX get() = run {
+        val values = FloatArray(9)
+        getValues(values)
+        values[Matrix.MSCALE_X]
+    }
+
+    private val Matrix.translationX get() = run {
+        val values = FloatArray(9)
+        getValues(values)
+        values[Matrix.MTRANS_X]
+    }
+
+    private val Matrix.translationY get() = run {
+        val values = FloatArray(9)
+        getValues(values)
+        values[Matrix.MTRANS_Y]
+    }
+
+    /**
+     * 원본 이미지보다 작게 축소하지 않는 한 requestedScale만큼 scale한 행렬을 반환합니다.
+     */
+    private fun Matrix.scaled(requestedScale: Float): Matrix {
+        val scale = requestedScale.coerceAtLeast(1f / this.scaleX)
+        return Matrix().apply {
+            set(this@scaled)
+            postScale(scale, scale)
+        }
+    }
+
+    /**
+     * 여백이 보이지 않는 한 requestedDx, requestedDy만큼 translate한 행렬을 반환합니다.
+     */
+    private fun Matrix.translated(requestedDx: Float, requestedDy: Float): Matrix {
+        val imageWidth = drawable.intrinsicWidth
+        val scaledImageWidth = imageWidth * this.scaleX
+        val dxLimit = scaledImageWidth - imageWidth
+        if (dxLimit < 0) return this
+        val dx = requestedDx.coerceIn(-dxLimit - this.translationX, -this.translationX)
+
+        val imageHeight = drawable.intrinsicHeight
+        val scaledImageHeight = imageHeight * this.scaleX
+        val dyLimit = scaledImageHeight - imageHeight
+        val dy = requestedDy.coerceIn(-dyLimit - this.translationY, -this.translationY)
+
+        return Matrix().apply {
+            set(this@translated)
+            postTranslate(dx, dy)
+        }
     }
 
     /**
