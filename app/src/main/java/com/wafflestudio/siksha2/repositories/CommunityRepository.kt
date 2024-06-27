@@ -18,6 +18,10 @@ class CommunityRepository @Inject constructor(
         return api.getBoards().map { it.toBoard() }
     }
 
+    suspend fun getBoard(boardId: Long): Board {
+        return api.getBoard(boardId).toBoard()
+    }
+
     fun postPagingSource(boardId: Long) = PostPagingSource(boardId, api)
 
     suspend fun getPost(postId: Long): Post {
@@ -38,8 +42,8 @@ class CommunityRepository @Inject constructor(
         return api.postUnlikePost(postId).toPost()
     }
 
-    suspend fun createPost(boardId: Long, title: String, content: String, images: List<MultipartBody.Part>): Post {
-        return api.postCreatePost(boardId, title, content, images).toPost()
+    suspend fun createPost(boardId: Long, title: String, content: String, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
+        return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
     }
 
     suspend fun patchPost(postId: Long, boardId: Long, title: String, content: String, images: List<MultipartBody.Part>): Post {

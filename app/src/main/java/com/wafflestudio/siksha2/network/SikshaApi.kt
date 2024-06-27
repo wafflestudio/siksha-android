@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
+import com.wafflestudio.siksha2.network.dto.core.BoardDto
 import okhttp3.MultipartBody
 import retrofit2.http.*
 import java.time.LocalDate
@@ -86,6 +87,11 @@ interface SikshaApi {
     @GET("/community/boards")
     suspend fun getBoards(): GetBoardsResult
 
+    @GET("/community/boards/{board_id}")
+    suspend fun getBoard(
+        @Path("board_id") boardId: Long
+    ): BoardDto
+
     @GET("/community/posts")
     suspend fun getPosts(
         @Query("board_id") boardId: Long,
@@ -126,6 +132,7 @@ interface SikshaApi {
         @Part("board_id") boardId: Long,
         @Part title: String,
         @Part content: String,
+        @Part anonymous: Boolean,
         @Part images: List<MultipartBody.Part>
     ): CreatePostResponse
 
