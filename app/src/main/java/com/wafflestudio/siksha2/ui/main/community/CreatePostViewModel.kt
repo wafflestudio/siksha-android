@@ -6,12 +6,17 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.utils.PathUtil
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -21,16 +26,36 @@ import javax.inject.Inject
 class CreatePostViewModel @Inject constructor(
     private val communityRepository: CommunityRepository
 ): ViewModel() {
+    private val _board = MutableStateFlow<Board>(Board())
+    val board: StateFlow<Board> = _board
+
     private val _imageUriList = MutableLiveData<List<Uri>>()
     val imageUriList: LiveData<List<Uri>>
         get() = _imageUriList
 
-    fun createPost(context: Context, content: String) {
-        var processedImageList: List<MultipartBody.Part>? = null
+    init {
+        viewModelScope.launch {
+            // TODO: navigation arguments 만든 후 boardId 설정
+            _board.value = communityRepository.getBoard(0)
+        }
+    }
+
+    fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {
+        val boardId = _board.value.id ?: return
         if(_imageUriList.value?.isNotEmpty()==true) {
             // TODO?: state 관리
-            val imageList = _imageUriList.value?.map {
-
+            viewModelScope.launch {
+                val imageList = _imageUriList.value?.map {
+                    getCompressedImage(context, it)
+                }
+                imageList?.let {
+                    communityRepository.createPost(boardId, title, content, anonymous, imageList)
+                }
+            }
+        }
+        else {
+            viewModelScope.launch {
+                communityRepository.createPost(boardId, title, content, anonymous, emptyList())
             }
         }
     }
