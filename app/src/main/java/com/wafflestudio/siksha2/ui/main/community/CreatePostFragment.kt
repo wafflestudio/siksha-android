@@ -1,4 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.community
 
-class CreatePostFragment {
+import androidx.fragment.app.Fragment
+
+class CreatePostFragment: Fragment() {
 }

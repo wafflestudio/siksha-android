@@ -145,5 +145,16 @@
         <argument
             android:name="post_id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_placeholder"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.CreatePostFragment"
+        android:label="CreatePostFragment">
+        <argument
+            android:name="board_id"
+            app:argType="long"/>
     </fragment>
 </navigation>
