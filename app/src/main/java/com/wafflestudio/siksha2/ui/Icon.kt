@@ -62,3 +62,16 @@ fun NavigateUpIcon(
         colorFilter = ColorFilter.tint(color)
     )
 }
+
+@Composable
+fun CancelIcon(
+    modifier: Modifier = Modifier,
+    color: Color = SikshaColors.White900
+) {
+    Image(
+        modifier = modifier.size(12.dp),
+        painter = painterResource(R.drawable.ic_cancel),
+        contentDescription = "cancel",
+        colorFilter = ColorFilter.tint(color)
+    )
+}
