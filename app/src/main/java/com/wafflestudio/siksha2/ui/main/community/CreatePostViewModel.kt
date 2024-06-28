@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.Board
@@ -24,6 +25,7 @@ import java.io.File
 import javax.inject.Inject
 
 class CreatePostViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val communityRepository: CommunityRepository
 ): ViewModel() {
     private val _board = MutableStateFlow<Board>(Board())
@@ -35,15 +37,16 @@ class CreatePostViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            // TODO: navigation arguments 만든 후 boardId 설정
-            _board.value = communityRepository.getBoard(0)
+            _board.value = communityRepository.getBoard(
+                CreatePostFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
+            )
         }
     }
 
     fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {
-        val boardId = _board.value.id ?: return
+        val boardId = _board.value.id
         if(_imageUriList.value?.isNotEmpty()==true) {
-            // TODO?: state 관리
+            // TODO?: 로딩 state 관리
             viewModelScope.launch {
                 val imageList = _imageUriList.value?.map {
                     getCompressedImage(context, it)
