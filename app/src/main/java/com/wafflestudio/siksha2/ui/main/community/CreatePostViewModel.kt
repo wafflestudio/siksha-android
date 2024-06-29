@@ -29,7 +29,7 @@ import javax.inject.Inject
 class CreatePostViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val communityRepository: CommunityRepository
-): ViewModel() {
+) : ViewModel() {
     private val _board = MutableStateFlow<Board>(Board())
     val board: StateFlow<Board> = _board
 
@@ -47,7 +47,7 @@ class CreatePostViewModel @Inject constructor(
 
     fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {
         val boardId = _board.value.id
-        if(_imageUriList.value?.isNotEmpty()==true) {
+        if (_imageUriList.value?.isNotEmpty() == true) {
             // TODO?: 로딩 state 관리
             viewModelScope.launch {
                 val imageList = _imageUriList.value?.map {
@@ -57,8 +57,7 @@ class CreatePostViewModel @Inject constructor(
                     communityRepository.createPost(boardId, title, content, anonymous, imageList)
                 }
             }
-        }
-        else {
+        } else {
             viewModelScope.launch {
                 communityRepository.createPost(boardId, title, content, anonymous, emptyList())
             }

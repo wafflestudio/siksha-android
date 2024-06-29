@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
-import android.graphics.Paint
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -108,7 +107,7 @@ fun CreatePostScreen(
     isUploadActivated: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Column (
+    Column(
         modifier = modifier
             .fillMaxSize()
             .background(SikshaColors.White900)
@@ -218,7 +217,7 @@ fun CurrentBoard(
                 onClick()
             }
     ) {
-        Row (
+        Row(
             modifier = Modifier.align(Alignment.Center),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -237,8 +236,7 @@ fun CurrentBoard(
 @Composable
 fun BoardSelector(
     modifier: Modifier = Modifier
-){
-
+) {
 }
 
 @Composable
@@ -246,7 +244,7 @@ fun TitleEditText(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: @Composable () -> Unit = {},
+    placeholder: @Composable () -> Unit = {}
 ) {
     BasicTextField(
         value = value,
@@ -254,7 +252,7 @@ fun TitleEditText(
         modifier = modifier,
         textStyle = SikshaTypography.subtitle1,
         decorationBox = {
-            Box (
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
@@ -262,10 +260,13 @@ fun TitleEditText(
                         shape = RoundedCornerShape(6.dp)
                     )
                     .padding(
-                        top = 11.dp, bottom = 8.dp, start = 12.dp, end = 12.dp
+                        top = 11.dp,
+                        bottom = 8.dp,
+                        start = 12.dp,
+                        end = 12.dp
                     ),
                 contentAlignment = Alignment.TopStart
-            ){
+            ) {
                 it()
                 if (value.isEmpty()) { placeholder() }
             }
@@ -274,11 +275,11 @@ fun TitleEditText(
 }
 
 @Composable
-fun ContentEditText (
+fun ContentEditText(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: @Composable () -> Unit = {},
+    placeholder: @Composable () -> Unit = {}
 ) {
     BasicTextField(
         value = value,
@@ -286,12 +287,12 @@ fun ContentEditText (
         modifier = modifier,
         textStyle = SikshaTypography.body1,
         decorationBox = {
-            Box (
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .defaultMinSize(minHeight = 110.dp),
                 contentAlignment = Alignment.TopStart
-            ){
+            ) {
                 it()
                 if (value.isEmpty()) { placeholder() }
             }
@@ -326,7 +327,7 @@ fun AnonymousCheckbox(
 }
 
 @Composable
-fun EditImage (
+fun EditImage(
     imageUriList: List<Uri>,
     onDeleteImage: (Uri) -> Unit,
     onAddImage: () -> Unit,
@@ -339,7 +340,7 @@ fun EditImage (
         horizontalArrangement = Arrangement.spacedBy(3.dp),
         verticalAlignment = Alignment.Bottom
     ) {
-        imageUriList.forEachIndexed{ idx, uri ->
+        imageUriList.forEachIndexed { idx, uri ->
             PostImage(
                 imageUri = uri,
                 idx = idx,
@@ -383,7 +384,7 @@ fun PostImage(
 
 @Preview
 @Composable
-fun CreatePostScreenPreview(){
+fun CreatePostScreenPreview() {
     SikshaTheme {
         CreatePostScreen(
             currentBoard = Board(
@@ -408,7 +409,7 @@ fun CreatePostScreenPreview(){
 
 @Preview
 @Composable
-fun CreatePostScreenPreview2(){
+fun CreatePostScreenPreview2() {
     SikshaTheme {
         CreatePostScreen(
             currentBoard = Board(
