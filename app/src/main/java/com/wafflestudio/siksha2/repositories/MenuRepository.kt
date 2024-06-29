@@ -11,6 +11,7 @@ import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -52,8 +53,8 @@ class MenuRepository @Inject constructor(
         return dailyMenusDao.getDailyMenuByDate(date)
     }
 
-    suspend fun getMenuById(menuId: Long): Menu {
-        return sikshaApi.fetchMenuById(menuId)
+    suspend fun getMenuById(menuId: Long): NetworkResult<Menu> {
+        return sikshaApi.fetchMenuById(-1L)
     }
 
     fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {

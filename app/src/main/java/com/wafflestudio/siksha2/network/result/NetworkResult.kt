@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.network.errorparsing
+package com.wafflestudio.siksha2.network.result
 
 import java.io.IOException
 

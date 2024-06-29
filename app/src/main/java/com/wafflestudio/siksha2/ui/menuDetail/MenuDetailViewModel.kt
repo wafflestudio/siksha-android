@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
-import com.wafflestudio.siksha2.network.errorparsing.NetworkResult
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.PathUtil
 import com.wafflestudio.siksha2.utils.showToast

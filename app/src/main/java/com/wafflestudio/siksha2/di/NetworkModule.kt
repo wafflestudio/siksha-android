@@ -5,7 +5,7 @@ import com.squareup.moshi.Moshi
 import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.network.SikshaApi
-import com.wafflestudio.siksha2.network.errorparsing.ResultCallAdapterFactory
+import com.wafflestudio.siksha2.network.result.ResultCallAdapterFactory
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.preferences.serializer.Serializer
 import dagger.hilt.android.qualifiers.ApplicationContext

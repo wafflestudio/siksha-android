@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.network.errorparsing
+package com.wafflestudio.siksha2.network.result
 
 import com.wafflestudio.siksha2.network.dto.core.ErrorDto
 import com.wafflestudio.siksha2.preferences.serializer.Serializer
