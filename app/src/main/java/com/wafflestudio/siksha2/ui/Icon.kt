@@ -65,7 +65,6 @@ fun NavigateUpIcon(
     )
 }
 
-@Preview
 @Composable
 fun ExpandOptionsIcon(
     modifier: Modifier = Modifier,
@@ -102,5 +101,16 @@ fun DeletePostImageIcon(
         modifier = modifier.size(22.dp),
         painter = painterResource(R.drawable.ic_delete_post_image),
         contentDescription = "delete image"
+    )
+}
+
+@Composable
+fun AddPostImageIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        modifier = modifier.size(106.dp),
+        painter = painterResource(R.drawable.ic_add_post_image),
+        contentDescription = "add image"
     )
 }
