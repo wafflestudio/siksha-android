@@ -72,7 +72,9 @@ fun ExpandOptionsIcon(
     color: Color = SikshaColors.White900
 ) {
     Image(
-        modifier = modifier.size(10.dp).rotate(270f),
+        modifier = modifier
+            .size(10.dp)
+            .rotate(270f),
         painter = painterResource(R.drawable.ic_back_arrow),
         contentDescription = "expand options",
         colorFilter = ColorFilter.tint(color)
@@ -89,5 +91,16 @@ fun CancelIcon(
         painter = painterResource(R.drawable.ic_cancel),
         contentDescription = "cancel",
         colorFilter = ColorFilter.tint(color)
+    )
+}
+
+@Composable
+fun DeletePostImageIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        modifier = modifier.size(22.dp),
+        painter = painterResource(R.drawable.ic_delete_post_image),
+        contentDescription = "delete image"
     )
 }
