@@ -73,7 +73,8 @@
             android:id="@+id/withdrawal_row"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:itemText="회원 탈퇴" />
+            app:itemText="회원 탈퇴"
+            app:textColor = "@color/google_gray"/>
 
     </LinearLayout>
 

@@ -63,7 +63,7 @@ class SettingAccountFragment : Fragment(), DefaultDialogListener {
             if (latestVersionNum != 0) binding.versionCheckText.text = getString(R.string.setting_need_update)
         }
 
-        binding.versionText.text = BuildConfig.VERSION_NAME
+        binding.versionText.text = "siksha-" + BuildConfig.VERSION_NAME
     }
 
     private fun initOnClickListener() {

@@ -35,7 +35,7 @@
             android:textStyle="bold"
             android:textSize="18dp"
             android:gravity="center"
-            android:textColor="@color/gray_500"
+            android:textColor="@color/gray_700"
             android:fontFamily="@font/nanum_square_regular"
             tools:text="닉네임"/>
 
@@ -52,7 +52,24 @@
             android:layout_marginEnd="18dp" />
 
     </LinearLayout>
-    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/frame_setting_layout"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/my_post_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:itemText="내가 쓴 글" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -120,7 +137,9 @@
             android:id="@+id/voc_row"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:itemText="1:1 문의하기" />
+            app:itemText="1:1 문의하기"
+            app:textColor = "@color/orange_main"
+            />
 
     </LinearLayout>
 
