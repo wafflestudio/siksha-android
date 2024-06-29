@@ -80,6 +80,10 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.getUserData().id
     }
 
+    suspend fun getUserNickname(): String?{
+        return sikshaApi.getUserData().nickname
+    }
+
     suspend fun getVersion(): String {
         return sikshaApi.getVersion().version
     }

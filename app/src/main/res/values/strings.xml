@@ -10,6 +10,7 @@
     <string name="menu_group_like">Like</string>
     <string name="setting_siksha">식샤 설정</string>
     <string name="setting_siksha_info">식샤 정보</string>
+    <string name="setting_setting_account">계정 관리</string>
     <string name="setting_restaurant">식당 설정</string>
     <string name="setting_using_latest_version">최신버전을 이용중입니다.</string>
     <string name="setting_need_update">업데이트가 필요합니다.</string>

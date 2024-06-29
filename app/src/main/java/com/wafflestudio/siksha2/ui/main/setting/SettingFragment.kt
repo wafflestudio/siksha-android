@@ -18,12 +18,13 @@ import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 import kotlin.math.pow
 
 @AndroidEntryPoint
-class SettingFragment : Fragment(), DefaultDialogListener {
+class SettingFragment : Fragment(){
 
     private lateinit var binding: FragmentSettingBinding
     private val vm: SettingViewModel by activityViewModels()
@@ -65,15 +66,21 @@ class SettingFragment : Fragment(), DefaultDialogListener {
                 } else {
                     binding.versionCheckText.text = getString(R.string.setting_need_update)
                 }
+
+                val nickname = userStatusManager.getUserNickname()
+
+                if(nickname != null) {
+                    binding.nickname.text = nickname
+                } else {
+                    binding.nickname.text = "닉네임"
+                }
             } catch (e: IOException) {
                 showToast("최신버전 정보를 가져올 수 없습니다.")
             }
         }
 
         binding.infoRow.setOnClickListener {
-            val action =
-                MainFragmentDirections.actionMainFragmentToSikshaInfoFragment(latestVersionNum.toLong())
-            findNavController().navigate(action)
+
         }
 
         binding.orderRestaurantRow.setOnClickListener {
@@ -92,10 +99,10 @@ class SettingFragment : Fragment(), DefaultDialogListener {
             vm.toggleShowEmptyRestaurant()
         }
 
-        binding.logoutRow.setOnClickListener {
-            // TODO: SikshaDialogController 만들기
-            DefaultDialog.newInstance(getString(R.string.setting_dialog_logout_content))
-                .show(childFragmentManager, "logout dialog")
+        binding.settingAccountRow.setOnClickListener {
+            val action =
+                MainFragmentDirections.actionMainFragmentToSikshaInfoFragment(latestVersionNum.toLong())
+            findNavController().navigate(action)
         }
 
         binding.vocRow.setOnClickListener {
@@ -109,12 +116,5 @@ class SettingFragment : Fragment(), DefaultDialogListener {
                 binding.showEmptyCheckRow.checked = it.not()
             }
         }
-    }
-
-    override fun onDialogNegativeClick() {}
-
-    override fun onDialogPositiveClick() {
-        val logoutCallback = { activity?.finish() }
-        userStatusManager.logoutUser(requireContext(), logoutCallback)
     }
 }

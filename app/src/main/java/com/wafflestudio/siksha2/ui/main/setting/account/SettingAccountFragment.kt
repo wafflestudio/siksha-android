@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.main.setting.info
+package com.wafflestudio.siksha2.ui.main.setting.account
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.databinding.FragmentSikshaInfoBinding
+import com.wafflestudio.siksha2.databinding.FragmentSettingAccountBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.ui.common.DefaultDialog
 import com.wafflestudio.siksha2.ui.common.DefaultDialogListener
@@ -22,22 +22,24 @@ import javax.inject.Inject
 import kotlin.math.pow
 
 @AndroidEntryPoint
-class SikshaInfoFragment : Fragment(), DefaultDialogListener {
+class SettingAccountFragment : Fragment(), DefaultDialogListener {
 
-    private var _binding: FragmentSikshaInfoBinding? = null
+    private var _binding: FragmentSettingAccountBinding? = null
     private val binding get() = _binding!!
 
-    private val args: SikshaInfoFragmentArgs by navArgs()
+    private val args: SettingAccountFragmentArgs by navArgs()
 
     @Inject
     lateinit var userStatusManager: UserStatusManager
+
+    private var isLogoutAction = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSikshaInfoBinding.inflate(inflater, container, false)
+        _binding = FragmentSettingAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -61,7 +63,7 @@ class SikshaInfoFragment : Fragment(), DefaultDialogListener {
             if (latestVersionNum != 0) binding.versionCheckText.text = getString(R.string.setting_need_update)
         }
 
-        binding.version.text = BuildConfig.VERSION_NAME
+        binding.versionText.text = BuildConfig.VERSION_NAME
     }
 
     private fun initOnClickListener() {
@@ -70,8 +72,15 @@ class SikshaInfoFragment : Fragment(), DefaultDialogListener {
                 findNavController().popBackStack()
             }
 
-            withdrawalText.setOnClickListener {
+            logoutRow.setOnClickListener {
+                isLogoutAction = true
+                DefaultDialog.newInstance(getString(R.string.setting_dialog_logout_content))
+                    .show(childFragmentManager,"logout dialog")
+            }
+
+            withdrawalRow.setOnClickListener {
                 // TODO: SikshaDialogController 만들기
+                isLogoutAction = false
                 DefaultDialog.newInstance(getString(R.string.siksha_info_dialog_withdrawal_content))
                     .show(childFragmentManager, "withdrawal dialog")
             }
@@ -88,9 +97,15 @@ class SikshaInfoFragment : Fragment(), DefaultDialogListener {
     override fun onDialogPositiveClick() {
         lifecycleScope.launch {
             try {
-                val withdrawCallback = { activity?.finish() }
-                userStatusManager.deleteUser(requireContext(), withdrawCallback)
-            } catch (e: IOException) {
+                if(isLogoutAction){
+                    val logoutCallback = { activity?.finish() }
+                    userStatusManager.logoutUser(requireContext(), logoutCallback)
+                }
+                else{
+                    val withdrawCallback = { activity?.finish() }
+                    userStatusManager.deleteUser(requireContext(), withdrawCallback)
+                }
+            }catch (e: IOException) {
                 showToast(getString(R.string.common_network_error))
             }
         }

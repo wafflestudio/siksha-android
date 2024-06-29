@@ -111,9 +111,9 @@
 
     <fragment
         android:id="@+id/sikshaInfoFragment"
-        android:name="com.wafflestudio.siksha2.ui.main.setting.info.SikshaInfoFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.account.SettingAccountFragment"
         android:label="fragment_siksha_info"
-        tools:layout="@layout/fragment_siksha_info">
+        tools:layout="@layout/fragment_setting_account">
         <argument
             android:name="latestVersionNum"
             app:argType="long" />
