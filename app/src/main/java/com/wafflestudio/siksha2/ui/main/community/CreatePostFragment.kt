@@ -12,7 +12,6 @@ import com.wafflestudio.siksha2.compose.ui.community.CreatePostRoute
 import com.wafflestudio.siksha2.ui.SikshaTheme
 
 class CreatePostFragment: Fragment() {
-    private val createPostViewModel: CreatePostViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_create_post, container, false)
@@ -21,9 +20,7 @@ class CreatePostFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                CreatePostRoute(
-                    createPostViewModel = createPostViewModel
-                )
+                CreatePostRoute()
             }
         }
     }
