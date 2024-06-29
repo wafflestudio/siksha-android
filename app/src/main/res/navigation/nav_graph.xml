@@ -155,6 +155,7 @@
         android:label="CreatePostFragment">
         <argument
             android:name="board_id"
+            android:defaultValue="0L"
             app:argType="long"/>
     </fragment>
 </navigation>

@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.utils.PathUtil
+import dagger.hilt.android.lifecycle.HiltViewModel
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.resolution
@@ -24,6 +25,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
 
+@HiltViewModel
 class CreatePostViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val communityRepository: CommunityRepository
