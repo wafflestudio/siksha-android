@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.R
 
@@ -59,6 +61,20 @@ fun NavigateUpIcon(
         modifier = modifier.size(16.dp),
         painter = painterResource(R.drawable.ic_back_arrow),
         contentDescription = "navigate up",
+        colorFilter = ColorFilter.tint(color)
+    )
+}
+
+@Preview
+@Composable
+fun ExpandOptionsIcon(
+    modifier: Modifier = Modifier,
+    color: Color = SikshaColors.White900
+) {
+    Image(
+        modifier = modifier.size(10.dp).rotate(270f),
+        painter = painterResource(R.drawable.ic_back_arrow),
+        contentDescription = "expand options",
         colorFilter = ColorFilter.tint(color)
     )
 }
