@@ -5,7 +5,9 @@ import com.squareup.moshi.Moshi
 import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.errorparsing.ResultCallAdapterFactory
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
+import com.wafflestudio.siksha2.preferences.serializer.Serializer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.Module
 import dagger.Provides
@@ -48,10 +50,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi, @ApplicationContext context: Context): Retrofit {
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi,
+        @ApplicationContext context: Context,
+        serializer: Serializer
+    ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(context.getString(R.string.server_base_url))
+            .addCallAdapterFactory(ResultCallAdapterFactory(serializer))
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
