@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
+import com.wafflestudio.siksha2.network.errorparsing.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.PathUtil
 import com.wafflestudio.siksha2.utils.showToast
@@ -66,11 +67,10 @@ class MenuDetailViewModel @Inject constructor(
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
-            try {
-                _menu.value = menuRepository.getMenuById(menuId)
-                _networkResultState.value = State.SUCCESS
-            } catch (e: IOException) {
-                _networkResultState.value = State.FAILED
+            val result = menuRepository.getMenuById(menuId)
+            when (result) {
+                is NetworkResult.Success -> _networkResultState.value = State.SUCCESS
+                else -> _networkResultState.value = State.FAILED
             }
         }
     }

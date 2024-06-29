@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
+import com.wafflestudio.siksha2.network.errorparsing.NetworkResult
 import okhttp3.MultipartBody
 import retrofit2.http.*
 import java.time.LocalDate
@@ -14,7 +15,7 @@ interface SikshaApi {
     ): FetchMenuGroupsResult
 
     @GET("/menus/{menu_id}")
-    suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): Menu
+    suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): NetworkResult<Menu>
 
     @GET("/reviews/")
     suspend fun fetchReviews(
