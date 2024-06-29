@@ -46,6 +46,9 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
 
     </fragment>
 
@@ -145,9 +148,6 @@
         <argument
             android:name="post_id"
             app:argType="long" />
-        <action
-            android:id="@+id/action_postDetailFragment_to_placeholder"
-            app:destination="@id/createPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/createPostFragment"

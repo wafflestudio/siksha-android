@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.compose.ui.community.CreatePostRoute
 import com.wafflestudio.siksha2.ui.SikshaTheme
 
 class CreatePostFragment: Fragment() {
@@ -20,7 +21,9 @@ class CreatePostFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                // TODO: CreatePostRoute 구현 후 여기에 연결
+                CreatePostRoute(
+                    createPostViewModel = createPostViewModel
+                )
             }
         }
     }

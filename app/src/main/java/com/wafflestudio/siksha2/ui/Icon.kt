@@ -114,3 +114,14 @@ fun AddPostImageIcon(
         contentDescription = "add image"
     )
 }
+
+@Composable
+fun NewPostIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        modifier = modifier.size(50.dp),
+        painter = painterResource(R.drawable.ic_new_post),
+        contentDescription = "글쓰기"
+    )
+}
