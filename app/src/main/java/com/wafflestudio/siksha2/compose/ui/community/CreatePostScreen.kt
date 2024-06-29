@@ -52,15 +52,33 @@ fun CreatePostRoute(
     modifier: Modifier = Modifier,
     createPostViewModel: CreatePostViewModel = hiltViewModel()
 ) {
+//    CreatePostScreen(
+//        currentBoard = Board(
+//            name = "자유게시판"
+//        ),
+//        onNavigateUp = { },
+//        onOpenBoardList = { },
+//        titleTextValue = "제목",
+//        onTitleTextChanged = { },
+//        contentTextValue = "나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다. 계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 그러나, 겨울이 지나고 나의 별에도 봄이 오면, 무덤 위에 파란 잔디가 피어나듯이 내 이름자 묻힌 언덕 위에도 자랑처럼 풀이 무성할 거외다. 나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다.",
+//        onContentTextChanged = { },
+//        isAnonymous = true,
+//        onIsAnonymousChanged = { },
+//        imageUriList = listOf<Uri>(Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200")),
+//        onDeleteImage = { },
+//        onAddImage = { },
+//        onUpload = { },
+//        isUploadActivated = true
+//    )
     CreatePostScreen(
         currentBoard = Board(
             name = "자유게시판"
         ),
         onNavigateUp = { },
         onOpenBoardList = { },
-        titleTextValue = "제목",
+        titleTextValue = "",
         onTitleTextChanged = { },
-        contentTextValue = "나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다. 계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 그러나, 겨울이 지나고 나의 별에도 봄이 오면, 무덤 위에 파란 잔디가 피어나듯이 내 이름자 묻힌 언덕 위에도 자랑처럼 풀이 무성할 거외다. 나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다.",
+        contentTextValue = "",
         onContentTextChanged = { },
         isAnonymous = true,
         onIsAnonymousChanged = { },
