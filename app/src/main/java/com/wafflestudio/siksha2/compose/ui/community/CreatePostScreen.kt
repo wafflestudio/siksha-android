@@ -54,6 +54,7 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.CreatePostViewModel
+import com.wafflestudio.siksha2.utils.showToast
 
 @Composable
 fun CreatePostRoute(
@@ -80,14 +81,18 @@ fun CreatePostRoute(
         onNavigateUp = onNavigateUp,
         onOpenBoardList = { },  // TODO
         titleTextValue = titleInput,
-        onTitleTextChanged = {
-            if (titleInput.length < 200) titleInput = it
-            // TODO: 길이 제한 토스트 출력
+        onTitleTextChanged = {newInput ->
+            if (titleInput.length < 200) titleInput = newInput.filter {
+                (it.isLetterOrDigit() || it.isWhitespace()) && it != '\n'
+            }
+            else    context.showToast("제목은 200자를 넘길 수 없습니다.")
         },
         contentTextValue = contentInput,
-        onContentTextChanged = {
-            if (contentInput.length < 200) contentInput = it
-            // TODO: 길이 제한 토스트 출력
+        onContentTextChanged = {newInput ->
+            if (contentInput.length < 1000) contentInput = newInput.filter {
+                it.isLetterOrDigit() || it.isWhitespace()
+            }
+            else context.showToast("내용은 1000자를 넘길 수 없습니다.")
         },
         isAnonymous = isAnonymous,
         onIsAnonymousChanged = { isAnonymous = it },
