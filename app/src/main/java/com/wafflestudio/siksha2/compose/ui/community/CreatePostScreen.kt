@@ -25,6 +25,11 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,18 +53,49 @@ import com.wafflestudio.siksha2.ui.main.community.CreatePostViewModel
 
 @Composable
 fun CreatePostRoute(
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     createPostViewModel: CreatePostViewModel = hiltViewModel()
 ) {
+    val board by createPostViewModel.board.collectAsState()
+    val imageUriList by createPostViewModel.imageUriList.collectAsState()
+
+    var titleInput by remember { mutableStateOf("") }
+    var contentInput by remember { mutableStateOf("") }
+    var isAnonymous by remember { mutableStateOf(true) }
+
+    CreatePostScreen(
+        currentBoard = board,
+        onNavigateUp = onNavigateUp,
+        onOpenBoardList = { },  // TODO
+        titleTextValue = titleInput,
+        onTitleTextChanged = {
+            if (titleInput.length < 200) titleInput = it
+            // TODO: 길이 제한 토스트 출력
+        },
+        contentTextValue = contentInput,
+        onContentTextChanged = {
+            if (contentInput.length < 200) contentInput = it
+            // TODO: 길이 제한 토스트 출력
+        },
+        isAnonymous = isAnonymous,
+        onIsAnonymousChanged = { }, // TODO
+        imageUriList = imageUriList,
+        onDeleteImage = { }, // TODO
+        onAddImage = { }, // TODO
+        onUpload = { }, // TODO
+        isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
+        modifier = modifier
+    )
 //    CreatePostScreen(
 //        currentBoard = Board(
 //            name = "자유게시판"
 //        ),
 //        onNavigateUp = { },
 //        onOpenBoardList = { },
-//        titleTextValue = "제목",
+//        titleTextValue = "",
 //        onTitleTextChanged = { },
-//        contentTextValue = "나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다. 계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 그러나, 겨울이 지나고 나의 별에도 봄이 오면, 무덤 위에 파란 잔디가 피어나듯이 내 이름자 묻힌 언덕 위에도 자랑처럼 풀이 무성할 거외다. 나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다.",
+//        contentTextValue = "",
 //        onContentTextChanged = { },
 //        isAnonymous = true,
 //        onIsAnonymousChanged = { },
@@ -69,24 +105,6 @@ fun CreatePostRoute(
 //        onUpload = { },
 //        isUploadActivated = true
 //    )
-    CreatePostScreen(
-        currentBoard = Board(
-            name = "자유게시판"
-        ),
-        onNavigateUp = { },
-        onOpenBoardList = { },
-        titleTextValue = "",
-        onTitleTextChanged = { },
-        contentTextValue = "",
-        onContentTextChanged = { },
-        isAnonymous = true,
-        onIsAnonymousChanged = { },
-        imageUriList = listOf<Uri>(Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200")),
-        onDeleteImage = { },
-        onAddImage = { },
-        onUpload = { },
-        isUploadActivated = true
-    )
 }
 
 @Composable

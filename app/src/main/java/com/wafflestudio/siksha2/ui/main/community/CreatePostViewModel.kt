@@ -33,8 +33,8 @@ class CreatePostViewModel @Inject constructor(
     private val _board = MutableStateFlow<Board>(Board())
     val board: StateFlow<Board> = _board
 
-    private val _imageUriList = MutableLiveData<List<Uri>>()
-    val imageUriList: LiveData<List<Uri>>
+    private val _imageUriList = MutableStateFlow<List<Uri>>(emptyList())
+    val imageUriList: StateFlow<List<Uri>>
         get() = _imageUriList
 
     init {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.compose.ui.community.CreatePostRoute
 import com.wafflestudio.siksha2.ui.SikshaTheme
@@ -21,7 +22,11 @@ class CreatePostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                CreatePostRoute()
+                CreatePostRoute(
+                    onNavigateUp = {
+                        findNavController().navigateUp()
+                    }
+                )
             }
         }
     }
