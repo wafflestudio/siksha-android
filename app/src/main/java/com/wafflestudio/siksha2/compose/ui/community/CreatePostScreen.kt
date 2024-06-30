@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -67,6 +68,7 @@ fun CreatePostRoute(
     var contentInput by remember { mutableStateOf("") }
     var isAnonymous by remember { mutableStateOf(true) }
 
+    val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) {
@@ -94,7 +96,7 @@ fun CreatePostRoute(
             createPostViewModel.deleteImageUri(idx)
         },
         onAddImage = { launcher.launch("image/*") },
-        onUpload = { }, // TODO
+        onUpload = { createPostViewModel.createPost(context, titleInput, contentInput, isAnonymous) },
         isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
         modifier = modifier
     )

@@ -130,9 +130,9 @@ interface SikshaApi {
     @POST("/community/posts")
     suspend fun postCreatePost(
         @Part("board_id") boardId: Long,
-        @Part title: String,
-        @Part content: String,
-        @Part anonymous: Boolean,
+        @Part title: MultipartBody.Part,
+        @Part content: MultipartBody.Part,
+        @Part("anonymous") anonymous: Boolean,
         @Part images: List<MultipartBody.Part>
     ): CreatePostResponse
 
@@ -141,8 +141,8 @@ interface SikshaApi {
     suspend fun postPatchPost(
         @Path("post_id") postId: Long,
         @Part("board_id") boardId: Long,
-        @Part title: String,
-        @Part content: String,
+        @Part("title") title: String,
+        @Part("content") content: String,
         @Part images: List<MultipartBody.Part>
     ): PatchPostResponse
 

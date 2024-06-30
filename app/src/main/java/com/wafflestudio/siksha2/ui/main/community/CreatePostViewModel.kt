@@ -59,19 +59,14 @@ class CreatePostViewModel @Inject constructor(
 
     fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {
         val boardId = _board.value.id
-        if (_imageUriList.value?.isNotEmpty() == true) {
-            // TODO?: 로딩 state 관리
-            viewModelScope.launch {
-                val imageList = _imageUriList.value?.map {
-                    getCompressedImage(context, it)
-                }
-                imageList?.let {
-                    communityRepository.createPost(boardId, title, content, anonymous, imageList)
-                }
+        viewModelScope.launch {
+            val imageList = _imageUriList.value.map {
+                getCompressedImage(context, it)
             }
-        } else {
-            viewModelScope.launch {
-                communityRepository.createPost(boardId, title, content, anonymous, emptyList())
+            val titleBody = MultipartBody.Part.createFormData("title", title)
+            val contentBody = MultipartBody.Part.createFormData("content", content)
+            imageList.let {
+                communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
             }
         }
     }

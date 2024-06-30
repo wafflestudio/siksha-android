@@ -42,7 +42,7 @@ class CommunityRepository @Inject constructor(
         return api.postUnlikePost(postId).toPost()
     }
 
-    suspend fun createPost(boardId: Long, title: String, content: String, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
+    suspend fun createPost(boardId: Long, title: MultipartBody.Part, content: MultipartBody.Part, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
         return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
     }
 
