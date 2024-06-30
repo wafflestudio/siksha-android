@@ -111,6 +111,7 @@ fun PostListScreen(
         CommunityDivider()
         Box(
             modifier = Modifier
+                .weight(1f)
                 .pullRefresh(pullRefreshState)
         ) {
             PullRefreshIndicator(
