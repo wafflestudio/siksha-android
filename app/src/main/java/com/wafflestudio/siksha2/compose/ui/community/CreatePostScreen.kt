@@ -8,7 +8,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,10 +37,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,7 +52,6 @@ import com.wafflestudio.siksha2.ui.CancelIcon
 import com.wafflestudio.siksha2.ui.DeletePostImageIcon
 import com.wafflestudio.siksha2.ui.ExpandOptionsIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
-import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.CreatePostViewModel
 import com.wafflestudio.siksha2.utils.showToast
@@ -106,6 +104,8 @@ fun CreatePostRoute(
         onAddImage = { launcher.launch("image/*") },
         onUpload = { createPostViewModel.createPost(context, titleInput, contentInput, isAnonymous) },
         isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
+        createPostState = createPostState,
+        context = context,
         modifier = modifier
     )
 }
@@ -126,6 +126,8 @@ fun CreatePostScreen(
     onAddImage: () -> Unit,
     onUpload: () -> Unit,
     isUploadActivated: Boolean,
+    createPostState: CreatePostViewModel.CreatePostState,
+    context: Context,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
@@ -215,6 +217,22 @@ fun CreatePostScreen(
                         fontWeight = FontWeight.Bold
                     )
                 }
+            }
+            when (createPostState) {
+                CreatePostViewModel.CreatePostState.COMPRESSING, CreatePostViewModel.CreatePostState.WAITING
+                    -> {
+                        Box (
+                            modifier = Modifier.fillMaxSize()
+                                .background(color = Color(0x88FFFFFF))
+                        ) {
+
+                        }
+                    }
+                CreatePostViewModel.CreatePostState.SUCCESS -> {
+                    context.showToast("글을 올렸습니다.")
+                    onNavigateUp()
+                }
+                else -> { }
             }
         }
     }
