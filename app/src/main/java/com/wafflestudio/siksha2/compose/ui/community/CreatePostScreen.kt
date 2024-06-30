@@ -80,20 +80,26 @@ fun CreatePostRoute(
     CreatePostScreen(
         currentBoard = board,
         onNavigateUp = onNavigateUp,
-        onOpenBoardList = { },  // TODO
+        onOpenBoardList = { }, // TODO
         titleTextValue = titleInput,
-        onTitleTextChanged = {newInput ->
-            if (titleInput.length < 200) titleInput = newInput.filter {
-                (it.isLetterOrDigit() || it.isWhitespace()) && it != '\n'
+        onTitleTextChanged = { newInput ->
+            if (titleInput.length < 200) {
+                titleInput = newInput.filter {
+                    (it.isLetterOrDigit() || it.isWhitespace()) && it != '\n'
+                }
+            } else {
+                context.showToast("제목은 200자를 넘길 수 없습니다.")
             }
-            else    context.showToast("제목은 200자를 넘길 수 없습니다.")
         },
         contentTextValue = contentInput,
-        onContentTextChanged = {newInput ->
-            if (contentInput.length < 1000) contentInput = newInput.filter {
-                it.isLetterOrDigit() || it.isWhitespace()
+        onContentTextChanged = { newInput ->
+            if (contentInput.length < 1000) {
+                contentInput = newInput.filter {
+                    it.isLetterOrDigit() || it.isWhitespace()
+                }
+            } else {
+                context.showToast("내용은 1000자를 넘길 수 없습니다.")
             }
-            else context.showToast("내용은 1000자를 넘길 수 없습니다.")
         },
         isAnonymous = isAnonymous,
         onIsAnonymousChanged = { isAnonymous = it },
@@ -220,14 +226,13 @@ fun CreatePostScreen(
             }
             when (createPostState) {
                 CreatePostViewModel.CreatePostState.COMPRESSING, CreatePostViewModel.CreatePostState.WAITING
-                    -> {
-                        Box (
-                            modifier = Modifier.fillMaxSize()
-                                .background(color = Color(0x88FFFFFF))
-                        ) {
-
-                        }
+                -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                            .background(color = Color(0x88FFFFFF))
+                    ) {
                     }
+                }
                 CreatePostViewModel.CreatePostState.SUCCESS -> {
                     context.showToast("글을 올렸습니다.")
                     onNavigateUp()
