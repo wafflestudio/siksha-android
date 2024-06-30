@@ -64,6 +64,7 @@ fun CreatePostRoute(
 ) {
     val board by createPostViewModel.board.collectAsState()
     val imageUriList by createPostViewModel.imageUriList.collectAsState()
+    val createPostState by createPostViewModel.createPostState.collectAsState()
 
     var titleInput by remember { mutableStateOf("") }
     var contentInput by remember { mutableStateOf("") }
