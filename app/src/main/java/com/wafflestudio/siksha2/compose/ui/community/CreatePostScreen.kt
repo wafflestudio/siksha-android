@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -126,6 +128,7 @@ fun CreatePostScreen(
     isUploadActivated: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -150,6 +153,7 @@ fun CreatePostScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
+                    .verticalScroll(scrollState)
             ) {
                 CurrentBoard(
                     board = currentBoard,
@@ -192,25 +196,25 @@ fun CreatePostScreen(
                     onDeleteImage = onDeleteImage,
                     onAddImage = onAddImage
                 )
-            }
-            Box(
-                modifier = Modifier
-                    .padding(bottom = 30.dp)
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(
-                        color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
-                        shape = RoundedCornerShape(8.dp)
+                Spacer(modifier = Modifier.height(20.dp))
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 30.dp)
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(
+                            color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .clickable { onUpload() }
+                ) {
+                    Text(
+                        text = "올리기",
+                        modifier = Modifier.align(Alignment.Center),
+                        color = SikshaColors.White900,
+                        fontWeight = FontWeight.Bold
                     )
-                    .align(Alignment.BottomCenter)
-                    .clickable { onUpload() }
-            ) {
-                Text(
-                    text = "올리기",
-                    modifier = Modifier.align(Alignment.Center),
-                    color = SikshaColors.White900,
-                    fontWeight = FontWeight.Bold
-                )
+                }
             }
         }
     }
@@ -397,56 +401,6 @@ fun PostImage(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .clickable { onDeleteImage() }
-        )
-    }
-}
-
-@Preview
-@Composable
-fun CreatePostScreenPreview() {
-    SikshaTheme {
-        CreatePostScreen(
-            currentBoard = Board(
-                name = "자유게시판"
-            ),
-            onNavigateUp = { },
-            onOpenBoardList = { },
-            titleTextValue = "제목",
-            onTitleTextChanged = { },
-            contentTextValue = "나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다. 계절이 지나가는 하늘에는 가을로 가득 차 있습니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 어머님, 그리고 당신은 멀리 북간도에 계십니다. 그러나, 겨울이 지나고 나의 별에도 봄이 오면, 무덤 위에 파란 잔디가 피어나듯이 내 이름자 묻힌 언덕 위에도 자랑처럼 풀이 무성할 거외다. 나는 아무 걱정도 없이 가을 속의 별들을 다 헬 듯합니다.",
-            onContentTextChanged = { },
-            isAnonymous = true,
-            onIsAnonymousChanged = { },
-            imageUriList = listOf<Uri>(Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200")),
-            onDeleteImage = { },
-            onAddImage = { },
-            onUpload = { },
-            isUploadActivated = true
-        )
-    }
-}
-
-@Preview
-@Composable
-fun CreatePostScreenPreview2() {
-    SikshaTheme {
-        CreatePostScreen(
-            currentBoard = Board(
-                name = "자유게시판"
-            ),
-            onNavigateUp = { },
-            onOpenBoardList = { },
-            titleTextValue = "",
-            onTitleTextChanged = { },
-            contentTextValue = "",
-            onContentTextChanged = { },
-            isAnonymous = true,
-            onIsAnonymousChanged = { },
-            imageUriList = listOf<Uri>(Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200")),
-            onDeleteImage = { },
-            onAddImage = { },
-            onUpload = { },
-            isUploadActivated = true
         )
     }
 }
