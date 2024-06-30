@@ -3,8 +3,6 @@ package com.wafflestudio.siksha2.ui.main.community
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -43,6 +41,12 @@ class CreatePostViewModel @Inject constructor(
                 CreatePostFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
             )
         }
+    }
+
+    fun addImageUri(uri: Uri) {
+        val uriList = _imageUriList.value.toMutableList()
+        uriList.add(uri)
+        _imageUriList.value = uriList
     }
 
     fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {

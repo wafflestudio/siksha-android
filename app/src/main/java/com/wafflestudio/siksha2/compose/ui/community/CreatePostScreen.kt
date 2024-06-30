@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +67,12 @@ fun CreatePostRoute(
     var contentInput by remember { mutableStateOf("") }
     var isAnonymous by remember { mutableStateOf(true) }
 
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        if (it != null) createPostViewModel.addImageUri(it)
+    }
+
     CreatePostScreen(
         currentBoard = board,
         onNavigateUp = onNavigateUp,
@@ -79,32 +88,14 @@ fun CreatePostRoute(
             // TODO: 길이 제한 토스트 출력
         },
         isAnonymous = isAnonymous,
-        onIsAnonymousChanged = { }, // TODO
+        onIsAnonymousChanged = { isAnonymous = it },
         imageUriList = imageUriList,
         onDeleteImage = { }, // TODO
-        onAddImage = { }, // TODO
+        onAddImage = { launcher.launch("image/*") },
         onUpload = { }, // TODO
         isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
         modifier = modifier
     )
-//    CreatePostScreen(
-//        currentBoard = Board(
-//            name = "자유게시판"
-//        ),
-//        onNavigateUp = { },
-//        onOpenBoardList = { },
-//        titleTextValue = "",
-//        onTitleTextChanged = { },
-//        contentTextValue = "",
-//        onContentTextChanged = { },
-//        isAnonymous = true,
-//        onIsAnonymousChanged = { },
-//        imageUriList = listOf<Uri>(Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200"), Uri.parse("https://picsum.photos/200")),
-//        onDeleteImage = { },
-//        onAddImage = { },
-//        onUpload = { },
-//        isUploadActivated = true
-//    )
 }
 
 @Composable
