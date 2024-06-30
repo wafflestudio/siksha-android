@@ -90,7 +90,9 @@ fun CreatePostRoute(
         isAnonymous = isAnonymous,
         onIsAnonymousChanged = { isAnonymous = it },
         imageUriList = imageUriList,
-        onDeleteImage = { }, // TODO
+        onDeleteImage = { idx ->
+            createPostViewModel.deleteImageUri(idx)
+        },
         onAddImage = { launcher.launch("image/*") },
         onUpload = { }, // TODO
         isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
@@ -110,7 +112,7 @@ fun CreatePostScreen(
     isAnonymous: Boolean,
     onIsAnonymousChanged: (Boolean) -> Unit,
     imageUriList: List<Uri>,
-    onDeleteImage: (Uri) -> Unit,
+    onDeleteImage: (Int) -> Unit,
     onAddImage: () -> Unit,
     onUpload: () -> Unit,
     isUploadActivated: Boolean,
@@ -338,7 +340,7 @@ fun AnonymousCheckbox(
 @Composable
 fun EditImage(
     imageUriList: List<Uri>,
-    onDeleteImage: (Uri) -> Unit,
+    onDeleteImage: (Int) -> Unit,
     onAddImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -353,7 +355,7 @@ fun EditImage(
             PostImage(
                 imageUri = uri,
                 idx = idx,
-                onDeleteImage = { onDeleteImage(uri) }
+                onDeleteImage = { onDeleteImage(idx) }
             )
         }
         AddPostImageIcon(

@@ -49,6 +49,14 @@ class CreatePostViewModel @Inject constructor(
         _imageUriList.value = uriList
     }
 
+    fun deleteImageUri(index: Int) {
+        val uriList = _imageUriList.value.toMutableList()
+        if (index < uriList.size) {
+            uriList.removeAt(index)
+            _imageUriList.value = uriList
+        }
+    }
+
     fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {
         val boardId = _board.value.id
         if (_imageUriList.value?.isNotEmpty() == true) {
