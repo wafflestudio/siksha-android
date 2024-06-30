@@ -169,6 +169,7 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:glide:4.15.1")
 
     // Image Compression
     implementation("id.zelory:compressor:3.0.1")

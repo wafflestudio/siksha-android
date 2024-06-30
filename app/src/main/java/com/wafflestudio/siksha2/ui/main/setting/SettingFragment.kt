@@ -80,7 +80,9 @@ class SettingFragment : Fragment(){
         }
 
         binding.infoRow.setOnClickListener {
-
+            val action =
+                MainFragmentDirections.actionMainFragmentToUserSettingFragment2()
+            findNavController().navigate(action)
         }
 
         binding.orderRestaurantRow.setOnClickListener {
@@ -101,7 +103,7 @@ class SettingFragment : Fragment(){
 
         binding.settingAccountRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToSikshaInfoFragment(latestVersionNum.toLong())
+                MainFragmentDirections.actionMainFragmentToSettingAccountFragment(latestVersionNum.toLong())
             findNavController().navigate(action)
         }
 

@@ -20,6 +20,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_settingFragment_to_userSettingFragment"
+            app:destination="@id/userSettingFragment" />
     </fragment>
 
     <fragment
@@ -38,4 +41,8 @@
             android:defaultValue="false"
             app:argType="boolean" />
     </fragment>
+    <fragment
+        android:id="@+id/userSettingFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.usersetting.UserSettingFragment"
+        android:label="UserSettingFragment" />
 </navigation>

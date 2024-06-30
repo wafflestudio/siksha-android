@@ -26,8 +26,8 @@
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
         <action
-            android:id="@+id/action_mainFragment_to_sikshaInfoFragment"
-            app:destination="@id/sikshaInfoFragment"
+            android:id="@+id/action_mainFragment_to_settingAccountFragment"
+            app:destination="@id/settingAccountFragment"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
@@ -46,6 +46,9 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_userSettingFragment2"
+            app:destination="@id/userSettingFragment2" />
 
     </fragment>
 
@@ -110,7 +113,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/sikshaInfoFragment"
+        android:id="@+id/settingAccountFragment"
         android:name="com.wafflestudio.siksha2.ui.main.setting.account.SettingAccountFragment"
         android:label="fragment_siksha_info"
         tools:layout="@layout/fragment_setting_account">
@@ -146,4 +149,8 @@
             android:name="post_id"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/userSettingFragment2"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.usersetting.UserSettingFragment"
+        android:label="UserSettingFragment" />
 </navigation>
