@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -85,8 +84,8 @@ fun PostListScreen(
             .background(SikshaColors.White900)
     ) {
         LazyRow(
-            modifier = Modifier.padding(horizontal = 28.dp, vertical = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             itemsIndexed(
                 items = boards
@@ -100,7 +99,7 @@ fun PostListScreen(
                 )
             }
         }
-        Divider(color = SikshaColors.Gray400, thickness = 0.5.dp)
+        CommunityDivider()
         Box(
             modifier = Modifier
                 .pullRefresh(pullRefreshState)
@@ -132,8 +131,12 @@ fun PostListScreen(
                                         isLiked = post.isLiked,
                                         onClick = {
                                             onClickPost(post.id)
-                                        }
+                                        },
+                                        thumbnailImage = post.etc?.images?.first()
                                     )
+                                    if (it < posts.itemCount - 1) {
+                                        CommunityDivider()
+                                    }
                                 }
                             }
                         }

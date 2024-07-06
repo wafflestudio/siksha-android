@@ -71,6 +71,7 @@
     <string name="community_board_empty">아직 아무도 글을 작성하지 않았어요.</string>
     <string name="community_board_error">글을 불러오는 중 문제가 발생하였습니다.</string>
     <string name="community_retry_button">다시 시도</string>
+    <string name="community_post_like">공감</string>
     <string name="community_comment_send_button">올리기</string>
     <string name="community_comment_hint">댓글을 입력하세요.</string>
     <string name="community_comment_anonymous">익명</string>

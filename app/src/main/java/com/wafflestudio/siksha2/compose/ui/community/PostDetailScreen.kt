@@ -3,15 +3,18 @@ package com.wafflestudio.siksha2.compose.ui.community
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,7 +30,6 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +41,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -64,6 +68,7 @@ import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
+import com.wafflestudio.siksha2.ui.ThumbIcon
 import com.wafflestudio.siksha2.ui.main.community.PostDetailEvent
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
@@ -72,6 +77,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -148,6 +154,11 @@ fun PostDetailScreen(
             )
             LazyColumn(state = commentListState) {
                 item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    PostHeader(
+                        post = post
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
                     PostBody(
                         post = post,
                         onClickLike = {
@@ -155,21 +166,23 @@ fun PostDetailScreen(
                             updateListWithLikedPost(post)
                         }
                     )
-                    Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
+                    CommunityDivider()
                 }
                 items(comments.itemCount) {
                     comments[it]?.let { comment ->
                         CommentItem(
                             comment = comment,
+                            modifier = Modifier.fillMaxWidth(),
                             onClickLike = {
                                 toggleCommentLike(comment)
                             }
                         )
+                        CommunityDivider()
                     }
                 }
             }
         }
-        Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
+        CommunityDivider()
         CommentInputRow(
             commentInput = commentInput,
             onCommentInputChanged = { commentInput = it },
@@ -243,53 +256,74 @@ private suspend fun LazyListState.animateScrollToLastItem() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
+fun PostHeader(
+    post: Post,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .padding(horizontal = 20.dp)
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CommunityProfilePicture(model = null) // TODO: 서버에서 프로필이미지 내려주면 반영하기
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .padding(top = 2.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = post.nickname,
+                color = SikshaColors.Black900,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                style = SikshaTypography.body2
+            )
+            Text(
+                text = post.updatedAt.toParsedTimeString(),
+                color = SikshaColors.Gray400,
+                fontSize = 10.sp,
+                style = SikshaTypography.body2
+            )
+        }
+        Spacer(modifier = Modifier.width(7.dp))
+        EtcIcon(modifier = Modifier.size(16.dp))
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
 fun PostBody(
     post: Post,
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.padding(top = 30.dp)
+        modifier = modifier
     ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 35.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = post.nickname ?: "",
-                color = SikshaColors.Gray400,
-                fontSize = 12.sp,
-                style = SikshaTypography.body2
-            )
-            Text(
-                text = post.updatedAt.toParsedTimeString(),
-                color = SikshaColors.Gray400,
-                fontSize = 12.sp,
-                style = SikshaTypography.body2
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = post.title,
-            modifier = Modifier.padding(horizontal = 35.dp),
+            modifier = Modifier.padding(horizontal = 20.dp),
             style = SikshaTypography.subtitle2,
             fontWeight = FontWeight.ExtraBold
         )
         Spacer(modifier = Modifier.height(13.dp))
         Text(
             text = post.content,
-            modifier = Modifier.padding(horizontal = 35.dp),
+            modifier = Modifier.padding(horizontal = 20.dp),
             style = SikshaTypography.body2
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         post.etc?.images?.let { images ->
             HorizontalPager(
                 state = rememberPagerState(pageCount = { images.size }),
                 modifier = Modifier
                     .fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 35.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp),
                 pageSize = PageSize.Fill
             ) {
                 val startPadding = if (it == 0) 0.dp else 8.dp
@@ -302,33 +336,71 @@ fun PostBody(
                         .padding(start = startPadding, end = endPadding),
                     contentDescription = "",
                     loading = {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(100.dp)
+                        )
                     },
                     contentScale = ContentScale.Crop
                 )
             }
+            Spacer(modifier = modifier.height(12.dp))
         }
-        Spacer(modifier = Modifier.height(18.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 35.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 20.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                LikeIconWithCount(
-                    likeCount = post.likeCount,
-                    isLiked = post.isLiked,
-                    onClick = onClickLike
-                )
-                CommentIconWithCount(
-                    commentCount = post.commentCount
-                )
-            }
-            EtcIcon()
+            LikeIconWithCount(
+                likeCount = post.likeCount,
+                isLiked = post.isLiked
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            CommentIconWithCount(
+                commentCount = post.commentCount
+            )
         }
+        Spacer(modifier = Modifier.height(14.dp))
+        PostLikeButton(
+            modifier = Modifier.padding(start = 20.dp),
+            isLiked = post.isLiked,
+            onClick = onClickLike
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+    }
+}
+
+@Composable
+fun PostLikeButton(
+    onClick: () -> Unit,
+    isLiked: Boolean,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = SikshaColors.OrangeMain,
+                shape = RoundedCornerShape(6.dp)
+            )
+            .clip(RoundedCornerShape(6.dp))
+            .background(
+                color = if (isLiked) SikshaColors.OrangeMain else SikshaColors.White900
+            )
+            .clickable { onClick() }
+            .padding(horizontal = 9.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        ThumbIcon(
+            modifier = Modifier.size(11.dp),
+            colorFilter = ColorFilter.tint(if (isLiked) SikshaColors.White900 else SikshaColors.OrangeMain)
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(
+            text = stringResource(R.string.community_post_like),
+            fontWeight = FontWeight.Bold,
+            fontSize = 10.sp,
+            color = if (isLiked) SikshaColors.White900 else SikshaColors.OrangeMain
+        )
     }
 }
 
@@ -338,27 +410,33 @@ fun CommentItem(
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {}
 ) {
-    Column(
+    Row(
         modifier = modifier
-            .background(SikshaColors.White900)
-            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 12.dp)
     ) {
         Column(
-            modifier = modifier
-                .padding(horizontal = 35.dp, vertical = 12.dp)
+            modifier = Modifier.weight(1f)
         ) {
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CommunityProfilePicture(
+                    model = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = comment.nickname,
-                    color = SikshaColors.Gray400,
-                    fontSize = 12.sp,
+                    color = SikshaColors.Black900,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 11.sp,
                     style = SikshaTypography.body2
                 )
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = comment.updatedAt.toParsedTimeString(),
                     color = SikshaColors.Gray400,
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     style = SikshaTypography.body2
                 )
             }
@@ -367,18 +445,50 @@ fun CommentItem(
                 text = comment.content,
                 style = SikshaTypography.body2
             )
-            Spacer(modifier = Modifier.height(15.dp))
-            Row {
-                LikeIconWithCount(
-                    likeCount = comment.likeCount,
-                    isLiked = comment.isLiked,
-                    onClick = onClickLike
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                EtcIcon()
-            }
+            Spacer(modifier = Modifier.height(10.dp))
+            EtcIcon(
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .size(16.dp)
+            )
         }
-        Divider(thickness = 0.5.dp, color = SikshaColors.Gray400)
+        Spacer(modifier = Modifier.width(8.dp))
+        CommentLikeButton(
+            likeCount = comment.likeCount,
+            isLiked = comment.isLiked,
+            onClick = onClickLike,
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
+    }
+}
+
+@Composable
+fun CommentLikeButton(
+    likeCount: Long,
+    isLiked: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(color = SikshaColors.Gray100)
+            .clickable { onClick() }
+            .size(width = 35.dp, height = 53.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        ThumbIcon(
+            isSelected = isLiked,
+            modifier = Modifier.size(13.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = likeCount.toString(),
+            fontSize = 10.sp,
+            color = SikshaColors.OrangeMain,
+            style = SikshaTypography.body2
+        )
     }
 }
 
@@ -443,7 +553,7 @@ fun CommentInputRow(
                             color = MaterialTheme.colors.primary,
                             shape = RoundedCornerShape(6.dp)
                         )
-                        .padding(horizontal = 6.dp, vertical = 5.dp)
+                        .padding(horizontal = 11.dp, vertical = 6.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.community_comment_send_button),
@@ -454,10 +564,12 @@ fun CommentInputRow(
                         )
                     )
                 }
-            }
-        },
-        textStyle = SikshaTypography.body2
-    )
+            },
+            textStyle = SikshaTypography.body2.copy(
+                fontSize = 12.sp
+            )
+        )
+    }
 }
 
 @Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
@@ -477,6 +589,47 @@ fun PostDetailScreenPreview() {
             addComment = { _, _ -> },
             updateListWithCommentAddedPost = {},
             modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PostHeaderPreview() {
+    SikshaTheme {
+        PostHeader(post = Post(title = "제목", createdAt = LocalDateTime.now(), nickname = "닉네임"))
+    }
+}
+
+@Preview
+@Composable
+fun PostLikeButtonPreview() {
+    SikshaTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+            PostLikeButton(onClick = {}, isLiked = true)
+            PostLikeButton(onClick = {}, isLiked = false)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CommentItemPreview() {
+    SikshaTheme {
+        CommentItem(
+            comment = Comment(content = "댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 ", nickname = "유저이름")
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CommentLikeButtonPreview() {
+    SikshaTheme {
+        CommentLikeButton(
+            likeCount = 123,
+            isLiked = true,
+            onClick = {}
         )
     }
 }
