@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.compose.ui.community.PostListScreen
+import com.wafflestudio.siksha2.compose.ui.community.PostListRoute
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +32,7 @@ class PostListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                PostListScreen(
+                PostListRoute(
                     modifier = Modifier.fillMaxSize(),
                     postListViewModel = postListViewModel,
                     onClickPost = { postId ->

@@ -1,14 +1,18 @@
-package com.wafflestudio.siksha2.components.compose
+package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,10 +27,11 @@ import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.ui.SikshaColors
 
 @Composable
-fun EditText(
+fun CommentEditText(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    hint: String? = null,
     leadingIcon: @Composable () -> Unit = {},
     trailingIcon: @Composable () -> Unit = {},
     enabled: Boolean = true,
@@ -63,14 +68,29 @@ fun EditText(
                 modifier = Modifier
                     .background(
                         color = SikshaColors.Gray100,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(8.dp)
                     )
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
-                horizontalArrangement = Arrangement.spacedBy(7.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .height(IntrinsicSize.Min),
+                verticalAlignment = Alignment.Bottom
             ) {
                 leadingIcon()
-                Row(modifier = Modifier.weight(1f)) { it() }
+                Box(
+                    modifier = Modifier
+                        .padding(vertical = 6.dp)
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    it()
+                    if (value.isEmpty()) {
+                        hint?.let {
+                            Text(
+                                text = hint,
+                                style = textStyle.copy(color = SikshaColors.Gray400)
+                            )
+                        }
+                    }
+                }
                 trailingIcon()
             }
         }

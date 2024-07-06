@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,42 +32,78 @@ class PostDetailViewModel @Inject constructor(
     private val _post = MutableStateFlow<Post>(Post())
     val post: StateFlow<Post> = _post
 
-    private val _loadCommentSignal = MutableSharedFlow<Unit>()
-    val commentPagingData = _loadCommentSignal.flatMapLatest {
-        Pager(
-            config = PagingConfig(
-                pageSize = CommentPagingSource.ITEMS_PER_PAGE
-            ),
-            pagingSourceFactory = { communityRepository.commentPagingSource(_post.value.id) }
-        ).flow.cachedIn(viewModelScope)
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
+    val commentPagingData = Pager(
+        config = PagingConfig(
+            pageSize = CommentPagingSource.ITEMS_PER_PAGE
+        ),
+        pagingSourceFactory = {
+            communityRepository.commentPagingSource(
+                PostDetailFragmentArgs.fromSavedStateHandle(
+                    savedStateHandle
+                ).postId
+            )
+        }
+    ).flow
+        .cachedIn(viewModelScope)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
+
+    private val _postDetailEvent = MutableSharedFlow<PostDetailEvent>()
+    val postDetailEvent = _postDetailEvent.asSharedFlow()
 
     init {
+        refreshPost(PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId)
+    }
+
+    private fun refreshPost(postId: Long) {
         viewModelScope.launch {
-            _post.value = communityRepository.getPost(
-                PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
-            )
-            _loadCommentSignal.emit(Unit)
+            _post.value = communityRepository.getPost(postId)
         }
     }
 
-    suspend fun addComment(content: String) {
-        communityRepository.addCommentToPost(_post.value.id, content)
+    fun addComment(content: String, isAnonymous: Boolean) {
+        if (content.isEmpty()) return
+        viewModelScope.launch {
+            runCatching {
+                communityRepository.addCommentToPost(_post.value.id, content, isAnonymous)
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.AddCommentSuccess)
+                refreshPost(post.value.id)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.AddCommentFailed)
+            }
+        }
     }
 
-    suspend fun likePost() {
-        _post.value = communityRepository.likePost(_post.value.id)
+    fun togglePostLike() {
+        viewModelScope.launch {
+            runCatching {
+                when (post.value.isLiked) {
+                    true -> _post.value = communityRepository.unlikePost(post.value.id)
+                    false -> _post.value = communityRepository.likePost(post.value.id)
+                }
+            }
+        }
     }
 
-    suspend fun unlikePost() {
-        _post.value = communityRepository.unlikePost(_post.value.id)
+    fun toggleCommentLike(comment: Comment) {
+        viewModelScope.launch {
+            runCatching {
+                when (comment.isLiked) {
+                    true -> communityRepository.unlikeComment(comment.id)
+                    false -> communityRepository.likeComment(comment.id)
+                }
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeSuccess)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeFailed)
+            }
+        }
     }
+}
 
-    suspend fun likeComment(commentId: Long) {
-        communityRepository.likeComment(commentId)
-    }
-
-    suspend fun unlikeComment(commentId: Long) {
-        communityRepository.unlikeComment(commentId)
-    }
+sealed interface PostDetailEvent {
+    object AddCommentSuccess : PostDetailEvent
+    object AddCommentFailed : PostDetailEvent
+    object ToggleCommentLikeSuccess : PostDetailEvent
+    object ToggleCommentLikeFailed : PostDetailEvent
 }
