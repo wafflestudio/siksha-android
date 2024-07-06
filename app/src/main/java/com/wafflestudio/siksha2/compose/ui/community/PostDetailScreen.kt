@@ -564,12 +564,9 @@ fun CommentInputRow(
                         )
                     )
                 }
-            },
-            textStyle = SikshaTypography.body2.copy(
-                fontSize = 12.sp
-            )
-        )
-    }
+            }
+        }
+    )
 }
 
 @Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
