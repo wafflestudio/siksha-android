@@ -71,6 +71,9 @@
                     android:scheme="@string/kakao_key_with_prefix" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.common.ImageDetailActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
