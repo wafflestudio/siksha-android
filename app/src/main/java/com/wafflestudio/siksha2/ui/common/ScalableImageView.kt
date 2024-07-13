@@ -174,7 +174,7 @@ class ScalableImageView @JvmOverloads constructor(
     }
 
     /**
-     * 원본 이미지보다 작게 축소하지 않는 한 (pivotX, pivotY)를 기준으로 requestedScale만큼 scale한 행렬을 반환합니다.
+     * 원본 이미지보다 작게 축소하지 않는 한, 점 ([pivotX], [pivotY])를 기준으로 [requestedScale]만큼 scale한 행렬을 반환합니다.
      */
     private fun Matrix.scaled(requestedScale: Float, pivotX: Float, pivotY: Float): Matrix {
         val initialScale = initialScale ?: return this
@@ -189,7 +189,7 @@ class ScalableImageView @JvmOverloads constructor(
     }
 
     /**
-     * 여백이 보이지 않는 한 requestedDx, requestedDy만큼 translate한 행렬을 반환합니다.
+     * 여백이 보이지 않는 한 [requestedDx], [requestedDy]만큼 translate한 행렬을 반환합니다.
      */
     private fun Matrix.translated(requestedDx: Float, requestedDy: Float): Matrix {
         val currentX = this.translationX
@@ -212,7 +212,7 @@ class ScalableImageView @JvmOverloads constructor(
     }
 
     /**
-     * event의 두 점 사이 거리를 반환합니다.
+     * [event]의 두 점 사이 거리를 반환합니다.
      */
     private fun getDistance(event: MotionEvent): Float {
         val x = event.getX(0) - event.getX(1)
@@ -221,7 +221,7 @@ class ScalableImageView @JvmOverloads constructor(
     }
 
     /**
-     * event의 두 점 사이 중점을 계산하여 point에 설정합니다.
+     * [event]의 두 점 사이 중점을 계산하여 point에 설정합니다.
      */
     private fun setMidPoint(point: PointF, event: MotionEvent) {
         val x = event.getX(0) + event.getX(1)
