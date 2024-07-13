@@ -12,6 +12,7 @@ import android.view.MotionEvent
 import androidx.annotation.AttrRes
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat.getString
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -59,8 +60,16 @@ class ScalableImageView @JvmOverloads constructor(
      * @param image 이미지의 웹 url
      */
     fun setModel(image: String) {
+        val placeHolderDrawable = CircularProgressDrawable(context).apply {
+            setColorSchemeColors(context.getColor(R.color.orange_main))
+            strokeWidth = 10f
+            centerRadius = 60f
+            start()
+        }
+
         Glide.with(this)
             .load(image)
+            .placeholder(placeHolderDrawable)
             .fallback(R.drawable.frame_black)
             .error(R.drawable.frame_black)
             .listener(object : RequestListener<Drawable> {
