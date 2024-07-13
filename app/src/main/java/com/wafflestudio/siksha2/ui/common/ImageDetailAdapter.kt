@@ -27,29 +27,7 @@ class ImageDetailAdapter(private val images: List<String>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ImageDetailViewHolder, position: Int) {
-        val context = holder.scalableImageView.context
-        val placeHolderDrawable = CircularProgressDrawable(context).apply {
-            setColorSchemeColors(context.getColor(R.color.orange_main))
-            strokeWidth = 10f
-            centerRadius = 60f
-            start()
-        }
-        Glide.with(context)
-            .load(images[position])
-            .placeholder(placeHolderDrawable)
-            .fallback(R.drawable.frame_black)
-            .error(R.drawable.frame_black)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                    context.showToast(context.getString(R.string.common_network_error))
-                    return false
-                }
-
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                    return false
-                }
-            })
-            .into(holder.scalableImageView)
+        holder.scalableImageView.setModel(images[position])
     }
 }
 
