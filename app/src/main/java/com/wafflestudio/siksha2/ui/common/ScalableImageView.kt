@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.utils.showToast
+import timber.log.Timber
 import kotlin.math.sqrt
 
 class ScalableImageView @JvmOverloads constructor(
@@ -227,5 +228,18 @@ class ScalableImageView @JvmOverloads constructor(
         val x = event.getX(0) + event.getX(1)
         val y = event.getY(0) + event.getY(1)
         point.set(x / 2, y / 2)
+    }
+
+    override fun canScrollHorizontally(direction: Int): Boolean {
+        val currentX = imageMatrix.translationX
+        val scaledImageWidth = drawable.intrinsicWidth * imageMatrix.scaleX
+        val viewWidth = width
+        val res = if (direction > 0) {
+            currentX + scaledImageWidth > viewWidth
+        } else {
+            currentX < 0
+        }
+        Timber.tag("asdf").d("canScrollHorizontally($direction) = $res")
+        return res
     }
 }
