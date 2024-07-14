@@ -214,7 +214,7 @@ fun CreatePostScreen(
                             color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
                             shape = RoundedCornerShape(8.dp)
                         )
-                        .clickable { onUpload() }
+                        .clickable { if (isUploadActivated) onUpload() }
                 ) {
                     Text(
                         text = "올리기",
@@ -258,10 +258,10 @@ fun CurrentBoard(
                 color = SikshaColors.Gray350,
                 shape = RoundedCornerShape(6.dp)
             )
-            .padding(top = 11.dp, bottom = 10.dp)
             .clickable {
                 onClick()
             }
+            .padding(top = 11.dp, bottom = 10.dp)
     ) {
         Row(
             modifier = Modifier.align(Alignment.Center),
