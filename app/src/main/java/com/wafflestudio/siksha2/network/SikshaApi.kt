@@ -93,6 +93,12 @@ interface SikshaApi {
         @Query("per_page") perPage: Int
     ): GetPostsResult
 
+    @GET("/community/posts/me")
+    suspend fun getUserPosts(
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Int
+    ): GetPostsResult
+
     @GET("/community/posts/{post_id}")
     suspend fun getPost(
         @Path("post_id") postId: Long
