@@ -23,11 +23,13 @@ class ImageDetailActivity: Activity() {
 
     companion object {
         private const val EXTRA_IMAGES = "EXTRA_IMAGES"
+        private const val EXTRA_INITIAL_PAGE = "EXTRA_INITIAL_PAGE"
 
-        fun createIntent(context: Context, images: List<String>): Intent = Intent(
+        fun createIntent(context: Context, images: List<String>, initialPage: Int): Intent = Intent(
             context, ImageDetailActivity::class.java
         ).apply {
             putStringArrayListExtra(EXTRA_IMAGES, ArrayList(images))
+            putExtra(EXTRA_INITIAL_PAGE, initialPage)
         }
     }
 
@@ -35,6 +37,10 @@ class ImageDetailActivity: Activity() {
 
     private val images: List<String>? by lazy {
         intent.getStringArrayListExtra(EXTRA_IMAGES)
+    }
+
+    private val initialPage: Int by lazy {
+        intent.getIntExtra(EXTRA_INITIAL_PAGE, 0)
     }
 
     private val onPageChangedCallback = object : OnPageChangeCallback() {
@@ -52,6 +58,7 @@ class ImageDetailActivity: Activity() {
 
         images?.let {
             binding.vpImages.adapter = ImageDetailAdapter(it)
+            binding.vpImages.setCurrentItem(initialPage, false)
             setPageText(binding.vpImages.currentItem + 1, it.size)
         }
         binding.vpImages.registerOnPageChangeCallback(onPageChangedCallback)

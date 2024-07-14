@@ -1,12 +1,14 @@
 package com.wafflestudio.siksha2.utils
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.wafflestudio.siksha2.ui.common.ImageDetailActivity
 
 fun View.setVisibleOrGone(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
@@ -32,4 +34,8 @@ fun ImageView.setImageUrl(url: String) {
     Glide.with(context)
         .load(url)
         .into(this)
+}
+
+fun Context.showImageViewer(images: List<String>, initialPage: Int) {
+    startActivity(ImageDetailActivity.createIntent(this, images, initialPage))
 }
