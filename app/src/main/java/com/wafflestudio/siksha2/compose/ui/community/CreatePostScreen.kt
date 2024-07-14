@@ -25,7 +25,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.wafflestudio.siksha2.components.compose.Checkbox
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.ui.AddPostImageIcon
@@ -359,7 +359,6 @@ fun AnonymousCheckbox(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // TODO: 댓글 브랜치 머지 후 식샤 Checkbox로 바꾸기
         Checkbox(
             checked = isAnonymous,
             onCheckedChange = onIsAnonymousChanged,
@@ -369,7 +368,7 @@ fun AnonymousCheckbox(
         Text(
             text = "익명",
             fontWeight = FontWeight.Bold,
-            fontSize = 10.sp,
+            fontSize = 14.sp,
             color = if (isAnonymous) SikshaColors.OrangeMain else SikshaColors.Gray400
         )
     }
