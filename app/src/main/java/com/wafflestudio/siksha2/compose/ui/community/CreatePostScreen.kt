@@ -228,7 +228,8 @@ fun CreatePostScreen(
                 CreatePostViewModel.CreatePostState.COMPRESSING, CreatePostViewModel.CreatePostState.WAITING
                 -> {
                     Box(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
                             .background(color = Color(0x88FFFFFF))
                     ) {
                     }
@@ -296,6 +297,7 @@ fun TitleEditText(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
+        singleLine = true,
         textStyle = SikshaTypography.subtitle1,
         decorationBox = {
             Box(
@@ -327,6 +329,7 @@ fun ContentEditText(
     modifier: Modifier = Modifier,
     placeholder: @Composable () -> Unit = {}
 ) {
+    val scrollState = rememberScrollState()
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
