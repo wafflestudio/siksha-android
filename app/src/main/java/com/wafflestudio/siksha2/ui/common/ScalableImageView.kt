@@ -239,7 +239,6 @@ class ScalableImageView @JvmOverloads constructor(
         } else {
             currentX < 0
         }
-        Timber.tag("asdf").d("canScrollHorizontally($direction) = $res")
         return res
     }
 }

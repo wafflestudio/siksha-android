@@ -65,7 +65,6 @@ class NestedScrollableHost : FrameLayout {
 
         // Early return if child can't scroll in same direction as parent
         if (!canChildScroll(orientation, -1f) && !canChildScroll(orientation, 1f)) {
-            Timber.tag("asdf").d("early return")
             return
         }
 
@@ -106,7 +105,6 @@ class NestedScrollableHost : FrameLayout {
                         // Gesture is perpendicular, allow all parents to intercept
                         parent.requestDisallowInterceptTouchEvent(false)
                     } else {
-                        Timber.tag("asdf").d("dx = $dx")
                         // Gesture is parallel, query child if movement in that direction is possible
                         if (canChildScroll(orientation, if (isVpHorizontal) dx else dy)) {
                             // Child can scroll, disallow all parents to intercept
