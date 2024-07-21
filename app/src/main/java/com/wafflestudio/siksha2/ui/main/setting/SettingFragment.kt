@@ -85,6 +85,12 @@ class SettingFragment : Fragment(){
             findNavController().navigate(action)
         }
 
+        binding.myPostRow.setOnClickListener {
+            val action =
+                MainFragmentDirections.actionMainFragmentToUserPostListFragment()
+            findNavController().navigate(action)
+        }
+
         binding.orderRestaurantRow.setOnClickListener {
             val action =
                 MainFragmentDirections.actionMainFragmentToReorderRestaurantFragment()

@@ -48,7 +48,18 @@
             app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_mainFragment_to_userSettingFragment2"
-            app:destination="@id/userSettingFragment2" />
+            app:destination="@id/userSettingFragment2"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_userPostListFragment"
+            app:destination="@id/userPostListFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
 
     </fragment>
 
@@ -149,8 +160,22 @@
             android:name="post_id"
             app:argType="long" />
     </fragment>
+
     <fragment
         android:id="@+id/userSettingFragment2"
         android:name="com.wafflestudio.siksha2.ui.main.setting.usersetting.UserSettingFragment"
         android:label="UserSettingFragment" />
+
+    <fragment
+        android:id="@+id/userPostListFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.UserPostListFragment"
+        android:label="UserPostListFragment" >
+        <action
+            android:id="@+id/action_userPostListFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right"/>
+    </fragment>
 </navigation>

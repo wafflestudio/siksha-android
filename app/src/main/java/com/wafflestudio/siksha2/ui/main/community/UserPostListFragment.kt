@@ -33,14 +33,15 @@ class UserPostListFragment : Fragment() {
             SikshaTheme {
                 UserPostListRoute(
                     modifier = Modifier.fillMaxSize(),
-                    postListViewModel = userPostListViewModel,
+                    userPostListViewModel = userPostListViewModel,
                     onClickPost = { postId ->
                         findNavController().navigate(
-                            MainFragmentDirections.actionMainFragmentToPostDetailFragment(
+                            UserPostListFragmentDirections.actionUserPostListFragmentToPostDetailFragment(
                                 postId
                             )
                         )
-                    }
+                    },
+                    onNavigateUp = { findNavController().navigateUp() }
                 )
             }
         }
