@@ -161,66 +161,61 @@ fun CreatePostScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
-                    .verticalScroll(scrollState)
             ) {
-                CurrentBoard(
-                    board = currentBoard,
-                    onClick = onOpenBoardList
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                TitleEditText(
-                    value = titleTextValue,
-                    onValueChange = onTitleTextChanged,
-                    placeholder = {
-                        Text(
-                            text = "제목",
-                            color = SikshaColors.Gray400,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                )
-                Spacer(modifier = Modifier.height(14.dp))
-                ContentEditText(
-                    value = contentTextValue,
-                    onValueChange = onContentTextChanged,
-                    placeholder = {
-                        Text(
-                            text = "내용을 입력하세요.",
-                            color = SikshaColors.Gray400
-                        )
-                    }
-                )
-                Spacer(modifier = Modifier.height(35.dp))
-                AnonymousCheckbox(
-                    isAnonymous = isAnonymous,
-                    onIsAnonymousChanged = onIsAnonymousChanged,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Divider(color = SikshaColors.Gray100, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(6.dp))
-                EditImage(
-                    imageUriList = imageUriList,
-                    onDeleteImage = onDeleteImage,
-                    onAddImage = onAddImage
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Box(
-                    modifier = Modifier
-                        .padding(bottom = 30.dp)
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .background(
-                            color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .clickable { if (isUploadActivated) onUpload() }
+                Column (
+                    modifier = Modifier.fillMaxWidth()
+                        .weight(1.0f)
                 ) {
-                    Text(
-                        text = "올리기",
-                        modifier = Modifier.align(Alignment.Center),
-                        color = SikshaColors.White900,
-                        fontWeight = FontWeight.Bold
+                    CurrentBoard(
+                        board = currentBoard,
+                        onClick = onOpenBoardList
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    TitleEditText(
+                        value = titleTextValue,
+                        onValueChange = onTitleTextChanged,
+                        placeholder = {
+                            Text(
+                                text = "제목",
+                                color = SikshaColors.Gray400,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(14.dp))
+                    ContentEditText(
+                        value = contentTextValue,
+                        onValueChange = onContentTextChanged,
+                        placeholder = {
+                            Text(
+                                text = "내용을 입력하세요.",
+                                color = SikshaColors.Gray400
+                            )
+                        },
+                        modifier = Modifier.weight(weight = 1.0f, fill = false)
+                    )
+                    Spacer(modifier = Modifier.height(13.dp))
+                    AnonymousCheckbox(
+                        isAnonymous = isAnonymous,
+                        onIsAnonymousChanged = onIsAnonymousChanged,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Divider(color = SikshaColors.Gray100, thickness = 1.dp)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    EditImage(
+                        imageUriList = imageUriList,
+                        onDeleteImage = onDeleteImage,
+                        onAddImage = onAddImage
+                    )
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Spacer(modifier = Modifier.height(20.dp))
+                    UploadButton(
+                        isUploadActivated = isUploadActivated,
+                        onUpload = onUpload
                     )
                 }
             }
@@ -339,7 +334,8 @@ fun ContentEditText(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .defaultMinSize(minHeight = 110.dp),
+                    .defaultMinSize(minHeight = 132.dp)
+                    .verticalScroll(scrollState),
                 contentAlignment = Alignment.TopStart
             ) {
                 it()
@@ -426,6 +422,32 @@ fun PostImage(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .clickable { onDeleteImage() }
+        )
+    }
+}
+
+@Composable
+fun UploadButton(
+    isUploadActivated: Boolean,
+    onUpload: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .padding(bottom = 30.dp)
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(
+                color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable { if (isUploadActivated) onUpload() }
+    ) {
+        Text(
+            text = "올리기",
+            modifier = Modifier.align(Alignment.Center),
+            color = SikshaColors.White900,
+            fontWeight = FontWeight.Bold
         )
     }
 }
