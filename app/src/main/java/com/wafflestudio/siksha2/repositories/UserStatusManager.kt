@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.repositories
 
 import android.content.Context
+import android.net.Uri
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
@@ -82,6 +83,14 @@ class UserStatusManager @Inject constructor(
 
     suspend fun getUserNickname(): String?{
         return sikshaApi.getUserData().nickname
+    }
+
+    suspend fun getUserImage(): List<String>?{
+        return sikshaApi.getUserData().etc?.images
+    }
+
+    suspend fun updateUserProfile(nickname: String?, imageUri: Uri?){
+
     }
 
     suspend fun getVersion(): String {

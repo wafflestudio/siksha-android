@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
@@ -17,16 +18,16 @@ import com.wafflestudio.siksha2.repositories.UserStatusManager
 
 class UserSettingFragment : Fragment() {
     private lateinit var binding:FragmentSettingUsersettingBinding
+    private val userSettingViewModel: UserSettingViewModel by activityViewModels()
 
-    lateinit var userStatusManager: UserStatusManager
-
-    lateinit var imageView:ShapeableImageView
+    private lateinit var imageView : ShapeableImageView
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
             Glide.with(this).load(it).circleCrop().into(imageView)
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,6 +58,8 @@ class UserSettingFragment : Fragment() {
 
         binding.completeButton.setOnClickListener {
             val nickname = binding.nicknameSetRow.text.toString()
+            userSettingViewModel.setNickname(nickname)
+            userSettingViewModel.sendDataToServer(requireContext())
         }
 
     }
