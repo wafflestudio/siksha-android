@@ -25,8 +25,8 @@ class CommunityRepository @Inject constructor(
 
     fun commentPagingSource(postId: Long) = CommentPagingSource(postId, api)
 
-    suspend fun addCommentToPost(postId: Long, content: String) {
-        api.postComment(PostCommentRequestBody(postId, content))
+    suspend fun addCommentToPost(postId: Long, content: String, isAnonymous: Boolean) {
+        api.postComment(PostCommentRequestBody(postId, content, isAnonymous))
     }
 
     suspend fun likePost(postId: Long): Post {

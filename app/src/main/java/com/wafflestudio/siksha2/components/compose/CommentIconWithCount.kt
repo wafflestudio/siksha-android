@@ -26,7 +26,7 @@ fun CommentIconWithCount(
         CommentIcon()
         Text(
             text = commentCount.toString(),
-            fontSize = 8.sp,
+            fontSize = 10.sp,
             color = SikshaColors.Gray600,
             style = SikshaTypography.body2
         )

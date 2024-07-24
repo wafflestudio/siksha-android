@@ -6,5 +6,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class PostCommentRequestBody(
     @Json(name = "post_id") val postId: Long,
-    val content: String
+    val content: String,
+    @Json(name = "anonymous") val isAnonymous: Boolean
 )
