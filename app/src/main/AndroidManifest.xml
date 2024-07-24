@@ -75,9 +75,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.common.ImageDetailActivity"
+            android:name=".ui.common.ImageViewerActivity"
             android:exported="false"
-            android:theme="@style/Theme.Siksha.ImageDetail" />
+            android:theme="@style/Theme.Siksha.ImageViewer" />
     </application>
 
 </manifest>

@@ -1,14 +1,13 @@
 package com.wafflestudio.siksha2.utils
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.wafflestudio.siksha2.ui.common.ImageDetailActivity
+import com.wafflestudio.siksha2.ui.common.ImageViewerActivity
 
 fun View.setVisibleOrGone(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
@@ -37,5 +36,5 @@ fun ImageView.setImageUrl(url: String) {
 }
 
 fun Context.showImageViewer(images: List<String>, initialPage: Int) {
-    startActivity(ImageDetailActivity.createIntent(this, images, initialPage))
+    startActivity(ImageViewerActivity.createIntent(this, images, initialPage))
 }

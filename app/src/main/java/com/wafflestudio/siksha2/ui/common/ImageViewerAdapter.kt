@@ -3,10 +3,10 @@ package com.wafflestudio.siksha2.ui.common
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class ImageDetailAdapter(private val images: List<String>) : RecyclerView.Adapter<ImageDetailViewHolder>() {
+class ImageViewerAdapter(private val images: List<String>) : RecyclerView.Adapter<ImageViewerViewHolder>() {
     override fun getItemCount(): Int = images.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageDetailViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewerViewHolder {
         val nestedScrollableHost = NestedScrollableHost(parent.context).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -21,15 +21,15 @@ class ImageDetailAdapter(private val images: List<String>) : RecyclerView.Adapte
                 }
             )
         }
-        return ImageDetailViewHolder(nestedScrollableHost)
+        return ImageViewerViewHolder(nestedScrollableHost)
     }
 
-    override fun onBindViewHolder(holder: ImageDetailViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ImageViewerViewHolder, position: Int) {
         val scalableImageView = holder.nestedScrollableHost.getChildAt(0) as? ScalableImageView
         scalableImageView?.setModel(images[position])
     }
 }
 
-class ImageDetailViewHolder(
+class ImageViewerViewHolder(
     val nestedScrollableHost: NestedScrollableHost
 ) : RecyclerView.ViewHolder(nestedScrollableHost)
