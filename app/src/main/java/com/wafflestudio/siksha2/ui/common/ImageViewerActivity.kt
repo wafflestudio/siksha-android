@@ -52,6 +52,9 @@ class ImageViewerActivity: Activity() {
             setPageText(binding.vpImages.currentItem + 1, it.size)
         }
         binding.vpImages.registerOnPageChangeCallback(onPageChangedCallback)
+        binding.ivClose.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setPageText(currentPage: Int, pageCount: Int) {
