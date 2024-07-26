@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
@@ -60,33 +62,22 @@ fun ReviewScreen(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        // TODO: 커뮤니티탭 머지 후 TopBar로 수정
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .background(color = SikshaColors.OrangeMain)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_back_arrow),
-                contentDescription = "뒤로가기",
-                modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 16.dp)
-                    .align(Alignment.CenterStart)
-                    .clickable {
-                        onNavigateUp()
-                    }
-            )
-            Text(
-                text = stringResource(R.string.review_title),
-                modifier = Modifier
-                    .padding(horizontal = 10.dp, vertical = 12.dp)
-                    .align(Alignment.Center),
+        TopBar(
+            title = stringResource(R.string.review_title),
+            textStyle = MaterialTheme.typography.subtitle1.copy(
                 fontSize = dpToSp(20.dp),
-                fontWeight = FontWeight.Bold,
-                color = SikshaColors.White900
-            )
-        }
+            ),
+            navigationButton = {
+                Image(
+                    painter = painterResource(R.drawable.ic_back_arrow),
+                    contentDescription = "뒤로가기",
+                    modifier = Modifier
+                        .clickable {
+                            onNavigateUp()
+                        }
+                )
+            }
+        )
 
         Box(
             modifier = Modifier
