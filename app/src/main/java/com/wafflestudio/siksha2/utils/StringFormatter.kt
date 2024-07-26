@@ -1,9 +1,12 @@
 package com.wafflestudio.siksha2.utils
 
+import timber.log.Timber
 import java.time.DayOfWeek
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 object StringFormatter {
     fun formatScore(score: Double?): String {
@@ -49,4 +52,30 @@ fun String.toLocalDate(): LocalDate {
 
 fun String.toLocalDateTime(): LocalDateTime {
     return LocalDateTime.parse(this, DateTimeFormatter.ISO_DATE_TIME)
+}
+
+fun LocalDateTime.toParsedTimeString(): String {
+    try {
+        val diff = Duration.between(this, LocalDateTime.now())
+        val hours = diff.toHours()
+        val minutes = diff.toMinutes()
+        val days = diff.toDays()
+        return when {
+            days > 0 -> {
+                format(DateTimeFormatter.ISO_DATE)
+            }
+            hours > 0 -> {
+                "$hours 시간 전"
+            }
+            minutes > 0 -> {
+                "$minutes 분 전"
+            }
+            else -> {
+                "방금 전"
+            }
+        }
+    } catch (e: DateTimeParseException) {
+        Timber.e("LocalDateTime parse error!")
+        return ""
+    }
 }

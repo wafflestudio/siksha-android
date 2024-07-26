@@ -1,14 +1,21 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.MealsOfDay
-import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -37,78 +44,60 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _favoriteRestaurantExists = MutableLiveData(false)
     val favoriteRestaurantExists: LiveData<Boolean> = _favoriteRestaurantExists
 
-    private val _updatedMenuItemStream = MutableLiveData<Menu?>(null)
-    val updatedMenuItemStream: LiveData<Menu?> = _updatedMenuItemStream
-
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
     private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
 
-    fun toggleFavorite(id: Long) {
+    init {
+        startRefreshingMenus()
+    }
+
+    private fun startRefreshingMenus() {
+        viewModelScope.launch {
+            _dateFilter.asFlow()
+                .conflate()
+                .collect {
+                    try {
+                        menuRepository.syncWithServer(_dateFilter.value ?: LocalDate.now())
+                    } catch (e: Exception) {
+                        _networkError.value = true
+                    }
+                }
+        }
+    }
+
+    fun toggleRestaurantFavorite(id: Long) {
         viewModelScope.launch {
             restaurantRepository.toggleRestaurantFavoriteById(id)
         }
     }
 
-    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
-        viewModelScope.launch {
-            val menuItem = menuRepository.getMenuById(id)
-            menuItem.isLiked = !isCurrentlyLiked
-            _updatedMenuItemStream.postValue(menuItem)
-            val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
-            if (serverMenuItem.isLiked != menuItem.isLiked) {
-                _updatedMenuItemStream.postValue(serverMenuItem)
-            }
+    suspend fun toggleMenuLike(id: Long, isCurrentlyLiked: Boolean) {
+        when (isCurrentlyLiked) {
+            true -> menuRepository.unlikeMenuById(id)
+            false -> menuRepository.likeMenuById(id)
         }
     }
 
     fun setMealsOfDayFilter(mealsOfDay: MealsOfDay) {
-        viewModelScope.launch {
-            _mealsOfDayFilter.value = mealsOfDay
-            startRefreshingData()
-        }
+        _mealsOfDayFilter.value = mealsOfDay
     }
 
     fun addDateOffset(offset: Long) {
-        viewModelScope.launch {
-            _dateFilter.value = _dateFilter.value?.plusDays(offset)
-            startRefreshingData()
-        }
+        _dateFilter.value = _dateFilter.value?.plusDays(offset)
     }
 
     fun setDateFilter(date: LocalDate) {
-        viewModelScope.launch {
-            _dateFilter.value = date
-            startRefreshingData()
-        }
+        _dateFilter.value = date
     }
 
     fun toggleCalendarVisibility() {
-        viewModelScope.launch {
-            _isCalendarVisible.value = _isCalendarVisible.value?.not()
-        }
+        _isCalendarVisible.value = _isCalendarVisible.value?.not()
     }
 
     fun setCalendarVisibility(visibility: Boolean) {
-        viewModelScope.launch {
-            _isCalendarVisible.value = visibility
-        }
-    }
-
-    fun startRefreshingData() {
-        viewModelScope.launch {
-            try {
-                restaurantRepository.syncWithServer()
-                dateFilter.asFlow()
-                    .conflate()
-                    .collect {
-                        menuRepository.syncWithServer(_dateFilter.value ?: LocalDate.now())
-                    }
-            } catch (e: Exception) {
-                _networkError.value = true
-            }
-        }
+        _isCalendarVisible.value = visibility
     }
 
     fun checkFavoriteRestaurantExists() {

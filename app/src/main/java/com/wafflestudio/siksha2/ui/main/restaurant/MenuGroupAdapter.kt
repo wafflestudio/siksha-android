@@ -31,7 +31,7 @@ class MenuGroupAdapter(
             it.adapter = menuAdapter
             it.layoutManager = LinearLayoutManager(parent.context)
         }
-        return MenuGroupViewHolder(binding, menuAdapter)
+        return MenuGroupViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MenuGroupViewHolder, position: Int) {
@@ -76,8 +76,7 @@ class MenuGroupAdapter(
     }
 
     class MenuGroupViewHolder(
-        val binding: ItemMenuGroupBinding,
-        val menuAdapter: MenuAdapter
+        val binding: ItemMenuGroupBinding
     ) : RecyclerView.ViewHolder(binding.root)
 
     companion object {

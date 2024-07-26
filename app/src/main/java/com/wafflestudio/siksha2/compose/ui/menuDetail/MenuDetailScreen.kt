@@ -94,7 +94,11 @@ fun MenuDetailRoute(
         imageReviews = imageReviews,
         loadingState = loadingState,
         isTodayMenu = isTodayMenu,
-        onClickLike = { menuDetailViewModel.toggleLike() },
+        onClickLike = {
+            menu?.let {
+                menuDetailViewModel.toggleLike(it.id, it.isLiked ?: false)  // todo: model, dto 구분하고 isLiked not-null로 만들기
+            }
+        },
         onNavigateUp = onNavigateUp,
         onNavigateToLeaveReview = onNavigateToLeaveReview,
         onNavigateToReviewPhoto = onNavigateToReviewPhoto,

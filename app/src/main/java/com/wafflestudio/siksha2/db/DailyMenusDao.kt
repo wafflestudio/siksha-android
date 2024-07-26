@@ -19,4 +19,7 @@ interface DailyMenusDao {
 
     @Query("DELETE FROM daily_menus WHERE date<:date")
     suspend fun deleteMenusBefore(date: LocalDate)
+
+    @Query("SELECT * FROM daily_menus")
+    suspend fun getDailyMenuAll(): List<DailyMenu>
 }

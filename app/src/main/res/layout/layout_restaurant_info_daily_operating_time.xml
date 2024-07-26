@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="dailyOperatingTimes"
+            type="com.wafflestudio.siksha2.ui.restaurantInfo.model.DailyOperatingTimes" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dailyOperatingTimes="@{dailyOperatingTimes}">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@{title}"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="주중" />
+
+        <TextView
+            android:id="@+id/tv_breakfast_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@string/daily_restaurant_breakfast"
+            android:textColor="@color/orange_main"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_breakfast_time"
+            app:layout_constraintEnd_toStartOf="@id/tv_breakfast_time"
+            app:layout_constraintTop_toTopOf="@id/tv_breakfast_time" />
+
+        <TextView
+            android:id="@+id/tv_breakfast_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@{dailyOperatingTimes.breakfast.toString()}"
+            android:textColor="@color/gray_700"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="08:00 - 10:00" />
+
+        <TextView
+            android:id="@+id/tv_lunch_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@string/daily_restaurant_lunch"
+            android:textColor="@color/orange_main"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_lunch_time"
+            app:layout_constraintEnd_toStartOf="@id/tv_lunch_time"
+            app:layout_constraintTop_toTopOf="@id/tv_lunch_time" />
+
+        <TextView
+            android:id="@+id/tv_lunch_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@{dailyOperatingTimes.lunch.toString()}"
+            android:textColor="@color/gray_700"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_breakfast_time"
+            tools:text="11:30 - 13:30" />
+
+        <TextView
+            android:id="@+id/tv_dinner_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@string/daily_restaurant_dinner"
+            android:textColor="@color/orange_main"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_dinner_time"
+            app:layout_constraintEnd_toStartOf="@id/tv_dinner_time"
+            app:layout_constraintTop_toTopOf="@id/tv_dinner_time" />
+
+        <TextView
+            android:id="@+id/tv_dinner_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:fontFamily="@font/nanum_square_regular"
+            android:text="@{dailyOperatingTimes.dinner.toString()}"
+            android:textColor="@color/gray_700"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_lunch_time"
+            tools:text="17:30 - 19:30" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/g_breakfast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_breakfast_title, tv_breakfast_time"
+            app:operatingTime="@{dailyOperatingTimes.breakfast}" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/g_lunch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_lunch_title, tv_lunch_time"
+            app:operatingTime="@{dailyOperatingTimes.lunch}" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/g_dinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="tv_dinner_title, tv_dinner_time"
+            app:operatingTime="@{dailyOperatingTimes.dinner}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

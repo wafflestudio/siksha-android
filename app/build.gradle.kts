@@ -49,6 +49,7 @@ android {
 
     productFlavors {
         create("staging") {
+            isDefault = true
             applicationIdSuffix = ".staging"
 
             val propertyVersionName = versionProps.getProperty("sikshaVersion")
@@ -91,6 +92,7 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
         debug {
+            isDefault = true
             isMinifyEnabled = false
         }
     }
@@ -98,6 +100,7 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        dataBinding = true
         compose = true
     }
 
@@ -179,7 +182,8 @@ dependencies {
     // Compose
     implementation("androidx.compose.runtime:runtime:${Deps.Version.Compose}")
     implementation("androidx.compose.ui:ui:${Deps.Version.Compose}")
-    implementation("androidx.compose.ui:ui-tooling:${Deps.Version.Compose}")
+    debugImplementation("androidx.compose.ui:ui-tooling:${Deps.Version.Compose}")
+    implementation("androidx.compose.ui:ui-tooling-preview:${Deps.Version.Compose}")
     implementation("androidx.compose.material:material:${Deps.Version.Compose}")
     implementation("androidx.compose.foundation:foundation:${Deps.Version.ComposeFoundation}")
     implementation("androidx.compose.foundation:foundation-layout:${Deps.Version.ComposeFoundation}")

@@ -16,9 +16,9 @@ fun LikeButton(
     Image(
         painter = painterResource(
             if (isChecked) {
-                R.drawable.ic_full_heart_small
+                R.drawable.ic_heart_filled
             } else {
-                R.drawable.ic_empty_heart_small
+                R.drawable.ic_heart_outline
             }
         ),
         contentDescription = "좋아요",

@@ -5,11 +5,11 @@ import androidx.paging.PagingData
 import com.wafflestudio.siksha2.db.DailyMenusDao
 import com.wafflestudio.siksha2.models.DailyMenu
 import com.wafflestudio.siksha2.models.Menu
+import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
-import com.wafflestudio.siksha2.network.dto.MenuLikeOrUnlikeResponse
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -94,11 +94,55 @@ class MenuRepository @Inject constructor(
 //        return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
 //    }
 
-    suspend fun toggleLike(menuId: Long, isCurrentlyLiked: Boolean): MenuLikeOrUnlikeResponse {
-        return if (isCurrentlyLiked) {
-            sikshaApi.unlikeMenu(menuId)
-        } else {
-            sikshaApi.likeMenu(menuId)
+    suspend fun likeMenuById(menuId: Long): Menu {
+        return withContext(Dispatchers.IO) {
+            val menu = sikshaApi.postLikeMenu(menuId)
+            updateMenuInLocal(menu)
+            return@withContext menu
+        }
+    }
+
+    suspend fun unlikeMenuById(menuId: Long): Menu {
+        return withContext(Dispatchers.IO) {
+            val menu = sikshaApi.postUnlikeMenu(menuId)
+            updateMenuInLocal(menu)
+            return@withContext menu
+        }
+    }
+
+    private suspend fun updateMenuInLocal(menu: Menu) { // DB에 저장된 메뉴 중 같은 code인 메뉴들에 좋아요를 반영한다.
+        if (menu.date != null) {
+            val dailyMenus = dailyMenusDao.getDailyMenuAll()
+            val updatedDailyMenus = withContext(Dispatchers.Default) { // TODO: DB 구조, UX 개선
+                dailyMenus.map { dailyMenu ->
+                    dailyMenu.copy(
+                        data = dailyMenu.data.copy(
+                            breakfast = dailyMenu.data.breakfast.toUpdatedMenuGroups(menu),
+                            lunch = dailyMenu.data.lunch.toUpdatedMenuGroups(menu),
+                            dinner = dailyMenu.data.dinner.toUpdatedMenuGroups(menu)
+                        )
+                    )
+                }
+            }
+            dailyMenusDao.insertDailyMenus(updatedDailyMenus)
+        }
+    }
+
+    private fun List<MenuGroup>.toUpdatedMenuGroups(menu: Menu): List<MenuGroup> {
+        return this.map { menuGroup ->
+            if (menuGroup.menus.find { it.code == menu.code } != null) {
+                menuGroup.copy(
+                    menus = menuGroup.menus.map {
+                        if (it.code == menu.code) {
+                            it.copy(isLiked = menu.isLiked)
+                        } else {
+                            it
+                        }
+                    }
+                )
+            } else {
+                menuGroup
+            }
         }
     }
 

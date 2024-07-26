@@ -22,8 +22,8 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ActivitySplashBinding
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
+import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi

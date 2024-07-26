@@ -151,26 +151,13 @@ class MenuDetailViewModel @Inject constructor(
         _leaveReviewState.value = LeaveReviewState.WAITING
     }
 
-    fun toggleLike() {
-        if (menu.value != null) {
-            _toggleLike(menu.value!!.id, menu.value!!.isLiked ?: false)
-        }
-    }
-
-    private fun _toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
         viewModelScope.launch {
-            val menuItem = menuRepository.getMenuById(id)
-            menuItem.isLiked = !isCurrentlyLiked
-            if (menuItem.isLiked == true) {
-                menuItem.likeCount = menuItem.likeCount?.plus(1)
-            } else {
-                menuItem.likeCount = menuItem.likeCount?.minus(1)
+            val updatedMenu = when (isCurrentlyLiked) {
+                true -> menuRepository.unlikeMenuById(id)
+                false -> menuRepository.likeMenuById(id)
             }
-            _menu.postValue(menuItem)
-            val serverMenuItem = menuRepository.toggleLike(id, isCurrentlyLiked)
-            if (serverMenuItem != menuItem) {
-                _menu.postValue(serverMenuItem)
-            }
+            _menu.postValue(updatedMenu)
         }
     }
 
