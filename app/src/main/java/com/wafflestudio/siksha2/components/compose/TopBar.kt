@@ -10,15 +10,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.ui.SikshaColors
-import com.wafflestudio.siksha2.ui.SikshaTypography
 
 @Composable
 fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
+    textStyle: TextStyle = MaterialTheme.typography.subtitle1,
     navigationButton: @Composable () -> Unit = {}
 ) {
     Box(
@@ -32,7 +33,7 @@ fun TopBar(
             modifier = Modifier.align(Alignment.Center),
             color = SikshaColors.White900,
             fontWeight = FontWeight.ExtraBold,
-            style = SikshaTypography.subtitle1
+            style = textStyle
         )
         Box(
             modifier = Modifier
