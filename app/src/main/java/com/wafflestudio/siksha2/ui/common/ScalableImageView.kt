@@ -42,15 +42,6 @@ class ScalableImageView @JvmOverloads constructor(
     private var savedDist = 1f
     private var mode = Mode.NONE
 
-    private val gestureDetector = GestureDetector(
-        context,
-        object : SimpleOnGestureListener() {
-            override fun onDoubleTap(e: MotionEvent): Boolean {
-                return true
-            }
-        }
-    )
-
     init {
         scaleType = ScaleType.MATRIX
     }
@@ -125,8 +116,6 @@ class ScalableImageView @JvmOverloads constructor(
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return true
         if (drawable == null) return true
-
-        gestureDetector.onTouchEvent(event)
 
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
