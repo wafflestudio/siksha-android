@@ -37,8 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
@@ -50,12 +52,16 @@ import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImage
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImageShowMore
+import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.ui.menuDetail.MenuLoadingState
 import com.wafflestudio.siksha2.utils.dpToSp
+import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDate
 import kotlin.math.min
 import kotlin.math.round
 
@@ -227,7 +233,7 @@ fun MenuDetailContent(
         // 사진 리뷰
         if (imageReviews.itemCount > 0) {
             item {
-                MenuPhotoPreview(
+                BriefImageReviews(
                     menu = menu,
                     imageReviews = imageReviews,
                     onNavigateToReviewPhoto = onNavigateToReviewPhoto
@@ -510,5 +516,42 @@ fun BriefImageReviews(
                 }
             }
         }
+    }
+}
+
+private val testMenu = Menu(
+    id = 0L,
+    code = "",
+    date = LocalDate.now(),
+    type = MealsOfDay.BR,
+    restaurantId = 0L,
+    nameKr = "nameKr",
+    nameEn = "nameEn",
+    price = 10000L,
+    score = 3.39,
+    etc = listOf("https://picsum.photos/200", "https://picsum.photos/201"),
+    reviewCount = 10L,
+    isLiked = true,
+    likeCount = 100L,
+)
+
+@Preview
+@Composable
+fun MenuDetailScreenPreview() {
+    SikshaTheme {
+        MenuDetailScreen(
+            menu = testMenu,
+            reviewDistribution = listOf(1L, 2L, 3L, 4L, 5L),
+            reviews = flowOf(PagingData.empty<Review>()).collectAsLazyPagingItems(),
+            imageReviews = flowOf(PagingData.empty<Review>()).collectAsLazyPagingItems(),
+            loadingState = MenuLoadingState.SUCCESS,
+            isTodayMenu = true,
+            onClickLike = {},
+            onNavigateUp = {},
+            onNavigateToLeaveReview = {},
+            onNavigateToReviewPhoto = {},
+            onNavigateToReview = {},
+            modifier = Modifier
+        )
     }
 }
