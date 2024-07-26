@@ -9,14 +9,15 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ActivityImageViewerBinding
 import java.util.ArrayList
 
-class ImageViewerActivity: Activity() {
+class ImageViewerActivity : Activity() {
 
     companion object {
         private const val EXTRA_IMAGES = "EXTRA_IMAGES"
         private const val EXTRA_INITIAL_PAGE = "EXTRA_INITIAL_PAGE"
 
         fun createIntent(context: Context, images: List<String>, initialPage: Int): Intent = Intent(
-            context, ImageViewerActivity::class.java
+            context,
+            ImageViewerActivity::class.java
         ).apply {
             putStringArrayListExtra(EXTRA_IMAGES, ArrayList(images))
             putExtra(EXTRA_INITIAL_PAGE, initialPage)

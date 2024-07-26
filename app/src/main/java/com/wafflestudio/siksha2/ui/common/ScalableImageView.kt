@@ -6,8 +6,6 @@ import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import androidx.annotation.AttrRes
 import androidx.appcompat.widget.AppCompatImageView
@@ -20,7 +18,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.utils.showToast
-import timber.log.Timber
 import kotlin.math.sqrt
 
 class ScalableImageView @JvmOverloads constructor(
@@ -185,15 +182,21 @@ class ScalableImageView @JvmOverloads constructor(
         val currentX = this.translationX
         val scaledImageWidth = drawable.intrinsicWidth * this.scaleX
         val viewWidth = width
-        val dx = if (viewWidth > scaledImageWidth) (viewWidth - scaledImageWidth) / 2 - currentX
-        else requestedDx.coerceIn(viewWidth - scaledImageWidth - currentX, -currentX)
+        val dx = if (viewWidth > scaledImageWidth) {
+            (viewWidth - scaledImageWidth) / 2 - currentX
+        } else {
+            requestedDx.coerceIn(viewWidth - scaledImageWidth - currentX, -currentX)
+        }
 
         val currentY = this.translationY
         val scaledImageHeight = drawable.intrinsicHeight * this.scaleX
         val viewHeight = height
         val dy =
-            if (viewHeight > scaledImageHeight) (viewHeight - scaledImageHeight) / 2 - currentY
-            else requestedDy.coerceIn(viewHeight - scaledImageHeight - currentY, -currentY)
+            if (viewHeight > scaledImageHeight) {
+                (viewHeight - scaledImageHeight) / 2 - currentY
+            } else {
+                requestedDy.coerceIn(viewHeight - scaledImageHeight - currentY, -currentY)
+            }
 
         return Matrix().apply {
             set(this@translated)

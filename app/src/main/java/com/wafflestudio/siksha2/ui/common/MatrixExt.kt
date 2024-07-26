@@ -2,7 +2,6 @@ package com.wafflestudio.siksha2.ui.common
 
 import android.graphics.Matrix
 
-
 val Matrix.scaleX get() = run {
     val values = FloatArray(9)
     getValues(values)
