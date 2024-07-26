@@ -20,20 +20,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
+import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.dpToSp
 
 @Composable
-fun ReviewScreen(
-    navController: NavController,
+fun ReviewRoute(
+    showImages: Boolean,
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
-    showImages: Boolean = false
 ) {
     val reviews = if (!showImages) {
         menuDetailViewModel.reviews.collectAsLazyPagingItems()
@@ -41,6 +42,21 @@ fun ReviewScreen(
         menuDetailViewModel.reviewsWithImage.collectAsLazyPagingItems()
     }
 
+    ReviewScreen(
+        showImages = showImages,
+        reviews = reviews,
+        onNavigateUp = onNavigateUp,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun ReviewScreen(
+    showImages: Boolean,
+    reviews: LazyPagingItems<Review>,
+    onNavigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -58,7 +74,7 @@ fun ReviewScreen(
                     .padding(horizontal = 20.dp, vertical = 16.dp)
                     .align(Alignment.CenterStart)
                     .clickable {
-                        navController.popBackStack()
+                        onNavigateUp()
                     }
             )
             Text(

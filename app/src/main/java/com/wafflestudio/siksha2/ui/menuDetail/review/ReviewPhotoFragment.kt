@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.wafflestudio.siksha2.compose.ui.menuDetail.review.ReviewScreen
+import com.wafflestudio.siksha2.compose.ui.menuDetail.review.ReviewRoute
 import com.wafflestudio.siksha2.databinding.FragmentReviewPhotoBinding
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
@@ -29,10 +29,10 @@ class ReviewPhotoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.reviewPhotoComposeView.setContent {
             SikshaTheme {
-                ReviewScreen(
-                    navController = findNavController(),
+                ReviewRoute(
                     showImages = true,
-                    menuDetailViewModel = vm
+                    onNavigateUp = { findNavController().popBackStack() },
+                    menuDetailViewModel = vm,
                 )
             }
         }
