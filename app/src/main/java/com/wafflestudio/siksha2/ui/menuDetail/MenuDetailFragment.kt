@@ -41,7 +41,7 @@ class MenuDetailFragment : Fragment() {
                     },
                     onNavigateToLeaveReview = {
                         findNavController().navigate(
-                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()    // TODO: leaveReviewFragment로 이동 시 menuId arguement 전달하는 식으로 바꾸기
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment() // TODO: leaveReviewFragment로 이동 시 menuId arguement 전달하는 식으로 바꾸기
                         )
                     },
                     onNavigateToReviewPhoto = { menuId ->

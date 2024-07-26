@@ -32,7 +32,7 @@ class ReviewPhotoFragment : Fragment() {
                 ReviewRoute(
                     showImages = true,
                     onNavigateUp = { findNavController().popBackStack() },
-                    menuDetailViewModel = vm,
+                    menuDetailViewModel = vm
                 )
             }
         }

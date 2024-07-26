@@ -28,7 +28,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
-import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
@@ -41,7 +40,7 @@ fun ReviewRoute(
     showImages: Boolean,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    menuDetailViewModel: MenuDetailViewModel = hiltViewModel(),
+    menuDetailViewModel: MenuDetailViewModel = hiltViewModel()
 ) {
     val reviews = if (!showImages) {
         menuDetailViewModel.reviews.collectAsLazyPagingItems()
@@ -53,7 +52,7 @@ fun ReviewRoute(
         showImages = showImages,
         reviews = reviews,
         onNavigateUp = onNavigateUp,
-        modifier = modifier,
+        modifier = modifier
     )
 }
 
@@ -62,7 +61,7 @@ fun ReviewScreen(
     showImages: Boolean,
     reviews: LazyPagingItems<Review>,
     onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -70,7 +69,7 @@ fun ReviewScreen(
         TopBar(
             title = stringResource(R.string.review_title),
             textStyle = MaterialTheme.typography.subtitle1.copy(
-                fontSize = dpToSp(20.dp),
+                fontSize = dpToSp(20.dp)
             ),
             navigationButton = {
                 Image(

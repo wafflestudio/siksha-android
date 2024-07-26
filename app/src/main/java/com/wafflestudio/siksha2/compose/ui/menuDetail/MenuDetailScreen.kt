@@ -76,7 +76,7 @@ fun MenuDetailRoute(
     modifier: Modifier = Modifier,
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel()
 ) {
-    val menu by menuDetailViewModel.menu.observeAsState()   // todo: LiveData대신 StateFlow 써서 non-null로 만들기
+    val menu by menuDetailViewModel.menu.observeAsState() // todo: LiveData대신 StateFlow 써서 non-null로 만들기
     val reviewDistribution by menuDetailViewModel.reviewDistribution.observeAsState()
     val reviews = menuDetailViewModel.reviews.collectAsLazyPagingItems()
     val imageReviews = menuDetailViewModel.reviewsWithImage.collectAsLazyPagingItems()
@@ -96,14 +96,14 @@ fun MenuDetailRoute(
         isTodayMenu = isTodayMenu,
         onClickLike = {
             menu?.let {
-                menuDetailViewModel.toggleLike(it.id, it.isLiked ?: false)  // todo: model, dto 구분하고 isLiked not-null로 만들기
+                menuDetailViewModel.toggleLike(it.id, it.isLiked ?: false) // todo: model, dto 구분하고 isLiked not-null로 만들기
             }
         },
         onNavigateUp = onNavigateUp,
         onNavigateToLeaveReview = onNavigateToLeaveReview,
         onNavigateToReviewPhoto = onNavigateToReviewPhoto,
         onNavigateToReview = onNavigateToReview,
-        modifier = modifier,
+        modifier = modifier
     )
 }
 
@@ -120,16 +120,15 @@ fun MenuDetailScreen(
     onNavigateToLeaveReview: () -> Unit,
     onNavigateToReviewPhoto: (Long) -> Unit,
     onNavigateToReview: (Long) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
-
     Column(
         modifier = modifier.fillMaxSize()
     ) {
         TopBar(
             title = menu?.nameKr ?: stringResource(R.string.review_title),
             textStyle = MaterialTheme.typography.subtitle1.copy(
-                fontSize = dpToSp(20.dp),
+                fontSize = dpToSp(20.dp)
             ),
             navigationButton = {
                 Image(
@@ -385,7 +384,7 @@ fun MenuStatistics(
                 ) {
                     Text(
                         text = "${
-                            menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
+                        menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
                         }",
                         fontSize = dpToSp(32.dp),
                         fontWeight = FontWeight.ExtraBold
@@ -524,7 +523,7 @@ private val testMenu = Menu(
     etc = listOf("https://picsum.photos/200", "https://picsum.photos/201"),
     reviewCount = 10L,
     isLiked = true,
-    likeCount = 100L,
+    likeCount = 100L
 )
 
 @Preview
