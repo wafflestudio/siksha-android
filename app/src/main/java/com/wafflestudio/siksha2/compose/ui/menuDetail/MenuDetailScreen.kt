@@ -437,7 +437,7 @@ fun MenuStatistics(
 }
 
 @Composable
-fun MenuPhotoPreview(   // TODO: 네이밍 변경
+fun BriefImageReviews(
     menu: Menu?,
     imageReviews: LazyPagingItems<Review>,
     onNavigateToReviewPhoto: (Long) -> Unit,
