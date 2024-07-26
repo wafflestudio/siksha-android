@@ -19,17 +19,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
+import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.dpToSp
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun ReviewRoute(
@@ -118,5 +123,17 @@ fun ReviewScreen(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ReviewScreenPreview() {
+    SikshaTheme {
+        ReviewScreen(
+            showImages = false,
+            reviews = flowOf(PagingData.empty<Review>()).collectAsLazyPagingItems(),
+            onNavigateUp = {}
+        )
     }
 }
