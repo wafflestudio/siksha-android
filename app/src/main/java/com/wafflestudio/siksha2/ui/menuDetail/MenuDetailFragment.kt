@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.wafflestudio.siksha2.compose.ui.menuDetail.MenuDetailScreen
+import com.wafflestudio.siksha2.compose.ui.menuDetail.MenuDetailRoute
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,10 +33,27 @@ class MenuDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.menuDetailComposeView.setContent {
             SikshaTheme {
-                MenuDetailScreen(
-                    navController = findNavController(),
+                MenuDetailRoute(
                     menuId = args.menuId,
                     isTodayMenu = args.isTodayMenu,
+                    onNavigateUp = {
+                        findNavController().popBackStack()
+                    },
+                    onNavigateToLeaveReview = {
+                        findNavController().navigate(
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()    // TODO: leaveReviewFragment로 이동 시 menuId arguement 전달하는 식으로 바꾸기
+                        )
+                    },
+                    onNavigateToReviewPhoto = { menuId ->
+                        findNavController().navigate(
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(menuId)
+                        )
+                    },
+                    onNavigateToReview = { menuId ->
+                        findNavController().navigate(
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(menuId)
+                        )
+                    },
                     menuDetailViewModel = vm
                 )
             }

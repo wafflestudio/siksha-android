@@ -39,22 +39,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.ErrorPlaceHolder
 import com.wafflestudio.siksha2.components.compose.LoadingPlaceHolder
+import com.wafflestudio.siksha2.components.compose.menuDetail.LikeButton
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingBars
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuRatingStars
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReview
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImage
-import com.wafflestudio.siksha2.components.compose.menuDetail.LikeButton
 import com.wafflestudio.siksha2.components.compose.menuDetail.MenuReviewImageShowMore
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaColors
-import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailFragmentDirections
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.ui.menuDetail.MenuLoadingState
 import com.wafflestudio.siksha2.utils.dpToSp
@@ -62,22 +60,58 @@ import kotlin.math.min
 import kotlin.math.round
 
 @Composable
-fun MenuDetailScreen(
-    navController: NavController,
+fun MenuDetailRoute(
     menuId: Long,
     isTodayMenu: Boolean,
+    onNavigateUp: () -> Unit,
+    onNavigateToLeaveReview: () -> Unit,
+    onNavigateToReviewPhoto: (Long) -> Unit,
+    onNavigateToReview: (Long) -> Unit,
     modifier: Modifier = Modifier,
     menuDetailViewModel: MenuDetailViewModel = hiltViewModel()
 ) {
-    val menu by menuDetailViewModel.menu.observeAsState()
+    val menu by menuDetailViewModel.menu.observeAsState()   // todo: LiveData대신 StateFlow 써서 non-null로 만들기
+    val reviewDistribution by menuDetailViewModel.reviewDistribution.observeAsState()
     val reviews = menuDetailViewModel.reviews.collectAsLazyPagingItems()
     val imageReviews = menuDetailViewModel.reviewsWithImage.collectAsLazyPagingItems()
-    val loadingState = menuDetailViewModel.networkResultMenuLoadingState.observeAsState()
+    val loadingState by menuDetailViewModel.networkResultMenuLoadingState.observeAsState()
 
     LaunchedEffect(Unit) {
         menuDetailViewModel.refreshMenu(menuId)
         menuDetailViewModel.refreshReviewDistribution(menuId)
     }
+
+    MenuDetailScreen(
+        menu = menu,
+        reviewDistribution = reviewDistribution,
+        reviews = reviews,
+        imageReviews = imageReviews,
+        loadingState = loadingState,
+        isTodayMenu = isTodayMenu,
+        onClickLike = { menuDetailViewModel.toggleLike() },
+        onNavigateUp = onNavigateUp,
+        onNavigateToLeaveReview = onNavigateToLeaveReview,
+        onNavigateToReviewPhoto = onNavigateToReviewPhoto,
+        onNavigateToReview = onNavigateToReview,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun MenuDetailScreen(
+    menu: Menu?,
+    reviewDistribution: List<Long>?,
+    reviews: LazyPagingItems<Review>,
+    imageReviews: LazyPagingItems<Review>,
+    loadingState: MenuLoadingState?,
+    isTodayMenu: Boolean,
+    onClickLike: () -> Unit,
+    onNavigateUp: () -> Unit,
+    onNavigateToLeaveReview: () -> Unit,
+    onNavigateToReviewPhoto: (Long) -> Unit,
+    onNavigateToReview: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
 
     Column(
         modifier = modifier.fillMaxSize()
@@ -95,7 +129,7 @@ fun MenuDetailScreen(
                     .padding(horizontal = 20.dp, vertical = 16.dp)
                     .align(Alignment.CenterStart)
                     .clickable {
-                        navController.popBackStack()
+                        onNavigateUp()
                     }
             )
             Text(
@@ -112,18 +146,21 @@ fun MenuDetailScreen(
             )
         }
 
-        when (loadingState.value) {
+        when (loadingState) {
             MenuLoadingState.SUCCESS -> {
                 MenuDetailContent(
-                    menuId,
-                    menu,
-                    reviews,
-                    imageReviews,
-                    isTodayMenu,
-                    menuDetailViewModel,
-                    navController
+                    menu = menu,
+                    reviewDistribution = reviewDistribution,
+                    reviews = reviews,
+                    imageReviews = imageReviews,
+                    isTodayMenu = isTodayMenu,
+                    onClickLike = onClickLike,
+                    onNavigateToLeaveReview = onNavigateToLeaveReview,
+                    onNavigateToReviewPhoto = onNavigateToReviewPhoto,
+                    onNavigateToReview = onNavigateToReview
                 )
             }
+
             MenuLoadingState.LOADING -> {
                 LoadingPlaceHolder(
                     modifier = Modifier
@@ -131,6 +168,7 @@ fun MenuDetailScreen(
                         .weight(1f)
                 )
             }
+
             MenuLoadingState.FAILED -> {
                 ErrorPlaceHolder(
                     modifier = Modifier
@@ -138,6 +176,7 @@ fun MenuDetailScreen(
                         .weight(1f)
                 )
             }
+
             else -> {}
         }
     }
@@ -145,13 +184,15 @@ fun MenuDetailScreen(
 
 @Composable
 fun MenuDetailContent(
-    menuId: Long,
     menu: Menu?,
+    reviewDistribution: List<Long>?,
     reviews: LazyPagingItems<Review>,
     imageReviews: LazyPagingItems<Review>,
     isTodayMenu: Boolean,
-    menuDetailViewModel: MenuDetailViewModel,
-    navController: NavController,
+    onClickLike: () -> Unit,
+    onNavigateToLeaveReview: () -> Unit,
+    onNavigateToReviewPhoto: (Long) -> Unit,
+    onNavigateToReview: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -163,14 +204,13 @@ fun MenuDetailContent(
         // 상단 별점 정보 + a
         item {
             MenuStatistics(
-                menu,
-                reviews,
-                menuDetailViewModel,
-                {
+                menu = menu,
+                reviewDistribution = reviewDistribution,
+                reviews = reviews,
+                onClickLike = onClickLike,
+                onLeaveReview = {
                     if (isTodayMenu) {
-                        navController.navigate(
-                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()
-                        )
+                        onNavigateToLeaveReview()
                     } else {
                         Toast
                             .makeText(
@@ -188,9 +228,9 @@ fun MenuDetailContent(
         if (imageReviews.itemCount > 0) {
             item {
                 MenuPhotoPreview(
-                    menuId,
-                    imageReviews,
-                    navController
+                    menu = menu,
+                    imageReviews = imageReviews,
+                    onNavigateToReviewPhoto = onNavigateToReviewPhoto
                 )
             }
         }
@@ -218,11 +258,9 @@ fun MenuDetailContent(
                             .align(Alignment.CenterEnd)
                             .rotate(180f)
                             .clickable {
-                                navController.navigate(
-                                    MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(
-                                        menuId
-                                    )
-                                )
+                                menu?.let {
+                                    onNavigateToReview(it.id)
+                                }
                             }
                     )
                 }
@@ -261,8 +299,9 @@ fun MenuDetailContent(
 @Composable
 fun MenuStatistics(
     menu: Menu?,
+    reviewDistribution: List<Long>?,
     reviews: LazyPagingItems<Review>,
-    menuDetailViewModel: MenuDetailViewModel,
+    onClickLike: () -> Unit,
     onLeaveReview: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -278,7 +317,7 @@ fun MenuStatistics(
         ) {
             LikeButton(
                 isChecked = menu?.isLiked ?: false,
-                onClick = { menuDetailViewModel.toggleLike() },
+                onClick = onClickLike,
                 modifier = Modifier.size(21.dp)
             )
             Text(
@@ -348,7 +387,7 @@ fun MenuStatistics(
                 ) {
                     Text(
                         text = "${
-                        menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
+                            menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"
                         }",
                         fontSize = dpToSp(32.dp),
                         fontWeight = FontWeight.ExtraBold
@@ -357,7 +396,7 @@ fun MenuStatistics(
                         rating = menu?.score?.toFloat() ?: 0.0f
                     )
                 }
-                menuDetailViewModel.reviewDistribution.value?.let {
+                reviewDistribution?.let {
                     MenuRatingBars(
                         distributions = it,
                         modifier = Modifier.weight(1f)
@@ -398,10 +437,10 @@ fun MenuStatistics(
 }
 
 @Composable
-fun MenuPhotoPreview(
-    menuId: Long,
+fun MenuPhotoPreview(   // TODO: 네이밍 변경
+    menu: Menu?,
     imageReviews: LazyPagingItems<Review>,
-    navController: NavController,
+    onNavigateToReviewPhoto: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val imagePreviewScrollState = rememberScrollState()
@@ -425,11 +464,9 @@ fun MenuPhotoPreview(
                 .align(Alignment.CenterEnd)
                 .rotate(180f)
                 .clickable {
-                    navController.navigate(
-                        MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(
-                            menuId
-                        )
-                    )
+                    menu?.let {
+                        onNavigateToReviewPhoto(it.id)
+                    }
                 }
         )
     }
@@ -447,6 +484,7 @@ fun MenuPhotoPreview(
                         .background(SikshaColors.Gray100)
                         .clip(RoundedCornerShape(10.dp))
                 )
+
                 else -> {
                     if (i == 3) {
                         MenuReviewImageShowMore(
@@ -456,11 +494,9 @@ fun MenuPhotoPreview(
                                 .clip(RoundedCornerShape(10.dp)),
                             showMoreCount = imageReviews.itemCount - 2,
                             onShowMore = {
-                                navController.navigate(
-                                    MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(
-                                        menuId
-                                    )
-                                )
+                                menu?.let {
+                                    onNavigateToReviewPhoto(it.id)
+                                }
                             }
                         )
                     } else {
