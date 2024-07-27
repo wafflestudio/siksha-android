@@ -32,23 +32,14 @@ class UserPostListViewModel@Inject constructor(
     private val communityRepository: CommunityRepository
 ) : ViewModel() {
     private val _boards = MutableStateFlow<List<Selectable<Board>>>(emptyList())
-    val boards: StateFlow<List<Selectable<Board>>> get() = _boards
 
-    val selectedBoard = _boards.map { list ->
-        list.find { it.state }?.data
-    }
-        .filterNotNull()
-        .stateIn(viewModelScope, SharingStarted.Eagerly, Board.Empty)
-
-    private val _postPagingData = selectedBoard.flatMapLatest { board ->
-        Pager(
+    private val _postPagingData = Pager(
             config = PagingConfig(
                 pageSize = PostPagingSource.ITEMS_PER_PAGE,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { communityRepository.getUserPostPagingSource() }
         ).flow.cachedIn(viewModelScope)
-    }
 
     private val modifiedPostsCache = MutableStateFlow(mapOf<Long, Post>())
 
@@ -70,24 +61,18 @@ class UserPostListViewModel@Inject constructor(
         }
     }
 
-    suspend fun getBoards() {
+    private suspend fun getBoards() {
         try {
-            _boards.value = communityRepository.getBoards().map { board ->
-                board.toDataWithState(false)
+            // Fetch the boards and map them with the state
+            _boards.value = communityRepository.getBoards().mapIndexed { index, board ->
+                board.toDataWithState(index == 0) // Always select the first board
             }
-            selectBoard(0)
         } catch (e: IOException) {
             // TODO: error handler
         }
     }
 
-    fun selectBoard(boardIndex: Int) {
-        _boards.value = _boards.value.mapIndexed { idx, board ->
-            board.data.toDataWithState(idx == boardIndex)
-        }
-    }
-
-    fun updateListWithLikedPost(post: Post) {
+    fun updateUserListWithLikedPost(post: Post) {
         val modifiedPost = post.copy(
             isLiked = post.isLiked.not(),
             likeCount = if (post.isLiked) post.likeCount - 1 else post.likeCount + 1
@@ -97,7 +82,7 @@ class UserPostListViewModel@Inject constructor(
         }
     }
 
-    fun updateListWithCommentAddedPost(post: Post) {
+    fun updateUserListWithCommentAddedPost(post: Post) {
         val modifiedPost = post.copy(
             commentCount = post.commentCount + 1
         )
