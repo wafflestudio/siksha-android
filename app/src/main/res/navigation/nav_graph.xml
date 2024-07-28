@@ -148,6 +148,9 @@
         <argument
             android:name="post_id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_postEditFragment"
+            app:destination="@id/postEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/postCreateFragment"
@@ -162,5 +165,14 @@
             app:destination="@id/postDetailFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/postEditFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostEditFragment"
+        android:label="PostEditFragment">
+        <action
+            android:id="@+id/action_postEditFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:popUpTo="@id/postDetailFragment" />
     </fragment>
 </navigation>
