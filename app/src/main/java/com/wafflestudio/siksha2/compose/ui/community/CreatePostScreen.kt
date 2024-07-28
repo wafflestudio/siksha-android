@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -432,6 +433,7 @@ fun UploadButton(
     onUpload: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
             .padding(bottom = 30.dp)
@@ -441,7 +443,13 @@ fun UploadButton(
                 color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
                 shape = RoundedCornerShape(8.dp)
             )
-            .clickable { if (isUploadActivated) onUpload() }
+            .then (
+                if (isUploadActivated) Modifier.clickable { onUpload() }
+                else Modifier.clickable (
+                    interactionSource = interactionSource,
+                    indication = null
+                ) { }
+            )
     ) {
         Text(
             text = "올리기",
