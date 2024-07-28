@@ -112,7 +112,7 @@ fun PostCreateRoute(
             postCreateViewModel.deleteImageUri(idx)
         },
         onAddImage = { launcher.launch("image/*") },
-        onUpload = { postCreateViewModel.createPost(context, titleInput, contentInput, isAnonymous) },
+        onUpload = { postCreateViewModel.sendPost(context, titleInput, contentInput, isAnonymous) },
         isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
         createPostState = createPostState,
         context = context,

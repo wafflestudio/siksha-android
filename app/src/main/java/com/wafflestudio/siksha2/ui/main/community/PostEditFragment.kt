@@ -22,18 +22,18 @@ class PostEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-//                PostCreateRoute(
-//                    onNavigateUp = {
-//                        findNavController().navigateUp()
-//                    },
-//                    onUploadSuccess = { postId ->
-//                        findNavController().navigate(
-//                            PostCreateFragmentDirections.actionPostCreateFragmentToPostDetailFragment(
-//                                postId
-//                            )
-//                        )
-//                    }
-//                )
+                PostCreateRoute(
+                    onNavigateUp = {
+                        findNavController().navigateUp()
+                    },
+                    onUploadSuccess = { postId ->
+                        findNavController().navigate(
+                            PostEditFragmentDirections.actionPostEditFragmentToPostDetailFragment(
+                                postId
+                            )
+                        )
+                    }
+                )
             }
         }
     }

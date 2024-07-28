@@ -46,12 +46,21 @@ class PostCreateViewModel @Inject constructor(
     private val _postId = MutableStateFlow<Long>(-1)
     val postId: StateFlow<Long> = _postId
 
+    private var isEdit = false
+
     init {
         viewModelScope.launch {
-            val boardId: Long? = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
-            val postId: Long? = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
-            if (boardId != null)    _board.value = communityRepository.getBoard(boardId)
-            else if (postId != null)    _post.value = communityRepository.getPost(postId)
+            val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
+            val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
+            if (boardId !=  -1L){
+                _board.value = communityRepository.getBoard(boardId)
+                isEdit = false
+            }
+            else if (postId != -1L){
+                _post.value = communityRepository.getPost(postId)
+                _board.value = communityRepository.getBoard(post.value.boardId)
+                isEdit = true
+            }
             else {
                 // error handling
             }
@@ -73,6 +82,13 @@ class PostCreateViewModel @Inject constructor(
         }
     }
 
+    fun sendPost(context: Context, title: String, content: String, anonymous: Boolean) {
+        if (isEdit)
+            patchPost(context, title, content, anonymous)
+        else
+            createPost(context, title, content, anonymous)
+    }
+
     fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {
         val boardId = _board.value.id
         viewModelScope.launch {
@@ -84,7 +100,7 @@ class PostCreateViewModel @Inject constructor(
                 val titleBody = MultipartBody.Part.createFormData("title", title)
                 val contentBody = MultipartBody.Part.createFormData("content", content)
                 _createPostState.value = CreatePostState.WAITING
-                var response: Post? = null
+                var response: Post?
                 imageList.let {
                     response = communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
                 }
@@ -111,7 +127,7 @@ class PostCreateViewModel @Inject constructor(
                 val titleBody = MultipartBody.Part.createFormData("title", title)
                 val contentBody = MultipartBody.Part.createFormData("content", content)
                 _createPostState.value = CreatePostState.WAITING
-                var response: Post? = null
+                var response: Post?
                 imageList.let {
                     response = communityRepository.patchPost(_post.value.id, boardId, titleBody, contentBody, anonymous, imageList)
                 }
@@ -119,10 +135,6 @@ class PostCreateViewModel @Inject constructor(
                 _createPostState.value = CreatePostState.SUCCESS
             } catch (e: Exception) {
                 throw e
-                Timber.tag("CreatePostViewModel.createPost").d(e.message)
-                // Timber.tag("CreatePostViewModel.createPost").d("asdf")
-                context.showToast("오류가 발생했습니다. 다시 시도해 주세요.")
-                _createPostState.value = CreatePostState.USER_INPUT
             }
         }
     }
