@@ -161,7 +161,7 @@ fun CreatePostScreen(
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
             ) {
-                Column (
+                Column(
                     modifier = Modifier.fillMaxWidth()
                         .weight(1.0f)
                 ) {
@@ -441,12 +441,15 @@ fun UploadButton(
                 color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
                 shape = RoundedCornerShape(8.dp)
             )
-            .then (
-                if (isUploadActivated) Modifier.clickable { onUpload() }
-                else Modifier.clickable (
-                    interactionSource = interactionSource,
-                    indication = null
-                ) { }
+            .then(
+                if (isUploadActivated) {
+                    Modifier.clickable { onUpload() }
+                } else {
+                    Modifier.clickable(
+                        interactionSource = interactionSource,
+                        indication = null
+                    ) { }
+                }
             )
     ) {
         Text(
