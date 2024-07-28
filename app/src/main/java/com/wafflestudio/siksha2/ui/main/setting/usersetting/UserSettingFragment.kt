@@ -67,7 +67,7 @@ class UserSettingFragment : Fragment() {
                     context = requireContext(),
                     nickname = binding.nicknameSetRow.text.toString()
                 )
-                showToast("프로필이 변경되었습니다.")
+                findNavController().popBackStack()
             }
         }
 

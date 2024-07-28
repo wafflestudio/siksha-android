@@ -53,12 +53,9 @@ class UserSettingViewModel @Inject constructor(
     }
 
     suspend fun patchUserData(context: Context, nickname: String){
-        _nickname.value = nickname
-        if(_imageUri != null){
-            val image = _imageUri.value?.let { getCompressedImage(context, it) }
-            val updatedUserData = userStatusManager.updateUserProfile(nickname, image)
-            _nickname.value = updatedUserData.nickname
-        }
+        val image = _imageUri.value?.let { getCompressedImage(context, it) }
+        val updatedUserData = userStatusManager.updateUserProfile(nickname, image)
+        _nickname.value = updatedUserData.nickname
     }
 
     private suspend fun getCompressedImage(context: Context, uri: Uri): MultipartBody.Part {
