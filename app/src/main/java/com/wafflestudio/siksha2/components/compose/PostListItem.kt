@@ -47,13 +47,13 @@ fun PostListItem(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 style = SikshaTypography.body2,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = content,
                 style = SikshaTypography.body2,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
             Row(
