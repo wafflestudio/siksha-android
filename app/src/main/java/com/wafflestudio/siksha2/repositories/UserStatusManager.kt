@@ -10,9 +10,11 @@ import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.GetUserDataResult
 import com.wafflestudio.siksha2.network.dto.VocParam
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
+import okhttp3.MultipartBody
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -89,8 +91,8 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.getUserData().etc?.images
     }
 
-    suspend fun updateUserProfile(nickname: String?, imageUri: Uri?){
-
+    suspend fun updateUserProfile(nickname: String?, image: MultipartBody.Part?): GetUserDataResult{
+        return sikshaApi.updateUserData(image, nickname)
     }
 
     suspend fun getVersion(): String {

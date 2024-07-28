@@ -82,6 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/transparent"
+            android:textColor="@color/black"
             android:layout_weight="1"
             android:hint="닉네임을 입력하세요"
             android:gravity="center"

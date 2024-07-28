@@ -9,11 +9,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.wafflestudio.siksha2.databinding.FragmentSettingUsersettingBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
+import kotlinx.coroutines.launch
 
 
 class UserSettingFragment : Fragment() {
@@ -24,6 +26,7 @@ class UserSettingFragment : Fragment() {
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
+            userSettingViewModel.updateImageUri(it)
             Glide.with(this).load(it).circleCrop().into(imageView)
         }
     }
@@ -57,11 +60,23 @@ class UserSettingFragment : Fragment() {
         }
 
         binding.completeButton.setOnClickListener {
-            val nickname = binding.nicknameSetRow.text.toString()
-            userSettingViewModel.setNickname(nickname)
-            userSettingViewModel.sendDataToServer(requireContext())
+            lifecycleScope.launch {
+                userSettingViewModel.patchUserData(
+                    context = requireContext(),
+                    nickname = binding.nicknameSetRow.text.toString()
+                )
+            }
         }
 
+        userSettingViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
+            binding.nicknameSetRow.setText(nickname)
+        }
+
+        userSettingViewModel.imageUri.observe(viewLifecycleOwner) { uri ->
+            uri?.let {
+                Glide.with(this).load(it).circleCrop().into(imageView)
+            }
+        }
     }
 
     private fun openGallery() {

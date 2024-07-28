@@ -9,11 +9,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.wafflestudio.siksha2.repositories.UserStatusManager
+import com.wafflestudio.siksha2.utils.PathUtil
+import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.resolution
+import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.ByteArrayOutputStream
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,38 +42,33 @@ class UserSettingViewModel @Inject constructor(
         }
     }
 
-    suspend fun startUserSetting(){
+    private suspend fun startUserSetting(){
         _nickname.value = userStatusManager.getUserNickname()
-        val imageList = userStatusManager.getUserImage()
-        _imageUri.value = imageList?.firstOrNull()?.let { Uri.parse(it) }
+        val image = userStatusManager.getUserImage()
+        _imageUri.value = image?.firstOrNull()?.let { Uri.parse(it) }
     }
 
-    fun setNickname(nickname: String) {
-        _nickname.value = nickname
-    }
-
-    fun setImageUri(uri: Uri) {
+    fun updateImageUri(uri:Uri){
         _imageUri.value = uri
     }
 
-    private suspend fun compressImage(context: Context, uri: Uri): ByteArray {
-        return withContext(Dispatchers.IO) {
-            val bitmap = Glide.with(context).asBitmap().load(uri).submit().get()
-            val outputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
-            outputStream.toByteArray()
+    suspend fun patchUserData(context: Context, nickname: String?){
+        if(_imageUri != null){
+            context.showToast("이미지 압축 중입니다.")
+            val image = _imageUri.value?.let { getCompressedImage(context, it) }
+            userStatusManager.updateUserProfile(nickname, image)
         }
     }
 
-    fun sendDataToServer(context: Context) {
-        viewModelScope.launch {
-            val nickname = _nickname.value ?: return@launch
-            val imageUri = _imageUri.value ?: return@launch
-
-            val compressedImage = compressImage(context, imageUri)
-
-            // 서버로 데이터 전송 로직을 여기에 추가하세요.
-            // 예시: sendToServer(nickname, compressedImage)
+    private suspend fun getCompressedImage(context: Context, uri: Uri): MultipartBody.Part {
+        val path = PathUtil.getPath(context, uri)
+        var file = File(path)
+        file = Compressor.compress(context, file) {
+            resolution(300, 300)
+            size(100000)
+            format(Bitmap.CompressFormat.JPEG)
         }
+        val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("images", file.name, requestBody)
     }
 }
