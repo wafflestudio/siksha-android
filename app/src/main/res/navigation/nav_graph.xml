@@ -48,7 +48,7 @@
             app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_mainFragment_to_createPostFragment"
-            app:destination="@id/createPostFragment" />
+            app:destination="@id/postCreateFragment" />
 
     </fragment>
 
@@ -150,15 +150,15 @@
             app:argType="long" />
     </fragment>
     <fragment
-        android:id="@+id/createPostFragment"
-        android:name="com.wafflestudio.siksha2.ui.main.community.CreatePostFragment"
-        android:label="CreatePostFragment">
+        android:id="@+id/postCreateFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostCreateFragment"
+        android:label="PostCreateFragment">
         <argument
             android:name="board_id"
             android:defaultValue="1L"
             app:argType="long"/>
         <action
-            android:id="@+id/action_createPostFragment_to_postDetailFragment"
+            android:id="@+id/action_postCreateFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="false" />

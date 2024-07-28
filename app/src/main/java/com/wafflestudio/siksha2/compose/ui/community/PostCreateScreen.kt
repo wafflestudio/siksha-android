@@ -54,20 +54,20 @@ import com.wafflestudio.siksha2.ui.DeletePostImageIcon
 import com.wafflestudio.siksha2.ui.ExpandOptionsIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
-import com.wafflestudio.siksha2.ui.main.community.CreatePostViewModel
+import com.wafflestudio.siksha2.ui.main.community.PostCreateViewModel
 import com.wafflestudio.siksha2.utils.showToast
 
 @Composable
-fun CreatePostRoute(
+fun PostCreateRoute(
     onNavigateUp: () -> Unit,
     onUploadSuccess: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    createPostViewModel: CreatePostViewModel = hiltViewModel()
+    postCreateViewModel: PostCreateViewModel = hiltViewModel()
 ) {
-    val board by createPostViewModel.board.collectAsState()
-    val postId by createPostViewModel.postId.collectAsState()
-    val imageUriList by createPostViewModel.imageUriList.collectAsState()
-    val createPostState by createPostViewModel.createPostState.collectAsState()
+    val board by postCreateViewModel.board.collectAsState()
+    val postId by postCreateViewModel.postId.collectAsState()
+    val imageUriList by postCreateViewModel.imageUriList.collectAsState()
+    val createPostState by postCreateViewModel.createPostState.collectAsState()
 
     var titleInput by remember { mutableStateOf("") }
     var contentInput by remember { mutableStateOf("") }
@@ -77,10 +77,10 @@ fun CreatePostRoute(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) {
-        if (it != null) createPostViewModel.addImageUri(it)
+        if (it != null) postCreateViewModel.addImageUri(it)
     }
 
-    CreatePostScreen(
+    PostCreateScreen(
         currentBoard = board,
         onNavigateUp = onNavigateUp,
         onUploadSuccess = {
@@ -109,10 +109,10 @@ fun CreatePostRoute(
         onIsAnonymousChanged = { isAnonymous = it },
         imageUriList = imageUriList,
         onDeleteImage = { idx ->
-            createPostViewModel.deleteImageUri(idx)
+            postCreateViewModel.deleteImageUri(idx)
         },
         onAddImage = { launcher.launch("image/*") },
-        onUpload = { createPostViewModel.createPost(context, titleInput, contentInput, isAnonymous) },
+        onUpload = { postCreateViewModel.createPost(context, titleInput, contentInput, isAnonymous) },
         isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
         createPostState = createPostState,
         context = context,
@@ -121,7 +121,7 @@ fun CreatePostRoute(
 }
 
 @Composable
-fun CreatePostScreen(
+fun PostCreateScreen(
     currentBoard: Board,
     onNavigateUp: () -> Unit,
     onUploadSuccess: () -> Unit,
@@ -137,7 +137,7 @@ fun CreatePostScreen(
     onAddImage: () -> Unit,
     onUpload: () -> Unit,
     isUploadActivated: Boolean,
-    createPostState: CreatePostViewModel.CreatePostState,
+    createPostState: PostCreateViewModel.CreatePostState,
     context: Context,
     modifier: Modifier = Modifier
 ) {
@@ -226,7 +226,7 @@ fun CreatePostScreen(
                 }
             }
             when (createPostState) {
-                CreatePostViewModel.CreatePostState.COMPRESSING, CreatePostViewModel.CreatePostState.WAITING
+                PostCreateViewModel.CreatePostState.COMPRESSING, PostCreateViewModel.CreatePostState.WAITING
                 -> {
                     Box(
                         modifier = Modifier
@@ -235,7 +235,7 @@ fun CreatePostScreen(
                     ) {
                     }
                 }
-                CreatePostViewModel.CreatePostState.SUCCESS -> {
+                PostCreateViewModel.CreatePostState.SUCCESS -> {
                     context.showToast("글을 올렸습니다.")
                     onUploadSuccess()
                 }

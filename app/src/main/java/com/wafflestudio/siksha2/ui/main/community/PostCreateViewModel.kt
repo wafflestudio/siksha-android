@@ -27,7 +27,7 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class CreatePostViewModel @Inject constructor(
+class PostCreateViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val communityRepository: CommunityRepository
 ) : ViewModel() {
@@ -46,7 +46,7 @@ class CreatePostViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _board.value = communityRepository.getBoard(
-                CreatePostFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
+                PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
             )
             _createPostState.value = CreatePostState.USER_INPUT
         }
