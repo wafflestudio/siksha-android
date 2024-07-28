@@ -86,7 +86,7 @@ fun CreatePostRoute(
         onTitleTextChanged = { newInput ->
             if (titleInput.length < 200) {
                 titleInput = newInput.filter {
-                    (it.isLetterOrDigit() || it.isWhitespace()) && it != '\n'
+                    it != '\n'
                 }
             } else {
                 context.showToast("제목은 200자를 넘길 수 없습니다.")
@@ -95,9 +95,7 @@ fun CreatePostRoute(
         contentTextValue = contentInput,
         onContentTextChanged = { newInput ->
             if (contentInput.length < 1000) {
-                contentInput = newInput.filter {
-                    it.isLetterOrDigit() || it.isWhitespace()
-                }
+                contentInput = newInput
             } else {
                 context.showToast("내용은 1000자를 넘길 수 없습니다.")
             }
