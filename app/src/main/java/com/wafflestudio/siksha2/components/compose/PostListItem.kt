@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
@@ -45,11 +46,15 @@ fun PostListItem(
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
-                style = SikshaTypography.body2
+                style = SikshaTypography.body2,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = content,
-                style = SikshaTypography.body2
+                style = SikshaTypography.body2,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
