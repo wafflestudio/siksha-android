@@ -157,5 +157,10 @@
             android:name="board_id"
             android:defaultValue="1L"
             app:argType="long"/>
+        <action
+            android:id="@+id/action_createPostFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

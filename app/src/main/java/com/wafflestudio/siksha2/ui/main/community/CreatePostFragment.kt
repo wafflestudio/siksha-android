@@ -25,6 +25,13 @@ class CreatePostFragment : Fragment() {
                 CreatePostRoute(
                     onNavigateUp = {
                         findNavController().navigateUp()
+                    },
+                    onUploadSuccess = { postId ->
+                        findNavController().navigate(
+                            CreatePostFragmentDirections.actionCreatePostFragmentToPostDetailFragment(
+                                postId
+                            )
+                        )
                     }
                 )
             }

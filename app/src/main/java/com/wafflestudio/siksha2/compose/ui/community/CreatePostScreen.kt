@@ -60,10 +60,12 @@ import com.wafflestudio.siksha2.utils.showToast
 @Composable
 fun CreatePostRoute(
     onNavigateUp: () -> Unit,
+    onUploadSuccess: (Long) -> Unit,
     modifier: Modifier = Modifier,
     createPostViewModel: CreatePostViewModel = hiltViewModel()
 ) {
     val board by createPostViewModel.board.collectAsState()
+    val postId by createPostViewModel.postId.collectAsState()
     val imageUriList by createPostViewModel.imageUriList.collectAsState()
     val createPostState by createPostViewModel.createPostState.collectAsState()
 
@@ -81,6 +83,9 @@ fun CreatePostRoute(
     CreatePostScreen(
         currentBoard = board,
         onNavigateUp = onNavigateUp,
+        onUploadSuccess = {
+            onUploadSuccess(postId)
+        },
         onOpenBoardList = { }, // TODO
         titleTextValue = titleInput,
         onTitleTextChanged = { newInput ->
@@ -119,6 +124,7 @@ fun CreatePostRoute(
 fun CreatePostScreen(
     currentBoard: Board,
     onNavigateUp: () -> Unit,
+    onUploadSuccess: () -> Unit,
     onOpenBoardList: () -> Unit,
     titleTextValue: String,
     onTitleTextChanged: (String) -> Unit,
@@ -162,7 +168,8 @@ fun CreatePostScreen(
                     .align(Alignment.TopCenter)
             ) {
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .weight(1.0f)
                 ) {
                     CurrentBoard(
@@ -230,7 +237,7 @@ fun CreatePostScreen(
                 }
                 CreatePostViewModel.CreatePostState.SUCCESS -> {
                     context.showToast("글을 올렸습니다.")
-                    onNavigateUp()
+                    onUploadSuccess()
                 }
                 else -> { }
             }

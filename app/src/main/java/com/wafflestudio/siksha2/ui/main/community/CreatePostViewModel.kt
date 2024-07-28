@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.Board
+import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.utils.PathUtil
 import com.wafflestudio.siksha2.utils.showToast
@@ -34,12 +35,13 @@ class CreatePostViewModel @Inject constructor(
     val board: StateFlow<Board> = _board
 
     private val _imageUriList = MutableStateFlow<List<Uri>>(emptyList())
-    val imageUriList: StateFlow<List<Uri>>
-        get() = _imageUriList
+    val imageUriList: StateFlow<List<Uri>> = _imageUriList
 
     private val _createPostState = MutableStateFlow(CreatePostState.USER_INPUT)
-    val createPostState: StateFlow<CreatePostState>
-        get() = _createPostState
+    val createPostState: StateFlow<CreatePostState> = _createPostState
+
+    private val _postId = MutableStateFlow<Long>(-1)
+    val postId: StateFlow<Long> = _postId
 
     init {
         viewModelScope.launch {
@@ -75,9 +77,11 @@ class CreatePostViewModel @Inject constructor(
                 val titleBody = MultipartBody.Part.createFormData("title", title)
                 val contentBody = MultipartBody.Part.createFormData("content", content)
                 _createPostState.value = CreatePostState.WAITING
+                var response: Post? = null
                 imageList.let {
-                    communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
+                    response = communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
                 }
+                _postId.value = response?.id ?: -1
                 _createPostState.value = CreatePostState.SUCCESS
             } catch (e: Exception) {
                 throw e
