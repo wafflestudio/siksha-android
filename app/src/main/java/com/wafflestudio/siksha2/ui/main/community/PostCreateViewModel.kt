@@ -34,6 +34,9 @@ class PostCreateViewModel @Inject constructor(
     private val _board = MutableStateFlow<Board>(Board())
     val board: StateFlow<Board> = _board
 
+    private val _post = MutableStateFlow<Post>(Post())
+    val post: StateFlow<Post> = _post
+
     private val _imageUriList = MutableStateFlow<List<Uri>>(emptyList())
     val imageUriList: StateFlow<List<Uri>> = _imageUriList
 
@@ -45,9 +48,13 @@ class PostCreateViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _board.value = communityRepository.getBoard(
-                PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
-            )
+            val boardId: Long? = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
+            val postId: Long? = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
+            if (boardId != null)    _board.value = communityRepository.getBoard(boardId)
+            else if (postId != null)    _post.value = communityRepository.getPost(postId)
+            else {
+                // error handling
+            }
             _createPostState.value = CreatePostState.USER_INPUT
         }
     }

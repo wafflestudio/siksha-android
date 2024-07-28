@@ -170,6 +170,10 @@
         android:id="@+id/postEditFragment"
         android:name="com.wafflestudio.siksha2.ui.main.community.PostEditFragment"
         android:label="PostEditFragment">
+        <argument
+            android:name="post_id"
+            android:defaultValue="1L"
+            app:argType="long"/>
         <action
             android:id="@+id/action_postEditFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment"
