@@ -141,8 +141,9 @@ interface SikshaApi {
     suspend fun postPatchPost(
         @Path("post_id") postId: Long,
         @Part("board_id") boardId: Long,
-        @Part("title") title: String,
-        @Part("content") content: String,
+        @Part title: MultipartBody.Part,
+        @Part content: MultipartBody.Part,
+        @Part("anonymous") anonymous: Boolean,
         @Part images: List<MultipartBody.Part>
     ): PatchPostResponse
 

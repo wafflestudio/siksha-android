@@ -100,6 +100,33 @@ class PostCreateViewModel @Inject constructor(
         }
     }
 
+    fun patchPost(context: Context, title: String, content: String, anonymous: Boolean) {
+        val boardId = _board.value.id
+        viewModelScope.launch {
+            try {
+                _createPostState.value = CreatePostState.COMPRESSING
+                val imageList = _imageUriList.value.map {
+                    getCompressedImage(context, it)
+                }
+                val titleBody = MultipartBody.Part.createFormData("title", title)
+                val contentBody = MultipartBody.Part.createFormData("content", content)
+                _createPostState.value = CreatePostState.WAITING
+                var response: Post? = null
+                imageList.let {
+                    response = communityRepository.patchPost(_post.value.id, boardId, titleBody, contentBody, anonymous, imageList)
+                }
+                _postId.value = response?.id ?: -1
+                _createPostState.value = CreatePostState.SUCCESS
+            } catch (e: Exception) {
+                throw e
+                Timber.tag("CreatePostViewModel.createPost").d(e.message)
+                // Timber.tag("CreatePostViewModel.createPost").d("asdf")
+                context.showToast("오류가 발생했습니다. 다시 시도해 주세요.")
+                _createPostState.value = CreatePostState.USER_INPUT
+            }
+        }
+    }
+
     private suspend fun getCompressedImage(context: Context, uri: Uri): MultipartBody.Part {
         val path = PathUtil.getPath(context, uri)
 //        if (path == null) {

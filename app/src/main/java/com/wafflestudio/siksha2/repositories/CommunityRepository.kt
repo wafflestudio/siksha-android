@@ -46,8 +46,8 @@ class CommunityRepository @Inject constructor(
         return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
     }
 
-    suspend fun patchPost(postId: Long, boardId: Long, title: String, content: String, images: List<MultipartBody.Part>): Post {
-        return api.postPatchPost(postId, boardId, title, content, images).toPost()
+    suspend fun patchPost(postId: Long, boardId: Long, title: MultipartBody.Part, content: MultipartBody.Part, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
+        return api.postPatchPost(postId, boardId, title, content, anonymous, images).toPost()
     }
 
     suspend fun likeComment(commentId: Long) {
