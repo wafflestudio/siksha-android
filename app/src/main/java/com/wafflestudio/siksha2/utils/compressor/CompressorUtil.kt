@@ -57,7 +57,6 @@ fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeig
     var inSampleSize = 1
 
     if (height > reqHeight || width > reqWidth) {
-
         val halfHeight: Int = height / 2
         val halfWidth: Int = width / 2
 
@@ -109,9 +108,13 @@ fun copyToCache(context: Context, srcFileUri: Uri): File {
 fun getFileName(context: Context, uri: Uri): String {
     val resolver = context.contentResolver
     val cursor = resolver.query(
-        uri, arrayOf(
+        uri,
+        arrayOf(
             OpenableColumns.DISPLAY_NAME
-        ), null, null, null
+        ),
+        null,
+        null,
+        null
     )
     cursor.use {
         val nameIndex = it!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
