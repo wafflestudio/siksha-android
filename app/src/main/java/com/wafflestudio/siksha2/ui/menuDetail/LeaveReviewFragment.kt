@@ -1,18 +1,14 @@
 package com.wafflestudio.siksha2.ui.menuDetail
 
-import android.Manifest
-import android.app.Activity.RESULT_OK
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ProgressBar
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -35,21 +31,16 @@ class LeaveReviewFragment : Fragment() {
 
     private val vm: MenuDetailViewModel by activityViewModels()
 
-    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.data?.let {
-                vm.addImageUri(it, onFailure = {
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(3)) { uris ->
+        val context = context ?: return@registerForActivityResult
+        uris.forEach { uri ->
+            vm.addImageUri(
+                context = context,
+                imageUri = uri,
+                onFailure = {
                     requireContext().showToast(getString(R.string.leave_review_max_image_toast))
-                })
-            }
-        }
-    }
-
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            launchGalleryIntent()
-        } else {
-            showToast("사진 업로드를 위해 사진 권한을 허용해 주세요.")
+                }
+            )
         }
     }
 
@@ -108,25 +99,42 @@ class LeaveReviewFragment : Fragment() {
             }
         )
 
-        vm.imageUriList.observe(viewLifecycleOwner) { imageUriList ->
-            binding.imageLayout.forEachIndexed { index, view ->
-                (view as ReviewImageView).run {
-                    if (index < imageUriList.size) {
-                        setImage(imageUriList[index])
-                        visibility = View.VISIBLE
-                        setOnDeleteClickListener(
-                            object : ReviewImageView.OnDeleteClickListener {
-                                override fun onClick() {
-                                    vm.deleteImageUri(index)
-                                }
-                            }
-                        )
-                    } else {
-                        visibility = View.GONE
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.images.collect { imageUriList ->
+                binding.imageLayout.forEachIndexed { index, view ->
+                    val frameLayout = view as? FrameLayout ?: return@forEachIndexed
+                    val reviewImageView = frameLayout.getChildAt(0) as? ReviewImageView ?: return@forEachIndexed
+                    val progressBar = frameLayout.getChildAt(1) as? ProgressBar ?: return@forEachIndexed
+
+                    if (index >= imageUriList.size) {
+                        reviewImageView.visibility = View.GONE
+                        return@forEachIndexed
                     }
+
+                    reviewImageView.visibility = View.VISIBLE
+                    reviewImageView.setOnDeleteClickListener(
+                        object : ReviewImageView.OnDeleteClickListener {
+                            override fun onClick() {
+                                vm.deleteImageUri(index)
+                            }
+                        }
+                    )
+
+                    when (val imageState = imageUriList[index]) {
+                        is CompressedImageUiState.Compressing -> {
+                            reviewImageView.setImage(imageState.originalImageUri)
+                            progressBar.visibility = View.VISIBLE
+                        }
+
+                        is CompressedImageUiState.Completed -> {
+                            reviewImageView.setImage(imageState.compressedImageUri)
+                            progressBar.visibility = View.GONE
+                        }
+                    }
+
                 }
+                binding.imageLayout.setVisibleOrGone(imageUriList.isNotEmpty())
             }
-            binding.imageLayout.setVisibleOrGone(imageUriList.isNotEmpty())
         }
 
         vm.leaveReviewState.observe(viewLifecycleOwner) {
@@ -141,10 +149,13 @@ class LeaveReviewFragment : Fragment() {
             lifecycleScope.launch {
                 try {
                     vm.leaveReview(
-                        context = requireContext(),
                         score = binding.rating.rating.toDouble(),
                         comment = binding.commentEdit.text.toString().ifEmpty {
                             binding.commentEdit.hint.toString()
+                        },
+                        onFailure = {
+                            showToast("이미지 압축 중입니다.")
+                            return@leaveReview
                         }
                     )
                     showToast("평가가 등록되었습니다.")
@@ -164,29 +175,7 @@ class LeaveReviewFragment : Fragment() {
         }
 
         binding.addImageButton.setOnClickListener {
-            requestPermission(onGranted = {
-                launchGalleryIntent()
-            })
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-    }
-
-    private fun requestPermission(onGranted: () -> Unit) {
-        val permission = if (Build.VERSION.SDK_INT >= 33) Manifest.permission.READ_MEDIA_IMAGES else Manifest.permission.READ_EXTERNAL_STORAGE
-        if (ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
-            onGranted()
-        } else {
-            requestPermissionLauncher.launch(permission)
-        }
-    }
-
-    private fun launchGalleryIntent() {
-        val intent = Intent(Intent.ACTION_PICK)
-            .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        galleryLauncher.launch(intent)
-    }
-
-    companion object {
-        private const val GET_GALLERY_IMAGE = 1126
-        private const val REQUEST_STORAGE_PERMISSION = 555
     }
 }

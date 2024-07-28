@@ -11,13 +11,17 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
-import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -25,6 +29,11 @@ import javax.inject.Inject
 class MenuDetailViewModel @Inject constructor(
     private val menuRepository: MenuRepository
 ) : ViewModel() {
+
+    companion object {
+        private const val MAX_IMAGE_COUNT = 3
+    }
+
     private val _menu = MutableLiveData<Menu>()
     val menu: LiveData<Menu>
         get() = _menu
@@ -41,9 +50,8 @@ class MenuDetailViewModel @Inject constructor(
     val reviewDistribution: LiveData<List<Long>>
         get() = _reviewDistribution
 
-    private val _imageUriList = MutableLiveData<List<Uri>>()
-    val imageUriList: LiveData<List<Uri>>
-        get() = _imageUriList
+    private val _images = MutableStateFlow(emptyList<CompressedImageUiState>())
+    val images: StateFlow<List<CompressedImageUiState>> = _images
 
     private val _imageUrlList = MutableLiveData<List<String>>()
     val imageUrlList: LiveData<List<String>>
@@ -119,28 +127,51 @@ class MenuDetailViewModel @Inject constructor(
         }
     }
 
-    fun addImageUri(uri: Uri, onFailure: () -> Unit) {
-        val list = _imageUriList.value?.toMutableList() ?: mutableListOf()
-        if (list.size < 3) {
-            list.add(uri)
-            _imageUriList.value = list.toList()
-        } else {
+    fun addImageUri(context: Context, imageUri: Uri, onFailure: () -> Unit) {
+        if (images.value.size >= MAX_IMAGE_COUNT) {
             onFailure()
+            return
+        }
+
+        viewModelScope.launch {
+            val compressing = CompressedImageUiState.Compressing(imageUri)
+
+            _images.emit(
+                _images.value.toMutableList().apply {
+                    add(compressing)
+                }
+            )
+
+            val compressedImageFile = withContext(Dispatchers.IO) {
+                ImageUtil.getCompressedImage(context, imageUri)
+            }
+
+            _images.emit(
+                _images.value.toMutableList().apply {
+                    set(
+                        indexOf(compressing),
+                        CompressedImageUiState.Completed(
+                            compressedImageUri = Uri.fromFile(compressedImageFile),
+                            compressedImageFile = compressedImageFile
+                        )
+                    )
+                }
+            )
         }
     }
 
     fun deleteImageUri(index: Int, onFailure: () -> Unit = {}) {
-        val list = _imageUriList.value?.toMutableList() ?: mutableListOf()
-        if (index < list.size) {
-            list.removeAt(index)
-            _imageUriList.value = list.toList()
-        } else {
+        if (index >= images.value.size) {
             onFailure()
+            return
+        }
+        _images.value = images.value.toMutableList().apply {
+            removeAt(index)
         }
     }
 
     fun refreshUriList() {
-        _imageUriList.value = listOf()
+        _images.value = emptyList()
     }
 
     fun notifySendReviewEnd() {
@@ -155,24 +186,33 @@ class MenuDetailViewModel @Inject constructor(
         _menu.postValue(updatedMenu)
     }
 
-    suspend fun leaveReview(context: Context, score: Double, comment: String) {
-        val menuId = _menu.value?.id ?: return
-        if (_imageUriList.value?.isNotEmpty() == true) {
-            context.showToast("이미지 압축 중입니다.")
-            _leaveReviewState.value = ReviewState.COMPRESSING
-            val imageList = _imageUriList.value?.map {
-                ImageUtil.getCompressedImage(context, it)
-            }?.map { file ->
-                val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                MultipartBody.Part.createFormData("images", file.name, requestBody)
-            }
-            val commentBody = MultipartBody.Part.createFormData("comment", comment)
-            imageList?.let {
-                menuRepository.leaveMenuReviewImage(menuId, score.toLong(), commentBody, imageList)
-            }
+    suspend fun leaveReview(score: Double, comment: String, onFailure: () -> Unit) {
+        val menuId = menu.value?.id ?: return
+        if (images.value.isEmpty()) {
+            leaveReviewWithoutImage(menuId, score, comment)
         } else {
-            menuRepository.leaveMenuReview(menuId, score, comment)
+            if (images.value.all { it is CompressedImageUiState.Completed }.not()) {
+                onFailure()
+                return
+            }
+            leaveReviewWithImage(menuId, score, comment, images.value)
         }
+    }
+
+    private suspend fun leaveReviewWithoutImage(menuId: Long, score: Double, comment: String) {
+        menuRepository.leaveMenuReview(menuId, score, comment)
+    }
+
+    private suspend fun leaveReviewWithImage(menuId: Long, score: Double, comment: String, images: List<CompressedImageUiState>) {
+        val commentBody = MultipartBody.Part.createFormData("comment", comment)
+        val imagesBody = withContext(Dispatchers.Default) {
+            images.map {
+                val compressedImageFile = (it as CompressedImageUiState.Completed).compressedImageFile
+                val requestBody = compressedImageFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("images", compressedImageFile.name, requestBody)
+            }
+        }
+        menuRepository.leaveMenuReviewImage(menuId, score.toLong(), commentBody, imagesBody)
     }
 
     enum class State {
@@ -185,4 +225,12 @@ class MenuDetailViewModel @Inject constructor(
         WAITING,
         COMPRESSING
     }
+}
+
+sealed interface CompressedImageUiState {
+    class Compressing(val originalImageUri: Uri) : CompressedImageUiState
+    class Completed(
+        val compressedImageUri: Uri,
+        val compressedImageFile: File,
+    ) : CompressedImageUiState
 }
