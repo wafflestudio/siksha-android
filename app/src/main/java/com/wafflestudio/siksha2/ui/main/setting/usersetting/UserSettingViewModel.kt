@@ -52,11 +52,12 @@ class UserSettingViewModel @Inject constructor(
         _imageUri.value = uri
     }
 
-    suspend fun patchUserData(context: Context, nickname: String?){
+    suspend fun patchUserData(context: Context, nickname: String){
+        _nickname.value = nickname
         if(_imageUri != null){
-            context.showToast("이미지 압축 중입니다.")
             val image = _imageUri.value?.let { getCompressedImage(context, it) }
-            userStatusManager.updateUserProfile(nickname, image)
+            val updatedUserData = userStatusManager.updateUserProfile(nickname, image)
+            _nickname.value = updatedUserData.nickname
         }
     }
 
