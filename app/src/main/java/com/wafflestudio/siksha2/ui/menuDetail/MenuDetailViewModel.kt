@@ -6,8 +6,11 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.repositories.MenuRepository
@@ -18,7 +21,13 @@ import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -39,9 +48,9 @@ class MenuDetailViewModel @Inject constructor(
     val commentHint: LiveData<String>
         get() = _commentHint
 
-    private val _networkResultState = MutableLiveData<State>()
-    val networkResultState: LiveData<State>
-        get() = _networkResultState
+    private val _networkResultMenuLoadingState = MutableLiveData<MenuLoadingState>()
+    val networkResultMenuLoadingState: LiveData<MenuLoadingState>
+        get() = _networkResultMenuLoadingState
 
     private val _reviewDistribution = MutableLiveData<List<Long>>()
     val reviewDistribution: LiveData<List<Long>>
@@ -51,53 +60,42 @@ class MenuDetailViewModel @Inject constructor(
     val imageUriList: LiveData<List<Uri>>
         get() = _imageUriList
 
-    private val _imageUrlList = MutableLiveData<List<String>>()
-    val imageUrlList: LiveData<List<String>>
-        get() = _imageUrlList
-
-    private val _imageCount = MutableLiveData<Long>(0)
-    val imageCount: LiveData<Long>
-        get() = _imageCount
-
-    private val _leaveReviewState = MutableLiveData<ReviewState>(ReviewState.WAITING)
-    val leaveReviewState: LiveData<ReviewState>
+    private val _leaveReviewState = MutableLiveData<LeaveReviewState>(LeaveReviewState.WAITING)
+    val leaveReviewState: LiveData<LeaveReviewState>
         get() = _leaveReviewState
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviews: StateFlow<PagingData<Review>> =
+        _menu.asFlow().filterNotNull().flatMapLatest { menu ->
+            Pager(
+                config = MenuReviewPagingSource.Config,
+                pagingSourceFactory = {
+                    menuRepository.menuReviewPagingSource(menu.id)
+                }
+            ).flow.cachedIn(viewModelScope)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = PagingData.empty())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviewsWithImage: StateFlow<PagingData<Review>> =
+        _menu.asFlow().filterNotNull().flatMapLatest { menu ->
+            Pager(
+                config = MenuReviewWithImagePagingSource.Config,
+                pagingSourceFactory = {
+                    menuRepository.menuReviewWithImagePagingSource(menu.id)
+                }
+            ).flow.cachedIn(viewModelScope)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = PagingData.empty())
+
     fun refreshMenu(menuId: Long) {
-        _networkResultState.value = State.LOADING
+        _networkResultMenuLoadingState.value = MenuLoadingState.LOADING
         viewModelScope.launch {
             try {
                 _menu.value = menuRepository.getMenuById(menuId)
-                _networkResultState.value = State.SUCCESS
+                _networkResultMenuLoadingState.value = MenuLoadingState.SUCCESS
             } catch (e: IOException) {
-                _networkResultState.value = State.FAILED
+                _networkResultMenuLoadingState.value = MenuLoadingState.FAILED
             }
         }
-    }
-
-    fun refreshImages(menuId: Long) {
-        viewModelScope.launch {
-            try {
-                val data = menuRepository.getFirstReviewPhotoByMenuId(menuId)
-                _imageCount.value = data.totalCount
-                val urlList = emptyList<String>().toMutableList()
-                for (i in 0 until 3) {
-                    if (i < data.result.size) {
-                        data.result[i].etc?.images?.get(0)?.let {
-                            urlList.add(it)
-                        }
-                    }
-                }
-                _imageUrlList.value = urlList
-            } catch (e: IOException) {
-                _imageUrlList.value = emptyList()
-                _networkResultState.value = State.FAILED
-            }
-        }
-    }
-
-    fun getReviews(menuId: Long): Flow<PagingData<Review>> {
-        return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
     }
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {
@@ -150,22 +148,24 @@ class MenuDetailViewModel @Inject constructor(
     }
 
     fun notifySendReviewEnd() {
-        _leaveReviewState.value = ReviewState.WAITING
+        _leaveReviewState.value = LeaveReviewState.WAITING
     }
 
-    suspend fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
-        val updatedMenu = when (isCurrentlyLiked) {
-            true -> menuRepository.unlikeMenuById(id)
-            false -> menuRepository.likeMenuById(id)
+    fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
+        viewModelScope.launch {
+            val updatedMenu = when (isCurrentlyLiked) {
+                true -> menuRepository.unlikeMenuById(id)
+                false -> menuRepository.likeMenuById(id)
+            }
+            _menu.postValue(updatedMenu)
         }
-        _menu.postValue(updatedMenu)
     }
 
     suspend fun leaveReview(context: Context, score: Double, comment: String) {
         val menuId = _menu.value?.id ?: return
         if (_imageUriList.value?.isNotEmpty() == true) {
             context.showToast("이미지 압축 중입니다.")
-            _leaveReviewState.value = ReviewState.COMPRESSING
+            _leaveReviewState.value = LeaveReviewState.COMPRESSING
             val imageList = _imageUriList.value?.map {
                 getCompressedImage(context, it)
             }
@@ -188,16 +188,5 @@ class MenuDetailViewModel @Inject constructor(
         }
         val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("images", file.name, requestBody)
-    }
-
-    enum class State {
-        LOADING,
-        SUCCESS,
-        FAILED
-    }
-
-    enum class ReviewState {
-        WAITING,
-        COMPRESSING
     }
 }

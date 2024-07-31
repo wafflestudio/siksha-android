@@ -11,7 +11,7 @@ plugins {
     id("com.google.firebase.crashlytics") version "2.9.5"
     id("com.google.gms.google-services") version "4.3.15"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
-    id("androidx.navigation.safeargs") version "2.5.3"
+    id("androidx.navigation.safeargs.kotlin") version "2.5.3"
     id("com.google.firebase.appdistribution") version "4.0.0"
 }
 
@@ -119,6 +119,8 @@ dependencies {
     // Android arch lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -189,11 +191,13 @@ dependencies {
     implementation("androidx.paging:paging-compose:${Deps.Version.PagingCompose}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Deps.Version.ComposeViewModel}")
     implementation("androidx.hilt:hilt-navigation-compose:${Deps.Version.ComposeHiltNavigation}")
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     // Paging
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.paging:paging-compose:3.2.1")
-
-    // Coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
 }

@@ -6,28 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.compose.ui.menuDetail.MenuDetailRoute
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
-import com.wafflestudio.siksha2.utils.dp
-import com.wafflestudio.siksha2.utils.showToast
-import com.wafflestudio.siksha2.utils.setVisibleOrGone
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.io.IOException
-import kotlin.math.round
 
 @AndroidEntryPoint
 class MenuDetailFragment : Fragment() {
     private val vm: MenuDetailViewModel by activityViewModels()
 
     private lateinit var binding: FragmentMenuDetailBinding
-    private lateinit var reviewsAdapter: MenuReviewsAdapter
 
     private val args: MenuDetailFragmentArgs by navArgs()
 
@@ -41,162 +31,32 @@ class MenuDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        reviewsAdapter = MenuReviewsAdapter(true, childFragmentManager)
-
-        binding.reviewList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = reviewsAdapter
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            reviewsAdapter.loadStateFlow
-                .collectLatest {
-                    if (it.refresh is LoadState.NotLoading) {
-                        (reviewsAdapter.itemCount < 1).let { empty ->
-                            binding.emptyList.setVisibleOrGone(empty)
-                            binding.reviewList.setVisibleOrGone(empty.not())
-                        }
-                    }
-                }
-        }
-
-        vm.refreshMenu(args.menuId)
-        vm.refreshImages(args.menuId)
-        vm.refreshReviewDistribution(args.menuId)
-
-        vm.networkResultState.observe(viewLifecycleOwner) {
-            binding.menuInfoContainer.setVisibleOrGone(it == MenuDetailViewModel.State.SUCCESS)
-            binding.onErrorContainer.root.setVisibleOrGone(it == MenuDetailViewModel.State.FAILED)
-            binding.onLoadingContainer.root.setVisibleOrGone(it == MenuDetailViewModel.State.LOADING)
-        }
-
-        vm.menu.observe(viewLifecycleOwner) { menu ->
-            // for marquee
-            binding.menuTitle.isSelected = true
-            binding.menuTitle.text = menu?.nameKr
-            binding.menuRating.text = "${menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"}"
-            binding.menuStars.rating = menu?.score?.toFloat() ?: 0.0f
-            binding.reviewCount.text = " ${menu?.reviewCount ?: 0}"
-            // Handle menu likes
-            menu.isLiked?.let { isLiked ->
-                binding.menuLikeButton.isSelected = isLiked
-            }
-
-            // Handle like count
-            menu.likeCount?.let { count ->
-                binding.menuLikeCount.text = menu.likeCount?.let { "좋아요 $it 개" } ?: "-"
-            }
-        }
-
-        vm.reviewDistribution.observe(viewLifecycleOwner) { distList ->
-            if (distList.isEmpty()) return@observe
-            val distBarList = listOf(
-                binding.distBar1,
-                binding.distBar2,
-                binding.distBar3,
-                binding.distBar4,
-                binding.distBar5
-            )
-            var maxCount = 1L
-            distList.forEach { if (maxCount < it) maxCount = it }
-            distBarList.forEachIndexed { index, bar ->
-                val params = bar.layoutParams
-                val ratio = distList[index].toDouble() / maxCount.toDouble()
-                if (ratio != 0.0) {
-                    params.width =
-                        (requireContext().dp(MAX_REVIEW_DIST_BAR_WIDTH_DP) * ratio).toInt()
-                } else {
-                    params.width = requireContext().dp(NO_REVIEW_DIST_BAR_WIDTH_DP)
-                }
-                bar.layoutParams = params
-                bar.requestLayout()
-            }
-        }
-
-        vm.imageCount.observe(viewLifecycleOwner) { imageCount ->
-            binding.layoutPhotoReview.setVisibleOrGone(imageCount > 0)
-            if (imageCount > 3) {
-                binding.reviewImageView3.showMorePhotos(imageCount - 3)
-                binding.reviewImageView3.setOnClickListener {
-                    val action =
-                        MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(
-                            args.menuId
+        binding.menuDetailComposeView.setContent {
+            SikshaTheme {
+                MenuDetailRoute(
+                    menuId = args.menuId,
+                    isTodayMenu = args.isTodayMenu,
+                    onNavigateUp = {
+                        findNavController().popBackStack()
+                    },
+                    onNavigateToLeaveReview = {
+                        findNavController().navigate(
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment() // TODO: leaveReviewFragment로 이동 시 menuId arguement 전달하는 식으로 바꾸기
                         )
-                    findNavController().navigate(action)
-                }
+                    },
+                    onNavigateToReviewPhoto = { menuId ->
+                        findNavController().navigate(
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(menuId)
+                        )
+                    },
+                    onNavigateToReview = { menuId ->
+                        findNavController().navigate(
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(menuId)
+                        )
+                    },
+                    menuDetailViewModel = vm
+                )
             }
         }
-
-        vm.imageUrlList.observe(viewLifecycleOwner) { imageUrlList ->
-            val imageReviewList =
-                listOf(binding.reviewImageView1, binding.reviewImageView2, binding.reviewImageView3)
-            for (i in 0 until 3) {
-                if (i < imageUrlList.size) {
-                    imageReviewList[i].run {
-                        setImage(imageUrlList[i])
-                        setVisibleOrGone(true)
-                    }
-                }
-            }
-            for (i in 0 until 2) {
-                if (i < imageUrlList.size) {
-                    imageReviewList[i].setOnClickListener {
-                        val dialog = ReviewImageDialog.newInstance(imageUrlList[i])
-                        dialog.show(childFragmentManager, "review_image_${imageUrlList[i]}")
-                    }
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            vm.getReviews(args.menuId).collectLatest {
-                reviewsAdapter.submitData(it)
-            }
-        }
-
-        binding.backButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.layoutCollectPhotoReviews.setOnClickListener {
-            val action =
-                MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewPhotoFragment(args.menuId)
-            findNavController().navigate(action)
-        }
-
-        binding.layoutCollectReviews.setOnClickListener {
-            val action =
-                MenuDetailFragmentDirections.actionMenuDetailFragmentToReviewFragment(args.menuId)
-            findNavController().navigate(action)
-        }
-
-        binding.leaveReviewButton.setOnClickListener {
-            if (args.isTodayMenu) {
-                val action =
-                    MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()
-                findNavController().navigate(action)
-            } else {
-                showToast("오늘 메뉴만 평가할 수 있습니다.")
-            }
-        }
-
-        binding.menuLikeButton.setOnClickListener {
-            vm.menu.value?.isLiked?.let {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    try {
-                        vm.toggleLike(args.menuId, it)
-                    } catch (e: IOException) {
-                        showToast(getString(R.string.common_network_error))
-                    }
-                }
-            }
-        }
-    }
-
-    companion object {
-        private const val NO_REVIEW_DIST_BAR_WIDTH_DP = 8
-        private const val MAX_REVIEW_DIST_BAR_WIDTH_DP = 180
     }
 }

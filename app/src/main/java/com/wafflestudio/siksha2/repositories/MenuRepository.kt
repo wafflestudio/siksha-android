@@ -8,7 +8,6 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
-import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
@@ -27,7 +26,6 @@ class MenuRepository @Inject constructor(
     private val sikshaApi: SikshaApi,
     private val dailyMenusDao: DailyMenusDao
 ) {
-
     // Client Heuristic: 앞 뒤 1일 정도를 캐싱해둔다.
     suspend fun syncWithServer(date: LocalDate) {
         withContext(Dispatchers.IO) {
@@ -56,12 +54,12 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchMenuById(menuId)
     }
 
-    fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
-        return Pager(
-            config = MenuReviewPagingSource.Config,
-            pagingSourceFactory = { MenuReviewPagingSource(sikshaApi, menuId) }
-        ).flow
-    }
+//    fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
+//        return Pager(
+//            config = MenuReviewPagingSource.Config,
+//            pagingSourceFactory = { MenuReviewPagingSource(sikshaApi, menuId) }
+//        ).flow
+//    }
 
     fun getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
@@ -69,6 +67,12 @@ class MenuRepository @Inject constructor(
             pagingSourceFactory = { MenuReviewWithImagePagingSource(sikshaApi, menuId) }
         ).flow
     }
+
+    fun menuReviewPagingSource(menuId: Long): MenuReviewPagingSource =
+        MenuReviewPagingSource(sikshaApi, menuId)
+
+    fun menuReviewWithImagePagingSource(menuId: Long): MenuReviewWithImagePagingSource =
+        MenuReviewWithImagePagingSource(sikshaApi, menuId)
 
     suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): LeaveReviewResult {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
@@ -86,9 +90,9 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewDistribution(menuId).dist
     }
 
-    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
-        return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
-    }
+//    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
+//        return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
+//    }
 
     suspend fun likeMenuById(menuId: Long): Menu {
         return withContext(Dispatchers.IO) {
