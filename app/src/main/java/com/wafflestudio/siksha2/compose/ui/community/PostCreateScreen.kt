@@ -66,11 +66,11 @@ fun PostCreateRoute(
 ) {
     val board by postCreateViewModel.board.collectAsState()
     val postId by postCreateViewModel.postId.collectAsState()
+    val title by postCreateViewModel.title.collectAsState()
+    val content by postCreateViewModel.content.collectAsState()
     val imageUriList by postCreateViewModel.imageUriList.collectAsState()
     val createPostState by postCreateViewModel.createPostState.collectAsState()
 
-    var titleInput by remember { mutableStateOf("") }
-    var contentInput by remember { mutableStateOf("") }
     var isAnonymous by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
@@ -87,23 +87,13 @@ fun PostCreateRoute(
             onUploadSuccess(postId)
         },
         onOpenBoardList = { }, // TODO
-        titleTextValue = titleInput,
+        titleTextValue = title,
         onTitleTextChanged = { newInput ->
-            if (titleInput.length < 200) {
-                titleInput = newInput.filter {
-                    it != '\n'
-                }
-            } else {
-                context.showToast("제목은 200자를 넘길 수 없습니다.")
-            }
+            postCreateViewModel.updateTitle(newInput, context)
         },
-        contentTextValue = contentInput,
+        contentTextValue = content,
         onContentTextChanged = { newInput ->
-            if (contentInput.length < 1000) {
-                contentInput = newInput
-            } else {
-                context.showToast("내용은 1000자를 넘길 수 없습니다.")
-            }
+            postCreateViewModel.updateContent(newInput, context)
         },
         isAnonymous = isAnonymous,
         onIsAnonymousChanged = { isAnonymous = it },
@@ -112,8 +102,8 @@ fun PostCreateRoute(
             postCreateViewModel.deleteImageUri(idx)
         },
         onAddImage = { launcher.launch("image/*") },
-        onUpload = { postCreateViewModel.sendPost(context, titleInput, contentInput, isAnonymous) },
-        isUploadActivated = (titleInput.isNotEmpty()) && (contentInput.isNotEmpty()),
+        onUpload = { postCreateViewModel.sendPost(context, isAnonymous) },
+        isUploadActivated = (title.isNotEmpty()) && (content.isNotEmpty()),
         createPostState = createPostState,
         context = context,
         modifier = modifier

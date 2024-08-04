@@ -37,6 +37,12 @@ class PostCreateViewModel @Inject constructor(
     private val _post = MutableStateFlow<Post>(Post())
     val post: StateFlow<Post> = _post
 
+    private val _title = MutableStateFlow<String>("")
+    val title: StateFlow<String> = _title
+
+    private val _content = MutableStateFlow<String>("")
+    val content: StateFlow<String> = _content
+
     private val _imageUriList = MutableStateFlow<List<Uri>>(emptyList())
     val imageUriList: StateFlow<List<Uri>> = _imageUriList
 
@@ -59,6 +65,8 @@ class PostCreateViewModel @Inject constructor(
             else if (postId != -1L){
                 _post.value = communityRepository.getPost(postId)
                 _board.value = communityRepository.getBoard(post.value.boardId)
+                _title.value = post.value.title
+                _content.value = post.value.content
                 isEdit = true
             }
             else {
@@ -82,14 +90,14 @@ class PostCreateViewModel @Inject constructor(
         }
     }
 
-    fun sendPost(context: Context, title: String, content: String, anonymous: Boolean) {
+    fun sendPost(context: Context, anonymous: Boolean) {
         if (isEdit)
-            patchPost(context, title, content, anonymous)
+            patchPost(context, anonymous)
         else
-            createPost(context, title, content, anonymous)
+            createPost(context, anonymous)
     }
 
-    fun createPost(context: Context, title: String, content: String, anonymous: Boolean) {
+    fun createPost(context: Context, anonymous: Boolean) {
         val boardId = _board.value.id
         viewModelScope.launch {
             try {
@@ -97,8 +105,8 @@ class PostCreateViewModel @Inject constructor(
                 val imageList = _imageUriList.value.map {
                     getCompressedImage(context, it)
                 }
-                val titleBody = MultipartBody.Part.createFormData("title", title)
-                val contentBody = MultipartBody.Part.createFormData("content", content)
+                val titleBody = MultipartBody.Part.createFormData("title", title.value)
+                val contentBody = MultipartBody.Part.createFormData("content", content.value)
                 _createPostState.value = CreatePostState.WAITING
                 var response: Post?
                 imageList.let {
@@ -107,7 +115,6 @@ class PostCreateViewModel @Inject constructor(
                 _postId.value = response?.id ?: -1
                 _createPostState.value = CreatePostState.SUCCESS
             } catch (e: Exception) {
-                throw e
                 Timber.tag("CreatePostViewModel.createPost").d(e.message)
                 // Timber.tag("CreatePostViewModel.createPost").d("asdf")
                 context.showToast("오류가 발생했습니다. 다시 시도해 주세요.")
@@ -116,7 +123,7 @@ class PostCreateViewModel @Inject constructor(
         }
     }
 
-    fun patchPost(context: Context, title: String, content: String, anonymous: Boolean) {
+    fun patchPost(context: Context, anonymous: Boolean) {
         val boardId = _board.value.id
         viewModelScope.launch {
             try {
@@ -124,8 +131,8 @@ class PostCreateViewModel @Inject constructor(
                 val imageList = _imageUriList.value.map {
                     getCompressedImage(context, it)
                 }
-                val titleBody = MultipartBody.Part.createFormData("title", title)
-                val contentBody = MultipartBody.Part.createFormData("content", content)
+                val titleBody = MultipartBody.Part.createFormData("title", title.value)
+                val contentBody = MultipartBody.Part.createFormData("content", content.value)
                 _createPostState.value = CreatePostState.WAITING
                 var response: Post?
                 imageList.let {
@@ -152,6 +159,24 @@ class PostCreateViewModel @Inject constructor(
         }
         val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("images", file.name, requestBody)
+    }
+
+    fun updateTitle(newTitle: String, context: Context) {
+        if (newTitle.length < 200) {
+            _title.value = newTitle.filter {
+                it != '\n'
+            }
+        } else {
+            context.showToast("제목은 200자를 넘길 수 없습니다.")
+        }
+    }
+
+    fun updateContent(newContent: String, context: Context) {
+        if (newContent.length < 1000) {
+            _content.value = newContent
+        } else {
+            context.showToast("내용은 1000자를 넘길 수 없습니다.")
+        }
     }
 
     enum class CreatePostState {
