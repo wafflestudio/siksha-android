@@ -2,9 +2,11 @@ package com.wafflestudio.siksha2.compose.ui.community
 
 import android.content.Context
 import android.net.Uri
+import android.view.ViewTreeObserver
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,6 +31,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,9 +44,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.wafflestudio.siksha2.components.compose.Checkbox
@@ -72,6 +79,7 @@ fun PostCreateRoute(
     val createPostState by postCreateViewModel.createPostState.collectAsState()
 
     var isAnonymous by remember { mutableStateOf(true) }
+    val keyboardState by keyboardAsState()
 
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
@@ -97,6 +105,7 @@ fun PostCreateRoute(
         },
         isAnonymous = isAnonymous,
         onIsAnonymousChanged = { isAnonymous = it },
+        keyboardState = keyboardState,
         imageUriList = imageUriList,
         onDeleteImage = { idx ->
             postCreateViewModel.deleteImageUri(idx)
@@ -122,6 +131,7 @@ fun PostCreateScreen(
     onContentTextChanged: (String) -> Unit,
     isAnonymous: Boolean,
     onIsAnonymousChanged: (Boolean) -> Unit,
+    keyboardState: Boolean,
     imageUriList: List<Uri>,
     onDeleteImage: (Int) -> Unit,
     onAddImage: () -> Unit,
@@ -157,54 +167,49 @@ fun PostCreateScreen(
                     .fillMaxWidth()
                     .align(Alignment.TopCenter)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1.0f)
-                ) {
-                    CurrentBoard(
-                        board = currentBoard,
-                        onClick = onOpenBoardList
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    TitleEditText(
-                        value = titleTextValue,
-                        onValueChange = onTitleTextChanged,
-                        placeholder = {
-                            Text(
-                                text = "제목",
-                                color = SikshaColors.Gray400,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(14.dp))
-                    ContentEditText(
-                        value = contentTextValue,
-                        onValueChange = onContentTextChanged,
-                        placeholder = {
-                            Text(
-                                text = "내용을 입력하세요.",
-                                color = SikshaColors.Gray400
-                            )
-                        },
-                        modifier = Modifier.weight(weight = 1.0f, fill = false)
-                    )
-                    Spacer(modifier = Modifier.height(13.dp))
-                    AnonymousCheckbox(
-                        isAnonymous = isAnonymous,
-                        onIsAnonymousChanged = onIsAnonymousChanged,
-                        modifier = Modifier.align(Alignment.Start)
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Divider(color = SikshaColors.Gray100, thickness = 1.dp)
-                    Spacer(modifier = Modifier.height(6.dp))
-                    EditImage(
-                        imageUriList = imageUriList,
-                        onDeleteImage = onDeleteImage,
-                        onAddImage = onAddImage
-                    )
-                }
+                CurrentBoard(
+                    board = currentBoard,
+                    onClick = onOpenBoardList
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                TitleEditText(
+                    value = titleTextValue,
+                    onValueChange = onTitleTextChanged,
+                    placeholder = {
+                        Text(
+                            text = "제목",
+                            color = SikshaColors.Gray400,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                )
+                Spacer(modifier = Modifier.height(14.dp))
+                ContentEditText(
+                    value = contentTextValue,
+                    onValueChange = onContentTextChanged,
+                    scrollState = scrollState,
+                    placeholder = {
+                        Text(
+                            text = "내용을 입력하세요.",
+                            color = SikshaColors.Gray400
+                        )
+                    },
+                    modifier = Modifier.weight(weight = 1.0f, fill = false)
+                )
+                Spacer(modifier = Modifier.height(13.dp))
+                AnonymousCheckbox(
+                    isAnonymous = isAnonymous,
+                    onIsAnonymousChanged = onIsAnonymousChanged,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Divider(color = SikshaColors.Gray100, thickness = 1.dp)
+                Spacer(modifier = Modifier.height(6.dp))
+                EditImage(
+                    imageUriList = imageUriList,
+                    onDeleteImage = onDeleteImage,
+                    onAddImage = onAddImage
+                )
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -317,10 +322,10 @@ fun TitleEditText(
 fun ContentEditText(
     value: String,
     onValueChange: (String) -> Unit,
+    scrollState: ScrollState,
     modifier: Modifier = Modifier,
     placeholder: @Composable () -> Unit = {}
 ) {
-    val scrollState = rememberScrollState()
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
@@ -456,4 +461,20 @@ fun UploadButton(
             fontWeight = FontWeight.Bold
         )
     }
+}
+
+@Composable
+fun keyboardAsState(): State<Boolean> {
+    val keyboardState = remember { mutableStateOf(false) }
+    val view = LocalView.current
+    DisposableEffect(view) {
+        val listener = ViewTreeObserver.OnGlobalLayoutListener {
+            keyboardState.value = ViewCompat.getRootWindowInsets(view)?.isVisible(WindowInsetsCompat.Type.ime()) ?: true
+        }
+        view.viewTreeObserver.addOnGlobalLayoutListener(listener)
+        onDispose {
+            view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+        }
+    }
+    return keyboardState
 }

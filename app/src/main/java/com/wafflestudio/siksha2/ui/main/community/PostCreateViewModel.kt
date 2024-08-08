@@ -58,18 +58,16 @@ class PostCreateViewModel @Inject constructor(
         viewModelScope.launch {
             val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
             val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
-            if (boardId !=  -1L){
+            if (boardId != -1L) {
                 _board.value = communityRepository.getBoard(boardId)
                 isEdit = false
-            }
-            else if (postId != -1L){
+            } else if (postId != -1L) {
                 _post.value = communityRepository.getPost(postId)
                 _board.value = communityRepository.getBoard(post.value.boardId)
                 _title.value = post.value.title
                 _content.value = post.value.content
                 isEdit = true
-            }
-            else {
+            } else {
                 // error handling
             }
             _createPostState.value = CreatePostState.USER_INPUT
@@ -91,10 +89,11 @@ class PostCreateViewModel @Inject constructor(
     }
 
     fun sendPost(context: Context, anonymous: Boolean) {
-        if (isEdit)
+        if (isEdit) {
             patchPost(context, anonymous)
-        else
+        } else {
             createPost(context, anonymous)
+        }
     }
 
     fun createPost(context: Context, anonymous: Boolean) {
