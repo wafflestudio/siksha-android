@@ -39,11 +39,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,6 +66,7 @@ import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostCreateViewModel
 import com.wafflestudio.siksha2.utils.showToast
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PostCreateRoute(
     onNavigateUp: () -> Unit,
@@ -80,6 +83,7 @@ fun PostCreateRoute(
 
     var isAnonymous by remember { mutableStateOf(true) }
     val keyboardState by keyboardAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
@@ -106,6 +110,7 @@ fun PostCreateRoute(
         isAnonymous = isAnonymous,
         onIsAnonymousChanged = { isAnonymous = it },
         keyboardState = keyboardState,
+        onCloseKeyboard = { keyboardController?.hide() },
         imageUriList = imageUriList,
         onDeleteImage = { idx ->
             postCreateViewModel.deleteImageUri(idx)
@@ -132,6 +137,7 @@ fun PostCreateScreen(
     isAnonymous: Boolean,
     onIsAnonymousChanged: (Boolean) -> Unit,
     keyboardState: Boolean,
+    onCloseKeyboard: () -> Unit,
     imageUriList: List<Uri>,
     onDeleteImage: (Int) -> Unit,
     onAddImage: () -> Unit,
@@ -194,30 +200,38 @@ fun PostCreateScreen(
                             color = SikshaColors.Gray400
                         )
                     },
-                    modifier = Modifier.weight(weight = 1.0f, fill = false)
+                    modifier = Modifier.weight(weight = 1.0f, fill = keyboardState)
                 )
-                Spacer(modifier = Modifier.height(13.dp))
-                AnonymousCheckbox(
-                    isAnonymous = isAnonymous,
-                    onIsAnonymousChanged = onIsAnonymousChanged,
-                    modifier = Modifier.align(Alignment.Start)
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Divider(color = SikshaColors.Gray100, thickness = 1.dp)
-                Spacer(modifier = Modifier.height(6.dp))
-                EditImage(
-                    imageUriList = imageUriList,
-                    onDeleteImage = onDeleteImage,
-                    onAddImage = onAddImage
-                )
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Spacer(modifier = Modifier.height(20.dp))
-                    UploadButton(
-                        isUploadActivated = isUploadActivated,
-                        onUpload = onUpload
+                if (keyboardState) {
+                    WithKeyboardControls(
+                        isAnonymous = isAnonymous,
+                        onIsAnonymousChanged = onIsAnonymousChanged,
+                        onCloseKeyboard = onCloseKeyboard
                     )
+                } else {
+                    Spacer(modifier = Modifier.height(13.dp))
+                    AnonymousCheckbox(
+                        isAnonymous = isAnonymous,
+                        onIsAnonymousChanged = onIsAnonymousChanged,
+                        modifier = Modifier.align(Alignment.Start)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Divider(color = SikshaColors.Gray100, thickness = 1.dp)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    EditImage(
+                        imageUriList = imageUriList,
+                        onDeleteImage = onDeleteImage,
+                        onAddImage = onAddImage
+                    )
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        UploadButton(
+                            isUploadActivated = isUploadActivated,
+                            onUpload = onUpload
+                        )
+                    }
                 }
             }
             when (createPostState) {
@@ -367,6 +381,35 @@ fun AnonymousCheckbox(
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             color = if (isAnonymous) SikshaColors.OrangeMain else SikshaColors.Gray400
+        )
+    }
+}
+
+@Composable
+fun WithKeyboardControls(
+    modifier: Modifier = Modifier,
+    isAnonymous: Boolean = true,
+    onIsAnonymousChanged: (Boolean) -> Unit = {},
+    onCloseKeyboard: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .height(40.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+    ) {
+        AnonymousCheckbox(
+            isAnonymous = isAnonymous,
+            onIsAnonymousChanged = onIsAnonymousChanged
+        )
+        Text(
+            text = "OK",
+            style = SikshaTypography.h1,
+            fontSize = 19.sp,
+            fontWeight = FontWeight.Bold,
+            color = SikshaColors.OrangeMain,
+            modifier = Modifier.clickable { onCloseKeyboard() }
         )
     }
 }
