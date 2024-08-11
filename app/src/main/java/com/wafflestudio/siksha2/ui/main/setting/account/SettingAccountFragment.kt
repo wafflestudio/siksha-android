@@ -75,7 +75,7 @@ class SettingAccountFragment : Fragment(), DefaultDialogListener {
             logoutRow.setOnClickListener {
                 isLogoutAction = true
                 DefaultDialog.newInstance(getString(R.string.setting_dialog_logout_content))
-                    .show(childFragmentManager,"logout dialog")
+                    .show(childFragmentManager, "logout dialog")
             }
 
             withdrawalRow.setOnClickListener {
@@ -97,15 +97,14 @@ class SettingAccountFragment : Fragment(), DefaultDialogListener {
     override fun onDialogPositiveClick() {
         lifecycleScope.launch {
             try {
-                if(isLogoutAction){
+                if (isLogoutAction) {
                     val logoutCallback = { activity?.finish() }
                     userStatusManager.logoutUser(requireContext(), logoutCallback)
-                }
-                else{
+                } else {
                     val withdrawCallback = { activity?.finish() }
                     userStatusManager.deleteUser(requireContext(), withdrawCallback)
                 }
-            }catch (e: IOException) {
+            } catch (e: IOException) {
                 showToast(getString(R.string.common_network_error))
             }
         }

@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.compose.ui.community.UserPostListRoute
 import com.wafflestudio.siksha2.ui.SikshaTheme
-import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +24,7 @@ class UserPostListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_user_post_list,container,false)
+        return inflater.inflate(R.layout.fragment_user_post_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -17,10 +17,7 @@ import com.wafflestudio.siksha2.utils.toDataWithState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -34,12 +31,12 @@ class UserPostListViewModel@Inject constructor(
     private val _boards = MutableStateFlow<List<Selectable<Board>>>(emptyList())
 
     private val _postPagingData = Pager(
-            config = PagingConfig(
-                pageSize = PostPagingSource.ITEMS_PER_PAGE,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { communityRepository.getUserPostPagingSource() }
-        ).flow.cachedIn(viewModelScope)
+        config = PagingConfig(
+            pageSize = PostPagingSource.ITEMS_PER_PAGE,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { communityRepository.getUserPostPagingSource() }
+    ).flow.cachedIn(viewModelScope)
 
     private val modifiedPostsCache = MutableStateFlow(mapOf<Long, Post>())
 
@@ -94,5 +91,4 @@ class UserPostListViewModel@Inject constructor(
     fun invalidateCache() {
         modifiedPostsCache.value = emptyMap()
     }
-
 }
