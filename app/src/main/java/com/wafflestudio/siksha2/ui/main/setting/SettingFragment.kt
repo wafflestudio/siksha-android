@@ -12,19 +12,16 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
 import com.wafflestudio.siksha2.repositories.UserStatusManager
-import com.wafflestudio.siksha2.ui.common.DefaultDialog
-import com.wafflestudio.siksha2.ui.common.DefaultDialogListener
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 import kotlin.math.pow
 
 @AndroidEntryPoint
-class SettingFragment : Fragment(){
+class SettingFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingBinding
     private val vm: SettingViewModel by activityViewModels()
@@ -69,7 +66,7 @@ class SettingFragment : Fragment(){
 
                 val nickname = userStatusManager.getUserNickname()
 
-                if(nickname != null) {
+                if (nickname != null) {
                     binding.nickname.text = nickname
                 } else {
                     binding.nickname.text = "닉네임"

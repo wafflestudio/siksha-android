@@ -7,22 +7,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.PathUtil
-import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
 
@@ -42,17 +37,17 @@ class UserSettingViewModel @Inject constructor(
         }
     }
 
-    private suspend fun startUserSetting(){
+    private suspend fun startUserSetting() {
         _nickname.value = userStatusManager.getUserNickname()
         val image = userStatusManager.getUserImage()
         _imageUri.value = image?.firstOrNull()?.let { Uri.parse(it) }
     }
 
-    fun updateImageUri(uri:Uri){
+    fun updateImageUri(uri: Uri) {
         _imageUri.value = uri
     }
 
-    suspend fun patchUserData(context: Context, nickname: String){
+    suspend fun patchUserData(context: Context, nickname: String) {
         val image = _imageUri.value?.let { getCompressedImage(context, it) }
         val updatedUserData = userStatusManager.updateUserProfile(nickname, image)
         _nickname.value = updatedUserData.nickname

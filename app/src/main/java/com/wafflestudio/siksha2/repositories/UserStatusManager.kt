@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha2.repositories
 
 import android.content.Context
-import android.net.Uri
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
@@ -83,15 +82,15 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.getUserData().id
     }
 
-    suspend fun getUserNickname(): String?{
+    suspend fun getUserNickname(): String? {
         return sikshaApi.getUserData().nickname
     }
 
-    suspend fun getUserImage(): List<String>?{
+    suspend fun getUserImage(): List<String>? {
         return sikshaApi.getUserData().etc?.images
     }
 
-    suspend fun updateUserProfile(nickname: String, image: MultipartBody.Part?): GetUserDataResult{
+    suspend fun updateUserProfile(nickname: String, image: MultipartBody.Part?): GetUserDataResult {
         val nicknameBody = MultipartBody.Part.createFormData("nickname", nickname)
         return sikshaApi.updateUserData(image, nicknameBody)
     }

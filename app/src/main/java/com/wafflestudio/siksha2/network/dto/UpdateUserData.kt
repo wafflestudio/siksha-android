@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class UpdateUserData(
     @Json(name = "nickname") val nickname: String?,
-    @Json(name = "image") val image:String?
+    @Json(name = "image") val image: String?
 )
