@@ -143,7 +143,7 @@ fun TrendingPostsBannerSuccessPreview() {
             trendingPostsUiState = TrendingPostsUiState.Success(
                 List(3) {
                     Post(
-                        title = "title${it}title${it}title${it}title${it}title${it}",
+                        title = "title${it}title${it}title${it}title${it}title$it",
                         likeCount = it.toLong()
                     )
                 }
