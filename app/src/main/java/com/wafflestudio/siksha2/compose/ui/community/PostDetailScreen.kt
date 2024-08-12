@@ -426,7 +426,7 @@ fun CommentItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CommunityProfilePicture(
-                    model = null,
+                    model = comment.profilePicture,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
