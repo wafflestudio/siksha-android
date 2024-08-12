@@ -131,8 +131,5 @@ interface SikshaApi {
     ): PostUnlikeCommentResponse
 
     @GET("/community/posts/popular/trending")
-    suspend fun getTrendingPosts(
-        @Query("likes") likes: Long,
-        @Query("created_before") createdBefore: Long
-    ): GetTrendingPostsResponse
+    suspend fun getTrendingPosts(): GetTrendingPostsResponse
 }

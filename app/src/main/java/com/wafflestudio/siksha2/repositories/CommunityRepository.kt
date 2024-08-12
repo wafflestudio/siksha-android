@@ -49,7 +49,7 @@ class CommunityRepository @Inject constructor(
 
     suspend fun getTrendingPosts(): List<Post> {
         return withContext(Dispatchers.IO) {
-            api.getTrendingPosts(10, 7).result.map {
+            api.getTrendingPosts().result.map {
                 it.toPost()
             }
         }
