@@ -78,7 +78,7 @@ private fun TrendingPostsBannerSuccess(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
-                onClickTrendingPost(posts[pagerState.currentPage].id)
+                onClickTrendingPost(posts[pagerState.currentPage % posts.size].id)
             }
     ) {
         VerticalPager(
