@@ -59,8 +59,8 @@ private fun TrendingPostsBannerSuccess(
 ) {
     val pagerState = rememberPagerState(pageCount = { posts.size * 1000 }) // Circular 스크롤을 위해 pageCount를 크게 설정한다
 
-    LaunchedEffect(Unit) {
-        if (posts.size > 1) {
+    if (posts.size > 1) {
+        LaunchedEffect(Unit) {
             while (true) {
                 delay(5000L)
                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
