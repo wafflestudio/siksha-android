@@ -71,6 +71,7 @@ class PostListViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getBoards()
+            fetchTrendingPosts()
         }
     }
 
@@ -129,7 +130,7 @@ class PostListViewModel @Inject constructor(
 }
 
 sealed interface TrendingPostsUiState {
-    class Success(val posts: List<Post>): TrendingPostsUiState
-    object Failed: TrendingPostsUiState
-    object Loading: TrendingPostsUiState
+    class Success(val posts: List<Post>) : TrendingPostsUiState
+    object Failed : TrendingPostsUiState
+    object Loading : TrendingPostsUiState
 }
