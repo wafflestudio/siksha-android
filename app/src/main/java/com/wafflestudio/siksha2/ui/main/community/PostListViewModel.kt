@@ -94,6 +94,7 @@ class PostListViewModel @Inject constructor(
 
     fun fetchTrendingPosts() {
         viewModelScope.launch {
+            _trendingPostsUiState.value = TrendingPostsUiState.Loading
             runCatching {
                 val trendingPosts = communityRepository.getTrendingPosts()
                 _trendingPostsUiState.value = if (trendingPosts.isNotEmpty()) {

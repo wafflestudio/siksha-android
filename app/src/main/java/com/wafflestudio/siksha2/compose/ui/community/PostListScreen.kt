@@ -105,10 +105,6 @@ fun PostListScreen(
             }
         }
         CommunityDivider()
-        TrendingPostsBanner(
-            trendingPostsUiState = trendingPostsUiState,
-            onClickTrendingPost = onClickPost
-        )
         Box(
             modifier = Modifier
                 .pullRefresh(pullRefreshState)
@@ -128,6 +124,12 @@ fun PostListScreen(
                         LazyColumn(
                             state = postListState
                         ) {
+                            item {
+                                TrendingPostsBanner(
+                                    trendingPostsUiState = trendingPostsUiState,
+                                    onClickTrendingPost = onClickPost
+                                )
+                            }
                             items(
                                 count = posts.itemCount
                             ) {
