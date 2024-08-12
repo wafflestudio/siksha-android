@@ -39,6 +39,7 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
+import com.wafflestudio.siksha2.ui.main.community.TrendingPostsUiState
 import com.wafflestudio.siksha2.utils.DataWithState
 import kotlinx.coroutines.flow.flowOf
 
@@ -51,15 +52,18 @@ fun PostListRoute(
     val boards by postListViewModel.boards.collectAsState()
     val posts = postListViewModel.postPagingData.collectAsLazyPagingItems()
     val postListState = postListViewModel.postListState
+    val trendingPostsUiState by postListViewModel.trendingPostsUiState.collectAsState()
 
     PostListScreen(
         boards = boards,
         posts = posts,
         postListState = postListState,
+        trendingPostsUiState = trendingPostsUiState,
         onClickPost = onClickPost,
         refreshPosts = {
             posts.refresh()
             postListViewModel.invalidateCache()
+            postListViewModel.fetchTrendingPosts()
         },
         selectBoard = postListViewModel::selectBoard,
         modifier = modifier
@@ -72,6 +76,7 @@ fun PostListScreen(
     boards: List<DataWithState<Board, Boolean>>,
     posts: LazyPagingItems<Post>,
     postListState: LazyListState,
+    trendingPostsUiState: TrendingPostsUiState,
     onClickPost: (Long) -> Unit,
     refreshPosts: () -> Unit,
     selectBoard: (Int) -> Unit,
@@ -100,6 +105,7 @@ fun PostListScreen(
             }
         }
         CommunityDivider()
+        TrendingPostsBanner(trendingPostsUiState = trendingPostsUiState)
         Box(
             modifier = Modifier
                 .pullRefresh(pullRefreshState)
@@ -230,6 +236,7 @@ fun PostListScreenPreview() {
             boards = emptyList(),
             posts = flowOf(PagingData.empty<Post>()).collectAsLazyPagingItems(),
             postListState = LazyListState(0, 0),
+            trendingPostsUiState = TrendingPostsUiState.Loading,
             onClickPost = {},
             refreshPosts = {},
             selectBoard = {},
