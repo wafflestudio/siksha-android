@@ -74,7 +74,8 @@ private fun TrendingPostsBannerSuccess(
     ) {
         VerticalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            userScrollEnabled = false
         ) {
             Row(
                 modifier = Modifier
