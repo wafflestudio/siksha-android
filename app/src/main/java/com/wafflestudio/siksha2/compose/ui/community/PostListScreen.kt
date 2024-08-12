@@ -105,7 +105,10 @@ fun PostListScreen(
             }
         }
         CommunityDivider()
-        TrendingPostsBanner(trendingPostsUiState = trendingPostsUiState)
+        TrendingPostsBanner(
+            trendingPostsUiState = trendingPostsUiState,
+            onClickTrendingPost = onClickPost
+        )
         Box(
             modifier = Modifier
                 .pullRefresh(pullRefreshState)

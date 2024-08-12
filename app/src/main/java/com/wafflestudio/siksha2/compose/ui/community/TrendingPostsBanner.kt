@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,12 +36,14 @@ import kotlinx.coroutines.delay
 @Composable
 fun TrendingPostsBanner(
     trendingPostsUiState: TrendingPostsUiState,
+    onClickTrendingPost: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (trendingPostsUiState) {
         is TrendingPostsUiState.Success -> TrendingPostsBannerSuccess(
-            modifier = modifier,
-            posts = trendingPostsUiState.posts
+            posts = trendingPostsUiState.posts,
+            onClickTrendingPost = onClickTrendingPost,
+            modifier = modifier
         )
         is TrendingPostsUiState.Loading -> TrendingPostsBannerLoading(modifier = modifier)
         is TrendingPostsUiState.Failed -> Unit
@@ -51,6 +54,7 @@ fun TrendingPostsBanner(
 @Composable
 private fun TrendingPostsBannerSuccess(
     posts: List<Post>,
+    onClickTrendingPost: (Long) -> Unit,
     modifier: Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { posts.size * 1000 }) // Circular 스크롤을 위해 pageCount를 크게 설정한다
@@ -73,6 +77,9 @@ private fun TrendingPostsBannerSuccess(
                 color = SikshaColors.OrangeMain.copy(alpha = 0.2f),
                 shape = RoundedCornerShape(12.dp)
             )
+            .clickable {
+                onClickTrendingPost(posts[pagerState.currentPage].id)
+            }
     ) {
         VerticalPager(
             state = pagerState,
@@ -133,14 +140,15 @@ private fun TrendingPostsBannerLoading(
 fun TrendingPostsBannerSuccessPreview() {
     SikshaTheme {
         TrendingPostsBanner(
-            TrendingPostsUiState.Success(
+            trendingPostsUiState = TrendingPostsUiState.Success(
                 List(3) {
                     Post(
                         title = "title${it}title${it}title${it}title${it}title${it}",
                         likeCount = it.toLong()
                     )
                 }
-            )
+            ),
+            onClickTrendingPost = {}
         )
     }
 }
@@ -150,7 +158,8 @@ fun TrendingPostsBannerSuccessPreview() {
 fun TrendingPostsBannerLoadingPreview() {
     SikshaTheme {
         TrendingPostsBanner(
-            TrendingPostsUiState.Loading
+            trendingPostsUiState = TrendingPostsUiState.Loading,
+            onClickTrendingPost = {}
         )
     }
 }
