@@ -20,7 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.components.compose.LikeIconWithCount
@@ -88,15 +88,12 @@ private fun TrendingPostsBannerSuccess(
                 val post = posts[it % posts.size]
                 Text(
                     text = post.title,
-                    fontWeight = FontWeight.Bold,
-                    style = SikshaTypography.body2
+                    style = SikshaTypography.body2,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.width(15.dp))
-                Text(
-                    text = post.content,
-                    modifier = Modifier.weight(1f),
-                    style = SikshaTypography.body2
-                )
+                Spacer(modifier = Modifier.width(20.dp))
                 LikeIconWithCount(
                     likeCount = post.likeCount,
                     isLiked = false
@@ -139,8 +136,7 @@ fun TrendingPostsBannerSuccessPreview() {
             TrendingPostsUiState.Success(
                 List(3) {
                     Post(
-                        title = "title$it",
-                        content = "content$it",
+                        title = "title${it}title${it}title${it}title${it}title${it}",
                         likeCount = it.toLong()
                     )
                 }
