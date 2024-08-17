@@ -40,7 +40,7 @@ class UserSettingViewModel @Inject constructor(
     private suspend fun startUserSetting() {
         _nickname.value = userStatusManager.getUserNickname()
         val image = userStatusManager.getUserImage()
-        _imageUri.value = image?.firstOrNull()?.let { Uri.parse(it) }
+        _imageUri.value = image?.let { Uri.parse(it) }
     }
 
     fun updateImageUri(uri: Uri) {

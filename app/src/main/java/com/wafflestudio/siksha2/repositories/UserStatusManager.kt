@@ -86,8 +86,8 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.getUserData().nickname
     }
 
-    suspend fun getUserImage(): List<String>? {
-        return sikshaApi.getUserData().etc?.images
+    suspend fun getUserImage(): String? {
+        return sikshaApi.getUserData().profileUrl
     }
 
     suspend fun updateUserProfile(nickname: String, image: MultipartBody.Part?): GetUserDataResult {
