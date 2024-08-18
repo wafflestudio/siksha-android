@@ -31,6 +31,9 @@ class PostCreateViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val communityRepository: CommunityRepository
 ) : ViewModel() {
+    private val _boards = MutableStateFlow<List<Board>>(listOf())
+    val boards: StateFlow<List<Board>> = _boards
+
     private val _board = MutableStateFlow<Board>(Board())
     val board: StateFlow<Board> = _board
 
@@ -56,6 +59,7 @@ class PostCreateViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            _boards.value = communityRepository.getBoards()
             val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
             val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
             if (boardId != -1L) {
@@ -66,6 +70,7 @@ class PostCreateViewModel @Inject constructor(
                 _board.value = communityRepository.getBoard(post.value.boardId)
                 _title.value = post.value.title
                 _content.value = post.value.content
+                _imageUriList.value = post.value.etc?.images?.map { it -> Uri.parse(it) } ?: listOf()
                 isEdit = true
             } else {
                 // error handling
@@ -127,9 +132,15 @@ class PostCreateViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _createPostState.value = CreatePostState.COMPRESSING
+//                val imageList = _imageUriList.value.filter{
+//                    post.value.etc?.images?.contains(it.toString()) != true
+//                }.map {
+//                    getCompressedImage(context, it)
+//                }
                 val imageList = _imageUriList.value.map {
                     getCompressedImage(context, it)
                 }
+
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
                 val contentBody = MultipartBody.Part.createFormData("content", content.value)
                 _createPostState.value = CreatePostState.WAITING
@@ -158,6 +169,10 @@ class PostCreateViewModel @Inject constructor(
         }
         val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("images", file.name, requestBody)
+    }
+
+    fun selectBoard(newBoard: Board) {
+        _board.value = newBoard
     }
 
     fun updateTitle(newTitle: String, context: Context) {

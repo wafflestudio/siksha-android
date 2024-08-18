@@ -103,7 +103,8 @@ fun PostCreateRoute(
             onUploadSuccess(postId)
         },
         isBoardListOpen = isBoardListOpen,
-        onOpenBoardList = { isBoardListOpen = !isBoardListOpen }, // TODO
+        onOpenBoardList = { isBoardListOpen = !isBoardListOpen },
+        onSelectBoard = { postCreateViewModel.selectBoard(it) },
         titleTextValue = title,
         onTitleTextChanged = { newInput ->
             postCreateViewModel.updateTitle(newInput, context)
@@ -137,6 +138,7 @@ fun PostCreateScreen(
     onUploadSuccess: () -> Unit,
     isBoardListOpen: Boolean,
     onOpenBoardList: () -> Unit,
+    onSelectBoard: (Board) -> Unit,
     titleTextValue: String,
     onTitleTextChanged: (String) -> Unit,
     contentTextValue: String,
@@ -255,6 +257,7 @@ fun PostCreateScreen(
                         BoardSelector(
                             boards = boardsList,
                             currentBoard = currentBoard,
+                            onSelectBoard = onSelectBoard,
                             modifier = Modifier.align(Alignment.TopCenter)
                         )
                     }
@@ -321,12 +324,14 @@ fun BoardSelectorCard(
     board: Board,
     isSelected: Boolean,
     isLast: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val textColor = if (isSelected) SikshaColors.OrangeMain else SikshaColors.Gray700
     Box (
         modifier = modifier
             .height(35.dp)
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier.align(Alignment.Center),
@@ -356,6 +361,7 @@ fun BoardSelectorCard(
 fun BoardSelector(
     boards: List<Board>,
     currentBoard: Board,
+    onSelectBoard: (Board) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column (
@@ -377,6 +383,7 @@ fun BoardSelector(
             BoardSelectorCard(
                 board = board,
                 isSelected = (board == currentBoard),
+                onClick = { onSelectBoard(board) },
                 isLast = (idx == boards.size-1)
             )
         }
