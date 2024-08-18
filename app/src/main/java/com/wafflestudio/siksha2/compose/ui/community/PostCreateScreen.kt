@@ -328,7 +328,7 @@ fun BoardSelectorCard(
     modifier: Modifier = Modifier
 ) {
     val textColor = if (isSelected) SikshaColors.OrangeMain else SikshaColors.Gray700
-    Box (
+    Box(
         modifier = modifier
             .height(35.dp)
             .clickable { onClick() }
@@ -344,8 +344,7 @@ fun BoardSelectorCard(
             Spacer(modifier = Modifier.width(18.dp))
             if (isSelected) {
                 CheckSimpleIcon()
-            }
-            else {
+            } else {
                 Spacer(modifier = Modifier.size(9.dp))
             }
         }
@@ -357,6 +356,7 @@ fun BoardSelectorCard(
         )
     }
 }
+
 @Composable
 fun BoardSelector(
     boards: List<Board>,
@@ -364,7 +364,7 @@ fun BoardSelector(
     onSelectBoard: (Board) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column (
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .background(
@@ -379,12 +379,12 @@ fun BoardSelector(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(1.dp)
     ) {
-        boards.forEachIndexed{ idx, board ->
+        boards.forEachIndexed { idx, board ->
             BoardSelectorCard(
                 board = board,
                 isSelected = (board == currentBoard),
                 onClick = { onSelectBoard(board) },
-                isLast = (idx == boards.size-1)
+                isLast = (idx == boards.size - 1)
             )
         }
     }

@@ -129,7 +129,7 @@ fun NewPostIcon(
 fun CheckSimpleIcon(
     modifier: Modifier = Modifier,
     colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.OrangeMain)
-){
+) {
     Image(
         modifier = modifier.size(9.dp),
         painter = painterResource(R.drawable.ic_check_simple),
