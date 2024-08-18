@@ -72,6 +72,7 @@ import com.wafflestudio.siksha2.ui.ThumbIcon
 import com.wafflestudio.siksha2.ui.main.community.PostDetailEvent
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
+import com.wafflestudio.siksha2.utils.showImageViewer
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -302,6 +303,7 @@ fun PostBody(
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier
     ) {
@@ -333,7 +335,10 @@ fun PostBody(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .padding(start = startPadding, end = endPadding),
+                        .padding(start = startPadding, end = endPadding)
+                        .clickable {
+                            context.showImageViewer(images, it)
+                        },
                     contentDescription = "",
                     loading = {
                         CircularProgressIndicator(
