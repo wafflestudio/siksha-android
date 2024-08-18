@@ -20,6 +20,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class PostDetailFragment : Fragment() {
 
     private val postListViewModel: PostListViewModel by activityViewModels()
+    private val userPostListViewModel: UserPostListViewModel by activityViewModels()    // FIXME: UserPostListViewModel을 acitivityViewModel로 유지할 필요 없다. 수정 필요
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +37,8 @@ class PostDetailFragment : Fragment() {
                 PostDetailRoute(
                     onNavigateUp = { findNavController().navigateUp() },
                     modifier = Modifier.fillMaxSize(),
-                    postListViewModel = postListViewModel
+                    postListViewModel = postListViewModel,
+                    userPostListViewModel = userPostListViewModel,
                 )
             }
         }
