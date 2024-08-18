@@ -62,6 +62,6 @@ class UserSettingViewModel @Inject constructor(
             format(Bitmap.CompressFormat.JPEG)
         }
         val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("images", file.name, requestBody)
+        return MultipartBody.Part.createFormData("image", file.name, requestBody)
     }
 }

@@ -14,7 +14,9 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.wafflestudio.siksha2.databinding.FragmentSettingUsersettingBinding
+import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class UserSettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingUsersettingBinding
@@ -59,11 +61,15 @@ class UserSettingFragment : Fragment() {
 
         binding.completeButton.setOnClickListener {
             lifecycleScope.launch {
-                userSettingViewModel.patchUserData(
-                    context = requireContext(),
-                    nickname = binding.nicknameSetRow.text.toString()
-                )
-                findNavController().popBackStack()
+                try {
+                    userSettingViewModel.patchUserData(
+                        context = requireContext(),
+                        nickname = binding.nicknameSetRow.text.toString()
+                    )
+                    findNavController().popBackStack()
+                } catch (e: IOException) {
+                    showToast("오류가 발생했습니다.")
+                }
             }
         }
 
