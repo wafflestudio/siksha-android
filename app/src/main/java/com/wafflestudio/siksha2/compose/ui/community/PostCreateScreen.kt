@@ -59,6 +59,7 @@ import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.ui.AddPostImageIcon
 import com.wafflestudio.siksha2.ui.CancelIcon
+import com.wafflestudio.siksha2.ui.CheckSimpleIcon
 import com.wafflestudio.siksha2.ui.DeletePostImageIcon
 import com.wafflestudio.siksha2.ui.ExpandOptionsIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
@@ -74,6 +75,7 @@ fun PostCreateRoute(
     modifier: Modifier = Modifier,
     postCreateViewModel: PostCreateViewModel = hiltViewModel()
 ) {
+    val boards by postCreateViewModel.boards.collectAsState()
     val board by postCreateViewModel.board.collectAsState()
     val postId by postCreateViewModel.postId.collectAsState()
     val title by postCreateViewModel.title.collectAsState()
@@ -84,6 +86,7 @@ fun PostCreateRoute(
     var isAnonymous by remember { mutableStateOf(true) }
     val keyboardState by keyboardAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
+    var isBoardListOpen by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
@@ -93,12 +96,14 @@ fun PostCreateRoute(
     }
 
     PostCreateScreen(
+        boardsList = boards,
         currentBoard = board,
         onNavigateUp = onNavigateUp,
         onUploadSuccess = {
             onUploadSuccess(postId)
         },
-        onOpenBoardList = { }, // TODO
+        isBoardListOpen = isBoardListOpen,
+        onOpenBoardList = { isBoardListOpen = !isBoardListOpen }, // TODO
         titleTextValue = title,
         onTitleTextChanged = { newInput ->
             postCreateViewModel.updateTitle(newInput, context)
@@ -126,9 +131,11 @@ fun PostCreateRoute(
 
 @Composable
 fun PostCreateScreen(
+    boardsList: List<Board>,
     currentBoard: Board,
     onNavigateUp: () -> Unit,
     onUploadSuccess: () -> Unit,
+    isBoardListOpen: Boolean,
     onOpenBoardList: () -> Unit,
     titleTextValue: String,
     onTitleTextChanged: (String) -> Unit,
@@ -178,58 +185,77 @@ fun PostCreateScreen(
                     onClick = onOpenBoardList
                 )
                 Spacer(modifier = Modifier.height(6.dp))
-                TitleEditText(
-                    value = titleTextValue,
-                    onValueChange = onTitleTextChanged,
-                    placeholder = {
-                        Text(
-                            text = "제목",
-                            color = SikshaColors.Gray400,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                )
-                Spacer(modifier = Modifier.height(14.dp))
-                ContentEditText(
-                    value = contentTextValue,
-                    onValueChange = onContentTextChanged,
-                    scrollState = scrollState,
-                    placeholder = {
-                        Text(
-                            text = "내용을 입력하세요.",
-                            color = SikshaColors.Gray400
-                        )
-                    },
-                    modifier = Modifier.weight(weight = 1.0f, fill = keyboardState)
-                )
-                if (keyboardState) {
-                    WithKeyboardControls(
-                        isAnonymous = isAnonymous,
-                        onIsAnonymousChanged = onIsAnonymousChanged,
-                        onCloseKeyboard = onCloseKeyboard
-                    )
-                } else {
-                    Spacer(modifier = Modifier.height(13.dp))
-                    AnonymousCheckbox(
-                        isAnonymous = isAnonymous,
-                        onIsAnonymousChanged = onIsAnonymousChanged,
-                        modifier = Modifier.align(Alignment.Start)
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Divider(color = SikshaColors.Gray100, thickness = 1.dp)
-                    Spacer(modifier = Modifier.height(6.dp))
-                    EditImage(
-                        imageUriList = imageUriList,
-                        onDeleteImage = onDeleteImage,
-                        onAddImage = onAddImage
-                    )
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.TopCenter)
                     ) {
-                        Spacer(modifier = Modifier.height(20.dp))
-                        UploadButton(
-                            isUploadActivated = isUploadActivated,
-                            onUpload = onUpload
+                        TitleEditText(
+                            value = titleTextValue,
+                            onValueChange = onTitleTextChanged,
+                            placeholder = {
+                                Text(
+                                    text = "제목",
+                                    color = SikshaColors.Gray400,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(14.dp))
+                        ContentEditText(
+                            value = contentTextValue,
+                            onValueChange = onContentTextChanged,
+                            scrollState = scrollState,
+                            placeholder = {
+                                Text(
+                                    text = "내용을 입력하세요.",
+                                    color = SikshaColors.Gray400
+                                )
+                            },
+                            modifier = Modifier.weight(weight = 1.0f, fill = keyboardState)
+                        )
+                        if (keyboardState) {
+                            WithKeyboardControls(
+                                isAnonymous = isAnonymous,
+                                onIsAnonymousChanged = onIsAnonymousChanged,
+                                onCloseKeyboard = onCloseKeyboard
+                            )
+                        } else {
+                            Spacer(modifier = Modifier.height(13.dp))
+                            AnonymousCheckbox(
+                                isAnonymous = isAnonymous,
+                                onIsAnonymousChanged = onIsAnonymousChanged,
+                                modifier = Modifier.align(Alignment.Start)
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Divider(color = SikshaColors.Gray100, thickness = 1.dp)
+                            Spacer(modifier = Modifier.height(6.dp))
+                            EditImage(
+                                imageUriList = imageUriList,
+                                onDeleteImage = onDeleteImage,
+                                onAddImage = onAddImage
+                            )
+                            Column(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                                UploadButton(
+                                    isUploadActivated = isUploadActivated,
+                                    onUpload = onUpload
+                                )
+                            }
+                        }
+                    }
+                    if (isBoardListOpen) {
+                        BoardSelector(
+                            boards = boardsList,
+                            currentBoard = currentBoard,
+                            modifier = Modifier.align(Alignment.TopCenter)
                         )
                     }
                 }
@@ -291,9 +317,70 @@ fun CurrentBoard(
 }
 
 @Composable
-fun BoardSelector(
+fun BoardSelectorCard(
+    board: Board,
+    isSelected: Boolean,
+    isLast: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val textColor = if (isSelected) SikshaColors.OrangeMain else SikshaColors.Gray700
+    Box (
+        modifier = modifier
+            .height(35.dp)
+    ) {
+        Row(
+            modifier = Modifier.align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = board.name,
+                color = textColor
+            )
+            Spacer(modifier = Modifier.width(18.dp))
+            if (isSelected) {
+                CheckSimpleIcon()
+            }
+            else {
+                Spacer(modifier = Modifier.size(9.dp))
+            }
+        }
+    }
+    if (!isLast) {
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            color = SikshaColors.Gray350
+        )
+    }
+}
+@Composable
+fun BoardSelector(
+    boards: List<Board>,
+    currentBoard: Board,
+    modifier: Modifier = Modifier
+) {
+    Column (
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = SikshaColors.White900,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .border(
+                width = 1.dp,
+                color = SikshaColors.Gray350,
+                shape = RoundedCornerShape(8.dp)
+            ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(1.dp)
+    ) {
+        boards.forEachIndexed{ idx, board ->
+            BoardSelectorCard(
+                board = board,
+                isSelected = (board == currentBoard),
+                isLast = (idx == boards.size-1)
+            )
+        }
+    }
 }
 
 @Composable
