@@ -126,22 +126,22 @@ fun PostDetailScreen(
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
     val commentListState = rememberLazyListState()
-    var isMoreDialogShowed by remember { mutableStateOf(false) }
+    var isPostDialogShowed by remember { mutableStateOf(false) }
 
-    if (isMoreDialogShowed) {
+    if (isPostDialogShowed) {
         PostDetailDialog(
             onDismissRequest = {
-                isMoreDialogShowed = false
+                isPostDialogShowed = false
             },
             onClickEdit = {},
             onClickDelete = {},
             onClickReport = {
-                isMoreDialogShowed = false
+                isPostDialogShowed = false
                 navController.navigate("postreportScreen")
             },
             onClickCopyUrl = {},
             onClickCancel = {
-                isMoreDialogShowed = false
+                isPostDialogShowed = false
             }
         )
     }
@@ -177,7 +177,8 @@ fun PostDetailScreen(
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
                     PostHeader(
-                        post = post
+                        post = post,
+                        onClick = { isPostDialogShowed = true }
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     PostBody(
@@ -197,9 +198,6 @@ fun PostDetailScreen(
                             modifier = Modifier.fillMaxWidth(),
                             onClickLike = {
                                 toggleCommentLike(comment)
-                            },
-                            onClickMore = {
-                                isMoreDialogShowed = true
                             }
                         )
                         CommunityDivider()
@@ -310,7 +308,8 @@ private suspend fun LazyListState.animateScrollToLastItem() {
 @Composable
 fun PostHeader(
     post: Post,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -343,7 +342,11 @@ fun PostHeader(
             )
         }
         Spacer(modifier = Modifier.width(7.dp))
-        EtcIcon(modifier = Modifier.size(16.dp))
+        EtcIcon(
+            modifier = Modifier
+                .size(16.dp)
+                .clickable { onClick() }
+        )
     }
 }
 
@@ -461,8 +464,7 @@ fun CommentItem(
     comment: Comment,
     navController: NavController,
     modifier: Modifier = Modifier,
-    onClickLike: () -> Unit = {},
-    onClickMore: () -> Unit = {}
+    onClickLike: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
     Row(
@@ -507,7 +509,6 @@ fun CommentItem(
                     .size(16.dp)
                     .clickable {
                         showDialog = true
-                        onClickMore()
                     }
             )
         }
@@ -670,7 +671,7 @@ fun PostDetailScreenPreview() {
 @Composable
 fun PostHeaderPreview() {
     SikshaTheme {
-        PostHeader(post = Post(title = "제목", createdAt = LocalDateTime.now(), nickname = "닉네임"))
+        PostHeader(post = Post(title = "제목", createdAt = LocalDateTime.now(), nickname = "닉네임"), onClick = {})
     }
 }
 
