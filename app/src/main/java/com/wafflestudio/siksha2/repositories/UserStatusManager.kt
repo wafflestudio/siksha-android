@@ -7,6 +7,7 @@ import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.GetUserDataResult
@@ -78,16 +79,12 @@ class UserStatusManager @Inject constructor(
         sikshaApi.sendVoc(VocParam(voc))
     }
 
-    suspend fun getUserData(): Long {
-        return sikshaApi.getUserData().id
+    suspend fun getUserData(): User{
+        return userDataPatch(sikshaApi.getUserData())
     }
 
-    suspend fun getUserNickname(): String? {
-        return sikshaApi.getUserData().nickname
-    }
-
-    suspend fun getUserImage(): String? {
-        return sikshaApi.getUserData().profileUrl
+    private fun userDataPatch(userDto: GetUserDataResult): User{
+        return User(id = userDto.id, nickname = userDto.nickname, profileUrl = userDto.profileUrl)
     }
 
     suspend fun updateUserProfile(nickname: String, image: MultipartBody.Part?): GetUserDataResult {
