@@ -4,6 +4,9 @@ import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
+import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
+import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
+import com.wafflestudio.siksha2.network.dto.ReportCommentResponse
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
 import javax.inject.Inject
@@ -43,5 +46,21 @@ class CommunityRepository @Inject constructor(
 
     suspend fun unlikeComment(commentId: Long) {
         api.postUnlikeComment(commentId)
+    }
+
+    suspend fun deletePost(postId: Long){
+        api.deletePost(postId)
+    }
+
+    suspend fun deleteComment(commentId:Long){
+        api.deleteComment(commentId)
+    }
+
+    suspend fun reportPost(postId: Long, reason: String) {
+        api.reportPost(postId, ReportPostRequestBody(reason))
+    }
+
+    suspend fun reportComment(commentId: Long, reason: String): ReportCommentResponse {
+        return api.reportComment(commentId, ReportCommentRequestBody(reason))
     }
 }

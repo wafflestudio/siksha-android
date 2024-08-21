@@ -129,4 +129,27 @@ interface SikshaApi {
     suspend fun postUnlikeComment(
         @Path("comment_id") commentId: Long
     ): PostUnlikeCommentResponse
+
+    @DELETE("/community/posts/{post_id}")
+    suspend fun deletePost(
+        @Path("post_id") postId:Long
+    )
+
+    @DELETE("/community/comments/{comment_id}")
+    suspend fun deleteComment(
+        @Path("comment_id") commentId:Long
+    )
+
+    @POST("/community/posts/{post_id}/report")
+    suspend fun reportPost(
+        @Path("post_id") postId:Long,
+        @Body requestBody:ReportPostRequestBody
+    ): ReportPostResponse
+
+    @POST("/community/comments/{comment_id}/report")
+    suspend fun reportComment(
+        @Path("comment_id") commentId: Long,
+        @Body requestBody: ReportCommentRequestBody
+    ): ReportCommentResponse
+
 }

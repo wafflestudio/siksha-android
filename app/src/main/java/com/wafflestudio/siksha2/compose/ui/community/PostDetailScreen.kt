@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
+import PostDetailDialog
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -51,7 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.PagingData
+import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
@@ -74,9 +74,7 @@ import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -84,6 +82,7 @@ import java.time.LocalDateTime
 fun PostDetailRoute(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
+    navController: NavController,
     postListViewModel: PostListViewModel = hiltViewModel(),
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
 ) {
@@ -103,6 +102,7 @@ fun PostDetailRoute(
         updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
         updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
         addComment = postDetailViewModel::addComment,
+        navController = navController,
         modifier = modifier
     )
 }
@@ -120,15 +120,36 @@ fun PostDetailScreen(
     updateListWithLikedPost: (Post) -> Unit,
     updateListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
     val commentListState = rememberLazyListState()
+    var isMoreDialogShowed by remember { mutableStateOf(false) }
+
+    if (isMoreDialogShowed) {
+        PostDetailDialog(
+            onDismissRequest = {
+                isMoreDialogShowed = false
+            },
+            onClickEdit = {},
+            onClickDelete = {},
+            onClickReport = {
+                isMoreDialogShowed=false
+                navController.navigate("postreportScreen")
+            },
+            onClickCopyUrl = {},
+            onClickCancel = {
+                isMoreDialogShowed=false
+            }
+        )
+    }
 
     PostDetailViewEventEffect(
         postDetailEvent = postDetailEvent,
-        refreshComments = refreshComments
+        refreshComments = refreshComments,
+        onNavigateUp=onNavigateUp
     )
 
     AutoScrollCommentsEffect(
@@ -172,9 +193,13 @@ fun PostDetailScreen(
                     comments[it]?.let { comment ->
                         CommentItem(
                             comment = comment,
+                            navController=navController,
                             modifier = Modifier.fillMaxWidth(),
                             onClickLike = {
                                 toggleCommentLike(comment)
+                            },
+                            onClickMore = {
+                                isMoreDialogShowed = true
                             }
                         )
                         CommunityDivider()
@@ -202,7 +227,8 @@ fun PostDetailScreen(
 @Composable
 private fun PostDetailViewEventEffect(
     postDetailEvent: SharedFlow<PostDetailEvent>,
-    refreshComments: () -> Unit
+    refreshComments: () -> Unit,
+    onNavigateUp:()->Unit
 ) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
@@ -222,6 +248,32 @@ private fun PostDetailViewEventEffect(
 
                 is PostDetailEvent.ToggleCommentLikeFailed -> {
                     Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeletePostSuccess -> {
+                    onNavigateUp()
+                    Toast.makeText(context, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeletePostFailed -> {
+                    Toast.makeText(context, "게시물 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeleteCommentSuccess -> {
+                    refreshComments()
+                    Toast.makeText(context, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeleteCommentFailed -> {
+                    Toast.makeText(context, "댓글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.ReportPostSuccess -> {
+                    Toast.makeText(context, "게시물이 성공적으로 신고되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.ReportPostFailed -> {
+                    Toast.makeText(context, "게시물 신고에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.ReportCommentSuccess -> {
+                    Toast.makeText(context, "댓글이 성공적으로 신고되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.ReportCommentFailed -> {
+                    Toast.makeText(context, "댓글 신고에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -407,9 +459,12 @@ fun PostLikeButton(
 @Composable
 fun CommentItem(
     comment: Comment,
+    navController: NavController,
     modifier: Modifier = Modifier,
-    onClickLike: () -> Unit = {}
+    onClickLike: () -> Unit = {},
+    onClickMore: () -> Unit = {}
 ) {
+    var showDialog by remember { mutableStateOf(false) }
     Row(
         modifier = modifier
             .padding(horizontal = 20.dp, vertical = 12.dp)
@@ -450,6 +505,10 @@ fun CommentItem(
                 modifier = Modifier
                     .padding(start = 4.dp)
                     .size(16.dp)
+                    .clickable {
+                        showDialog = true
+                        onClickMore()
+                    }
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -460,7 +519,25 @@ fun CommentItem(
             modifier = Modifier.align(Alignment.CenterVertically)
         )
     }
+
+    if (showDialog) {
+        CommentDetailDialog(
+            onDismissRequest = { showDialog = false },
+            onClickReply = {
+                showDialog = false
+                // ??
+            },
+            onClickReport = {
+                showDialog = false
+                navController.navigate("commentreportScreen")
+            },
+            onClickCancel = {
+                showDialog = false
+            }
+        )
+    }
 }
+
 
 @Composable
 fun CommentLikeButton(
@@ -569,7 +646,7 @@ fun CommentInputRow(
     )
 }
 
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+/*@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Composable
 fun PostDetailScreenPreview() {
     SikshaTheme {
@@ -588,7 +665,7 @@ fun PostDetailScreenPreview() {
             modifier = Modifier.fillMaxSize()
         )
     }
-}
+}*/
 
 @Preview(showBackground = true)
 @Composable
@@ -609,7 +686,7 @@ fun PostLikeButtonPreview() {
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun CommentItemPreview() {
     SikshaTheme {
@@ -617,7 +694,7 @@ fun CommentItemPreview() {
             comment = Comment(content = "댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 ", nickname = "유저이름")
         )
     }
-}
+}*/
 
 @Preview
 @Composable

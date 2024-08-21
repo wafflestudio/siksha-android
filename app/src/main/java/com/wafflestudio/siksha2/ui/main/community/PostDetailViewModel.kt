@@ -1,5 +1,8 @@
 package com.wafflestudio.siksha2.ui.main.community
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -99,6 +102,59 @@ class PostDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun deletePost(postId:Long, authToken:String){
+        viewModelScope.launch {
+            runCatching{
+                communityRepository.deletePost(postId, authToken)
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.DeletePostSuccess)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.DeletePostFailed)
+            }
+        }
+    }
+
+    fun deleteComment(commentId: Long, authToken: String){
+        viewModelScope.launch {
+            runCatching {
+                communityRepository.deleteComment(commentId, authToken)
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.DeleteCommentSuccess)
+                refreshPost(_post.value.id)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.DeleteCommentFailed)
+            }
+        }
+    }
+
+    fun reportPost(postId: Long, authToken: String, reason: String) {
+        viewModelScope.launch {
+            runCatching {
+                communityRepository.reportPost(postId, authToken, reason)
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.ReportPostSuccess)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.ReportPostFailed)
+            }
+        }
+    }
+
+    fun reportComment(commentId: Long, authToken: String, reason: String) {
+        viewModelScope.launch {
+            runCatching {
+                communityRepository.reportComment(commentId, authToken, reason)
+            }.onSuccess {
+                _postDetailEvent.emit(PostDetailEvent.ReportCommentSuccess)
+            }.onFailure {
+                _postDetailEvent.emit(PostDetailEvent.ReportCommentFailed)
+            }
+        }
+    }
+
+
+
+
 }
 
 sealed interface PostDetailEvent {
@@ -106,4 +162,12 @@ sealed interface PostDetailEvent {
     object AddCommentFailed : PostDetailEvent
     object ToggleCommentLikeSuccess : PostDetailEvent
     object ToggleCommentLikeFailed : PostDetailEvent
+    object DeletePostSuccess: PostDetailEvent
+    object DeletePostFailed: PostDetailEvent
+    object DeleteCommentSuccess: PostDetailEvent
+    object DeleteCommentFailed: PostDetailEvent
+    object ReportPostSuccess: PostDetailEvent
+    object ReportPostFailed: PostDetailEvent
+    object ReportCommentSuccess: PostDetailEvent
+    object ReportCommentFailed: PostDetailEvent
 }

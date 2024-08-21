@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.compose.ui.community.PostDetailRoute
@@ -36,7 +37,8 @@ class PostDetailFragment : Fragment() {
                 PostDetailRoute(
                     onNavigateUp = { findNavController().navigateUp() },
                     modifier = Modifier.fillMaxSize(),
-                    postListViewModel = postListViewModel
+                    postListViewModel = postListViewModel,
+                    navController = findNavController()
                 )
             }
         }
