@@ -290,6 +290,7 @@ fun ConfirmDeleteDialog(
     }
 }
 
+@Preview
 @Composable
 fun ConfirmDeleteDialogPreview() {
     var isDialogVisible by remember { mutableStateOf(true) }
@@ -309,10 +310,4 @@ fun ConfirmDeleteDialogPreview() {
             }
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ConfirmDeleteDialogPreviewDisplay() {
-    ConfirmDeleteDialogPreview()
 }
