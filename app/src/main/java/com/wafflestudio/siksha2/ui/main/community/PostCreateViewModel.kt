@@ -16,14 +16,17 @@ import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.format
 import id.zelory.compressor.constraint.resolution
 import id.zelory.compressor.constraint.size
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import timber.log.Timber
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.net.URL
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,6 +52,9 @@ class PostCreateViewModel @Inject constructor(
     private val _imageUriList = MutableStateFlow<List<Uri>>(emptyList())
     val imageUriList: StateFlow<List<Uri>> = _imageUriList
 
+    private val _imageFileList = MutableStateFlow<Map<String, ByteArray>>(emptyMap())
+    val imageFileList: StateFlow<Map<String, ByteArray>> = _imageFileList
+
     private val _createPostState = MutableStateFlow(CreatePostState.USER_INPUT)
     val createPostState: StateFlow<CreatePostState> = _createPostState
 
@@ -70,7 +76,10 @@ class PostCreateViewModel @Inject constructor(
                 _board.value = communityRepository.getBoard(post.value.boardId)
                 _title.value = post.value.title
                 _content.value = post.value.content
-                _imageUriList.value = post.value.etc?.images?.map { it -> Uri.parse(it) } ?: listOf()
+                _imageUriList.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
+                _imageFileList.value = post.value.etc?.images?.associate {
+                    it to downloadFile(it)
+                } ?: emptyMap()
                 isEdit = true
             } else {
                 // error handling
@@ -119,8 +128,6 @@ class PostCreateViewModel @Inject constructor(
                 _postId.value = response?.id ?: -1
                 _createPostState.value = CreatePostState.SUCCESS
             } catch (e: Exception) {
-                Timber.tag("CreatePostViewModel.createPost").d(e.message)
-                // Timber.tag("CreatePostViewModel.createPost").d("asdf")
                 context.showToast("오류가 발생했습니다. 다시 시도해 주세요.")
                 _createPostState.value = CreatePostState.USER_INPUT
             }
@@ -132,13 +139,13 @@ class PostCreateViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _createPostState.value = CreatePostState.COMPRESSING
-//                val imageList = _imageUriList.value.filter{
-//                    post.value.etc?.images?.contains(it.toString()) != true
-//                }.map {
-//                    getCompressedImage(context, it)
-//                }
-                val imageList = _imageUriList.value.map {
-                    getCompressedImage(context, it)
+                val imageList = _imageUriList.value.map { uri ->
+                    if (_imageFileList.value.containsKey(uri.toString())) {
+                        val filename = uri.toString()
+                        byteArrayToMultipartBody(filename, _imageFileList.value.getValue(filename))
+                    } else {
+                        getCompressedImage(context, uri)
+                    }
                 }
 
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
@@ -154,6 +161,12 @@ class PostCreateViewModel @Inject constructor(
                 throw e
             }
         }
+    }
+
+    private fun byteArrayToMultipartBody(filename: String, byteArray: ByteArray): MultipartBody.Part {
+        val requestBody = byteArray
+            .toRequestBody("image/jpeg".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("images", filename, requestBody)
     }
 
     private suspend fun getCompressedImage(context: Context, uri: Uri): MultipartBody.Part {
@@ -190,6 +203,13 @@ class PostCreateViewModel @Inject constructor(
             _content.value = newContent
         } else {
             context.showToast("내용은 1000자를 넘길 수 없습니다.")
+        }
+    }
+
+    private suspend fun downloadFile(str: String): ByteArray {
+        return withContext(Dispatchers.IO) {
+            val url = URL(str)
+            url.readBytes()
         }
     }
 
