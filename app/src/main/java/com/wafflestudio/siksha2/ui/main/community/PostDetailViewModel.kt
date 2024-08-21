@@ -1,8 +1,5 @@
 package com.wafflestudio.siksha2.ui.main.community
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -103,10 +100,10 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun deletePost(postId:Long, authToken:String){
+    fun deletePost(postId: Long) {
         viewModelScope.launch {
-            runCatching{
-                communityRepository.deletePost(postId, authToken)
+            runCatching {
+                communityRepository.deletePost(postId)
             }.onSuccess {
                 _postDetailEvent.emit(PostDetailEvent.DeletePostSuccess)
             }.onFailure {
@@ -115,10 +112,10 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteComment(commentId: Long, authToken: String){
+    fun deleteComment(commentId: Long) {
         viewModelScope.launch {
             runCatching {
-                communityRepository.deleteComment(commentId, authToken)
+                communityRepository.deleteComment(commentId)
             }.onSuccess {
                 _postDetailEvent.emit(PostDetailEvent.DeleteCommentSuccess)
                 refreshPost(_post.value.id)
@@ -128,10 +125,10 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun reportPost(postId: Long, authToken: String, reason: String) {
+    fun reportPost(postId: Long, reason: String) {
         viewModelScope.launch {
             runCatching {
-                communityRepository.reportPost(postId, authToken, reason)
+                communityRepository.reportPost(postId, reason)
             }.onSuccess {
                 _postDetailEvent.emit(PostDetailEvent.ReportPostSuccess)
             }.onFailure {
@@ -140,10 +137,10 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun reportComment(commentId: Long, authToken: String, reason: String) {
+    fun reportComment(commentId: Long, reason: String) {
         viewModelScope.launch {
             runCatching {
-                communityRepository.reportComment(commentId, authToken, reason)
+                communityRepository.reportComment(commentId, reason)
             }.onSuccess {
                 _postDetailEvent.emit(PostDetailEvent.ReportCommentSuccess)
             }.onFailure {
@@ -151,10 +148,6 @@ class PostDetailViewModel @Inject constructor(
             }
         }
     }
-
-
-
-
 }
 
 sealed interface PostDetailEvent {
@@ -162,12 +155,12 @@ sealed interface PostDetailEvent {
     object AddCommentFailed : PostDetailEvent
     object ToggleCommentLikeSuccess : PostDetailEvent
     object ToggleCommentLikeFailed : PostDetailEvent
-    object DeletePostSuccess: PostDetailEvent
-    object DeletePostFailed: PostDetailEvent
-    object DeleteCommentSuccess: PostDetailEvent
-    object DeleteCommentFailed: PostDetailEvent
-    object ReportPostSuccess: PostDetailEvent
-    object ReportPostFailed: PostDetailEvent
-    object ReportCommentSuccess: PostDetailEvent
-    object ReportCommentFailed: PostDetailEvent
+    object DeletePostSuccess : PostDetailEvent
+    object DeletePostFailed : PostDetailEvent
+    object DeleteCommentSuccess : PostDetailEvent
+    object DeleteCommentFailed : PostDetailEvent
+    object ReportPostSuccess : PostDetailEvent
+    object ReportPostFailed : PostDetailEvent
+    object ReportCommentSuccess : PostDetailEvent
+    object ReportCommentFailed : PostDetailEvent
 }

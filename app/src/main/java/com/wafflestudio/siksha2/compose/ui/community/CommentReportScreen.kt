@@ -11,14 +11,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -107,13 +103,11 @@ fun CommentReportScreen(
 
         Spacer(modifier = Modifier.height(300.dp))
 
-
         Button(
             onClick = {
                 isSubmitting = true
                 postDetailViewModel.reportComment(
-                    commentId=commentId,
-                    authToken = authToken,
+                    commentId = commentId,
                     reason = reportText.value.text
                 )
                 isSubmitting = false

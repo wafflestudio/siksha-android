@@ -136,12 +136,12 @@ fun PostDetailScreen(
             onClickEdit = {},
             onClickDelete = {},
             onClickReport = {
-                isMoreDialogShowed=false
+                isMoreDialogShowed = false
                 navController.navigate("postreportScreen")
             },
             onClickCopyUrl = {},
             onClickCancel = {
-                isMoreDialogShowed=false
+                isMoreDialogShowed = false
             }
         )
     }
@@ -149,7 +149,7 @@ fun PostDetailScreen(
     PostDetailViewEventEffect(
         postDetailEvent = postDetailEvent,
         refreshComments = refreshComments,
-        onNavigateUp=onNavigateUp
+        onNavigateUp = onNavigateUp
     )
 
     AutoScrollCommentsEffect(
@@ -193,7 +193,7 @@ fun PostDetailScreen(
                     comments[it]?.let { comment ->
                         CommentItem(
                             comment = comment,
-                            navController=navController,
+                            navController = navController,
                             modifier = Modifier.fillMaxWidth(),
                             onClickLike = {
                                 toggleCommentLike(comment)
@@ -228,7 +228,7 @@ fun PostDetailScreen(
 private fun PostDetailViewEventEffect(
     postDetailEvent: SharedFlow<PostDetailEvent>,
     refreshComments: () -> Unit,
-    onNavigateUp:()->Unit
+    onNavigateUp: () -> Unit
 ) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
@@ -537,7 +537,6 @@ fun CommentItem(
         )
     }
 }
-
 
 @Composable
 fun CommentLikeButton(

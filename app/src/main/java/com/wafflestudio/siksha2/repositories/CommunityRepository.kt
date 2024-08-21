@@ -48,11 +48,11 @@ class CommunityRepository @Inject constructor(
         api.postUnlikeComment(commentId)
     }
 
-    suspend fun deletePost(postId: Long){
+    suspend fun deletePost(postId: Long) {
         api.deletePost(postId)
     }
 
-    suspend fun deleteComment(commentId:Long){
+    suspend fun deleteComment(commentId: Long) {
         api.deleteComment(commentId)
     }
 

@@ -8,14 +8,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -26,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,10 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
@@ -156,23 +149,23 @@ fun PostDetailDialogPreview() {
 
 @Composable
 fun Usage(
-    navController:NavController,
+    navController: NavController,
     postId: Long,
     authToken: String,
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
-    ){
-    var isDialogVisible by remember {mutableStateOf(false)}
-    var isConfirmDeleteVisible by remember {mutableStateOf(false)}
+) {
+    var isDialogVisible by remember { mutableStateOf(false) }
+    var isConfirmDeleteVisible by remember { mutableStateOf(false) }
 
-    fun deletePost(){
-        isConfirmDeleteVisible=true
+    fun deletePost() {
+        isConfirmDeleteVisible = true
     }
 
     if (isConfirmDeleteVisible) {
         ConfirmDeleteDialog(
             onDismissRequest = { isConfirmDeleteVisible = false },
             onConfirmDelete = {
-                postDetailViewModel.deletePost(postId, authToken)
+                postDetailViewModel.deletePost(postId)
                 isConfirmDeleteVisible = false
                 navController.popBackStack()
             },
@@ -182,24 +175,25 @@ fun Usage(
         )
     }
 
-    fun reportPost(){
+    fun reportPost() {
         navController.navigate("postreportScreen")
     }
 
-    if(isDialogVisible){
+    if (isDialogVisible) {
         PostDetailDialog(
             onDismissRequest = { isDialogVisible = false },
             onClickEdit = { /*TODO*/ },
             onClickDelete = {
                 deletePost()
-                isDialogVisible=false
+                isDialogVisible = false
             },
             onClickReport = {
                 reportPost()
-                isDialogVisible=false
+                isDialogVisible = false
             },
             onClickCopyUrl = { /*TODO*/ },
-            onClickCancel = {isDialogVisible = false})
+            onClickCancel = { isDialogVisible = false }
+        )
     }
 
     if (isConfirmDeleteVisible) {
@@ -213,7 +207,6 @@ fun Usage(
             }
         )
     }
-
 }
 
 @Composable
@@ -260,7 +253,7 @@ fun ConfirmDeleteDialog(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 // "취소" Button
                 TextButton(
