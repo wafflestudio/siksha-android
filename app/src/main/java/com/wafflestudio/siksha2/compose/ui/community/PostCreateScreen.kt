@@ -103,8 +103,12 @@ fun PostCreateRoute(
             onUploadSuccess(postId)
         },
         isBoardListOpen = isBoardListOpen,
-        onOpenBoardList = { isBoardListOpen = !isBoardListOpen },
-        onSelectBoard = { postCreateViewModel.selectBoard(it) },
+        onCloseBoardList = { isBoardListOpen = false },
+        onToggleBoardList = { isBoardListOpen = !isBoardListOpen },
+        onSelectBoard = {
+            postCreateViewModel.selectBoard(it)
+            isBoardListOpen = false
+        },
         titleTextValue = title,
         onTitleTextChanged = { newInput ->
             postCreateViewModel.updateTitle(newInput, context)
@@ -137,7 +141,8 @@ fun PostCreateScreen(
     onNavigateUp: () -> Unit,
     onUploadSuccess: () -> Unit,
     isBoardListOpen: Boolean,
-    onOpenBoardList: () -> Unit,
+    onCloseBoardList: () -> Unit,
+    onToggleBoardList: () -> Unit,
     onSelectBoard: (Board) -> Unit,
     titleTextValue: String,
     onTitleTextChanged: (String) -> Unit,
@@ -157,6 +162,7 @@ fun PostCreateScreen(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val closeBoardSelectorInteractionSource = remember { MutableInteractionSource() }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -184,7 +190,7 @@ fun PostCreateScreen(
             ) {
                 CurrentBoard(
                     board = currentBoard,
-                    onClick = onOpenBoardList
+                    onClick = onToggleBoardList
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Box(
@@ -254,6 +260,13 @@ fun PostCreateScreen(
                         }
                     }
                     if (isBoardListOpen) {
+                        Box(
+                            modifier = Modifier.fillMaxSize()
+                                .clickable(
+                                    interactionSource = closeBoardSelectorInteractionSource,
+                                    indication = null
+                                ) { onCloseBoardList() }
+                        ) { }
                         BoardSelector(
                             boards = boardsList,
                             currentBoard = currentBoard,
