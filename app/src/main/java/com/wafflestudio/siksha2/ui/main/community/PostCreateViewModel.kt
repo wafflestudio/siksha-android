@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.community
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -9,13 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
-import com.wafflestudio.siksha2.utils.PathUtil
+import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
-import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.format
-import id.zelory.compressor.constraint.resolution
-import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +20,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.File
 import java.net.URL
 import javax.inject.Inject
 
@@ -116,7 +110,7 @@ class PostCreateViewModel @Inject constructor(
             try {
                 _createPostState.value = CreatePostState.COMPRESSING
                 val imageList = _imageUriList.value.map {
-                    getCompressedImage(context, it)
+                    getCompressedImageAsMultipartBody(context, it)
                 }
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
                 val contentBody = MultipartBody.Part.createFormData("content", content.value)
@@ -144,7 +138,7 @@ class PostCreateViewModel @Inject constructor(
                         val filename = uri.toString()
                         byteArrayToMultipartBody(filename, _imageFileList.value.getValue(filename))
                     } else {
-                        getCompressedImage(context, uri)
+                        getCompressedImageAsMultipartBody(context, uri)
                     }
                 }
 
@@ -169,17 +163,8 @@ class PostCreateViewModel @Inject constructor(
         return MultipartBody.Part.createFormData("images", filename, requestBody)
     }
 
-    private suspend fun getCompressedImage(context: Context, uri: Uri): MultipartBody.Part {
-        val path = PathUtil.getPath(context, uri)
-//        if (path == null) {
-//            Timber.tag("CreatePostViewModel.createPost").d("path null")
-//        }
-        var file = File(path)
-        file = Compressor.compress(context, file) {
-            resolution(300, 300)
-            size(100000)
-            format(Bitmap.CompressFormat.JPEG)
-        }
+    private suspend fun getCompressedImageAsMultipartBody(context: Context, uri: Uri): MultipartBody.Part {
+        val file = ImageUtil.getCompressedImage(context, uri)
         val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData("images", file.name, requestBody)
     }
