@@ -79,7 +79,7 @@ class PostCreateViewModel @Inject constructor(
                 _imageUriList.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
                 _imageFileList.value = post.value.etc?.images?.associate {
                     it to downloadFile(it)
-                } ?: emptyMap()
+                }?.filterValues { it.isNotEmpty() } ?: emptyMap()
                 isEdit = true
             } else {
                 // error handling
@@ -208,8 +208,12 @@ class PostCreateViewModel @Inject constructor(
 
     private suspend fun downloadFile(str: String): ByteArray {
         return withContext(Dispatchers.IO) {
-            val url = URL(str)
-            url.readBytes()
+            try {
+                val url = URL(str)
+                url.readBytes()
+            } catch (e: Exception) {
+                ByteArray(0)
+            }
         }
     }
 
