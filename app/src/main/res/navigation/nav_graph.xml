@@ -177,6 +177,7 @@
         <action
             android:id="@+id/action_postEditFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment"
-            app:popUpTo="@id/postDetailFragment" />
+            app:popUpTo="@id/postDetailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
