@@ -79,17 +79,17 @@ class UserStatusManager @Inject constructor(
         sikshaApi.sendVoc(VocParam(voc))
     }
 
-    suspend fun getUserData(): User{
+    suspend fun getUserData(): User {
         return userDataPatch(sikshaApi.getUserData())
     }
 
-    private fun userDataPatch(userDto: GetUserDataResult): User{
+    private fun userDataPatch(userDto: GetUserDataResult): User {
         return User(id = userDto.id, nickname = userDto.nickname, profileUrl = userDto.profileUrl)
     }
 
-    suspend fun updateUserProfile(nickname: String, image: MultipartBody.Part?): GetUserDataResult {
+    suspend fun updateUserProfile(nickname: String, image: MultipartBody.Part?): User {
         val nicknameBody = MultipartBody.Part.createFormData("nickname", nickname)
-        return sikshaApi.updateUserData(image, nicknameBody)
+        return userDataPatch(sikshaApi.updateUserData(image, nicknameBody))
     }
 
     suspend fun getVersion(): String {

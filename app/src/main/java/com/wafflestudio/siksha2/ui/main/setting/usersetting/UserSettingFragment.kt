@@ -14,13 +14,14 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.wafflestudio.siksha2.databinding.FragmentSettingUsersettingBinding
+import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 class UserSettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingUsersettingBinding
-    private val userSettingViewModel: UserSettingViewModel by activityViewModels()
+    private val userSettingViewModel: SettingViewModel by activityViewModels()
 
     private lateinit var imageView: ShapeableImageView
 
@@ -73,13 +74,13 @@ class UserSettingFragment : Fragment() {
             }
         }
 
-        userSettingViewModel.nickname.observe(viewLifecycleOwner) { nickname ->
-            binding.nicknameSetRow.setText(nickname)
-        }
+        userSettingViewModel.userData.observe(viewLifecycleOwner) { userData ->
+            userData?.let {
+                binding.nicknameSetRow.setText(it.nickname)
 
-        userSettingViewModel.imageUri.observe(viewLifecycleOwner) { uri ->
-            uri?.let {
-                Glide.with(this).load(it).circleCrop().into(imageView)
+                it.profileUrl?.let { uri ->
+                    Glide.with(this).load(uri).circleCrop().into(imageView)
+                }
             }
         }
     }

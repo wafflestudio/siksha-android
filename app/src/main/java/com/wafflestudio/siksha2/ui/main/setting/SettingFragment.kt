@@ -79,7 +79,7 @@ class SettingFragment : Fragment() {
 
         binding.settingAccountRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToSettingAccountFragment(latestVersionNum.toLong())
+                MainFragmentDirections.actionMainFragmentToSettingAccountFragment(vm.latestVersionNum.toLong())
             findNavController().navigate(action)
         }
 
