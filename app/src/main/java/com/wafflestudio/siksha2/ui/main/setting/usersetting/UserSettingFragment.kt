@@ -36,7 +36,7 @@ class UserSettingFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             binding = FragmentSettingUsersettingBinding.inflate(inflater, container, false)
             return binding.root
@@ -44,8 +44,6 @@ class UserSettingFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         imageView = binding.imageView
 
         binding.backButton.setOnClickListener {
