@@ -7,7 +7,7 @@ object FeatureChecker {
     }
 
     private val featureFlags = mapOf(
-        Feature.COMMUNITY_TAB to true
+        Feature.COMMUNITY_TAB to false
     )
 
     fun isFeatureEnabled(feature: Feature): Boolean {
