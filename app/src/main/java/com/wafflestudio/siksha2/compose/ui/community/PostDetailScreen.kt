@@ -72,7 +72,7 @@ import com.wafflestudio.siksha2.ui.ThumbIcon
 import com.wafflestudio.siksha2.ui.main.community.PostDetailEvent
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
-import com.wafflestudio.siksha2.utils.showImageViewer
+import com.wafflestudio.siksha2.ui.main.community.UserPostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -86,6 +86,7 @@ fun PostDetailRoute(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel(),
+    userPostListViewModel: UserPostListViewModel = hiltViewModel(),
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
 ) {
     val post by postDetailViewModel.post.collectAsState()
@@ -103,6 +104,8 @@ fun PostDetailRoute(
         toggleCommentLike = postDetailViewModel::toggleCommentLike,
         updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
         updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
+        updateUserListWithLikedPost = userPostListViewModel::updateUserListWithLikedPost,
+        updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
         addComment = postDetailViewModel::addComment,
         modifier = modifier
     )
@@ -120,6 +123,8 @@ fun PostDetailScreen(
     toggleCommentLike: (Comment) -> Unit,
     updateListWithLikedPost: (Post) -> Unit,
     updateListWithCommentAddedPost: (Post) -> Unit,
+    updateUserListWithLikedPost: (Post) -> Unit,
+    updateUserListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -165,6 +170,7 @@ fun PostDetailScreen(
                         onClickLike = {
                             togglePostLike()
                             updateListWithLikedPost(post)
+                            updateUserListWithLikedPost(post)
                         }
                     )
                     CommunityDivider()
@@ -192,6 +198,7 @@ fun PostDetailScreen(
             addComment = { ->
                 addComment(commentInput, isAnonymousInput)
                 updateListWithCommentAddedPost(post)
+                updateUserListWithCommentAddedPost(post)
             },
             modifier = Modifier
                 .padding(horizontal = 9.dp, vertical = 5.dp)
@@ -303,7 +310,6 @@ fun PostBody(
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {}
 ) {
-    val context = LocalContext.current
     Column(
         modifier = modifier
     ) {
@@ -335,10 +341,7 @@ fun PostBody(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .padding(start = startPadding, end = endPadding)
-                        .clickable {
-                            context.showImageViewer(images, it)
-                        },
+                        .padding(start = startPadding, end = endPadding),
                     contentDescription = "",
                     loading = {
                         CircularProgressIndicator(
@@ -590,7 +593,9 @@ fun PostDetailScreenPreview() {
             toggleCommentLike = {},
             addComment = { _, _ -> },
             updateListWithCommentAddedPost = {},
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            updateUserListWithCommentAddedPost = {},
+            updateUserListWithLikedPost = {}
         )
     }
 }

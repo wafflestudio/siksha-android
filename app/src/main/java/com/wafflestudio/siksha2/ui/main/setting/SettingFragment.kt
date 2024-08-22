@@ -57,7 +57,13 @@ class SettingFragment : Fragment() {
 
         binding.infoRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToUserSettingFragment()
+                MainFragmentDirections.actionMainFragmentToUserAccountFragment()
+            findNavController().navigate(action)
+        }
+
+        binding.myPostRow.setOnClickListener {
+            val action =
+                MainFragmentDirections.actionMainFragmentToUserPostListFragment()
             findNavController().navigate(action)
         }
 
