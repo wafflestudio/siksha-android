@@ -17,6 +17,7 @@ import com.wafflestudio.siksha2.databinding.FragmentSettingUsersettingBinding
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.IOException
 
 class UserAccountFragment : Fragment() {
@@ -66,6 +67,10 @@ class UserAccountFragment : Fragment() {
                         nickname = binding.nicknameSetRow.text.toString()
                     )
                     findNavController().popBackStack()
+                } catch (e: HttpException) {
+                    if (e.code() == 409) {
+                        showToast("이미 존재하는 닉네임입니다.")
+                    }
                 } catch (e: IOException) {
                     showToast("오류가 발생했습니다.")
                 }

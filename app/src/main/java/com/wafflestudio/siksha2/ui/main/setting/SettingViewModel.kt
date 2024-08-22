@@ -53,7 +53,19 @@ class SettingViewModel @Inject constructor(
         _userData.value?.profileUrl = uri.toString()
     }
 
+    private suspend fun getNicknameToUpdate(nickname: String): String? {
+        val currentNickname = _userData.value?.nickname
+        if (currentNickname == nickname) {
+            return null
+        } else {
+            userStatusManager.checkNickname(nickname)
+            return nickname
+        }
+    }
+
     suspend fun patchUserData(context: Context, nickname: String) {
+        val nicknameToUpdate = getNicknameToUpdate(nickname)
+
         val image = _userData.value?.profileUrl.let {
             val uri = Uri.parse(it)
             getCompressedImage(context, uri)
@@ -61,7 +73,8 @@ class SettingViewModel @Inject constructor(
             val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("image", file.name, requestBody)
         }
-        val updatedUserData = userStatusManager.updateUserProfile(nickname, image)
+
+        val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, image)
         _userData.value = updatedUserData
     }
 

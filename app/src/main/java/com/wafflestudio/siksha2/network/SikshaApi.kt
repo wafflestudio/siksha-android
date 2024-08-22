@@ -78,8 +78,13 @@ interface SikshaApi {
     @PATCH("/auth/me/image/profile")
     suspend fun updateUserData(
         @Part image: MultipartBody.Part?,
-        @Part nickname: MultipartBody.Part
+        @Part nickname: MultipartBody.Part?
     ): GetUserDataResult
+
+    @GET("/auth/nicknames/validate")
+    suspend fun checkNickname(
+        @Query("nickname") nickname: String
+    )
 
     @GET("/versions/android")
     suspend fun getVersion(): GetVersionResult

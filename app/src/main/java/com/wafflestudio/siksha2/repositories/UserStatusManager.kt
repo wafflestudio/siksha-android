@@ -87,9 +87,13 @@ class UserStatusManager @Inject constructor(
         return User(id = userDto.id, nickname = userDto.nickname, profileUrl = userDto.profileUrl)
     }
 
-    suspend fun updateUserProfile(nickname: String, image: MultipartBody.Part?): User {
-        val nicknameBody = MultipartBody.Part.createFormData("nickname", nickname)
+    suspend fun updateUserProfile(nickname: String?, image: MultipartBody.Part?): User {
+        val nicknameBody = nickname?.let { MultipartBody.Part.createFormData("nickname", it) }
         return userDataPatch(sikshaApi.updateUserData(image, nicknameBody))
+    }
+
+    suspend fun checkNickname(nickname: String) {
+        sikshaApi.checkNickname(nickname)
     }
 
     suspend fun getVersion(): String {
