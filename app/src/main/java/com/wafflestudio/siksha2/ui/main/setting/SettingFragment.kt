@@ -57,7 +57,7 @@ class SettingFragment : Fragment() {
 
         binding.infoRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToUserSettingFragment2()
+                MainFragmentDirections.actionMainFragmentToUserSettingFragment()
             findNavController().navigate(action)
         }
 

@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.main.setting.usersetting
+package com.wafflestudio.siksha2.ui.main.setting.userAccount
 
 import android.net.Uri
 import android.os.Bundle
@@ -19,7 +19,7 @@ import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class UserSettingFragment : Fragment() {
+class UserAccountFragment : Fragment() {
     private lateinit var binding: FragmentSettingUsersettingBinding
     private val userSettingViewModel: SettingViewModel by activityViewModels()
 

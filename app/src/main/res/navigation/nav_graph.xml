@@ -151,6 +151,6 @@
     </fragment>
     <fragment
         android:id="@+id/userSettingFragment"
-        android:name="com.wafflestudio.siksha2.ui.main.setting.usersetting.UserSettingFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.userAccount.UserAccountFragment"
         android:label="UserSettingFragment" />
 </navigation>
