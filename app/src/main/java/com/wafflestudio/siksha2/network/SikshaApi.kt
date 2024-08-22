@@ -71,8 +71,15 @@ interface SikshaApi {
         @Body req: VocParam
     )
 
-    @GET("/auth/me")
+    @GET("/auth/me/image")
     suspend fun getUserData(): GetUserDataResult
+
+    @Multipart
+    @PATCH("/auth/me/image/profile")
+    suspend fun updateUserData(
+        @Part image: MultipartBody.Part?,
+        @Part nickname: MultipartBody.Part
+    ): GetUserDataResult
 
     @GET("/versions/android")
     suspend fun getVersion(): GetVersionResult

@@ -11,14 +11,11 @@ import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
-import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.IOException
-import javax.inject.Inject
-import kotlin.math.pow
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
@@ -26,11 +23,7 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingBinding
     private val vm: SettingViewModel by activityViewModels()
 
-    @Inject
-    lateinit var userStatusManager: UserStatusManager
-
-    private var packageVersion: String = BuildConfig.VERSION_NAME
-    private var latestVersionNum: Int = 0
+    private val packageVersion: String = BuildConfig.VERSION_NAME
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,30 +39,16 @@ class SettingFragment : Fragment() {
 
         binding.versionText.text = "siksha-" + packageVersion
 
+        vm.userData.observe(viewLifecycleOwner) { user ->
+            binding.nickname.text = user.nickname
+        }
+
         lifecycleScope.launch {
             try {
-                val version = userStatusManager.getVersion()
-                latestVersionNum = 0
-                version.split('.').forEachIndexed { idx, s ->
-                    latestVersionNum += ((100.0F).pow(2 - idx) * (s.toIntOrNull() ?: 0)).toInt()
-                }
-                var currVersionNum = 0
-                packageVersion.split('.').forEachIndexed { idx, s ->
-                    currVersionNum += ((100.0F).pow(2 - idx) * (s.toIntOrNull() ?: 0)).toInt()
-                }
-
-                if (latestVersionNum == currVersionNum) {
+                if (vm.versionCheck(packageVersion)) {
                     binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
                 } else {
                     binding.versionCheckText.text = getString(R.string.setting_need_update)
-                }
-
-                val nickname = userStatusManager.getUserNickname()
-
-                if (nickname != null) {
-                    binding.nickname.text = nickname
-                } else {
-                    binding.nickname.text = "닉네임"
                 }
             } catch (e: IOException) {
                 showToast("최신버전 정보를 가져올 수 없습니다.")
@@ -78,13 +57,7 @@ class SettingFragment : Fragment() {
 
         binding.infoRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToUserSettingFragment2()
-            findNavController().navigate(action)
-        }
-
-        binding.myPostRow.setOnClickListener {
-            val action =
-                MainFragmentDirections.actionMainFragmentToUserPostListFragment()
+                MainFragmentDirections.actionMainFragmentToUserSettingFragment()
             findNavController().navigate(action)
         }
 
@@ -106,7 +79,7 @@ class SettingFragment : Fragment() {
 
         binding.settingAccountRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToSettingAccountFragment(latestVersionNum.toLong())
+                MainFragmentDirections.actionMainFragmentToSettingAccountFragment(vm.latestVersionNum.toLong())
             findNavController().navigate(action)
         }
 

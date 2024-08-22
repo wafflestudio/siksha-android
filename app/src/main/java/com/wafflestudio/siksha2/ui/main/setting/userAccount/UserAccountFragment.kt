@@ -1,4 +1,4 @@
-package com.wafflestudio.siksha2.ui.main.setting.usersetting
+package com.wafflestudio.siksha2.ui.main.setting.userAccount
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,29 +8,35 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.wafflestudio.siksha2.databinding.FragmentSettingUsersettingBinding
-import com.wafflestudio.siksha2.repositories.UserStatusManager
+import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
+import com.wafflestudio.siksha2.utils.showToast
+import kotlinx.coroutines.launch
+import java.io.IOException
 
-class UserSettingFragment : Fragment() {
+class UserAccountFragment : Fragment() {
     private lateinit var binding: FragmentSettingUsersettingBinding
+    private val userSettingViewModel: SettingViewModel by activityViewModels()
 
-    lateinit var userStatusManager: UserStatusManager
-
-    lateinit var imageView: ShapeableImageView
+    private lateinit var imageView: ShapeableImageView
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
+            userSettingViewModel.updateImageUri(it)
             Glide.with(this).load(it).circleCrop().into(imageView)
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return ComposeView(requireContext()).apply {
             binding = FragmentSettingUsersettingBinding.inflate(inflater, container, false)
             return binding.root
@@ -38,8 +44,6 @@ class UserSettingFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         imageView = binding.imageView
 
         binding.backButton.setOnClickListener {
@@ -55,7 +59,27 @@ class UserSettingFragment : Fragment() {
         }
 
         binding.completeButton.setOnClickListener {
-            val nickname = binding.nicknameSetRow.text.toString()
+            lifecycleScope.launch {
+                try {
+                    userSettingViewModel.patchUserData(
+                        context = requireContext(),
+                        nickname = binding.nicknameSetRow.text.toString()
+                    )
+                    findNavController().popBackStack()
+                } catch (e: IOException) {
+                    showToast("오류가 발생했습니다.")
+                }
+            }
+        }
+
+        userSettingViewModel.userData.observe(viewLifecycleOwner) { userData ->
+            userData?.let {
+                binding.nicknameSetRow.setText(it.nickname)
+
+                it.profileUrl?.let { uri ->
+                    Glide.with(this).load(uri).circleCrop().into(imageView)
+                }
+            }
         }
     }
 

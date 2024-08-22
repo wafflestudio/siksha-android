@@ -74,6 +74,10 @@
                     android:scheme="@string/kakao_key_with_prefix" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.common.ImageViewerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Siksha.ImageViewer" />
     </application>
 
 </manifest>

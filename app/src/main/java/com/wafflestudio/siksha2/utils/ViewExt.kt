@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.wafflestudio.siksha2.ui.common.ImageViewerActivity
 
 fun View.setVisibleOrGone(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
@@ -32,4 +33,8 @@ fun ImageView.setImageUrl(url: String) {
     Glide.with(context)
         .load(url)
         .into(this)
+}
+
+fun Context.showImageViewer(images: List<String>, initialPage: Int) {
+    startActivity(ImageViewerActivity.createIntent(this, images, initialPage))
 }
