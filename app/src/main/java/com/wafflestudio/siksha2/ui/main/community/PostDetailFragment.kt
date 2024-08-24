@@ -35,9 +35,17 @@ class PostDetailFragment : Fragment() {
             SikshaTheme {
                 PostDetailRoute(
                     onNavigateUp = { findNavController().navigateUp() },
+                    onNavigateToPostReport = { postId ->
+                        val action =
+                            PostDetailFragmentDirections.actionPostDetailFragmentToPostReportFragment(
+                                postId
+                            )
+                        findNavController().navigate(action)
+                    },
+                    onNavigateToCommentReport = {
+                    },
                     modifier = Modifier.fillMaxSize(),
-                    postListViewModel = postListViewModel,
-                    navController = findNavController()
+                    postListViewModel = postListViewModel
                 )
             }
         }

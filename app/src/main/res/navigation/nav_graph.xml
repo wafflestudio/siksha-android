@@ -145,5 +145,24 @@
         <argument
             android:name="post_id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_postReportFragment"
+            app:destination="@id/postReportFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+
+
     </fragment>
+
+    <fragment
+        android:id="@+id/postReportFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostReportFragment"
+        android:label="fragment_post_report">
+        <argument
+            android:name="post_id"
+            app:argType="long" />
+    </fragment>
+
 </navigation>

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,25 +13,51 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.wafflestudio.siksha2.ui.SikshaColors
-import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
+import com.wafflestudio.siksha2.ui.main.community.PostReportEvent
+import com.wafflestudio.siksha2.ui.main.community.PostReportViewModel
+import com.wafflestudio.siksha2.utils.showToast
+
+@Composable
+fun PostReportRoute(
+    onNavigateUp: () -> Unit,
+    postReportViewModel: PostReportViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        postReportViewModel.postReportEvent.collect {
+            when (it) {
+                is PostReportEvent.ReportPostSuccess -> {
+                    onNavigateUp()
+                }
+
+                is PostReportEvent.ReportPostFailed -> {
+                    context.showToast("신고 실패 ! ")
+                }
+            }
+        }
+    }
+
+    PostReportScreen(
+        onNavigateUp = onNavigateUp,
+        onClickReport = {
+            postReportViewModel.reportPost(it)
+        }
+    )
+}
 
 @Composable
 fun PostReportScreen(
-    postId: Long,
-    authToken: String,
-    navController: NavController,
-    onDismissRequest: () -> Unit,
-    postDetailViewModel: PostDetailViewModel = hiltViewModel()
+    onNavigateUp: () -> Unit,
+    onClickReport: (String) -> Unit
 ) {
-    val reportText = remember { mutableStateOf(TextFieldValue("")) }
-    var isSubmitting by remember { mutableStateOf(false) }
+    var reportContent by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -83,8 +110,8 @@ fun PostReportScreen(
                 .border(1.dp, Color.LightGray, shape = RectangleShape) // Add border if needed
         ) {
             BasicTextField(
-                value = reportText.value,
-                onValueChange = { reportText.value = it },
+                value = reportContent,
+                onValueChange = { reportContent = it },
                 textStyle = TextStyle(fontSize = 16.sp),
                 modifier = Modifier
                     .fillMaxSize()
@@ -93,7 +120,7 @@ fun PostReportScreen(
 
             // Character count positioned in the bottom-right corner inside the text box
             Text(
-                text = "${reportText.value.text.length}자/500자",
+                text = "${reportContent.length}자/500자",
                 style = TextStyle(color = Color.Gray, fontSize = 12.sp),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -105,13 +132,7 @@ fun PostReportScreen(
 
         Button(
             onClick = {
-                isSubmitting = true
-                postDetailViewModel.reportPost(
-                    postId = postId,
-                    reason = reportText.value.text
-                )
-                isSubmitting = false
-                navController.popBackStack()
+                onClickReport(reportContent)
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF9522)),
             modifier = Modifier

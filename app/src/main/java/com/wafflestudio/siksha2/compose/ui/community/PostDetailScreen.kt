@@ -51,7 +51,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
@@ -81,8 +80,9 @@ import java.time.LocalDateTime
 @Composable
 fun PostDetailRoute(
     onNavigateUp: () -> Unit,
+    onNavigateToPostReport: (Long) -> Unit,
+    onNavigateToCommentReport: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    navController: NavController,
     postListViewModel: PostListViewModel = hiltViewModel(),
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
 ) {
@@ -96,13 +96,13 @@ fun PostDetailRoute(
         comments = comments,
         postDetailEvent = postDetailViewModel.postDetailEvent,
         onNavigateUp = onNavigateUp,
+        onNavigateToPostReport = onNavigateToPostReport,
         refreshComments = { comments.refresh() },
         togglePostLike = postDetailViewModel::togglePostLike,
         toggleCommentLike = postDetailViewModel::toggleCommentLike,
         updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
         updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
         addComment = postDetailViewModel::addComment,
-        navController = navController,
         modifier = modifier
     )
 }
@@ -114,14 +114,14 @@ fun PostDetailScreen(
     comments: LazyPagingItems<Comment>,
     postDetailEvent: SharedFlow<PostDetailEvent>,
     onNavigateUp: () -> Unit,
+    onNavigateToPostReport: (Long) -> Unit,
     togglePostLike: () -> Unit,
     refreshComments: () -> Unit,
     toggleCommentLike: (Comment) -> Unit,
     updateListWithLikedPost: (Post) -> Unit,
     updateListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    navController: NavController
+    modifier: Modifier = Modifier
 ) {
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
@@ -137,7 +137,7 @@ fun PostDetailScreen(
             onClickDelete = {},
             onClickReport = {
                 isPostDialogShowed = false
-                navController.navigate("postreportScreen")
+                onNavigateToPostReport(post.id)
             },
             onClickCopyUrl = {},
             onClickCancel = {
@@ -194,10 +194,12 @@ fun PostDetailScreen(
                     comments[it]?.let { comment ->
                         CommentItem(
                             comment = comment,
-                            navController = navController,
                             modifier = Modifier.fillMaxWidth(),
                             onClickLike = {
                                 toggleCommentLike(comment)
+                            },
+                            onClickReport = {
+                                // TODO: onReportComment()
                             }
                         )
                         CommunityDivider()
@@ -260,12 +262,6 @@ private fun PostDetailViewEventEffect(
                 }
                 is PostDetailEvent.DeleteCommentFailed -> {
                     Toast.makeText(context, "댓글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-                is PostDetailEvent.ReportPostSuccess -> {
-                    Toast.makeText(context, "게시물이 성공적으로 신고되었습니다.", Toast.LENGTH_SHORT).show()
-                }
-                is PostDetailEvent.ReportPostFailed -> {
-                    Toast.makeText(context, "게시물 신고에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
                 is PostDetailEvent.ReportCommentSuccess -> {
                     Toast.makeText(context, "댓글이 성공적으로 신고되었습니다.", Toast.LENGTH_SHORT).show()
@@ -462,9 +458,9 @@ fun PostLikeButton(
 @Composable
 fun CommentItem(
     comment: Comment,
-    navController: NavController,
     modifier: Modifier = Modifier,
-    onClickLike: () -> Unit = {}
+    onClickLike: () -> Unit = {},
+    onClickReport: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
     Row(
@@ -530,7 +526,7 @@ fun CommentItem(
             },
             onClickReport = {
                 showDialog = false
-                navController.navigate("commentreportScreen")
+                onClickReport()
             },
             onClickCancel = {
                 showDialog = false

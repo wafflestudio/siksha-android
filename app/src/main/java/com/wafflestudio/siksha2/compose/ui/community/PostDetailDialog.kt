@@ -29,11 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
-import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 
 @Composable
 fun PostDetailDialog(
@@ -143,68 +140,6 @@ fun PostDetailDialogPreview() {
             onClickReport = {},
             onClickCopyUrl = {},
             onClickCancel = {}
-        )
-    }
-}
-
-@Composable
-fun Usage(
-    navController: NavController,
-    postId: Long,
-    authToken: String,
-    postDetailViewModel: PostDetailViewModel = hiltViewModel()
-) {
-    var isDialogVisible by remember { mutableStateOf(false) }
-    var isConfirmDeleteVisible by remember { mutableStateOf(false) }
-
-    fun deletePost() {
-        isConfirmDeleteVisible = true
-    }
-
-    if (isConfirmDeleteVisible) {
-        ConfirmDeleteDialog(
-            onDismissRequest = { isConfirmDeleteVisible = false },
-            onConfirmDelete = {
-                postDetailViewModel.deletePost(postId)
-                isConfirmDeleteVisible = false
-                navController.popBackStack()
-            },
-            onCancel = {
-                isConfirmDeleteVisible = false
-            }
-        )
-    }
-
-    fun reportPost() {
-        navController.navigate("postreportScreen")
-    }
-
-    if (isDialogVisible) {
-        PostDetailDialog(
-            onDismissRequest = { isDialogVisible = false },
-            onClickEdit = { /*TODO*/ },
-            onClickDelete = {
-                deletePost()
-                isDialogVisible = false
-            },
-            onClickReport = {
-                reportPost()
-                isDialogVisible = false
-            },
-            onClickCopyUrl = { /*TODO*/ },
-            onClickCancel = { isDialogVisible = false }
-        )
-    }
-
-    if (isConfirmDeleteVisible) {
-        ConfirmDeleteDialog(
-            onDismissRequest = { isConfirmDeleteVisible = false },
-            onConfirmDelete = {
-                isConfirmDeleteVisible = false
-            },
-            onCancel = {
-                isConfirmDeleteVisible = false
-            }
         )
     }
 }

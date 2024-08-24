@@ -125,18 +125,6 @@ class PostDetailViewModel @Inject constructor(
         }
     }
 
-    fun reportPost(postId: Long, reason: String) {
-        viewModelScope.launch {
-            runCatching {
-                communityRepository.reportPost(postId, reason)
-            }.onSuccess {
-                _postDetailEvent.emit(PostDetailEvent.ReportPostSuccess)
-            }.onFailure {
-                _postDetailEvent.emit(PostDetailEvent.ReportPostFailed)
-            }
-        }
-    }
-
     fun reportComment(commentId: Long, reason: String) {
         viewModelScope.launch {
             runCatching {
@@ -159,8 +147,6 @@ sealed interface PostDetailEvent {
     object DeletePostFailed : PostDetailEvent
     object DeleteCommentSuccess : PostDetailEvent
     object DeleteCommentFailed : PostDetailEvent
-    object ReportPostSuccess : PostDetailEvent
-    object ReportPostFailed : PostDetailEvent
     object ReportCommentSuccess : PostDetailEvent
     object ReportCommentFailed : PostDetailEvent
 }
