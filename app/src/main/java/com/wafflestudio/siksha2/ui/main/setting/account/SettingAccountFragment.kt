@@ -8,11 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingAccountBinding
-import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.ui.common.DefaultDialog
 import com.wafflestudio.siksha2.ui.common.DefaultDialogListener
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
@@ -20,8 +17,6 @@ import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okio.IOException
-import javax.inject.Inject
-import kotlin.math.pow
 
 @AndroidEntryPoint
 class SettingAccountFragment : Fragment(), DefaultDialogListener {
@@ -44,9 +39,9 @@ class SettingAccountFragment : Fragment(), DefaultDialogListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(vm.versionCheck.value == true) {
+        if (vm.versionCheck.value == true) {
             binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
-        } else{
+        } else {
             binding.versionCheckText.text = getString(R.string.setting_need_update)
         }
 
@@ -85,7 +80,7 @@ class SettingAccountFragment : Fragment(), DefaultDialogListener {
                     val logoutCallback: () -> Unit = { activity?.finish() }
                     vm.logoutUser(requireContext(), logoutCallback)
                 } else {
-                    val withdrawCallback: () -> Unit= { activity?.finish() }
+                    val withdrawCallback: () -> Unit = { activity?.finish() }
                     vm.deleteUser(requireContext(), withdrawCallback)
                 }
             } catch (e: IOException) {

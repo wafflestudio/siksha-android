@@ -8,14 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
-import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
@@ -41,9 +38,9 @@ class SettingFragment : Fragment() {
             binding.nickname.text = user.nickname
         }
 
-        if(vm.versionCheck.value == true) {
+        if (vm.versionCheck.value == true) {
             binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
-        } else{
+        } else {
             binding.versionCheckText.text = getString(R.string.setting_need_update)
         }
 

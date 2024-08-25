@@ -2,7 +2,6 @@ package com.wafflestudio.siksha2.ui.main.setting
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,9 +18,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import timber.log.Timber
 import javax.inject.Inject
-import kotlin.math.pow
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
@@ -79,11 +76,11 @@ class SettingViewModel @Inject constructor(
 
     val showEmptyRestaurantFlow = restaurantRepository.showEmptyRestaurant.asFlow()
 
-    fun logoutUser(context: Context, logoutCallBack:()->Unit){
+    fun logoutUser(context: Context, logoutCallBack: () -> Unit) {
         userStatusManager.logoutUser(context, logoutCallBack)
     }
 
-    suspend fun deleteUser(context: Context, withdrawCallback:()->Unit){
+    suspend fun deleteUser(context: Context, withdrawCallback: () -> Unit) {
         userStatusManager.deleteUser(context, withdrawCallback)
     }
 
