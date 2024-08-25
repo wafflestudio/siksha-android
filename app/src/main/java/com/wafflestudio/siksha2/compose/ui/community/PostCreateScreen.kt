@@ -74,10 +74,10 @@ fun PostCreateRoute(
 ) {
     val boards by postCreateViewModel.boards.collectAsState()
     val board by postCreateViewModel.board.collectAsState()
-    val postId by postCreateViewModel.postId.collectAsState()
+    val postId by postCreateViewModel.createdPostId.collectAsState()
     val title by postCreateViewModel.title.collectAsState()
     val content by postCreateViewModel.content.collectAsState()
-    val imageUriList by postCreateViewModel.addedImageUris.collectAsState()
+    val imageUriList by postCreateViewModel.imageUrisToUpload.collectAsState()
     val createPostState by postCreateViewModel.createPostState.collectAsState()
 
     var isAnonymous by remember { mutableStateOf(true) }
@@ -390,7 +390,7 @@ fun BoardSelector(
                 isSelected = (board == currentBoard),
                 onClick = { onSelectBoard(board) }
             )
-            if (idx != boards.size -1) {
+            if (idx != boards.size - 1) {
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
                     color = SikshaColors.Gray350
@@ -566,7 +566,7 @@ fun PostImage(
         )
         DeletePostImageIcon(
             modifier = Modifier
-                .offset(x=7.dp, y= (-6).dp)
+                .offset(x = 7.dp, y = (-6).dp)
                 .align(Alignment.TopEnd)
                 .clickable { onDeleteImage() }
         )
