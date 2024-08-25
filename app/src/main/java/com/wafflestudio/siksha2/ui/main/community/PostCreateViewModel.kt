@@ -85,7 +85,7 @@ class PostCreateViewModel @Inject constructor(
         _content.value = post.value.content
         _imageUriList.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
         _imageFileList.value = post.value.etc?.images?.associate {
-            it to downloadFile(it)
+            it to downloadImageAsByteArray(it)
         }?.filterValues { it.isNotEmpty() } ?: emptyMap()
         isEdit = true
     }
@@ -199,10 +199,10 @@ class PostCreateViewModel @Inject constructor(
         }
     }
 
-    private suspend fun downloadFile(str: String): ByteArray {
+    private suspend fun downloadImageAsByteArray(imageUrl: String): ByteArray {
         return withContext(Dispatchers.IO) {
             try {
-                val url = URL(str)
+                val url = URL(imageUrl)
                 url.readBytes()
             } catch (e: Exception) {
                 ByteArray(0)
