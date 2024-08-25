@@ -334,7 +334,6 @@ fun CurrentBoard(
 fun BoardSelectorCard(
     board: Board,
     isSelected: Boolean,
-    isLast: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -359,12 +358,6 @@ fun BoardSelectorCard(
                 Spacer(modifier = Modifier.size(9.dp))
             }
         }
-    }
-    if (!isLast) {
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            color = SikshaColors.Gray350
-        )
     }
 }
 
@@ -394,9 +387,14 @@ fun BoardSelector(
             BoardSelectorCard(
                 board = board,
                 isSelected = (board == currentBoard),
-                onClick = { onSelectBoard(board) },
-                isLast = (idx == boards.size - 1)
+                onClick = { onSelectBoard(board) }
             )
+            if (idx != boards.size -1) {
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = SikshaColors.Gray350
+                )
+            }
         }
     }
 }
