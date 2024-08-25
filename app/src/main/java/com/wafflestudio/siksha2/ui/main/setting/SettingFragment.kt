@@ -23,8 +23,6 @@ class SettingFragment : Fragment() {
     private lateinit var binding: FragmentSettingBinding
     private val vm: SettingViewModel by activityViewModels()
 
-    private val packageVersion: String = BuildConfig.VERSION_NAME
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,22 +35,16 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.versionText.text = "siksha-" + packageVersion
+        binding.versionText.text = getString(R.string.version_text, vm.packageVersion)
 
         vm.userData.observe(viewLifecycleOwner) { user ->
             binding.nickname.text = user.nickname
         }
 
-        lifecycleScope.launch {
-            try {
-                if (vm.versionCheck(packageVersion)) {
-                    binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
-                } else {
-                    binding.versionCheckText.text = getString(R.string.setting_need_update)
-                }
-            } catch (e: IOException) {
-                showToast("최신버전 정보를 가져올 수 없습니다.")
-            }
+        if(vm.versionCheck.value == true) {
+            binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
+        } else{
+            binding.versionCheckText.text = getString(R.string.setting_need_update)
         }
 
         binding.infoRow.setOnClickListener {
@@ -85,7 +77,7 @@ class SettingFragment : Fragment() {
 
         binding.settingAccountRow.setOnClickListener {
             val action =
-                MainFragmentDirections.actionMainFragmentToSettingAccountFragment(vm.latestVersionNum.toLong())
+                MainFragmentDirections.actionMainFragmentToSettingAccountFragment()
             findNavController().navigate(action)
         }
 

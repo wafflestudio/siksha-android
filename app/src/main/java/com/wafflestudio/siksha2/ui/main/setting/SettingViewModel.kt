@@ -2,10 +2,12 @@ package com.wafflestudio.siksha2.ui.main.setting
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.models.RestaurantOrder
 import com.wafflestudio.siksha2.models.User
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.pow
 
@@ -28,25 +31,21 @@ class SettingViewModel @Inject constructor(
     private val _userData = MutableLiveData<User>()
     val userData: LiveData<User> get() = _userData
 
+    private val _versionCheck = MutableLiveData<Boolean>()
+    val versionCheck: LiveData<Boolean> get() = _versionCheck
+
+    val packageVersion: String = BuildConfig.VERSION_NAME
+
     init {
         viewModelScope.launch {
             _userData.value = userStatusManager.getUserData()
+            versionCheck()
         }
     }
 
-    var latestVersionNum: Int = 0
-
-    suspend fun versionCheck(packageVersion: String): Boolean {
-        val version = userStatusManager.getVersion()
-        var currVersionNum = 0
-
-        version.split('.').forEachIndexed { idx, s ->
-            latestVersionNum += ((100.0F).pow(2 - idx) * (s.toIntOrNull() ?: 0)).toInt()
-        }
-        packageVersion.split('.').forEachIndexed { idx, s ->
-            currVersionNum = ((100.0F).pow(2 - idx) * (s.toIntOrNull() ?: 0)).toInt()
-        }
-        return latestVersionNum == currVersionNum
+    private suspend fun versionCheck() {
+        val latestVersionNum = userStatusManager.getVersion()
+        _versionCheck.value = (packageVersion == latestVersionNum)
     }
 
     fun updateImageUri(uri: Uri) {
@@ -79,6 +78,14 @@ class SettingViewModel @Inject constructor(
     }
 
     val showEmptyRestaurantFlow = restaurantRepository.showEmptyRestaurant.asFlow()
+
+    fun logoutUser(context: Context, logoutCallBack:()->Unit){
+        userStatusManager.logoutUser(context, logoutCallBack)
+    }
+
+    suspend fun deleteUser(context: Context, withdrawCallback:()->Unit){
+        userStatusManager.deleteUser(context, withdrawCallback)
+    }
 
     fun toggleShowEmptyRestaurant() {
         restaurantRepository.showEmptyRestaurant.run {
