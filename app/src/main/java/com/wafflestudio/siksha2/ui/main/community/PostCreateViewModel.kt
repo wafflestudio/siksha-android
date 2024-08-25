@@ -63,23 +63,31 @@ class PostCreateViewModel @Inject constructor(
             val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
             val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
             if (boardId != -1L) {
-                _board.value = communityRepository.getBoard(boardId)
-                isEdit = false
+                createPostInit(boardId)
             } else if (postId != -1L) {
-                _post.value = communityRepository.getPost(postId)
-                _board.value = communityRepository.getBoard(post.value.boardId)
-                _title.value = post.value.title
-                _content.value = post.value.content
-                _imageUriList.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
-                _imageFileList.value = post.value.etc?.images?.associate {
-                    it to downloadFile(it)
-                }?.filterValues { it.isNotEmpty() } ?: emptyMap()
-                isEdit = true
+                editPostInit(postId)
             } else {
                 // error handling
             }
             _createPostState.value = CreatePostState.USER_INPUT
         }
+    }
+
+    private suspend fun createPostInit(boardId: Long) {
+        _board.value = communityRepository.getBoard(boardId)
+        isEdit = false
+    }
+
+    private suspend fun editPostInit(postId: Long) {
+        _post.value = communityRepository.getPost(postId)
+        _board.value = communityRepository.getBoard(post.value.boardId)
+        _title.value = post.value.title
+        _content.value = post.value.content
+        _imageUriList.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
+        _imageFileList.value = post.value.etc?.images?.associate {
+            it to downloadFile(it)
+        }?.filterValues { it.isNotEmpty() } ?: emptyMap()
+        isEdit = true
     }
 
     fun addImageUri(uri: Uri) {
