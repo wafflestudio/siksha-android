@@ -43,11 +43,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.Checkbox
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.models.Board
@@ -164,7 +166,7 @@ fun PostCreateScreen(
             .background(SikshaColors.White900)
     ) {
         TopBar(
-            title = "글쓰기",
+            title = stringResource(R.string.community_create_screen_title),
             navigationButton = {
                 CancelIcon(
                     modifier = Modifier.clickable {
@@ -203,7 +205,7 @@ fun PostCreateScreen(
                             onValueChange = onTitleTextChanged,
                             placeholder = {
                                 Text(
-                                    text = "제목",
+                                    text = stringResource(R.string.community_create_title_placeholder),
                                     color = SikshaColors.Gray400,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -216,7 +218,7 @@ fun PostCreateScreen(
                             scrollState = scrollState,
                             placeholder = {
                                 Text(
-                                    text = "내용을 입력하세요.",
+                                    text = stringResource(R.string.community_create_content_placeholder),
                                     color = SikshaColors.Gray400
                                 )
                             },
@@ -256,7 +258,8 @@ fun PostCreateScreen(
                     }
                     if (isBoardListOpen) {
                         Box(
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier
+                                .fillMaxSize()
                                 .clickable(
                                     interactionSource = closeBoardSelectorInteractionSource,
                                     indication = null
@@ -282,7 +285,7 @@ fun PostCreateScreen(
                     }
                 }
                 PostCreateViewModel.CreatePostState.SUCCESS -> {
-                    context.showToast("글을 올렸습니다.")
+                    context.showToast(stringResource(R.string.community_create_success))
                     onUploadSuccess()
                 }
                 else -> { }
@@ -479,7 +482,7 @@ fun AnonymousCheckbox(
         )
         Spacer(modifier = Modifier.width(5.dp))
         Text(
-            text = "익명",
+            text = stringResource(R.string.community_create_anonymous),
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
             color = if (isAnonymous) SikshaColors.OrangeMain else SikshaColors.Gray400
@@ -506,7 +509,7 @@ fun WithKeyboardControls(
             onIsAnonymousChanged = onIsAnonymousChanged
         )
         Text(
-            text = "OK",
+            text = stringResource(R.string.community_create_submit_content),
             style = SikshaTypography.h1,
             fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
@@ -561,7 +564,7 @@ fun PostImage(
                 .clip(RoundedCornerShape(8.dp))
                 .align(Alignment.BottomStart),
             painter = rememberAsyncImagePainter(imageUri),
-            contentDescription = idx.toString() + "번째 이미지",
+            contentDescription = idx.toString() + stringResource(R.string.community_create_image_idx),
             contentScale = ContentScale.Crop
         )
         DeletePostImageIcon(
