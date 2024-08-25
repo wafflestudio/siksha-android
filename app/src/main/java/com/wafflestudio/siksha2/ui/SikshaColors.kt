@@ -6,6 +6,7 @@ object SikshaColors {
     val OrangeMain = Color(0xFFFF952B)
 
     val White900 = Color(0xFFFFFFFF)
+    val White900Alpha80 = Color(0x80FFFFFF)
 
     val Black900 = Color(0xFF000000)
 

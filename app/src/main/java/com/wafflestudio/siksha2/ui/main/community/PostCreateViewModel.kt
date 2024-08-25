@@ -43,11 +43,12 @@ class PostCreateViewModel @Inject constructor(
     private val _content = MutableStateFlow<String>("")
     val content: StateFlow<String> = _content
 
-    private val _imageUriList = MutableStateFlow<List<Uri>>(emptyList())
-    val imageUriList: StateFlow<List<Uri>> = _imageUriList
+    // 새로 추가된 이미지 uri
+    private val _addedImageUris = MutableStateFlow<List<Uri>>(emptyList())
+    val addedImageUris: StateFlow<List<Uri>> = _addedImageUris
 
-    private val _imageFileList = MutableStateFlow<Map<String, ByteArray>>(emptyMap())
-    val imageFileList: StateFlow<Map<String, ByteArray>> = _imageFileList
+    // 원래 있던 이미지들 (글 수정 시 다시 보내야 하므로, ByteArray 형태 저장)
+    private val _downloadedImages = MutableStateFlow<Map<String, ByteArray>>(emptyMap())
 
     private val _createPostState = MutableStateFlow(CreatePostState.USER_INPUT)
     val createPostState: StateFlow<CreatePostState> = _createPostState
@@ -83,24 +84,24 @@ class PostCreateViewModel @Inject constructor(
         _board.value = communityRepository.getBoard(post.value.boardId)
         _title.value = post.value.title
         _content.value = post.value.content
-        _imageUriList.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
-        _imageFileList.value = post.value.etc?.images?.associate {
+        _addedImageUris.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
+        _downloadedImages.value = post.value.etc?.images?.associate {
             it to downloadImageAsByteArray(it)
         }?.filterValues { it.isNotEmpty() } ?: emptyMap()
         isEdit = true
     }
 
     fun addImageUri(uri: Uri) {
-        val uriList = _imageUriList.value.toMutableList()
+        val uriList = _addedImageUris.value.toMutableList()
         uriList.add(uri)
-        _imageUriList.value = uriList
+        _addedImageUris.value = uriList
     }
 
     fun deleteImageUri(index: Int) {
-        val uriList = _imageUriList.value.toMutableList()
+        val uriList = _addedImageUris.value.toMutableList()
         if (index < uriList.size) {
             uriList.removeAt(index)
-            _imageUriList.value = uriList
+            _addedImageUris.value = uriList
         }
     }
 
@@ -117,7 +118,7 @@ class PostCreateViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _createPostState.value = CreatePostState.COMPRESSING
-                val imageList = _imageUriList.value.map {
+                val imageList = _addedImageUris.value.map {
                     getCompressedImageAsMultipartBody(context, it)
                 }
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
@@ -141,10 +142,10 @@ class PostCreateViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _createPostState.value = CreatePostState.COMPRESSING
-                val imageList = _imageUriList.value.map { uri ->
-                    if (_imageFileList.value.containsKey(uri.toString())) {
+                val imageList = _addedImageUris.value.map { uri ->
+                    if (_downloadedImages.value.containsKey(uri.toString())) {
                         val filename = uri.toString()
-                        byteArrayToMultipartBody(filename, _imageFileList.value.getValue(filename))
+                        byteArrayToMultipartBody(filename, _downloadedImages.value.getValue(filename))
                     } else {
                         getCompressedImageAsMultipartBody(context, uri)
                     }
@@ -153,11 +154,10 @@ class PostCreateViewModel @Inject constructor(
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
                 val contentBody = MultipartBody.Part.createFormData("content", content.value)
                 _createPostState.value = CreatePostState.WAITING
-                var response: Post?
-                imageList.let {
-                    response = communityRepository.patchPost(_post.value.id, boardId, titleBody, contentBody, anonymous, imageList)
+                val response = imageList.let {
+                    communityRepository.patchPost(_post.value.id, boardId, titleBody, contentBody, anonymous, imageList)
                 }
-                _postId.value = response?.id ?: -1
+                _postId.value = response.id
                 _createPostState.value = CreatePostState.SUCCESS
             } catch (e: Exception) {
                 throw e

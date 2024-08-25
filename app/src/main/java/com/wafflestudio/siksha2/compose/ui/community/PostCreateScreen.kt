@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -77,7 +76,7 @@ fun PostCreateRoute(
     val postId by postCreateViewModel.postId.collectAsState()
     val title by postCreateViewModel.title.collectAsState()
     val content by postCreateViewModel.content.collectAsState()
-    val imageUriList by postCreateViewModel.imageUriList.collectAsState()
+    val imageUriList by postCreateViewModel.addedImageUris.collectAsState()
     val createPostState by postCreateViewModel.createPostState.collectAsState()
 
     var isAnonymous by remember { mutableStateOf(true) }
@@ -225,7 +224,7 @@ fun PostCreateScreen(
                             modifier = Modifier.weight(weight = 1.0f, fill = keyboardState)
                         )
                         if (keyboardState) {
-                            WithKeyboardControls(
+                            KeyboardToolbar(
                                 isAnonymous = isAnonymous,
                                 onIsAnonymousChanged = onIsAnonymousChanged,
                                 onCloseKeyboard = onCloseKeyboard
@@ -240,7 +239,7 @@ fun PostCreateScreen(
                             Spacer(modifier = Modifier.height(12.dp))
                             Divider(color = SikshaColors.Gray100, thickness = 1.dp)
                             Spacer(modifier = Modifier.height(6.dp))
-                            EditImage(
+                            PostImages(
                                 imageUriList = imageUriList,
                                 onDeleteImage = onDeleteImage,
                                 onAddImage = onAddImage
@@ -275,12 +274,13 @@ fun PostCreateScreen(
                 }
             }
             when (createPostState) {
-                PostCreateViewModel.CreatePostState.COMPRESSING, PostCreateViewModel.CreatePostState.WAITING
+                PostCreateViewModel.CreatePostState.COMPRESSING,
+                PostCreateViewModel.CreatePostState.WAITING
                 -> {
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(color = Color(0x88FFFFFF))
+                            .background(color = SikshaColors.White900Alpha80)
                     ) {
                     }
                 }
@@ -491,7 +491,7 @@ fun AnonymousCheckbox(
 }
 
 @Composable
-fun WithKeyboardControls(
+fun KeyboardToolbar(
     modifier: Modifier = Modifier,
     isAnonymous: Boolean = true,
     onIsAnonymousChanged: (Boolean) -> Unit = {},
@@ -502,7 +502,7 @@ fun WithKeyboardControls(
             .height(40.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         AnonymousCheckbox(
             isAnonymous = isAnonymous,
@@ -520,7 +520,7 @@ fun WithKeyboardControls(
 }
 
 @Composable
-fun EditImage(
+fun PostImages(
     imageUriList: List<Uri>,
     onDeleteImage: (Int) -> Unit,
     onAddImage: () -> Unit,

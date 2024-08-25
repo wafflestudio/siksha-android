@@ -62,7 +62,7 @@ fun PostListRoute(
         posts = posts,
         postListState = postListState,
         onClickPost = onClickPost,
-        onNewPost = onNewPost,
+        onClickCreatePost = onNewPost,
         selectedBoard = selectedBoard,
         refreshPosts = {
             posts.refresh()
@@ -80,7 +80,7 @@ fun PostListScreen(
     posts: LazyPagingItems<Post>,
     postListState: LazyListState,
     onClickPost: (Long) -> Unit,
-    onNewPost: (Long) -> Unit,
+    onClickCreatePost: (Long) -> Unit,
     selectedBoard: Board,
     refreshPosts: () -> Unit,
     selectBoard: (Int) -> Unit,
@@ -173,7 +173,7 @@ fun PostListScreen(
                     .padding(end = 30.dp, bottom = 16.dp)
                     .align(Alignment.BottomEnd)
                     .clickable {
-                        onNewPost(selectedBoard.id)
+                        onClickCreatePost(selectedBoard.id)
                     }
             )
         }
@@ -249,7 +249,7 @@ fun PostListScreenPreview() {
             posts = flowOf(PagingData.empty<Post>()).collectAsLazyPagingItems(),
             postListState = LazyListState(0, 0),
             onClickPost = {},
-            onNewPost = {},
+            onClickCreatePost = {},
             selectedBoard = Board(),
             refreshPosts = {},
             selectBoard = {},
