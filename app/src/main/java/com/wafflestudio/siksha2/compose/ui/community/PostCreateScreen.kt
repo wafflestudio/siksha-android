@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -238,7 +239,7 @@ fun PostCreateScreen(
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             Divider(color = SikshaColors.Gray100, thickness = 1.dp)
-                            Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(13.dp))
                             PostImages(
                                 imageUriList = imageUriList,
                                 onDeleteImage = onDeleteImage,
@@ -528,13 +529,13 @@ fun PostImages(
     Row(
         modifier = modifier
             .horizontalScroll(scrollState),
-        horizontalArrangement = Arrangement.spacedBy(3.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.Bottom
     ) {
         imageUriList.forEachIndexed { idx, uri ->
             PostImage(
                 imageUri = uri,
-                idx = idx,
+                contentDescription = idx.toString() + stringResource(R.string.community_create_image_idx),
                 onDeleteImage = { onDeleteImage(idx) }
             )
         }
@@ -547,14 +548,12 @@ fun PostImages(
 @Composable
 fun PostImage(
     imageUri: Uri,
-    idx: Int,
+    contentDescription: String,
     onDeleteImage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
-            .width(112.dp)
-            .height(113.dp)
     ) {
         Image(
             modifier = Modifier
@@ -562,11 +561,12 @@ fun PostImage(
                 .clip(RoundedCornerShape(8.dp))
                 .align(Alignment.BottomStart),
             painter = rememberAsyncImagePainter(imageUri),
-            contentDescription = idx.toString() + stringResource(R.string.community_create_image_idx),
+            contentDescription = contentDescription,
             contentScale = ContentScale.Crop
         )
         DeletePostImageIcon(
             modifier = Modifier
+                .offset(x=7.dp, y= (-6).dp)
                 .align(Alignment.TopEnd)
                 .clickable { onDeleteImage() }
         )
