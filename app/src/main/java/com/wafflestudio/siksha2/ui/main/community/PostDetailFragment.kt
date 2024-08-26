@@ -42,7 +42,12 @@ class PostDetailFragment : Fragment() {
                             )
                         findNavController().navigate(action)
                     },
-                    onNavigateToCommentReport = {
+                    onNavigateToCommentReport = {commentId->
+                        val action=
+                            PostDetailFragmentDirections.actionPostDetailFragmentToCommentReportFragment(
+                                commentId
+                            )
+                        findNavController().navigate(action)
                     },
                     modifier = Modifier.fillMaxSize(),
                     postListViewModel = postListViewModel

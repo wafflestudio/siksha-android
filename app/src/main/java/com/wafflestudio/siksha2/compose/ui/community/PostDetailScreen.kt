@@ -97,12 +97,14 @@ fun PostDetailRoute(
         postDetailEvent = postDetailViewModel.postDetailEvent,
         onNavigateUp = onNavigateUp,
         onNavigateToPostReport = onNavigateToPostReport,
+        onNavigateToCommentReport = onNavigateToCommentReport,
         refreshComments = { comments.refresh() },
         togglePostLike = postDetailViewModel::togglePostLike,
         toggleCommentLike = postDetailViewModel::toggleCommentLike,
         updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
         updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
         addComment = postDetailViewModel::addComment,
+        deletePost = postDetailViewModel::deletePost,
         modifier = modifier
     )
 }
@@ -115,18 +117,21 @@ fun PostDetailScreen(
     postDetailEvent: SharedFlow<PostDetailEvent>,
     onNavigateUp: () -> Unit,
     onNavigateToPostReport: (Long) -> Unit,
+    onNavigateToCommentReport: (Long) -> Unit,
     togglePostLike: () -> Unit,
     refreshComments: () -> Unit,
     toggleCommentLike: (Comment) -> Unit,
     updateListWithLikedPost: (Post) -> Unit,
     updateListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
+    deletePost: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var commentInput by remember { mutableStateOf("") }
     var isAnonymousInput by remember { mutableStateOf(true) }
     val commentListState = rememberLazyListState()
     var isPostDialogShowed by remember { mutableStateOf(false) }
+    var isConfirmDeleteDialogShowed by remember { mutableStateOf(false) }
 
     if (isPostDialogShowed) {
         PostDetailDialog(
@@ -134,7 +139,9 @@ fun PostDetailScreen(
                 isPostDialogShowed = false
             },
             onClickEdit = {},
-            onClickDelete = {},
+            onClickDelete = {
+                isConfirmDeleteDialogShowed = true
+            },
             onClickReport = {
                 isPostDialogShowed = false
                 onNavigateToPostReport(post.id)
@@ -142,6 +149,20 @@ fun PostDetailScreen(
             onClickCopyUrl = {},
             onClickCancel = {
                 isPostDialogShowed = false
+            }
+        )
+    }
+
+    if (isConfirmDeleteDialogShowed) {
+        ConfirmDeleteDialog(
+            onDismissRequest = {
+                isConfirmDeleteDialogShowed = false
+            },
+            onConfirmDelete = {
+                deletePost(post.id)
+            },
+            onCancelDelete = {
+                isConfirmDeleteDialogShowed = false
             }
         )
     }
@@ -198,8 +219,9 @@ fun PostDetailScreen(
                             onClickLike = {
                                 toggleCommentLike(comment)
                             },
+                            onNavigateToCommentReport=onNavigateToCommentReport,
                             onClickReport = {
-                                // TODO: onReportComment()
+                                onNavigateToCommentReport(comment.id)
                             }
                         )
                         CommunityDivider()
@@ -262,12 +284,6 @@ private fun PostDetailViewEventEffect(
                 }
                 is PostDetailEvent.DeleteCommentFailed -> {
                     Toast.makeText(context, "댓글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-                is PostDetailEvent.ReportCommentSuccess -> {
-                    Toast.makeText(context, "댓글이 성공적으로 신고되었습니다.", Toast.LENGTH_SHORT).show()
-                }
-                is PostDetailEvent.ReportCommentFailed -> {
-                    Toast.makeText(context, "댓글 신고에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -460,6 +476,7 @@ fun CommentItem(
     comment: Comment,
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {},
+    onNavigateToCommentReport: (Long) -> Unit,
     onClickReport: () -> Unit = {}
 ) {
     var showDialog by remember { mutableStateOf(false) }
@@ -526,7 +543,7 @@ fun CommentItem(
             },
             onClickReport = {
                 showDialog = false
-                onClickReport()
+                onNavigateToCommentReport(comment.id)
             },
             onClickCancel = {
                 showDialog = false

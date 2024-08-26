@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.main.community.CommentReportEvent
 import com.wafflestudio.siksha2.ui.main.community.PostReportEvent
 import com.wafflestudio.siksha2.ui.main.community.PostReportViewModel
 import com.wafflestudio.siksha2.utils.showToast
@@ -38,7 +39,7 @@ fun PostReportRoute(
                 }
 
                 is PostReportEvent.ReportPostFailed -> {
-                    context.showToast("신고 실패 ! ")
+                    context.showToast("신고 실패 !!!!!")
                 }
             }
         }

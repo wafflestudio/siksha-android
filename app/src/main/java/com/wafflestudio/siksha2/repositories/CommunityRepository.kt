@@ -60,7 +60,7 @@ class CommunityRepository @Inject constructor(
         api.reportPost(postId, ReportPostRequestBody(reason))
     }
 
-    suspend fun reportComment(commentId: Long, reason: String): ReportCommentResponse {
-        return api.reportComment(commentId, ReportCommentRequestBody(reason))
+    suspend fun reportComment(commentId: Long, reason: String) {
+        api.reportComment(commentId, ReportCommentRequestBody(reason))
     }
 }
