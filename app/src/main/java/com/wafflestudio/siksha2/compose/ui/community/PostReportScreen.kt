@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wafflestudio.siksha2.ui.SikshaColors
-import com.wafflestudio.siksha2.ui.main.community.CommentReportEvent
 import com.wafflestudio.siksha2.ui.main.community.PostReportEvent
 import com.wafflestudio.siksha2.ui.main.community.PostReportViewModel
 import com.wafflestudio.siksha2.utils.showToast
@@ -112,14 +111,16 @@ fun PostReportScreen(
         ) {
             BasicTextField(
                 value = reportContent,
-                onValueChange = { reportContent = it },
+                onValueChange = {
+                    if(it.length<=500){
+                        reportContent = it
+                    } },
                 textStyle = TextStyle(fontSize = 16.sp),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp) // Add padding inside the text box
+                    .padding(16.dp)
             )
 
-            // Character count positioned in the bottom-right corner inside the text box
             Text(
                 text = "${reportContent.length}자/500자",
                 style = TextStyle(color = Color.Gray, fontSize = 12.sp),

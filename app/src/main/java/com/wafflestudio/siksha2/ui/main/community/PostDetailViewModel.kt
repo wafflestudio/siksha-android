@@ -124,7 +124,6 @@ class PostDetailViewModel @Inject constructor(
             }
         }
     }
-
 }
 
 sealed interface PostDetailEvent {

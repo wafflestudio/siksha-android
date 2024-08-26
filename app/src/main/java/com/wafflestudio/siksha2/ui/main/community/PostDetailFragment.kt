@@ -42,8 +42,8 @@ class PostDetailFragment : Fragment() {
                             )
                         findNavController().navigate(action)
                     },
-                    onNavigateToCommentReport = {commentId->
-                        val action=
+                    onNavigateToCommentReport = { commentId ->
+                        val action =
                             PostDetailFragmentDirections.actionPostDetailFragmentToCommentReportFragment(
                                 commentId
                             )

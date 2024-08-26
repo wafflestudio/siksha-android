@@ -219,7 +219,7 @@ fun PostDetailScreen(
                             onClickLike = {
                                 toggleCommentLike(comment)
                             },
-                            onNavigateToCommentReport=onNavigateToCommentReport,
+                            onNavigateToCommentReport = onNavigateToCommentReport,
                             onClickReport = {
                                 onNavigateToCommentReport(comment.id)
                             }

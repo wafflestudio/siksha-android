@@ -111,14 +111,16 @@ fun CommentReportScreen(
         ) {
             BasicTextField(
                 value = reportContent,
-                onValueChange = { reportContent = it },
+                onValueChange = {
+                    if(it.length<=500){
+                        reportContent = it
+                    } },
                 textStyle = TextStyle(fontSize = 16.sp),
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp) // Add padding inside the text box
+                    .padding(16.dp)
             )
 
-            // Character count positioned in the bottom-right corner inside the text box
             Text(
                 text = "${reportContent.length}자/500자",
                 style = TextStyle(color = Color.Gray, fontSize = 12.sp),
