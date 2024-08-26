@@ -1,6 +1,7 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -12,17 +13,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.main.community.CommentReportEvent
 import com.wafflestudio.siksha2.ui.main.community.CommentReportViewModel
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.utils.showToast
-
+import com.wafflestudio.siksha2.ui.SikshaTypography
 @Composable
 fun CommentReportRoute(
     onNavigateUp: () -> Unit,
@@ -66,19 +69,31 @@ fun CommentReportScreen(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
                 .height(88.dp)
-                .background(Color(0xFFFF9522))
+                .fillMaxWidth()
+                .background(SikshaColors.OrangeMain)
         ) {
+            IconButton(
+                onClick = onNavigateUp,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 16.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.larrow),
+                    contentDescription = "뒤로가기",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+
             Text(
                 text = "신고하기",
-                style = TextStyle(
-                    color = Color.White,
-                    fontSize = 20.sp
-                ),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 12.dp)
+                modifier = Modifier.align(Alignment.Center),
+                color = SikshaColors.White900,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+                style = SikshaTypography.subtitle1
             )
         }
 
@@ -103,18 +118,19 @@ fun CommentReportScreen(
 
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .width(320.dp)
                 .height(280.dp)
-                .padding(horizontal = 16.dp)
-                .background(Color(0xFFF5F5F5))
-                .border(1.dp, Color.LightGray, shape = RectangleShape) // Add border if needed
+                .align(Alignment.CenterHorizontally) // 중앙에 위치하도록 수정
+                .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(8.dp))
+                .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
         ) {
             BasicTextField(
                 value = reportContent,
                 onValueChange = {
-                    if(it.length<=500){
+                    if (it.length <= 500) {
                         reportContent = it
-                    } },
+                    }
+                },
                 textStyle = TextStyle(fontSize = 16.sp),
                 modifier = Modifier
                     .fillMaxSize()
@@ -130,7 +146,7 @@ fun CommentReportScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(300.dp))
+        Spacer(modifier = Modifier.height(200.dp))
 
         Button(
             onClick = {
@@ -140,8 +156,8 @@ fun CommentReportScreen(
             modifier = Modifier
                 .width(343.dp)
                 .height(56.dp)
+                .padding(start = 16.dp)
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = 1.dp)
         ) {
             Text(
                 text = "전송하기",
@@ -151,5 +167,7 @@ fun CommentReportScreen(
                 )
             )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
