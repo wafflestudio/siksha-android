@@ -15,7 +15,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.imageview.ShapeableImageView
+import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.databinding.DialogProfileImageBinding
 import com.wafflestudio.siksha2.databinding.FragmentSettingUsersettingBinding
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
@@ -55,7 +58,7 @@ class UserAccountFragment : Fragment() {
         }
 
         binding.imageView.setOnClickListener {
-            openGallery()
+            showImagePickerBottomDialog()
         }
 
         binding.eraseButton.setOnClickListener {
@@ -102,6 +105,35 @@ class UserAccountFragment : Fragment() {
         }
     }
 
+    private fun applyDefaultImage() {
+        imageView.setImageResource(R.drawable.ic_rice_bowl)
+        // 1. Server에 image 기본 rice_bowl image 전송
+        // 2. isDefaultImage를 true로 변경
+        // 추후 서버팀 선택에 따라 추가 작업 필요
+    }
+
+    private fun showImagePickerBottomDialog() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.TransparentBottomSheetDialogTheme)
+        val dialogBinding = DialogProfileImageBinding.inflate(LayoutInflater.from(requireContext()))
+        bottomSheetDialog.setContentView(dialogBinding.root)
+
+        dialogBinding.albumButton.setOnClickListener {
+            openGallery()
+            bottomSheetDialog.dismiss()
+        }
+
+        dialogBinding.defaultImageButton.setOnClickListener {
+            applyDefaultImage()
+            bottomSheetDialog.dismiss()
+        }
+
+        dialogBinding.cancelButton.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.show()
+    }
+
     private fun detectKeyboardVisibility() {
         val rootView = binding.root
         rootView.viewTreeObserver.addOnGlobalLayoutListener {
@@ -111,11 +143,11 @@ class UserAccountFragment : Fragment() {
             val keypadHeight = screenHeight - rect.bottom
 
             if (keypadHeight > screenHeight * 0.15) {
-                // Keyboard is visible, hide the complete button and show confirm button
+                // When keyboard is visible
                 binding.completeButton.visibility = View.GONE
                 binding.cancelOkLayout.visibility = View.VISIBLE
             } else {
-                // Keyboard is hidden, show the complete button and hide confirm button
+                // When keyboard is hidden
                 binding.completeButton.visibility = View.VISIBLE
                 binding.cancelOkLayout.visibility = View.GONE
             }
