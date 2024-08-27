@@ -141,7 +141,7 @@ fun PostDetailScreen(
             onClickEdit = {},
             onClickDelete = {
                 isConfirmDeleteDialogShowed = true
-                isPostDialogShowed=false
+                isPostDialogShowed = false
             },
             onClickReport = {
                 isPostDialogShowed = false

@@ -16,15 +16,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -62,7 +59,7 @@ fun ConfirmDeleteDialog(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             Text(
                 text = "게시글을 정말 삭제하시겠습니까?",
@@ -72,7 +69,7 @@ fun ConfirmDeleteDialog(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Spacer(
                 modifier = Modifier
@@ -84,16 +81,16 @@ fun ConfirmDeleteDialog(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),  // Ensure the row height is enough to display the text buttons properly
+                    .height(56.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically // Center align the buttons vertically
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 TextButton(
                     onClick = onCancelDelete,
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxHeight()  // Ensure the button fills the height of the row
-                        .padding(vertical = 8.dp) // Adjust padding for better text visibility
+                        .fillMaxHeight()
+                        .padding(vertical = 8.dp)
                 ) {
                     Text(
                         text = "취소",
@@ -114,8 +111,8 @@ fun ConfirmDeleteDialog(
                     onClick = onConfirmDelete,
                     modifier = Modifier
                         .weight(1f)
-                        .fillMaxHeight()  // Ensure the button fills the height of the row
-                        .padding(vertical = 8.dp) // Adjust padding for better text visibility
+                        .fillMaxHeight()
+                        .padding(vertical = 8.dp)
                 ) {
                     Text(
                         text = "삭제",
@@ -126,25 +123,5 @@ fun ConfirmDeleteDialog(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun ConfirmDeleteDialogPreview() {
-    var isDialogVisible by remember { mutableStateOf(true) }
-
-    if (isDialogVisible) {
-        ConfirmDeleteDialog(
-            onDismissRequest = { isDialogVisible = false },
-            onConfirmDelete = {
-                println("Confirmed delete")
-                isDialogVisible = false
-            },
-            onCancelDelete = {
-                println("Cancelled")
-                isDialogVisible = false
-            }
-        )
     }
 }

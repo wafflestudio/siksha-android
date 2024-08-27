@@ -50,35 +50,42 @@ fun CommentDetailDialog(
                 shape = RoundedCornerShape(26.dp),
                 color = Color.White
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "댓글달기",
-                        fontSize = 16.sp,
-                        color = Color(0xFF797979),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = onClickReply)
-                            .padding(vertical = 16.dp),
-                        textAlign = TextAlign.Center
-                    )
-                    Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
-                    Text(
-                        text = "신고하기",
-                        fontSize = 16.sp,
-                        color = Color(0xFF797979),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = onClickReport)
-                            .padding(vertical = 16.dp),
-                        textAlign = TextAlign.Center
-                    )
-                }
+                Text(
+                    text = "댓글달기",
+                    fontSize = 16.sp,
+                    color = Color(0xFF797979),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onClickReply)
+                        .padding(vertical = 16.dp),
+                    textAlign = TextAlign.Center
+                )
             }
             Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .weight(1f)
+                    .background(Color.White, RoundedCornerShape(26.dp)),
+                shape = RoundedCornerShape(26.dp),
+                color = Color.White
+            ) {
+                Text(
+                    text = "신고하기",
+                    fontSize = 16.sp,
+                    color = Color(0xFF797979),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onClickReport)
+                        .padding(vertical = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+            Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
                     .background(Color.White, RoundedCornerShape(26.dp)),
                 shape = RoundedCornerShape(26.dp),
                 color = Color.White
@@ -89,9 +96,7 @@ fun CommentDetailDialog(
                     color = Color(0xFFFF9522),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(onClick = {
-                            onClickCancel()
-                        })
+                        .clickable(onClick = onClickCancel)
                         .padding(vertical = 16.dp),
                     textAlign = TextAlign.Center
                 )
