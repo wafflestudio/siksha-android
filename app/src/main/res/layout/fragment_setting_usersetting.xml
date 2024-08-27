@@ -95,7 +95,8 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="16dp"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_image_delete"
+            />
 
     </LinearLayout>
 
