@@ -105,6 +105,45 @@
         android:layout_weight="1"
         />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cancel_ok_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="8dp"
+        android:background="@color/white">
+
+        <!-- Cancel Button aligned to the left -->
+        <TextView
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:textColor="@color/orange_main"
+            android:textSize="16sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:fontFamily="@font/nanum_square_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- OK Button aligned to the right -->
+        <TextView
+            android:id="@+id/ok_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:textColor="@color/orange_main"
+            android:textSize="16sp"
+            android:paddingStart="8dp"
+            android:paddingEnd="16dp"
+            android:fontFamily="@font/nanum_square_bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id = "@+id/complete_button"

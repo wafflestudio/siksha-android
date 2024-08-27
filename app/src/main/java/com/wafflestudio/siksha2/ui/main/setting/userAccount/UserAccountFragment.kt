@@ -1,10 +1,13 @@
 package com.wafflestudio.siksha2.ui.main.setting.userAccount
 
+import android.content.Context
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
@@ -77,6 +80,17 @@ class UserAccountFragment : Fragment() {
             }
         }
 
+        binding.cancelButton.setOnClickListener {
+            binding.nicknameSetRow.setText(userSettingViewModel.userData.value?.nickname ?: "")
+            hideKeyboard()
+        }
+
+        binding.okButton.setOnClickListener {
+            hideKeyboard()
+        }
+
+        detectKeyboardVisibility()
+
         userSettingViewModel.userData.observe(viewLifecycleOwner) { userData ->
             userData?.let {
                 binding.nicknameSetRow.setText(it.nickname)
@@ -86,6 +100,31 @@ class UserAccountFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun detectKeyboardVisibility() {
+        val rootView = binding.root
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+
+            if (keypadHeight > screenHeight * 0.15) {
+                // Keyboard is visible, hide the complete button and show confirm button
+                binding.completeButton.visibility = View.GONE
+                binding.cancelOkLayout.visibility = View.VISIBLE
+            } else {
+                // Keyboard is hidden, show the complete button and hide confirm button
+                binding.completeButton.visibility = View.VISIBLE
+                binding.cancelOkLayout.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
     private fun openGallery() {
