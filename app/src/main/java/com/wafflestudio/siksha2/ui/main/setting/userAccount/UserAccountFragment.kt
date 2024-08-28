@@ -78,7 +78,7 @@ class UserAccountFragment : Fragment() {
                         showToast("이미 존재하는 닉네임입니다.")
                     }
                 } catch (e: IOException) {
-                    showToast("오류가 발생했습니다.")
+                    e.printStackTrace()
                 }
             }
         }
@@ -103,13 +103,6 @@ class UserAccountFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun applyDefaultImage() {
-        imageView.setImageResource(R.drawable.ic_rice_bowl)
-        // 1. Server에 image 기본 rice_bowl image 전송
-        // 2. isDefaultImage를 true로 변경
-        // 추후 서버팀 선택에 따라 추가 작업 필요
     }
 
     private fun showImagePickerBottomDialog() {
@@ -157,6 +150,13 @@ class UserAccountFragment : Fragment() {
     private fun hideKeyboard() {
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    private fun applyDefaultImage() {
+        imageView.setImageResource(R.drawable.ic_rice_bowl)
+        // 1. Server에 image 기본 rice_bowl image 전송
+        // 2. isDefaultImage를 true로 변경
+        // 추후 서버팀 선택에 따라 추가 작업 필요
     }
 
     private fun openGallery() {
