@@ -51,7 +51,7 @@ fun CommentDetailDialog(
                 color = Color.White
             ) {
                 Text(
-                    text = "댓글달기",
+                    text = "삭제하기",
                     fontSize = 16.sp,
                     color = Color(0xFF797979),
                     modifier = Modifier
