@@ -8,6 +8,7 @@ import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
 import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
+import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -47,8 +48,8 @@ class CommunityRepository @Inject constructor(
         api.postUnlikeComment(commentId)
     }
 
-    suspend fun deletePost(postId: Long) {
-        api.deletePost(postId)
+    suspend fun deletePost(postId: Long): Response<Unit?> {
+        return api.deletePost(postId)
     }
 
     suspend fun deleteComment(commentId: Long) {

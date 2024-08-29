@@ -103,9 +103,13 @@ class PostDetailViewModel @Inject constructor(
     fun deletePost(postId: Long) {
         viewModelScope.launch {
             runCatching {
-                communityRepository.deletePost(postId)
-            }.onSuccess {
-                _postDetailEvent.emit(PostDetailEvent.DeletePostSuccess)
+                val response = communityRepository.deletePost(postId)
+                if (response.isSuccessful) {
+                    _post.value = Post()
+                    _postDetailEvent.emit(PostDetailEvent.DeletePostSuccess)
+                } else {
+                    _postDetailEvent.emit(PostDetailEvent.DeletePostFailed)
+                }
             }.onFailure {
                 _postDetailEvent.emit(PostDetailEvent.DeletePostFailed)
             }

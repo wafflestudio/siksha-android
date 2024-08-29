@@ -42,7 +42,7 @@ fun PostReportRoute(
                 }
 
                 is PostReportEvent.ReportPostFailed -> {
-                    context.showToast("신고 실패 !!!!!")
+                    context.showToast("신고가 실패했습니다.")
                 }
             }
         }
@@ -121,7 +121,7 @@ fun PostReportScreen(
             modifier = Modifier
                 .width(320.dp)
                 .height(280.dp)
-                .align(Alignment.CenterHorizontally) // 중앙에 위치하도록 수정
+                .align(Alignment.CenterHorizontally)
                 .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(8.dp))
                 .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
         ) {
