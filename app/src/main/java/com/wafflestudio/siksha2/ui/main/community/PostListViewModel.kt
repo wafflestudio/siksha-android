@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
@@ -57,6 +58,8 @@ class PostListViewModel @Inject constructor(
         combine(_postPagingData, modifiedPostsCache) { pagingData, modifiedPosts ->
             pagingData.map { post ->
                 modifiedPosts[post.id] ?: post
+            }.filter { post ->
+                post.available
             }
         }.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
