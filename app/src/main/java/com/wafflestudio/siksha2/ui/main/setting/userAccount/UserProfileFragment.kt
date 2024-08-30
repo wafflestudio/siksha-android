@@ -19,15 +19,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.imageview.ShapeableImageView
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogProfileImageBinding
-import com.wafflestudio.siksha2.databinding.FragmentSettingUsersettingBinding
+import com.wafflestudio.siksha2.databinding.FragmentUserProfileBinding
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class UserAccountFragment : Fragment() {
-    private lateinit var binding: FragmentSettingUsersettingBinding
+class UserProfileFragment : Fragment() {
+    private lateinit var binding: FragmentUserProfileBinding
     private val userSettingViewModel: SettingViewModel by activityViewModels()
 
     private lateinit var imageView: ShapeableImageView
@@ -46,7 +46,7 @@ class UserAccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
-            binding = FragmentSettingUsersettingBinding.inflate(inflater, container, false)
+            binding = FragmentUserProfileBinding.inflate(inflater, container, false)
             return binding.root
         }
     }

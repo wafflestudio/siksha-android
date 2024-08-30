@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.databinding.FragmentSettingAccountBinding
+import com.wafflestudio.siksha2.databinding.FragmentUserAccountBinding
 import com.wafflestudio.siksha2.ui.common.DefaultDialog
 import com.wafflestudio.siksha2.ui.common.DefaultDialogListener
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
@@ -21,7 +21,7 @@ import okio.IOException
 @AndroidEntryPoint
 class SettingAccountFragment : Fragment(), DefaultDialogListener {
 
-    private lateinit var binding: FragmentSettingAccountBinding
+    private lateinit var binding: FragmentUserAccountBinding
 
     private val vm: SettingViewModel by activityViewModels()
 
@@ -32,7 +32,7 @@ class SettingAccountFragment : Fragment(), DefaultDialogListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSettingAccountBinding.inflate(inflater, container, false)
+        binding = FragmentUserAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
 
