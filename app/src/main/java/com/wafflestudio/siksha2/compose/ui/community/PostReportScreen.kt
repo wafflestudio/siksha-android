@@ -129,7 +129,7 @@ fun PostReportScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 28.dp)
@@ -147,15 +147,16 @@ fun PostReportScreen(
                 },
                 textStyle = TextStyle(fontSize = 16.sp),
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp)
             )
 
             Text(
                 text = "${reportContent.length}자/200자",
                 style = TextStyle(color = Color.Gray, fontSize = 12.sp),
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
+                    .align(Alignment.End)
                     .padding(8.dp)
             )
         }
