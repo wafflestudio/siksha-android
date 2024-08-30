@@ -78,6 +78,7 @@ import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharedFlow
 import java.time.LocalDateTime
+import kotlin.random.Random
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -315,15 +316,19 @@ fun PostDetailScreenSuccess(
                 }
                 items(comments.itemCount) {
                     comments[it]?.let { comment ->
-                        CommentItem(
-                            comment = comment,
-                            modifier = Modifier.fillMaxWidth(),
-                            onClickLike = {
-                                toggleCommentLike(comment)
-                            },
-                            onClickReport = onNavigateToCommentReport,
-                            deleteComment = deleteComment
-                        )
+                        if (comment.available) {
+                            CommentItem(
+                                comment = comment,
+                                modifier = Modifier.fillMaxWidth(),
+                                onClickLike = {
+                                    toggleCommentLike(comment)
+                                },
+                                onClickReport = onNavigateToCommentReport,
+                                deleteComment = deleteComment
+                            )
+                        } else {
+                            UnavailableCommentItem()
+                        }
                         CommunityDivider()
                     }
                 }
@@ -568,6 +573,26 @@ fun PostLikeButton(
             fontWeight = FontWeight.Bold,
             fontSize = 10.sp,
             color = if (isLiked) SikshaColors.White900 else SikshaColors.OrangeMain
+        )
+    }
+}
+
+@Composable
+fun UnavailableCommentItem(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .padding(horizontal = 20.dp)
+            .height(60.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        Text(
+            text = stringResource(R.string.community_comment_unavailable),
+            color = SikshaColors.Gray400,
+            fontSize = 12.sp,
+            style = MaterialTheme.typography.body2
         )
     }
 }
