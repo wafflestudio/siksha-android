@@ -30,7 +30,9 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -118,6 +120,7 @@ fun PostDetailRoute(
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PostDetailScreen(
     post: Post,
@@ -162,7 +165,6 @@ fun PostDetailScreen(
                 isPostDialogShowed = false
                 onNavigateToPostReport(post.id)
             },
-            onClickCopyUrl = {},
             onClickCancel = {
                 isPostDialogShowed = false
             }
@@ -171,6 +173,8 @@ fun PostDetailScreen(
 
     if (isConfirmDeleteDialogShowed) {
         ConfirmDeleteDialog(
+            title = stringResource(R.string.community_post_delete_dialog_title),
+            description = stringResource(R.string.community_post_delete_dialog_description),
             onDismissRequest = {
                 isConfirmDeleteDialogShowed = false
             },
@@ -555,10 +559,7 @@ fun CommentItem(
     if (showDialog) {
         CommentDetailDialog(
             onDismissRequest = { showDialog = false },
-            onClickReply = {
-                showDialog = false
-                // ??
-            },
+            onClickDelete = {},
             onClickReport = {
                 showDialog = false
                 onNavigateToCommentReport(comment.id)

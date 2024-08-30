@@ -1,13 +1,12 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
@@ -15,18 +14,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.wafflestudio.siksha2.ui.SikshaColors
 
 @Composable
 fun CommentDetailDialog(
     onDismissRequest: () -> Unit,
-    onClickReply: () -> Unit,
+    onClickDelete: () -> Unit,
     onClickReport: () -> Unit,
     onClickCancel: () -> Unit
 ) {
@@ -34,40 +33,35 @@ fun CommentDetailDialog(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .width(315.dp)
-                .height(165.dp)
-                .clip(RoundedCornerShape(26.dp))
-                .background(Color.White)
-                .border(
-                    width = 1.dp,
-                    color = Color.Gray,
-                    shape = RoundedCornerShape(26.dp)
-                )
+                .background(color = SikshaColors.White900, shape = RoundedCornerShape(26.dp))
         ) {
-            Surface(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .background(Color.White, RoundedCornerShape(26.dp)),
-                shape = RoundedCornerShape(26.dp),
-                color = Color.White
+                    .height(55.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "댓글 달기",
+                    text = "삭제하기",
                     fontSize = 16.sp,
                     color = Color(0xFF797979),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(onClick = onClickReply)
+                        .clickable(onClick = onClickDelete)
                         .padding(vertical = 16.dp),
                     textAlign = TextAlign.Center
                 )
             }
-            Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
-            Surface(
-                modifier=Modifier
+            Divider(
+                modifier = Modifier.padding(horizontal = 11.dp),
+                color = Color(0xFFE0E0E0),
+                thickness = 1.dp,
+            )
+            Box(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
+                    .height(55.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "신고하기",
@@ -80,14 +74,16 @@ fun CommentDetailDialog(
                     textAlign = TextAlign.Center
                 )
             }
-            Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
-            Surface(
+            Divider(
+                modifier = Modifier.padding(horizontal = 11.dp),
+                color = Color(0xFFE0E0E0),
+                thickness = 1.dp,
+            )
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
-                    .background(Color.White, RoundedCornerShape(26.dp)),
-                shape = RoundedCornerShape(26.dp),
-                color = Color.White
+                    .height(55.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "취소",
@@ -109,7 +105,7 @@ fun CommentDetailDialog(
 fun CommentDetailDialogPreview() {
     CommentDetailDialog(
         onDismissRequest = {},
-        onClickReply = { },
+        onClickDelete = {},
         onClickReport = {},
         onClickCancel = {}
     )
