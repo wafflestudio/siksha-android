@@ -83,6 +83,7 @@ fun PostDetailRoute(
     onNavigateUp: () -> Unit,
     onNavigateToPostReport: (Long) -> Unit,
     onNavigateToCommentReport: (Long) -> Unit,
+    onNavigateToPostEdit: (Long) -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel(),
     userPostListViewModel: UserPostListViewModel = hiltViewModel(),
@@ -102,6 +103,7 @@ fun PostDetailRoute(
         onNavigateUp = onNavigateUp,
         onNavigateToPostReport = onNavigateToPostReport,
         onNavigateToCommentReport = onNavigateToCommentReport,
+        onNavigateToPostEdit = onNavigateToPostEdit,
         refreshComments = { comments.refresh() },
         togglePostLike = postDetailViewModel::togglePostLike,
         toggleCommentLike = postDetailViewModel::toggleCommentLike,
@@ -126,6 +128,7 @@ fun PostDetailScreen(
     onNavigateUp: () -> Unit,
     onNavigateToPostReport: (Long) -> Unit,
     onNavigateToCommentReport: (Long) -> Unit,
+    onNavigateToPostEdit: (Long) -> Unit,
     togglePostLike: () -> Unit,
     refreshComments: () -> Unit,
     toggleCommentLike: (Comment) -> Unit,
@@ -148,7 +151,9 @@ fun PostDetailScreen(
             onDismissRequest = {
                 isPostDialogShowed = false
             },
-            onClickEdit = {},
+            onClickEdit = {
+                onNavigateToPostEdit(post.id)
+            },
             onClickDelete = {
                 isConfirmDeleteDialogShowed = true
                 isPostDialogShowed = false

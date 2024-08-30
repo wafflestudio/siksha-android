@@ -50,6 +50,11 @@ class PostDetailFragment : Fragment() {
                             )
                         findNavController().navigate(action)
                     },
+                    onNavigateToPostEdit = {
+                        val action =
+                            PostDetailFragmentDirections.actionPostDetailFragmentToPostEditFragment().apply { postId = it }
+                        findNavController().navigate(action)
+                    },
                     modifier = Modifier.fillMaxSize(),
                     postListViewModel = postListViewModel,
                     userPostListViewModel = userPostListViewModel
