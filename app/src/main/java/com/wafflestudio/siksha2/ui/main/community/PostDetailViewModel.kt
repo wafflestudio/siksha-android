@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
@@ -31,6 +32,9 @@ class PostDetailViewModel @Inject constructor(
 
     private val _post = MutableStateFlow<Post>(Post())
     val post: StateFlow<Post> = _post
+
+    private val _board = MutableStateFlow<Board>(Board.Empty)
+    val board: StateFlow<Board> = _board
 
     val commentPagingData = Pager(
         config = PagingConfig(
@@ -59,6 +63,7 @@ class PostDetailViewModel @Inject constructor(
     private fun refreshPost(postId: Long) {
         viewModelScope.launch {
             _post.value = communityRepository.getPost(postId)
+            _board.value = communityRepository.getBoard(post.value.boardId)
         }
     }
 
