@@ -92,12 +92,14 @@ fun PostDetailRoute(
     val post by postDetailViewModel.post.collectAsState()
     val board by postListViewModel.selectedBoard.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
+    val isAnonymous by postDetailViewModel.isAnonymous.collectAsState()
 
     PostDetailScreen(
         post = post,
         board = board,
         comments = comments,
         postDetailEvent = postDetailViewModel.postDetailEvent,
+        isAnonymous = isAnonymous,
         onNavigateUp = onNavigateUp,
         refreshComments = { comments.refresh() },
         togglePostLike = postDetailViewModel::togglePostLike,
@@ -107,6 +109,7 @@ fun PostDetailRoute(
         updateUserListWithLikedPost = userPostListViewModel::updateUserListWithLikedPost,
         updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
         addComment = postDetailViewModel::addComment,
+        onIsAnonymousChanged = postDetailViewModel::setIsAnonymous,
         modifier = modifier
     )
 }
@@ -117,6 +120,7 @@ fun PostDetailScreen(
     board: Board,
     comments: LazyPagingItems<Comment>,
     postDetailEvent: SharedFlow<PostDetailEvent>,
+    isAnonymous: Boolean,
     onNavigateUp: () -> Unit,
     togglePostLike: () -> Unit,
     refreshComments: () -> Unit,
@@ -126,10 +130,10 @@ fun PostDetailScreen(
     updateUserListWithLikedPost: (Post) -> Unit,
     updateUserListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
+    onIsAnonymousChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var commentInput by remember { mutableStateOf("") }
-    var isAnonymousInput by remember { mutableStateOf(true) }
     val commentListState = rememberLazyListState()
 
     PostDetailViewEventEffect(
@@ -193,10 +197,10 @@ fun PostDetailScreen(
         CommentInputRow(
             commentInput = commentInput,
             onCommentInputChanged = { commentInput = it },
-            isAnonymous = isAnonymousInput,
-            onIsAnonymousChanged = { isAnonymousInput = it },
+            isAnonymous = isAnonymous,
+            onIsAnonymousChanged = onIsAnonymousChanged,
             addComment = { ->
-                addComment(commentInput, isAnonymousInput)
+                addComment(commentInput, isAnonymous)
                 updateListWithCommentAddedPost(post)
                 updateUserListWithCommentAddedPost(post)
             },
@@ -275,7 +279,7 @@ fun PostHeader(
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CommunityProfilePicture(model = null) // TODO: 서버에서 프로필이미지 내려주면 반영하기
+        CommunityProfilePicture(model = post.profilePicture)
         Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = Modifier
@@ -429,7 +433,7 @@ fun CommentItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CommunityProfilePicture(
-                    model = null,
+                    model = comment.profilePicture,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
@@ -586,6 +590,7 @@ fun PostDetailScreenPreview() {
             board = Board(),
             comments = flowOf(PagingData.empty<Comment>()).collectAsLazyPagingItems(),
             postDetailEvent = MutableSharedFlow(),
+            isAnonymous = true,
             onNavigateUp = {},
             togglePostLike = {},
             refreshComments = {},
@@ -593,9 +598,10 @@ fun PostDetailScreenPreview() {
             toggleCommentLike = {},
             addComment = { _, _ -> },
             updateListWithCommentAddedPost = {},
-            modifier = Modifier.fillMaxSize(),
             updateUserListWithCommentAddedPost = {},
-            updateUserListWithLikedPost = {}
+            updateUserListWithLikedPost = {},
+            onIsAnonymousChanged = {},
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

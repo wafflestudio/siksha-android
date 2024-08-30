@@ -65,9 +65,13 @@ class PostListViewModel @Inject constructor(
         firstVisibleItemScrollOffset = 0
     )
 
+    private val _trendingPostsUiState = MutableStateFlow<TrendingPostsUiState>(TrendingPostsUiState.Loading)
+    val trendingPostsUiState: StateFlow<TrendingPostsUiState> = _trendingPostsUiState
+
     init {
         viewModelScope.launch {
             getBoards()
+            fetchTrendingPosts()
         }
     }
 
@@ -85,6 +89,22 @@ class PostListViewModel @Inject constructor(
     fun selectBoard(boardIndex: Int) {
         _boards.value = _boards.value.mapIndexed { idx, board ->
             board.data.toDataWithState(idx == boardIndex)
+        }
+    }
+
+    fun fetchTrendingPosts() {
+        viewModelScope.launch {
+            _trendingPostsUiState.value = TrendingPostsUiState.Loading
+            runCatching {
+                val trendingPosts = communityRepository.getTrendingPosts()
+                _trendingPostsUiState.value = if (trendingPosts.isNotEmpty()) {
+                    TrendingPostsUiState.Success(communityRepository.getTrendingPosts())
+                } else {
+                    TrendingPostsUiState.Failed
+                }
+            }.onFailure {
+                _trendingPostsUiState.value = TrendingPostsUiState.Failed
+            }
         }
     }
 
@@ -113,4 +133,10 @@ class PostListViewModel @Inject constructor(
     fun invalidateCache() {
         modifiedPostsCache.value = emptyMap()
     }
+}
+
+sealed interface TrendingPostsUiState {
+    class Success(val posts: List<Post>) : TrendingPostsUiState
+    object Failed : TrendingPostsUiState
+    object Loading : TrendingPostsUiState
 }
