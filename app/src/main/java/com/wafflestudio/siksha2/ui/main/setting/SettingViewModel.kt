@@ -117,6 +117,11 @@ class SettingViewModel @Inject constructor(
     fun patchUserData(context: Context, imageChanged: Boolean, nickname: String) {
         viewModelScope.launch {
             runCatching {
+                if (nickname.isEmpty()) {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("닉네임 칸이 비어있습니다."))
+                    return@runCatching
+                }
+
                 val nicknameToUpdate = getNicknameToUpdate(nickname)
                 val imageToUpdate = getImageToUpdate(context, imageChanged)
 

@@ -72,6 +72,14 @@ class UserProfileFragment : Fragment() {
             )
         }
 
+        binding.nicknameSetRow.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.nicknameSetRow.hint = ""
+            } else {
+                binding.nicknameSetRow.hint = getString(R.string.nickname_hint)
+            }
+        }
+
         binding.cancelButton.setOnClickListener {
             binding.nicknameSetRow.setText(userSettingViewModel.userData.value?.nickname ?: "")
             hideKeyboard()
