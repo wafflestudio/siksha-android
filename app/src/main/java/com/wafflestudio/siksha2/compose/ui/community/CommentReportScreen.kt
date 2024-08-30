@@ -33,6 +33,7 @@ import com.wafflestudio.siksha2.ui.main.community.CommentReportEvent
 import com.wafflestudio.siksha2.ui.main.community.CommentReportViewModel
 import com.wafflestudio.siksha2.compose.ui.community.CommunityProfilePicture
 import com.wafflestudio.siksha2.models.User
+import com.wafflestudio.siksha2.ui.NavigateUpIcon
 
 @Composable
 fun CommentReportRoute(
@@ -81,14 +82,10 @@ fun CommentReportScreen(
         TopBar(
             title = "신고하기",
             navigationButton = {
-                Icon(
-                    painter = painterResource(id = R.drawable.larrow),
-                    contentDescription = "뒤로가기",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .clickable(onClick = onNavigateUp)
-                        .padding(16.dp)
-                        .size(24.dp)
+                NavigateUpIcon(
+                    modifier = Modifier.clickable {
+                        onNavigateUp()
+                    }
                 )
             }
         )
