@@ -76,5 +76,5 @@
     <string name="community_comment_hint">댓글을 입력하세요.</string>
     <string name="community_comment_anonymous">익명</string>
     <string name="siksha_info_dialog_withdrawal_content">앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.</string>
-    <string name="image_viewer_current_page">%d/%d</string>
+    <string name="image_viewer_current_page">%1$d/%2$d</string>
 </resources>
