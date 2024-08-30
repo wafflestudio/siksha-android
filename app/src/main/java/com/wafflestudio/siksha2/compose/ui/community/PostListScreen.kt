@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.Chip
 import com.wafflestudio.siksha2.components.compose.PostListItem
+import com.wafflestudio.siksha2.ui.NewPostIcon
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.SikshaColors
@@ -43,13 +45,16 @@ import com.wafflestudio.siksha2.ui.main.community.TrendingPostsUiState
 import com.wafflestudio.siksha2.utils.DataWithState
 import kotlinx.coroutines.flow.flowOf
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PostListRoute(
     onClickPost: (Long) -> Unit,
+    onNewPost: (Long) -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel()
 ) {
     val boards by postListViewModel.boards.collectAsState()
+    val selectedBoard by postListViewModel.selectedBoard.collectAsState()
     val posts = postListViewModel.postPagingData.collectAsLazyPagingItems()
     val postListState = postListViewModel.postListState
     val trendingPostsUiState by postListViewModel.trendingPostsUiState.collectAsState()
@@ -60,6 +65,8 @@ fun PostListRoute(
         postListState = postListState,
         trendingPostsUiState = trendingPostsUiState,
         onClickPost = onClickPost,
+        onClickCreatePost = onNewPost,
+        selectedBoard = selectedBoard,
         refreshPosts = {
             posts.refresh()
             postListViewModel.invalidateCache()
@@ -78,6 +85,8 @@ fun PostListScreen(
     postListState: LazyListState,
     trendingPostsUiState: TrendingPostsUiState,
     onClickPost: (Long) -> Unit,
+    onClickCreatePost: (Long) -> Unit,
+    selectedBoard: Board,
     refreshPosts: () -> Unit,
     selectBoard: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -107,6 +116,7 @@ fun PostListScreen(
         CommunityDivider()
         Box(
             modifier = Modifier
+                .weight(1f)
                 .pullRefresh(pullRefreshState)
         ) {
             PullRefreshIndicator(
@@ -169,6 +179,14 @@ fun PostListScreen(
                     )
                 }
             }
+            NewPostIcon(
+                modifier = Modifier
+                    .padding(end = 30.dp, bottom = 16.dp)
+                    .align(Alignment.BottomEnd)
+                    .clickable {
+                        onClickCreatePost(selectedBoard.id)
+                    }
+            )
         }
     }
 }
@@ -243,6 +261,8 @@ fun PostListScreenPreview() {
             postListState = LazyListState(0, 0),
             trendingPostsUiState = TrendingPostsUiState.Loading,
             onClickPost = {},
+            onClickCreatePost = {},
+            selectedBoard = Board(),
             refreshPosts = {},
             selectBoard = {},
             modifier = Modifier

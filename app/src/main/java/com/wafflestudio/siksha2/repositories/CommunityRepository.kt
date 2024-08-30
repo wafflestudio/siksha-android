@@ -7,6 +7,7 @@ import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
+import okhttp3.MultipartBody
 import com.wafflestudio.siksha2.repositories.pagingsource.UserPostPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -22,6 +23,10 @@ class CommunityRepository @Inject constructor(
 
     suspend fun getBoards(): List<Board> {
         return api.getBoards().map { it.toBoard() }
+    }
+
+    suspend fun getBoard(boardId: Long): Board {
+        return api.getBoard(boardId).toBoard()
     }
 
     fun getUserPostPagingSource() = UserPostPagingSource(api)
@@ -43,6 +48,14 @@ class CommunityRepository @Inject constructor(
 
     suspend fun unlikePost(postId: Long): Post {
         return api.postUnlikePost(postId).toPost()
+    }
+
+    suspend fun createPost(boardId: Long, title: MultipartBody.Part, content: MultipartBody.Part, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
+        return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
+    }
+
+    suspend fun patchPost(postId: Long, boardId: Long, title: MultipartBody.Part, content: MultipartBody.Part, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
+        return api.postPatchPost(postId, boardId, title, content, anonymous, images).toPost()
     }
 
     suspend fun likeComment(commentId: Long) {
