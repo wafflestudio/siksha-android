@@ -15,6 +15,8 @@ import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.ImageUtil.getCompressedImage
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -34,6 +36,9 @@ class SettingViewModel @Inject constructor(
 
     val packageVersion: String = BuildConfig.VERSION_NAME
     private val isDefaultImage: Boolean get() = userData.value?.profileUrl == null
+
+    private val _settingEvent = MutableSharedFlow<SettingEvent>()
+    val settingEvent = _settingEvent.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -121,4 +126,9 @@ class SettingViewModel @Inject constructor(
         val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)
         _userData.value = updatedUserData
     }
+}
+
+sealed interface SettingEvent {
+    object ChangeProfileSuccess: SettingEvent
+    object ChangeProfileFailed: SettingEvent
 }
