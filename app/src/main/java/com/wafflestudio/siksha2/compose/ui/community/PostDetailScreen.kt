@@ -653,7 +653,7 @@ fun CommentItem(
             onDismissRequest = { showCommentDetailDialog = false },
             onClickDelete = {
                 showCommentDetailDialog = false
-                deleteComment(comment.id)
+                showConfirmDeleteDialog = true
             },
             onClickReport = {
                 showCommentDetailDialog = false
