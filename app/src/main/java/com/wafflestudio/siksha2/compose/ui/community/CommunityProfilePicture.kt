@@ -19,7 +19,7 @@ fun CommunityProfilePicture(
 ) {
     if (model == null) {
         Image(
-            painter = painterResource(R.drawable.ic_rice_bowl),
+            painter = painterResource(R.drawable.ic_rice_bowl_new),
             contentDescription = "",
             modifier = modifier.size(30.dp)
         )
