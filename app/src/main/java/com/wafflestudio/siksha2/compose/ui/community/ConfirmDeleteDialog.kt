@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -24,99 +25,78 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 
 @Composable
 fun ConfirmDeleteDialog(
+    title: String,
+    description: String,
     onDismissRequest: () -> Unit,
     onConfirmDelete: () -> Unit,
     onCancelDelete: () -> Unit,
-    modifier: Modifier=Modifier
+    modifier: Modifier = Modifier
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .width(315.dp)
-                .height(130.27.dp)
+            modifier = modifier
                 .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(26.dp)
-                )
-                .border(
-                    width = 1.dp,
-                    color = Color(0xFFE3E3E3),
+                    color = SikshaColors.White900,
                     shape = RoundedCornerShape(26.dp)
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(12.dp))
-
+            Spacer(modifier = Modifier.height(18.dp))
             Text(
-                text = "게시글 삭제",
+                text = title,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
-
             Spacer(modifier = Modifier.height(10.dp))
-
             Text(
-                text = "게시글을 정말 삭제하시겠습니까?",
+                text = description,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Color(0xFFE3E3E3))
-            )
-
+            Spacer(modifier = Modifier.height(16.dp))
+            Divider(color = SikshaColors.Gray400)
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.height(50.dp)
             ) {
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .padding(vertical = 8.dp)
-                        .clickable(onClick = onCancelDelete)
+                        .clickable(onClick = onCancelDelete),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "취소",
-                        color = Color(0xFFFF9522),
+                        color = SikshaColors.OrangeMain,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
-
-
-                Spacer(
+                Divider(
+                    color = SikshaColors.Gray400,
                     modifier = Modifier
+                        .fillMaxHeight()
                         .width(1.dp)
-                        .height(49.73.dp)
-                        .background(Color(0xFFE3E3E3))
                 )
-
-                TextButton(
-                    onClick = onConfirmDelete,
+                Box(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
-                        .padding(vertical = 8.dp)
+                        .clickable(onClick = onConfirmDelete),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "삭제",
@@ -127,5 +107,19 @@ fun ConfirmDeleteDialog(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun ConfirmDeleteDialogPreview() {
+    SikshaTheme {
+        ConfirmDeleteDialog(
+            title = "게시글 삭제",
+            description = "게시글을 정말 삭제하시겠습니까?",
+            onDismissRequest = {},
+            onConfirmDelete = {},
+            onCancelDelete = {}
+        )
     }
 }
