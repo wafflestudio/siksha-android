@@ -32,7 +32,6 @@ import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.TrendingPostsUiState
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TrendingPostsBanner(
     trendingPostsUiState: TrendingPostsUiState,
