@@ -14,8 +14,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -37,6 +39,8 @@ class PostCreateViewModel @Inject constructor(
 
     private val _title = MutableStateFlow<String>("")
     val title: StateFlow<String> = _title
+
+    val isAnonymous = communityRepository.isAnonymous.stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
     private val _content = MutableStateFlow<String>("")
     val content: StateFlow<String> = _content
@@ -209,6 +213,10 @@ class PostCreateViewModel @Inject constructor(
         } else {
             context.showToast("내용은 1000자를 넘길 수 없습니다.")
         }
+    }
+
+    fun setIsAnonymous(isAnonymous: Boolean) {
+        communityRepository.setIsAnonymous(isAnonymous)
     }
 
     private suspend fun downloadImageAsByteArray(imageUrl: String): ByteArray {

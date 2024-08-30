@@ -83,8 +83,8 @@ fun PostCreateRoute(
     val title by postCreateViewModel.title.collectAsState()
     val content by postCreateViewModel.content.collectAsState()
     val imageUriList by postCreateViewModel.imageUrisToUpload.collectAsState()
+    val isAnonymous by postCreateViewModel.isAnonymous.collectAsState()
 
-    var isAnonymous by remember { mutableStateOf(true) }
     val keyboardState by keyboardAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
     var isBoardListOpen by remember { mutableStateOf(false) }
@@ -120,7 +120,7 @@ fun PostCreateRoute(
             postCreateViewModel.updateContent(newInput, context)
         },
         isAnonymous = isAnonymous,
-        onIsAnonymousChanged = { isAnonymous = it },
+        onIsAnonymousChanged = { postCreateViewModel.setIsAnonymous(it) },
         keyboardState = keyboardState,
         onCloseKeyboard = { keyboardController?.hide() },
         imageUriList = imageUriList,
