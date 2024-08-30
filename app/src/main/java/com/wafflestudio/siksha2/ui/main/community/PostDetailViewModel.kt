@@ -159,9 +159,9 @@ class PostDetailViewModel @Inject constructor(
 }
 
 sealed interface PostUiState {
-    class Success(val post: Post): PostUiState
-    class Failed(val errorMessage: String): PostUiState
-    object Loading: PostUiState
+    class Success(val post: Post) : PostUiState
+    class Failed(val errorMessage: String) : PostUiState
+    object Loading : PostUiState
 }
 
 sealed interface PostDetailEvent {

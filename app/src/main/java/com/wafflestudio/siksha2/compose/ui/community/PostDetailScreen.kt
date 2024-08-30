@@ -78,7 +78,6 @@ import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharedFlow
 import java.time.LocalDateTime
-import kotlin.random.Random
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -128,14 +127,14 @@ fun PostDetailRoute(
             PostDetailScreenFailed(
                 onNavigateUp = onNavigateUp,
                 errorMessage = (postUiState as PostUiState.Failed).errorMessage,
-                modifier = modifier,
+                modifier = modifier
             )
         }
 
         is PostUiState.Loading -> {
             PostDetailScreenLoading(
                 onNavigateUp = onNavigateUp,
-                modifier = modifier,
+                modifier = modifier
             )
         }
     }
@@ -145,7 +144,7 @@ fun PostDetailRoute(
 fun PostDetailScreenFailed(
     onNavigateUp: () -> Unit,
     errorMessage: String,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -177,7 +176,7 @@ fun PostDetailScreenFailed(
 @Composable
 fun PostDetailScreenLoading(
     onNavigateUp: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.background(SikshaColors.White900)
@@ -579,14 +578,14 @@ fun PostLikeButton(
 
 @Composable
 fun UnavailableCommentItem(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
             .padding(horizontal = 20.dp)
             .height(60.dp)
             .fillMaxWidth(),
-        contentAlignment = Alignment.CenterStart,
+        contentAlignment = Alignment.CenterStart
     ) {
         Text(
             text = stringResource(R.string.community_comment_unavailable),
@@ -603,7 +602,7 @@ fun CommentItem(
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {},
     onClickReport: (Long) -> Unit,
-    deleteComment: (Long) -> Unit,
+    deleteComment: (Long) -> Unit
 ) {
     var showCommentDetailDialog by remember { mutableStateOf(false) }
     var showConfirmDeleteDialog by remember { mutableStateOf(false) }
@@ -614,7 +613,7 @@ fun CommentItem(
             description = stringResource(R.string.community_comment_delete_dialog_description),
             onDismissRequest = { showConfirmDeleteDialog = false },
             onConfirmDelete = { deleteComment(comment.id) },
-            onCancelDelete = { showConfirmDeleteDialog = false}
+            onCancelDelete = { showConfirmDeleteDialog = false }
         )
     }
 
