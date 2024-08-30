@@ -41,7 +41,7 @@ android {
     defaultConfig {
         applicationId = "com.wafflestudio.siksha2"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
