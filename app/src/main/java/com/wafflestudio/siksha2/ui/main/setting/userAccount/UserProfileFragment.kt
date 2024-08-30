@@ -12,7 +12,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,11 +22,10 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogProfileImageBinding
 import com.wafflestudio.siksha2.databinding.FragmentUserProfileBinding
+import com.wafflestudio.siksha2.ui.main.setting.SettingEvent
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 
 class UserProfileFragment : Fragment() {
     private lateinit var binding: FragmentUserProfileBinding
@@ -67,22 +68,11 @@ class UserProfileFragment : Fragment() {
         }
 
         binding.completeButton.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    userSettingViewModel.patchUserData(
-                        context = requireContext(),
-                        nickname = binding.nicknameSetRow.text.toString(),
-                        imageChanged = imageChanged
-                    )
-                    findNavController().popBackStack()
-                } catch (e: HttpException) {
-                    if (e.code() == 409) {
-                        showToast("이미 존재하는 닉네임입니다.")
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
+            userSettingViewModel.patchUserData(
+                context = requireContext(),
+                nickname = binding.nicknameSetRow.text.toString(),
+                imageChanged = imageChanged
+            )
         }
 
         binding.cancelButton.setOnClickListener {
@@ -105,6 +95,22 @@ class UserProfileFragment : Fragment() {
                     Glide.with(this).load(imageUrl).circleCrop().into(imageView)
                 } else {
                     Glide.with(this).load(R.drawable.ic_rice_bowl).circleCrop().into(imageView)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userSettingViewModel.settingEvent.collect {
+                    when (it) {
+                        is SettingEvent.ChangeProfileSuccess -> {
+                            findNavController().popBackStack()
+                        }
+
+                        is SettingEvent.ChangeProfileFailed -> {
+                            showToast(it.errorMessage)
+                        }
+                    }
                 }
             }
         }

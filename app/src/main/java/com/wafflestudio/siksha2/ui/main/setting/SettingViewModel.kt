@@ -13,7 +13,6 @@ import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.ImageUtil.getCompressedImage
-import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,6 +20,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,21 +114,45 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    suspend fun patchUserData(context: Context, imageChanged: Boolean, nickname: String) {
-        val nicknameToUpdate = getNicknameToUpdate(nickname)
-        val imageToUpdate = getImageToUpdate(context, imageChanged)
+    fun patchUserData(context: Context, imageChanged: Boolean, nickname: String) {
+        viewModelScope.launch {
+            runCatching {
+                val nicknameToUpdate = getNicknameToUpdate(nickname)
+                val imageToUpdate = getImageToUpdate(context, imageChanged)
 
-        if (nicknameToUpdate == null && !imageChanged) {
-            context.showToast("수정 사항이 없습니다.")
-            return
+                if (nicknameToUpdate == null && !imageChanged) {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("수정 사항이 없습니다."))
+                    return@runCatching
+                }
+
+                val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)
+                _userData.value = updatedUserData
+            }.onFailure {
+                when (it) {
+                    is HttpException -> {
+                        when (it.code()) {
+                            409 -> {
+                                _settingEvent.emit(SettingEvent.ChangeProfileFailed("이미 존재하는 닉네임입니다."))
+                            }
+
+                            else -> {
+                                _settingEvent.emit(SettingEvent.ChangeProfileFailed("일시적인 오류가 발생했습니다."))
+                            }
+                        }
+                    }
+
+                    else -> {
+                        _settingEvent.emit(SettingEvent.ChangeProfileFailed("일시적인 오류가 발생했습니다."))
+                    }
+                }
+            }.onSuccess {
+                _settingEvent.emit(SettingEvent.ChangeProfileSuccess)
+            }
         }
-
-        val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)
-        _userData.value = updatedUserData
     }
 }
 
 sealed interface SettingEvent {
-    object ChangeProfileSuccess: SettingEvent
-    object ChangeProfileFailed: SettingEvent
+    object ChangeProfileSuccess : SettingEvent
+    class ChangeProfileFailed(val errorMessage: String) : SettingEvent
 }
