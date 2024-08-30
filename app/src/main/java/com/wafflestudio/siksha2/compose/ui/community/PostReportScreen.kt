@@ -46,6 +46,7 @@ fun PostReportRoute(
         postReportViewModel.postReportEvent.collect {
             when (it) {
                 is PostReportEvent.ReportPostSuccess -> {
+                    context.showToast("게시글을 신고하였습니다.")
                     onNavigateUp()
                 }
 

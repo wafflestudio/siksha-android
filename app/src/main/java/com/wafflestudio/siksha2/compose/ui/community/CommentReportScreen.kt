@@ -46,6 +46,7 @@ fun CommentReportRoute(
         commentReportViewModel.commentReportEvent.collect {
             when (it) {
                 is CommentReportEvent.ReportCommentSuccess -> {
+                    context.showToast("댓글을 신고하였습니다.")
                     onNavigateUp()
                 }
 
