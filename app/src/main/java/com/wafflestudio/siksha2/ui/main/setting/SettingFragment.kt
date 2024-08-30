@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentSettingBinding
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
@@ -36,6 +37,13 @@ class SettingFragment : Fragment() {
 
         vm.userData.observe(viewLifecycleOwner) { user ->
             binding.nickname.text = user.nickname
+
+            val imageUrl = user.profileUrl
+            if (imageUrl != null) {
+                Glide.with(this).load(imageUrl).circleCrop().into(binding.ivProfilePicture)
+            } else {
+                Glide.with(this).load(R.drawable.ic_rice_bowl).circleCrop().into(binding.ivProfilePicture)
+            }
         }
 
         if (vm.versionCheck.value == true) {
