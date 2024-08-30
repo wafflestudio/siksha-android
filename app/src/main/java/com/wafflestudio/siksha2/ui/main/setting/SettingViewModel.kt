@@ -47,6 +47,38 @@ class SettingViewModel @Inject constructor(
         _versionCheck.value = (packageVersion == latestVersionNum)
     }
 
+    val showEmptyRestaurantFlow = restaurantRepository.showEmptyRestaurant.asFlow()
+
+    fun logoutUser(context: Context, logoutCallBack: () -> Unit) {
+        userStatusManager.logoutUser(context, logoutCallBack)
+    }
+
+    suspend fun deleteUser(context: Context, withdrawCallback: () -> Unit) {
+        userStatusManager.deleteUser(context, withdrawCallback)
+    }
+
+    fun toggleShowEmptyRestaurant() {
+        restaurantRepository.showEmptyRestaurant.run {
+            setValue(getValue().not())
+        }
+    }
+
+    fun updateOrder(order: RestaurantOrder) {
+        restaurantRepository.restaurantsOrder.setValue(order)
+    }
+
+    fun updateFavoriteOrder(order: RestaurantOrder) {
+        restaurantRepository.favoriteRestaurantsOrder.setValue(order)
+    }
+
+    suspend fun getOrderedAllRestaurants(): List<RestaurantInfo> {
+        return restaurantRepository.getOrderedRestaurants()
+    }
+
+    suspend fun getOrderedFavoriteRestaurants(): List<RestaurantInfo> {
+        return restaurantRepository.getOrderedFavoriteRestaurants()
+    }
+
     fun updateImageUri(uri: Uri?) {
         _userData.value?.profileUrl = uri?.toString()
         defaultImage = (uri == null)
@@ -89,37 +121,5 @@ class SettingViewModel @Inject constructor(
 
         val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, defaultImage, imageToUpdate)
         _userData.value = updatedUserData
-    }
-
-    val showEmptyRestaurantFlow = restaurantRepository.showEmptyRestaurant.asFlow()
-
-    fun logoutUser(context: Context, logoutCallBack: () -> Unit) {
-        userStatusManager.logoutUser(context, logoutCallBack)
-    }
-
-    suspend fun deleteUser(context: Context, withdrawCallback: () -> Unit) {
-        userStatusManager.deleteUser(context, withdrawCallback)
-    }
-
-    fun toggleShowEmptyRestaurant() {
-        restaurantRepository.showEmptyRestaurant.run {
-            setValue(getValue().not())
-        }
-    }
-
-    fun updateOrder(order: RestaurantOrder) {
-        restaurantRepository.restaurantsOrder.setValue(order)
-    }
-
-    fun updateFavoriteOrder(order: RestaurantOrder) {
-        restaurantRepository.favoriteRestaurantsOrder.setValue(order)
-    }
-
-    suspend fun getOrderedAllRestaurants(): List<RestaurantInfo> {
-        return restaurantRepository.getOrderedRestaurants()
-    }
-
-    suspend fun getOrderedFavoriteRestaurants(): List<RestaurantInfo> {
-        return restaurantRepository.getOrderedFavoriteRestaurants()
     }
 }
