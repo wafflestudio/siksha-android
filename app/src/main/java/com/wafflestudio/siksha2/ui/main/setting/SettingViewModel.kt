@@ -102,7 +102,7 @@ class SettingViewModel @Inject constructor(
         return if (isDefaultImage) {
             null
         } else if (imageChanged) {
-            _userData.value?.profileUrl.let {
+            _userData.value?.profileUrl?.let {
                 val uri = Uri.parse(it)
                 getCompressedImage(context, uri)
             }?.let { file ->
