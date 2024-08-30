@@ -62,17 +62,17 @@ class PostCreateViewModel @Inject constructor(
     private val _boards = MutableStateFlow<List<Board>>(listOf())
     val boards: StateFlow<List<Board>> = _boards
 
-    private val isEdit get() = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId == -1L
+    private val isEdit get() = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId != -1L
 
     private val _postCreateEvent = MutableSharedFlow<PostCreateEvent>()
     val postCreateEvent = _postCreateEvent.asSharedFlow()
 
     init {
         viewModelScope.launch {
-            _boards.value = communityRepository.getBoards()
-            val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
-            val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
             runCatching {
+                _boards.value = communityRepository.getBoards()
+                val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
+                val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
                 _postCreateEvent.emit(PostCreateEvent.FetchPostProcessing)
                 // boardId와 postId 중 하나만 -1이 아니어야 하고, 나머지 경우는 오류
                 if ((boardId == -1L) == (postId == -1L)) {

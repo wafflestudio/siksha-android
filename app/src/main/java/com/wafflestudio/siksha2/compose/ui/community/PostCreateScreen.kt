@@ -292,7 +292,7 @@ fun PostCreateScreen(
                     }
                 }
             }
-            if (screenClickEnabled) {
+            if (!screenClickEnabled) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -635,6 +635,7 @@ private fun PostCreateViewEventEffect(
                 }
                 is PostCreateEvent.UploadPostFailed -> {
                     Toast.makeText(context, "업로드 중 오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                    enableScreenClick()
                 }
                 is PostCreateEvent.FetchPostSuccess -> {
                     enableScreenClick()
