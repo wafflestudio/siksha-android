@@ -46,10 +46,8 @@ class UserProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return ComposeView(requireContext()).apply {
-            binding = FragmentUserProfileBinding.inflate(inflater, container, false)
-            return binding.root
-        }
+        binding = FragmentUserProfileBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
