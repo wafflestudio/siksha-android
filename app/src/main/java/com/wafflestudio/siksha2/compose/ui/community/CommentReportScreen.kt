@@ -163,7 +163,7 @@ fun CommentReportScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(193.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         Button(
             onClick = {
@@ -172,7 +172,7 @@ fun CommentReportScreen(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF9522)),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 32.dp)
                 .height(56.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
@@ -184,8 +184,6 @@ fun CommentReportScreen(
                 )
             )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
