@@ -694,31 +694,6 @@ fun CommentInputRow(
     )
 }
 
-/*@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Composable
-fun PostDetailScreenPreview() {
-    SikshaTheme {
-        PostDetailScreen(
-            post = Post(),
-            board = Board(),
-            comments = flowOf(PagingData.empty<Comment>()).collectAsLazyPagingItems(),
-            postDetailEvent = MutableSharedFlow(),
-            isAnonymous = true,
-            onNavigateUp = {},
-            togglePostLike = {},
-            refreshComments = {},
-            updateListWithLikedPost = {},
-            toggleCommentLike = {},
-            addComment = { _, _ -> },
-            updateListWithCommentAddedPost = {},
-            updateUserListWithCommentAddedPost = {},
-            updateUserListWithLikedPost = {},
-            onIsAnonymousChanged = {},
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}*/
-
 @Preview(showBackground = true)
 @Composable
 fun PostHeaderPreview() {
@@ -737,16 +712,6 @@ fun PostLikeButtonPreview() {
         }
     }
 }
-
-/*@Preview(showBackground = true)
-@Composable
-fun CommentItemPreview() {
-    SikshaTheme {
-        CommentItem(
-            comment = Comment(content = "댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 ", nickname = "유저이름")
-        )
-    }
-}*/
 
 @Preview
 @Composable
