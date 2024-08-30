@@ -97,15 +97,16 @@
 
         <EditText
             android:id = "@+id/nickname_set_row"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:background="@color/transparent"
             android:textColor="@color/black"
             android:layout_weight="1"
-            android:hint="닉네임을 입력하세요"
+            android:hint="@string/nickname_hint"
+            android:textColorHint="@color/gray_500"
             android:gravity="center"
-            >
-        </EditText>
+            android:singleLine="true"
+            />
 
         <ImageView
             android:id="@+id/erase_button"
