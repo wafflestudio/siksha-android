@@ -67,6 +67,7 @@ fun CommentReportScreen(
     var reportContent by remember { mutableStateOf("") }
 
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(SikshaColors.White900)
@@ -113,7 +114,8 @@ fun CommentReportScreen(
 
         Box(
             modifier = Modifier
-                .width(320.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp)
                 .height(280.dp)
                 .align(Alignment.CenterHorizontally)
                 .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(8.dp))
@@ -149,9 +151,9 @@ fun CommentReportScreen(
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF9522)),
             modifier = Modifier
-                .width(343.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .height(56.dp)
-                .padding(start = 16.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
