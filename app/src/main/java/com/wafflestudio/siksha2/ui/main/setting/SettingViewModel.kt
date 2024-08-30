@@ -33,7 +33,7 @@ class SettingViewModel @Inject constructor(
     val versionCheck: LiveData<Boolean> get() = _versionCheck
 
     val packageVersion: String = BuildConfig.VERSION_NAME
-    private var defaultImage: Boolean = false
+    private val isDefaultImage: Boolean get() = userData.value?.profileUrl == null
 
     init {
         viewModelScope.launch {
@@ -81,7 +81,6 @@ class SettingViewModel @Inject constructor(
 
     fun updateImageUri(uri: Uri?) {
         _userData.value?.profileUrl = uri?.toString()
-        defaultImage = (uri == null)
     }
 
     private suspend fun getNicknameToUpdate(nickname: String): String? {
@@ -95,7 +94,7 @@ class SettingViewModel @Inject constructor(
     }
 
     private suspend fun getImageToUpdate(context: Context, imageChanged: Boolean): MultipartBody.Part? {
-        return if (defaultImage) {
+        return if (isDefaultImage) {
             null
         } else if (imageChanged) {
             _userData.value?.profileUrl.let {
@@ -119,7 +118,7 @@ class SettingViewModel @Inject constructor(
             return
         }
 
-        val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, defaultImage, imageToUpdate)
+        val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)
         _userData.value = updatedUserData
     }
 }
