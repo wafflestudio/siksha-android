@@ -7,6 +7,8 @@ import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -47,6 +49,14 @@ class CommunityRepository @Inject constructor(
 
     suspend fun unlikeComment(commentId: Long) {
         api.postUnlikeComment(commentId)
+    }
+
+    suspend fun getTrendingPosts(): List<Post> {
+        return withContext(Dispatchers.IO) {
+            api.getTrendingPosts().result.map {
+                it.toPost()
+            }
+        }
     }
 
     fun setIsAnonymous(isAnonymous: Boolean) {

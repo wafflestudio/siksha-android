@@ -129,4 +129,7 @@ interface SikshaApi {
     suspend fun postUnlikeComment(
         @Path("comment_id") commentId: Long
     ): PostUnlikeCommentResponse
+
+    @GET("/community/posts/popular/trending")
+    suspend fun getTrendingPosts(): GetTrendingPostsResponse
 }
