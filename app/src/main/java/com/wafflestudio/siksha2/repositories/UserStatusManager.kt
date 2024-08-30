@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.models.User
+import com.wafflestudio.siksha2.models.toUser
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.VocParam
@@ -80,16 +81,12 @@ class UserStatusManager @Inject constructor(
     }
 
     suspend fun getUserData(): User {
-        return userDataPatch(sikshaApi.getUserData())
-    }
-
-    private fun userDataPatch(userDto: UserDto): User {
-        return User(id = userDto.id, nickname = userDto.nickname, profileUrl = userDto.profileUrl)
+        return sikshaApi.getUserData().toUser()
     }
 
     suspend fun updateUserProfile(nickname: String?, changeToDefaultImage: Boolean, image: MultipartBody.Part?): User {
         val nicknameBody = nickname?.let { MultipartBody.Part.createFormData("nickname", it) }
-        return userDataPatch(sikshaApi.updateUserData(image, changeToDefaultImage, nicknameBody))
+        return sikshaApi.updateUserData(image, changeToDefaultImage, nicknameBody).toUser()
     }
 
     suspend fun checkNickname(nickname: String) {
