@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,6 +74,9 @@ fun CommentReportScreen(
     user: User
 ) {
     var reportContent by remember { mutableStateOf("") }
+    val isContentNotEmpty by remember {
+        derivedStateOf { reportContent.isNotEmpty() }
+    }
 
     Column(
         modifier = Modifier
@@ -168,6 +172,7 @@ fun CommentReportScreen(
                 onClickReport(reportContent)
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF9522)),
+            enabled = isContentNotEmpty,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 32.dp)
