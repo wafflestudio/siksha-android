@@ -22,17 +22,13 @@ class ImageBottomDialog(
     ): View? {
         val binding = DialogProfileImageBinding.inflate(inflater, container, false)
 
-        binding.albumButton.setOnClickListener {
+        binding.albumRow.setOnClickListener {
             onGallerySelected()
             dismiss()
         }
 
-        binding.defaultImageButton.setOnClickListener {
+        binding.defaultImageRow.setOnClickListener {
             onDefaultImageSelected()
-            dismiss()
-        }
-
-        binding.cancelButton.setOnClickListener {
             dismiss()
         }
 
