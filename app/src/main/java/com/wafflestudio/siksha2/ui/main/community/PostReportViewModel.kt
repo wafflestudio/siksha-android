@@ -18,7 +18,7 @@ import javax.inject.Inject
 class PostReportViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val communityRepository: CommunityRepository,
-    private val userStatusManager: UserStatusManager,
+    private val userStatusManager: UserStatusManager
 ) : ViewModel() {
 
     private val _postReportEvent = MutableSharedFlow<PostReportEvent>()

@@ -58,7 +58,7 @@ fun PostReportRoute(
         onClickReport = {
             postReportViewModel.reportPost(it)
         },
-        user = user,
+        user = user
     )
 }
 
@@ -66,7 +66,7 @@ fun PostReportRoute(
 fun PostReportScreen(
     onNavigateUp: () -> Unit,
     onClickReport: (String) -> Unit,
-    user: User,
+    user: User
 ) {
     var reportContent by remember { mutableStateOf("") }
 
