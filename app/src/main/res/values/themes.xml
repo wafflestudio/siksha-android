@@ -6,6 +6,11 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="Theme.Siksha.ImageViewer" parent="Theme.Siksha">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
     <style name="Theme.Siksha" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange_main</item>

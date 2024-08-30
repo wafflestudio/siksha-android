@@ -26,8 +26,8 @@
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
         <action
-            android:id="@+id/action_mainFragment_to_sikshaInfoFragment"
-            app:destination="@id/sikshaInfoFragment"
+            android:id="@+id/action_mainFragment_to_settingAccountFragment"
+            app:destination="@id/settingAccountFragment"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
@@ -42,6 +42,23 @@
         <action
             android:id="@+id/action_mainFragment_to_postDetailFragment"
             app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_createPostFragment"
+            app:destination="@id/postCreateFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_userPostListFragment"
+            app:destination="@id/userPostListFragment"
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
@@ -110,14 +127,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/sikshaInfoFragment"
-        android:name="com.wafflestudio.siksha2.ui.main.setting.info.SikshaInfoFragment"
+        android:id="@+id/settingAccountFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.account.UserAccountFragment"
         android:label="fragment_siksha_info"
-        tools:layout="@layout/fragment_siksha_info">
-        <argument
-            android:name="latestVersionNum"
-            app:argType="long" />
-    </fragment>
+        tools:layout="@layout/fragment_user_account"/>
 
     <fragment
         android:id="@+id/reorderRestaurantFragment"
@@ -159,8 +172,55 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_postEditFragment"
+            app:destination="@id/postEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postCreateFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostCreateFragment"
+        android:label="PostCreateFragment">
+        <argument
+            android:name="board_id"
+            android:defaultValue="-1L"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_postCreateFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/postEditFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostEditFragment"
+        android:label="PostEditFragment">
+        <argument
+            android:name="post_id"
+            android:defaultValue="-1L"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_postEditFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:popUpTo="@id/postDetailFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.userAccount.UserProfileFragment"
+        android:label="UserAccountFragment" />
 
+    <fragment
+        android:id="@+id/userPostListFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.UserPostListFragment"
+        android:label="UserPostListFragment" >
+        <action
+            android:id="@+id/action_userPostListFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right"/>
     </fragment>
 
     <fragment

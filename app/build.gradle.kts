@@ -41,7 +41,7 @@ android {
     defaultConfig {
         applicationId = "com.wafflestudio.siksha2"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -169,9 +169,6 @@ dependencies {
 
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
-
-    // Image Compression
-    implementation("id.zelory:compressor:3.0.1")
 
     testImplementation("junit:junit:4.+")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

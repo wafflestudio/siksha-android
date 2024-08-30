@@ -50,6 +50,8 @@ class PostDetailViewModel @Inject constructor(
     private val _postDetailEvent = MutableSharedFlow<PostDetailEvent>()
     val postDetailEvent = _postDetailEvent.asSharedFlow()
 
+    val isAnonymous = communityRepository.isAnonymous.stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
     init {
         refreshPost(PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId)
     }
@@ -127,6 +129,10 @@ class PostDetailViewModel @Inject constructor(
                 _postDetailEvent.emit(PostDetailEvent.DeleteCommentFailed)
             }
         }
+    }
+
+    fun setIsAnonymous(isAnonymous: Boolean) {
+        communityRepository.setIsAnonymous(isAnonymous)
     }
 }
 

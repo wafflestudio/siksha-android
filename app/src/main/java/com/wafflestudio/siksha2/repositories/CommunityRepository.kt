@@ -4,23 +4,39 @@ import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
+
 import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
 import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
+import retrofit2.Response
+
+import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
-import retrofit2.Response
+import okhttp3.MultipartBody
+import com.wafflestudio.siksha2.repositories.pagingsource.UserPostPagingSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class CommunityRepository @Inject constructor(
-    private val api: SikshaApi
+    private val api: SikshaApi,
+    private val sikshaPrefObjects: SikshaPrefObjects
 ) {
+    val isAnonymous = sikshaPrefObjects.communityIsAnonymous.asFlow()
+
     suspend fun getBoards(): List<Board> {
         return api.getBoards().map { it.toBoard() }
     }
 
-    fun postPagingSource(boardId: Long) = PostPagingSource(boardId, api)
+    suspend fun getBoard(boardId: Long): Board {
+        return api.getBoard(boardId).toBoard()
+    }
+
+    fun getUserPostPagingSource() = UserPostPagingSource(api)
+    fun getPostPagingSource(boardId: Long) = PostPagingSource(boardId, api)
 
     suspend fun getPost(postId: Long): Post {
         return api.getPost(postId).toPost()
@@ -38,6 +54,27 @@ class CommunityRepository @Inject constructor(
 
     suspend fun unlikePost(postId: Long): Post {
         return api.postUnlikePost(postId).toPost()
+    }
+
+    suspend fun createPost(
+        boardId: Long,
+        title: MultipartBody.Part,
+        content: MultipartBody.Part,
+        anonymous: Boolean,
+        images: List<MultipartBody.Part>
+    ): Post {
+        return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
+    }
+
+    suspend fun patchPost(
+        postId: Long,
+        boardId: Long,
+        title: MultipartBody.Part,
+        content: MultipartBody.Part,
+        anonymous: Boolean,
+        images: List<MultipartBody.Part>
+    ): Post {
+        return api.postPatchPost(postId, boardId, title, content, anonymous, images).toPost()
     }
 
     suspend fun likeComment(commentId: Long) {
@@ -62,5 +99,17 @@ class CommunityRepository @Inject constructor(
 
     suspend fun reportComment(commentId: Long, reason: String) {
         api.reportComment(commentId, ReportCommentRequestBody(reason))
+    }
+
+    suspend fun getTrendingPosts(): List<Post> {
+        return withContext(Dispatchers.IO) {
+            api.getTrendingPosts().result.map {
+                it.toPost()
+            }
+        }
+    }
+
+    fun setIsAnonymous(isAnonymous: Boolean) {
+        sikshaPrefObjects.communityIsAnonymous.setValue(isAnonymous)
     }
 }

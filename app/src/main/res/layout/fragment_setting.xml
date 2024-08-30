@@ -19,42 +19,26 @@
         android:layout_gravity="center">
 
         <ImageView
+            android:id="@+id/iv_profile_picture"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/version"
             android:layout_marginVertical="12dp"
             android:layout_marginStart="16dp"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/version_check_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:layout_marginStart="24dp"
-                android:fontFamily="@font/nanum_square_regular"
-                android:textColor="@color/gray_500"
-                tools:text="최신버전을 이용중입니다."/>
-
-            <TextView
-                android:id="@+id/version_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:layout_marginStart="24dp"
-                android:fontFamily="@font/nanum_square_regular"
-                android:textColor="@color/gray_500"
-                tools:text="siksha-2.0.0"/>
-
-        </LinearLayout>
-
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:textColor="@color/gray_700"
+            android:fontFamily="@font/nanum_square_regular"
+            tools:text="닉네임"/>
 
         <View
             android:layout_width="0dp"
@@ -67,8 +51,26 @@
             android:src="@drawable/ic_right_arrow"
             android:layout_gravity="center"
             android:layout_marginEnd="18dp" />
+
     </LinearLayout>
-    
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/frame_setting_layout"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/my_post_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:itemText="내가 쓴 글" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,35 +111,70 @@
             app:showArrowIcon="false"
             app:showCheckbox="true" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray_500"
+            android:layout_marginHorizontal="8dp" />
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/setting_account_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:itemText="계정 관리"
+            />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/voc_row"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="1:1 문의하기"
-        android:fontFamily="@font/nanum_square_regular"
-        android:textSize="15dp"
-        android:maxLines="1"
-        android:textColor="@color/orange_main"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
-        android:paddingHorizontal="18dp"
-        />
+        android:layout_marginTop="16dp"
+        android:background="@drawable/frame_setting_layout"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/logout_row"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="앱 로그아웃"
-        android:fontFamily="@font/nanum_square_regular"
-        android:textSize="15dp"
-        android:maxLines="1"
-        android:textColor="@color/gray_700"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="12dp"
-        android:paddingHorizontal="18dp"
-        />
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/voc_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:itemText="1:1 문의하기"
+            app:textColor = "@color/orange_main"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="bottom"
+        >
+
+        <TextView
+            android:id="@+id/version_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/gray_500"
+            tools:text="siksha-2.0.0"/>
+
+        <TextView
+            android:id="@+id/version_check_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/gray_500"
+            tools:text="최신버전을 이용중입니다."/>
+
+    </LinearLayout>
 
 </LinearLayout>
