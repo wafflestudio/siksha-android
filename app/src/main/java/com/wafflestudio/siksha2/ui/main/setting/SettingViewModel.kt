@@ -33,7 +33,7 @@ class SettingViewModel @Inject constructor(
     val versionCheck: LiveData<Boolean> get() = _versionCheck
 
     val packageVersion: String = BuildConfig.VERSION_NAME
-    private var imageChanged: Boolean = false
+    private var defaultImage: Boolean = false
 
     init {
         viewModelScope.launch {
@@ -47,9 +47,9 @@ class SettingViewModel @Inject constructor(
         _versionCheck.value = (packageVersion == latestVersionNum)
     }
 
-    fun updateImageUri(uri: Uri) {
-        _userData.value?.profileUrl = uri.toString()
-        imageChanged = true
+    fun updateImageUri(uri: Uri?) {
+        _userData.value?.profileUrl = uri?.toString()
+        defaultImage = (uri == null)
     }
 
     private suspend fun getNicknameToUpdate(nickname: String): String? {
@@ -62,8 +62,10 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getImageToUpdate(context: Context): MultipartBody.Part? {
-        return if (imageChanged) {
+    private suspend fun getImageToUpdate(context: Context, imageChanged: Boolean): MultipartBody.Part? {
+        return if (defaultImage) {
+            null
+        } else if (imageChanged) {
             _userData.value?.profileUrl.let {
                 val uri = Uri.parse(it)
                 getCompressedImage(context, uri)
@@ -76,16 +78,16 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    suspend fun patchUserData(context: Context, nickname: String) {
+    suspend fun patchUserData(context: Context, imageChanged: Boolean, nickname: String) {
         val nicknameToUpdate = getNicknameToUpdate(nickname)
-        val imageToUpdate = getImageToUpdate(context)
+        val imageToUpdate = getImageToUpdate(context, imageChanged)
 
-        if (nicknameToUpdate == null && imageToUpdate == null) {
+        if (nicknameToUpdate == null && !imageChanged) {
             Toast.makeText(context, "수정 사항이 없습니다", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, imageToUpdate)
+        val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, defaultImage, imageToUpdate)
         _userData.value = updatedUserData
     }
 

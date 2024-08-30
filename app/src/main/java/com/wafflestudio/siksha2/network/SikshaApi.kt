@@ -78,6 +78,7 @@ interface SikshaApi {
     @PATCH("/auth/me/image/profile")
     suspend fun updateUserData(
         @Part image: MultipartBody.Part?,
+        @Part("change_to_default_image") changeToDefaultImage: Boolean,
         @Part nickname: MultipartBody.Part?
     ): GetUserDataResult
 

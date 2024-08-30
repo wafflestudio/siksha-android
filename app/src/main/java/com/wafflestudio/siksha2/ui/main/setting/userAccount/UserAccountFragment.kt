@@ -31,6 +31,7 @@ class UserAccountFragment : Fragment() {
     private val userSettingViewModel: SettingViewModel by activityViewModels()
 
     private lateinit var imageView: ShapeableImageView
+    private var imageChanged: Boolean = false
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -70,7 +71,8 @@ class UserAccountFragment : Fragment() {
                 try {
                     userSettingViewModel.patchUserData(
                         context = requireContext(),
-                        nickname = binding.nicknameSetRow.text.toString()
+                        nickname = binding.nicknameSetRow.text.toString(),
+                        imageChanged = imageChanged
                     )
                     findNavController().popBackStack()
                 } catch (e: HttpException) {
@@ -98,8 +100,11 @@ class UserAccountFragment : Fragment() {
             userData?.let {
                 binding.nicknameSetRow.setText(it.nickname)
 
-                it.profileUrl?.let { uri ->
-                    Glide.with(this).load(uri).circleCrop().into(imageView)
+                val imageUrl = it.profileUrl
+                if (imageUrl != null) {
+                    Glide.with(this).load(imageUrl).circleCrop().into(imageView)
+                } else {
+                    Glide.with(this).load(R.drawable.ic_rice_bowl).circleCrop().into(imageView)
                 }
             }
         }
@@ -111,12 +116,12 @@ class UserAccountFragment : Fragment() {
         bottomSheetDialog.setContentView(dialogBinding.root)
 
         dialogBinding.albumButton.setOnClickListener {
-            openGallery()
+            changeToGalleryImage()
             bottomSheetDialog.dismiss()
         }
 
         dialogBinding.defaultImageButton.setOnClickListener {
-            applyDefaultImage()
+            changeToDefaultImage()
             bottomSheetDialog.dismiss()
         }
 
@@ -152,14 +157,14 @@ class UserAccountFragment : Fragment() {
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
-    private fun applyDefaultImage() {
-        imageView.setImageResource(R.drawable.ic_rice_bowl)
-        // 1. Server에 image 기본 rice_bowl image 전송
-        // 2. isDefaultImage를 true로 변경
-        // 추후 서버팀 선택에 따라 추가 작업 필요
+    private fun changeToGalleryImage() {
+        pickImage.launch("image/*")
+        imageChanged = true
     }
 
-    private fun openGallery() {
-        pickImage.launch("image/*")
+    private fun changeToDefaultImage() {
+        userSettingViewModel.updateImageUri(null)
+        Glide.with(this).load(R.drawable.ic_rice_bowl).circleCrop().into(imageView)
+        imageChanged = true
     }
 }
