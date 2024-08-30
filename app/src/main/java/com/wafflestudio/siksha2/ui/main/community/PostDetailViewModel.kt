@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.repositories.CommunityRepository
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +33,10 @@ class PostDetailViewModel @Inject constructor(
 
     private val _post = MutableStateFlow<Post>(Post())
     val post: StateFlow<Post> = _post
+
+    val board = post.map {
+        communityRepository.getBoard(it.boardId)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, Board.Empty)
 
     val commentPagingData = Pager(
         config = PagingConfig(

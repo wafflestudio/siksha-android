@@ -24,6 +24,10 @@ class CommunityRepository @Inject constructor(
         return api.getBoards().map { it.toBoard() }
     }
 
+    suspend fun getBoard(boardId: Long): Board {
+        return api.getBoard(boardId).toBoard()
+    }
+
     fun getUserPostPagingSource() = UserPostPagingSource(api)
     fun getPostPagingSource(boardId: Long) = PostPagingSource(boardId, api)
 
