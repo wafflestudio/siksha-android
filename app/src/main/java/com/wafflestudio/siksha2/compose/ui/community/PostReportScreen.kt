@@ -1,5 +1,6 @@
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -15,16 +16,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kakao.sdk.user.model.User
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.main.community.PostReportEvent
 import com.wafflestudio.siksha2.ui.main.community.PostReportViewModel
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.compose.TopBar
+import com.wafflestudio.siksha2.compose.ui.community.CommunityProfilePicture
+import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
@@ -69,35 +76,20 @@ fun PostReportScreen(
             .fillMaxSize()
             .background(SikshaColors.White900)
     ) {
-        Box(
-            modifier = Modifier
-                .height(88.dp)
-                .fillMaxWidth()
-                .background(SikshaColors.OrangeMain)
-        ) {
-            IconButton(
-                onClick = onNavigateUp,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 16.dp)
-            ) {
+        TopBar(
+            title = "신고하기",
+            navigationButton = {
                 Icon(
                     painter = painterResource(id = R.drawable.larrow),
                     contentDescription = "뒤로가기",
                     tint = Color.White,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier
+                        .clickable(onClick = onNavigateUp)
+                        .padding(16.dp)
+                        .size(24.dp)
                 )
             }
-
-            Text(
-                text = "신고하기",
-                modifier = Modifier.align(Alignment.Center),
-                color = SikshaColors.White900,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold,
-                style = SikshaTypography.subtitle1
-            )
-        }
+        )
 
         Spacer(modifier = Modifier.height(44.dp))
 
@@ -106,21 +98,33 @@ fun PostReportScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            Text(
-                text = "어떤 이유로 신고하시나요?",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Color.Black
-                ),
-                modifier = Modifier.align(Alignment.Center)
-            )
+            Row(
+                modifier = Modifier.align(Alignment.Center),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.frame_11),
+                    contentDescription = null,
+                    tint = Color.Black,
+                    modifier = Modifier.size(18.dp)
+                )
+                Text(
+                    text = "어떤 이유로 신고하시나요?",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color.Black
+                    ),
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(62.dp))
 
         Box(
             modifier = Modifier
-                .width(320.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp)
                 .height(280.dp)
                 .align(Alignment.CenterHorizontally)
                 .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(8.dp))
@@ -129,7 +133,7 @@ fun PostReportScreen(
             BasicTextField(
                 value = reportContent,
                 onValueChange = {
-                    if (it.length <= 500) {
+                    if (it.length <= 200) {
                         reportContent = it
                     }
                 },
@@ -140,7 +144,7 @@ fun PostReportScreen(
             )
 
             Text(
-                text = "${reportContent.length}자/500자",
+                text = "${reportContent.length}자/200자",
                 style = TextStyle(color = Color.Gray, fontSize = 12.sp),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
@@ -148,7 +152,7 @@ fun PostReportScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(200.dp))
+        Spacer(modifier = Modifier.height(193.dp))
 
         Button(
             onClick = {
@@ -169,7 +173,6 @@ fun PostReportScreen(
                 )
             )
         }
-
         Spacer(modifier = Modifier.height(16.dp))
     }
 }
@@ -177,8 +180,10 @@ fun PostReportScreen(
 @Preview(showBackground = true)
 @Composable
 fun PostReportScreenPreview() {
-    PostReportScreen(
-        onNavigateUp = {},
-        onClickReport = {}
-    )
+    SikshaTheme {
+        PostReportScreen(
+            onNavigateUp = {},
+            onClickReport = {}
+        )
+    }
 }

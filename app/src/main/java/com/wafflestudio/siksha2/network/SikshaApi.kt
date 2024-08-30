@@ -178,7 +178,8 @@ interface SikshaApi {
     ): PostUnlikeCommentResponse
 
     @DELETE("community/posts/{postId}")
-    suspend fun deletePost(@Path("postId") postId: Long): Response<Unit?>
+    suspend fun deletePost(@Path("postId") postId: Long
+    ): Response<Unit?>
 
     @DELETE("/community/comments/{comment_id}")
     suspend fun deleteComment(

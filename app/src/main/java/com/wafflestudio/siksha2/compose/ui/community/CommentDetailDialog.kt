@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +36,8 @@ fun CommentDetailDialog(
             modifier = Modifier
                 .width(315.dp)
                 .height(165.dp)
-                .background(Color.White, shape = RoundedCornerShape(26.dp))
+                .clip(RoundedCornerShape(26.dp))
+                .background(Color.White)
                 .border(
                     width = 1.dp,
                     color = Color.Gray,
@@ -63,12 +65,9 @@ fun CommentDetailDialog(
             }
             Divider(color = Color(0xFFE0E0E0), thickness = 1.dp)
             Surface(
-                modifier = Modifier
+                modifier=Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .background(Color.White, RoundedCornerShape(26.dp)),
-                shape = RoundedCornerShape(26.dp),
-                color = Color.White
             ) {
                 Text(
                     text = "신고하기",

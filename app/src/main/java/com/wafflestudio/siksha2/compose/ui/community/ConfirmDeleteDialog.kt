@@ -2,7 +2,9 @@ package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +32,8 @@ import androidx.compose.ui.window.Dialog
 fun ConfirmDeleteDialog(
     onDismissRequest: () -> Unit,
     onConfirmDelete: () -> Unit,
-    onCancelDelete: () -> Unit
+    onCancelDelete: () -> Unit,
+    modifier: Modifier=Modifier
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
@@ -85,12 +88,12 @@ fun ConfirmDeleteDialog(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(
-                    onClick = onCancelDelete,
+                Box(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
                         .padding(vertical = 8.dp)
+                        .clickable(onClick = onCancelDelete)
                 ) {
                     Text(
                         text = "취소",
@@ -99,6 +102,7 @@ fun ConfirmDeleteDialog(
                         fontWeight = FontWeight.Bold
                     )
                 }
+
 
                 Spacer(
                     modifier = Modifier
