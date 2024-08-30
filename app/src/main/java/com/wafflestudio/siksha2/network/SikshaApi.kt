@@ -71,8 +71,21 @@ interface SikshaApi {
         @Body req: VocParam
     )
 
-    @GET("/auth/me")
+    @GET("/auth/me/image")
     suspend fun getUserData(): GetUserDataResult
+
+    @Multipart
+    @PATCH("/auth/me/image/profile")
+    suspend fun updateUserData(
+        @Part image: MultipartBody.Part?,
+        @Part("change_to_default_image") changeToDefaultImage: Boolean,
+        @Part nickname: MultipartBody.Part?
+    ): GetUserDataResult
+
+    @GET("/auth/nicknames/validate")
+    suspend fun checkNickname(
+        @Query("nickname") nickname: String
+    )
 
     @GET("/versions/android")
     suspend fun getVersion(): GetVersionResult
@@ -89,6 +102,12 @@ interface SikshaApi {
     @GET("/community/posts")
     suspend fun getPosts(
         @Query("board_id") boardId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Int
+    ): GetPostsResult
+
+    @GET("/community/posts/me")
+    suspend fun getUserPosts(
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
     ): GetPostsResult

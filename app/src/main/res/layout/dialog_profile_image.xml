@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/transparent"
+    android:gravity="center"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/frame_setting_layout"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/dialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="프로필 사진 설정"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:padding = "8dp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray_500"
+            android:layout_marginHorizontal="8dp" />
+
+        <TextView
+            android:id="@+id/albumButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="앨범에서 사진 선택"
+            android:textColor="@android:color/holo_blue_dark"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            android:textSize="15.5sp"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray_500"
+            android:layout_marginHorizontal="8dp" />
+
+        <TextView
+            android:id="@+id/defaultImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="기본 이미지 적용"
+            android:textColor="@android:color/holo_blue_dark"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            android:textSize="15.5sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/frame_setting_layout"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/cancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="취소"
+            android:textColor="@android:color/holo_blue_dark"
+            android:background="@android:color/transparent"
+            android:padding="16dp"
+            android:textSize="15.5sp"
+            android:gravity="center"
+            android:textStyle="bold"/>
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

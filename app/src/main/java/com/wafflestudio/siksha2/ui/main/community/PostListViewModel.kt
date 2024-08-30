@@ -49,7 +49,7 @@ class PostListViewModel @Inject constructor(
                 pageSize = ITEMS_PER_PAGE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { communityRepository.postPagingSource(board.id) }
+            pagingSourceFactory = { communityRepository.getPostPagingSource(board.id) }
         ).flow.cachedIn(viewModelScope)
     }
     private val modifiedPostsCache = MutableStateFlow(mapOf<Long, Post>())

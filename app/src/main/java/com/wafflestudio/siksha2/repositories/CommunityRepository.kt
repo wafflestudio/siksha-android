@@ -7,6 +7,7 @@ import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
+import com.wafflestudio.siksha2.repositories.pagingsource.UserPostPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -23,7 +24,8 @@ class CommunityRepository @Inject constructor(
         return api.getBoards().map { it.toBoard() }
     }
 
-    fun postPagingSource(boardId: Long) = PostPagingSource(boardId, api)
+    fun getUserPostPagingSource() = UserPostPagingSource(api)
+    fun getPostPagingSource(boardId: Long) = PostPagingSource(boardId, api)
 
     suspend fun getPost(postId: Long): Post {
         return api.getPost(postId).toPost()
