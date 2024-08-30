@@ -1,7 +1,7 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
-import android.content.Context
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -31,6 +31,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,9 +61,10 @@ import com.wafflestudio.siksha2.ui.DeletePostImageIcon
 import com.wafflestudio.siksha2.ui.ExpandOptionsIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
+import com.wafflestudio.siksha2.ui.main.community.PostCreateEvent
 import com.wafflestudio.siksha2.ui.main.community.PostCreateViewModel
 import com.wafflestudio.siksha2.utils.KeyboardUtil.keyboardAsState
-import com.wafflestudio.siksha2.utils.showToast
+import kotlinx.coroutines.flow.SharedFlow
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -78,12 +80,12 @@ fun PostCreateRoute(
     val title by postCreateViewModel.title.collectAsState()
     val content by postCreateViewModel.content.collectAsState()
     val imageUriList by postCreateViewModel.imageUrisToUpload.collectAsState()
-    val createPostState by postCreateViewModel.createPostState.collectAsState()
 
     var isAnonymous by remember { mutableStateOf(true) }
     val keyboardState by keyboardAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
     var isBoardListOpen by remember { mutableStateOf(false) }
+    var screenClickEnabled by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
@@ -125,8 +127,10 @@ fun PostCreateRoute(
         onAddImage = { launcher.launch("image/*") },
         onUpload = { postCreateViewModel.sendPost(context, isAnonymous) },
         isUploadActivated = (title.isNotEmpty()) && (content.isNotEmpty()),
-        createPostState = createPostState,
-        context = context,
+        screenClickEnabled = screenClickEnabled,
+        onEnableScreenClick = { screenClickEnabled = true },
+        onDisableScreenClick = { screenClickEnabled = false },
+        postCreateEvent = postCreateViewModel.postCreateEvent,
         modifier = modifier
     )
 }
@@ -154,12 +158,23 @@ fun PostCreateScreen(
     onAddImage: () -> Unit,
     onUpload: () -> Unit,
     isUploadActivated: Boolean,
-    createPostState: PostCreateViewModel.CreatePostState,
-    context: Context,
+    screenClickEnabled: Boolean,
+    onEnableScreenClick: () -> Unit,
+    onDisableScreenClick: () -> Unit,
+    postCreateEvent: SharedFlow<PostCreateEvent>,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
     val closeBoardSelectorInteractionSource = remember { MutableInteractionSource() }
+
+    PostCreateViewEventEffect(
+        postCreateEvent = postCreateEvent,
+        enableScreenClick = onEnableScreenClick,
+        disableScreenClick = onDisableScreenClick,
+        onUploadSuccess = onUploadSuccess,
+        onFetchFailed = onNavigateUp
+    )
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -274,22 +289,13 @@ fun PostCreateScreen(
                     }
                 }
             }
-            when (createPostState) {
-                PostCreateViewModel.CreatePostState.COMPRESSING,
-                PostCreateViewModel.CreatePostState.WAITING
-                -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(color = SikshaColors.White900Alpha80)
-                    ) {
-                    }
-                }
-                PostCreateViewModel.CreatePostState.SUCCESS -> {
-                    context.showToast(stringResource(R.string.community_create_success))
-                    onUploadSuccess()
-                }
-                else -> { }
+            if (screenClickEnabled) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = SikshaColors.White900Alpha80)
+                        .clickable {  }
+                )
             }
         }
     }
@@ -606,5 +612,40 @@ fun UploadButton(
             color = SikshaColors.White900,
             fontWeight = FontWeight.Bold
         )
+    }
+}
+
+@Composable
+private fun PostCreateViewEventEffect(
+    postCreateEvent: SharedFlow<PostCreateEvent>,
+    enableScreenClick: () -> Unit,
+    disableScreenClick: () -> Unit,
+    onUploadSuccess: () -> Unit,
+    onFetchFailed: () -> Unit
+) {
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        postCreateEvent.collect {
+            when (it) {
+                is PostCreateEvent.UploadPostSuccess -> {
+                    Toast.makeText(context, context.getString(R.string.community_create_success), Toast.LENGTH_SHORT).show()
+                    onUploadSuccess()
+                }
+                is PostCreateEvent.UploadPostFailed -> {
+                    Toast.makeText(context, "업로드 중 오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                }
+                is PostCreateEvent.FetchPostSuccess -> {
+                    enableScreenClick()
+                }
+                is PostCreateEvent.FetchPostFailed -> {
+                    Toast.makeText(context, "서버에서 데이터를 가져오는 중 오류가 발생했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                    onFetchFailed()
+                }
+                is PostCreateEvent.UploadPostProcessing,
+                is PostCreateEvent.FetchPostProcessing -> {
+                    disableScreenClick()
+                }
+            }
+        }
     }
 }

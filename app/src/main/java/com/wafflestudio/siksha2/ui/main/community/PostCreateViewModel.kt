@@ -12,8 +12,10 @@ import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -60,24 +62,31 @@ class PostCreateViewModel @Inject constructor(
     private val _boards = MutableStateFlow<List<Board>>(listOf())
     val boards: StateFlow<List<Board>> = _boards
 
-    private val _createPostState = MutableStateFlow(CreatePostState.USER_INPUT)
-    val createPostState: StateFlow<CreatePostState> = _createPostState
     private val isEdit get() = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId == -1L
+
+    private val _postCreateEvent = MutableSharedFlow<PostCreateEvent>()
+    val postCreateEvent = _postCreateEvent.asSharedFlow()
 
     init {
         viewModelScope.launch {
             _boards.value = communityRepository.getBoards()
             val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
             val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
-            // boardId와 postId 중 하나만 -1이 아니어야 하고, 나머지 경우는 오류
-            if ((boardId == -1L) == (postId == -1L)) {
-                // error handling
-            } else if (boardId != -1L) {
-                createPostInit(boardId)
-            } else { // postId != -1L
-                editPostInit(postId)
+            runCatching {
+                _postCreateEvent.emit(PostCreateEvent.FetchPostProcessing)
+                // boardId와 postId 중 하나만 -1이 아니어야 하고, 나머지 경우는 오류
+                if ((boardId == -1L) == (postId == -1L)) {
+                    throw Exception()
+                } else if (boardId != -1L) {
+                    createPostInit(boardId)
+                } else { // postId != -1L
+                    editPostInit(postId)
+                }
+            }.onSuccess {
+                _postCreateEvent.emit(PostCreateEvent.FetchPostSuccess)
+            }.onFailure {
+                _postCreateEvent.emit(PostCreateEvent.FetchPostFailed)
             }
-            _createPostState.value = CreatePostState.USER_INPUT
         }
     }
 
@@ -121,23 +130,22 @@ class PostCreateViewModel @Inject constructor(
     private fun createPost(context: Context, anonymous: Boolean) {
         val boardId = _board.value.id
         viewModelScope.launch {
-            try {
-                _createPostState.value = CreatePostState.COMPRESSING
+            runCatching {
+                _postCreateEvent.emit(PostCreateEvent.UploadPostProcessing)
                 val imageList = _imageUrisToUpload.value.map {
                     getCompressedImageAsMultipartBody(context, it)
                 }
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
                 val contentBody = MultipartBody.Part.createFormData("content", content.value)
-                _createPostState.value = CreatePostState.WAITING
                 var response: Post?
                 imageList.let {
                     response = communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
                 }
                 _createdPostId.value = response?.id ?: -1
-                _createPostState.value = CreatePostState.SUCCESS
-            } catch (e: Exception) {
-                context.showToast("오류가 발생했습니다. 다시 시도해 주세요.")
-                _createPostState.value = CreatePostState.USER_INPUT
+            }.onSuccess {
+                _postCreateEvent.emit(PostCreateEvent.UploadPostSuccess)
+            }.onFailure {
+                _postCreateEvent.emit(PostCreateEvent.UploadPostFailed)
             }
         }
     }
@@ -145,8 +153,8 @@ class PostCreateViewModel @Inject constructor(
     private fun patchPost(context: Context, anonymous: Boolean) {
         val boardId = _board.value.id
         viewModelScope.launch {
-            try {
-                _createPostState.value = CreatePostState.COMPRESSING
+            runCatching {
+                _postCreateEvent.emit(PostCreateEvent.UploadPostProcessing)
                 val imageList = _imageUrisToUpload.value.map { uri ->
                     if (_downloadedImages.value.containsKey(uri.toString())) {
                         val filename = uri.toString()
@@ -155,17 +163,16 @@ class PostCreateViewModel @Inject constructor(
                         getCompressedImageAsMultipartBody(context, uri)
                     }
                 }
-
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
                 val contentBody = MultipartBody.Part.createFormData("content", content.value)
-                _createPostState.value = CreatePostState.WAITING
                 val response = imageList.let {
                     communityRepository.patchPost(_post.value.id, boardId, titleBody, contentBody, anonymous, imageList)
                 }
                 _createdPostId.value = response.id
-                _createPostState.value = CreatePostState.SUCCESS
-            } catch (e: Exception) {
-                throw e
+            }.onSuccess {
+                _postCreateEvent.emit(PostCreateEvent.UploadPostSuccess)
+            }.onFailure {
+                _postCreateEvent.emit(PostCreateEvent.UploadPostFailed)
             }
         }
     }
@@ -214,11 +221,13 @@ class PostCreateViewModel @Inject constructor(
             }
         }
     }
+}
 
-    enum class CreatePostState {
-        USER_INPUT,
-        COMPRESSING,
-        WAITING,
-        SUCCESS
-    }
+sealed interface PostCreateEvent {
+    object UploadPostSuccess: PostCreateEvent
+    object UploadPostFailed: PostCreateEvent
+    object UploadPostProcessing: PostCreateEvent
+    object FetchPostSuccess: PostCreateEvent
+    object FetchPostFailed: PostCreateEvent
+    object FetchPostProcessing: PostCreateEvent
 }
