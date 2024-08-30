@@ -11,8 +11,8 @@
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting">
         <action
-            android:id="@+id/action_settingFragment_to_sikshaInfoFragment"
-            app:destination="@id/sikshaInfoFragment" />
+            android:id="@+id/action_settingFragment_to_settingAccountFragment"
+            app:destination="@id/setting_account_fragment" />
         <action
             android:id="@+id/action_settingFragment_to_reorderRestaurantFragment"
             app:destination="@id/reorderRestaurantFragment"
@@ -20,13 +20,16 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_settingFragment_to_userSettingFragment"
+            app:destination="@id/userSettingFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/sikshaInfoFragment"
-        android:name="com.wafflestudio.siksha2.ui.main.setting.info.SikshaInfoFragment"
-        android:label="fragment_siksha_info"
-        tools:layout="@layout/fragment_siksha_info" />
+        android:id="@+id/setting_account_fragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.account.UserAccountFragment"
+        android:label="fragment_setting_account"
+        tools:layout="@layout/fragment_user_account" />
 
     <fragment
         android:id="@+id/reorderRestaurantFragment"
@@ -38,4 +41,8 @@
             android:defaultValue="false"
             app:argType="boolean" />
     </fragment>
+    <fragment
+        android:id="@+id/userSettingFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.userAccount.UserProfileFragment"
+        android:label="UserSettingFragment" />
 </navigation>

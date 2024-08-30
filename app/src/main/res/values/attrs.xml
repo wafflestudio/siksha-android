@@ -5,6 +5,7 @@
         <attr name="showNewIcon" format="boolean" />
         <attr name="showArrowIcon" format="boolean" />
         <attr name="showCheckbox" format="boolean" />
+        <attr name="textColor" format="color" />
     </declare-styleable>
     <declare-styleable name="RatingStarsView">
         <attr name="starSize" format="enum">

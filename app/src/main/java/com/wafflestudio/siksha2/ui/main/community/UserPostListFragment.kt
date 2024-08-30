@@ -11,34 +11,36 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.compose.ui.community.PostDetailRoute
+import com.wafflestudio.siksha2.compose.ui.community.UserPostListRoute
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @AndroidEntryPoint
-class PostDetailFragment : Fragment() {
-
-    private val postListViewModel: PostListViewModel by activityViewModels()
-    private val userPostListViewModel: UserPostListViewModel by activityViewModels() // FIXME: UserPostListViewModel을 acitivityViewModel로 유지할 필요 없다. 수정 필요
+class UserPostListFragment : Fragment() {
+    private val userPostListViewModel: UserPostListViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_post_detail, container, false)
+    ): View {
+        return inflater.inflate(R.layout.fragment_user_post_list, container, false)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.findViewById<ComposeView>(R.id.community_compose_view).setContent {
             SikshaTheme {
-                PostDetailRoute(
-                    onNavigateUp = { findNavController().navigateUp() },
+                UserPostListRoute(
                     modifier = Modifier.fillMaxSize(),
-                    postListViewModel = postListViewModel,
-                    userPostListViewModel = userPostListViewModel
+                    userPostListViewModel = userPostListViewModel,
+                    onClickPost = { postId ->
+                        findNavController().navigate(
+                            UserPostListFragmentDirections.actionUserPostListFragmentToPostDetailFragment(
+                                postId
+                            )
+                        )
+                    },
+                    onNavigateUp = { findNavController().navigateUp() }
                 )
             }
         }

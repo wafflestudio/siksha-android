@@ -9,6 +9,7 @@ data class Comment(
     val updatedAt: LocalDateTime = LocalDateTime.MIN,
     val id: Long = 0L,
     val nickname: String = "",
+    val profilePicture: String? = null,
     val available: Boolean = true,
     val anonymous: Boolean = true,
     val isMine: Boolean = false,

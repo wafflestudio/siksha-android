@@ -72,7 +72,7 @@ import com.wafflestudio.siksha2.ui.ThumbIcon
 import com.wafflestudio.siksha2.ui.main.community.PostDetailEvent
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
-import com.wafflestudio.siksha2.utils.showImageViewer
+import com.wafflestudio.siksha2.ui.main.community.UserPostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -86,24 +86,30 @@ fun PostDetailRoute(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel(),
+    userPostListViewModel: UserPostListViewModel = hiltViewModel(),
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
 ) {
     val post by postDetailViewModel.post.collectAsState()
     val board by postListViewModel.selectedBoard.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
+    val isAnonymous by postDetailViewModel.isAnonymous.collectAsState()
 
     PostDetailScreen(
         post = post,
         board = board,
         comments = comments,
         postDetailEvent = postDetailViewModel.postDetailEvent,
+        isAnonymous = isAnonymous,
         onNavigateUp = onNavigateUp,
         refreshComments = { comments.refresh() },
         togglePostLike = postDetailViewModel::togglePostLike,
         toggleCommentLike = postDetailViewModel::toggleCommentLike,
         updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
         updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
+        updateUserListWithLikedPost = userPostListViewModel::updateUserListWithLikedPost,
+        updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
         addComment = postDetailViewModel::addComment,
+        onIsAnonymousChanged = postDetailViewModel::setIsAnonymous,
         modifier = modifier
     )
 }
@@ -114,17 +120,20 @@ fun PostDetailScreen(
     board: Board,
     comments: LazyPagingItems<Comment>,
     postDetailEvent: SharedFlow<PostDetailEvent>,
+    isAnonymous: Boolean,
     onNavigateUp: () -> Unit,
     togglePostLike: () -> Unit,
     refreshComments: () -> Unit,
     toggleCommentLike: (Comment) -> Unit,
     updateListWithLikedPost: (Post) -> Unit,
     updateListWithCommentAddedPost: (Post) -> Unit,
+    updateUserListWithLikedPost: (Post) -> Unit,
+    updateUserListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
+    onIsAnonymousChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var commentInput by remember { mutableStateOf("") }
-    var isAnonymousInput by remember { mutableStateOf(true) }
     val commentListState = rememberLazyListState()
 
     PostDetailViewEventEffect(
@@ -165,6 +174,7 @@ fun PostDetailScreen(
                         onClickLike = {
                             togglePostLike()
                             updateListWithLikedPost(post)
+                            updateUserListWithLikedPost(post)
                         }
                     )
                     CommunityDivider()
@@ -187,11 +197,12 @@ fun PostDetailScreen(
         CommentInputRow(
             commentInput = commentInput,
             onCommentInputChanged = { commentInput = it },
-            isAnonymous = isAnonymousInput,
-            onIsAnonymousChanged = { isAnonymousInput = it },
+            isAnonymous = isAnonymous,
+            onIsAnonymousChanged = onIsAnonymousChanged,
             addComment = { ->
-                addComment(commentInput, isAnonymousInput)
+                addComment(commentInput, isAnonymous)
                 updateListWithCommentAddedPost(post)
+                updateUserListWithCommentAddedPost(post)
             },
             modifier = Modifier
                 .padding(horizontal = 9.dp, vertical = 5.dp)
@@ -268,7 +279,7 @@ fun PostHeader(
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CommunityProfilePicture(model = null) // TODO: 서버에서 프로필이미지 내려주면 반영하기
+        CommunityProfilePicture(model = post.profilePicture)
         Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = Modifier
@@ -303,7 +314,6 @@ fun PostBody(
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {}
 ) {
-    val context = LocalContext.current
     Column(
         modifier = modifier
     ) {
@@ -335,10 +345,7 @@ fun PostBody(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .padding(start = startPadding, end = endPadding)
-                        .clickable {
-                            context.showImageViewer(images, it)
-                        },
+                        .padding(start = startPadding, end = endPadding),
                     contentDescription = "",
                     loading = {
                         CircularProgressIndicator(
@@ -426,7 +433,7 @@ fun CommentItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CommunityProfilePicture(
-                    model = null,
+                    model = comment.profilePicture,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
@@ -583,6 +590,7 @@ fun PostDetailScreenPreview() {
             board = Board(),
             comments = flowOf(PagingData.empty<Comment>()).collectAsLazyPagingItems(),
             postDetailEvent = MutableSharedFlow(),
+            isAnonymous = true,
             onNavigateUp = {},
             togglePostLike = {},
             refreshComments = {},
@@ -590,6 +598,9 @@ fun PostDetailScreenPreview() {
             toggleCommentLike = {},
             addComment = { _, _ -> },
             updateListWithCommentAddedPost = {},
+            updateUserListWithCommentAddedPost = {},
+            updateUserListWithLikedPost = {},
+            onIsAnonymousChanged = {},
             modifier = Modifier.fillMaxSize()
         )
     }
