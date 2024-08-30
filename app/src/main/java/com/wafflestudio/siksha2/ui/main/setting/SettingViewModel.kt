@@ -38,11 +38,11 @@ class SettingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             _userData.value = userStatusManager.getUserData()
-            versionCheck()
+            checkAppVersion()
         }
     }
 
-    private suspend fun versionCheck() {
+    private suspend fun checkAppVersion() {
         val latestVersionNum = userStatusManager.getVersion()
         _versionCheck.value = (packageVersion == latestVersionNum)
     }
