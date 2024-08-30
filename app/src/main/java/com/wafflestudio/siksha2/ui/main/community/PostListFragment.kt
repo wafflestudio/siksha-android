@@ -41,6 +41,12 @@ class PostListFragment : Fragment() {
                                 postId
                             )
                         )
+                    },
+                    onNewPost = { id ->
+                        findNavController().navigate(
+                            MainFragmentDirections.actionMainFragmentToCreatePostFragment()
+                                .apply { boardId = id }
+                        )
                     }
                 )
             }

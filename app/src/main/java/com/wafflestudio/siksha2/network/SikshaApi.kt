@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
+import com.wafflestudio.siksha2.network.dto.core.BoardDto
 import okhttp3.MultipartBody
 import retrofit2.http.*
 import java.time.LocalDate
@@ -143,6 +144,27 @@ interface SikshaApi {
     suspend fun postUnlikePost(
         @Path("post_id") postId: Long
     ): PostUnlikePostResponse
+
+    @Multipart
+    @POST("/community/posts")
+    suspend fun postCreatePost(
+        @Part("board_id") boardId: Long,
+        @Part title: MultipartBody.Part,
+        @Part content: MultipartBody.Part,
+        @Part("anonymous") anonymous: Boolean,
+        @Part images: List<MultipartBody.Part>
+    ): CreatePostResponse
+
+    @Multipart
+    @PATCH("/community/posts/{post_id}")
+    suspend fun postPatchPost(
+        @Path("post_id") postId: Long,
+        @Part("board_id") boardId: Long,
+        @Part title: MultipartBody.Part,
+        @Part content: MultipartBody.Part,
+        @Part("anonymous") anonymous: Boolean,
+        @Part images: List<MultipartBody.Part>
+    ): PatchPostResponse
 
     @POST("/community/comments/{comment_id}/like")
     suspend fun postLikeComment(

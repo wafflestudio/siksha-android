@@ -47,6 +47,9 @@
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
         <action
+            android:id="@+id/action_mainFragment_to_createPostFragment"
+            app:destination="@id/postCreateFragment" />
+        <action
             android:id="@+id/action_mainFragment_to_userAccountFragment"
             app:destination="@id/userAccountFragment"
             app:enterAnim="@anim/slide_left"
@@ -155,6 +158,37 @@
         <argument
             android:name="post_id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_postDetailFragment_to_postEditFragment"
+            app:destination="@id/postEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postCreateFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostCreateFragment"
+        android:label="PostCreateFragment">
+        <argument
+            android:name="board_id"
+            android:defaultValue="-1L"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_postCreateFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/postEditFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.community.PostEditFragment"
+        android:label="PostEditFragment">
+        <argument
+            android:name="post_id"
+            android:defaultValue="-1L"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_postEditFragment_to_postDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:popUpTo="@id/postDetailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

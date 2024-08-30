@@ -77,6 +77,14 @@
     <string name="community_comment_send_button">올리기</string>
     <string name="community_comment_hint">댓글을 입력하세요.</string>
     <string name="community_comment_anonymous">익명</string>
+    <string name="community_create_screen_title">글쓰기</string>
+    <string name="community_create_title_placeholder">제목</string>
+    <string name="community_create_content_placeholder">내용을 입력하세요.</string>
+    <string name="community_create_success">글을 올렸습니다.</string>
+    <string name="community_create_anonymous">익명</string>
+    <string name="community_create_submit_content">OK</string>
+    <string name="community_create_image_idx">번째 이미지</string>
+    <string name="community_create_title_length_warning">제목은 200자를 넘길 수 없습니다.</string>
     <string name="siksha_info_dialog_withdrawal_content">앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.</string>
     <string name="version_text">siksha-%s</string>
     <string name="image_viewer_current_page">%1$d/%2$d</string>
