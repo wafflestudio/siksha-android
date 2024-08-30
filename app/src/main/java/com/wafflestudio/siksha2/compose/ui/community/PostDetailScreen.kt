@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
+import PostDetailDialog
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -51,7 +52,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.SubcomposeAsyncImage
@@ -72,56 +72,145 @@ import com.wafflestudio.siksha2.ui.ThumbIcon
 import com.wafflestudio.siksha2.ui.main.community.PostDetailEvent
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
+import com.wafflestudio.siksha2.ui.main.community.PostUiState
 import com.wafflestudio.siksha2.ui.main.community.UserPostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun PostDetailRoute(
     onNavigateUp: () -> Unit,
+    onNavigateToPostReport: (Long) -> Unit,
+    onNavigateToCommentReport: (Long) -> Unit,
+    onNavigateToPostEdit: (Long) -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel(),
     userPostListViewModel: UserPostListViewModel = hiltViewModel(),
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
 ) {
-    val post by postDetailViewModel.post.collectAsState()
+    val postUiState by postDetailViewModel.postUiState.collectAsState()
     val board by postDetailViewModel.board.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
     val isAnonymous by postDetailViewModel.isAnonymous.collectAsState()
 
-    PostDetailScreen(
-        post = post,
-        board = board,
-        comments = comments,
-        postDetailEvent = postDetailViewModel.postDetailEvent,
-        isAnonymous = isAnonymous,
-        onNavigateUp = onNavigateUp,
-        refreshComments = { comments.refresh() },
-        togglePostLike = postDetailViewModel::togglePostLike,
-        toggleCommentLike = postDetailViewModel::toggleCommentLike,
-        updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
-        updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
-        updateUserListWithLikedPost = userPostListViewModel::updateUserListWithLikedPost,
-        updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
-        addComment = postDetailViewModel::addComment,
-        onIsAnonymousChanged = postDetailViewModel::setIsAnonymous,
-        modifier = modifier
-    )
+    when (postUiState) {
+        is PostUiState.Success -> {
+            PostDetailScreenSuccess(
+                post = (postUiState as PostUiState.Success).post,
+                board = board,
+                comments = comments,
+                postDetailEvent = postDetailViewModel.postDetailEvent,
+                isAnonymous = isAnonymous,
+                onNavigateUp = onNavigateUp,
+                onNavigateToPostReport = onNavigateToPostReport,
+                onNavigateToCommentReport = onNavigateToCommentReport,
+                onNavigateToPostEdit = onNavigateToPostEdit,
+                refreshComments = { comments.refresh() },
+                togglePostLike = postDetailViewModel::togglePostLike,
+                toggleCommentLike = postDetailViewModel::toggleCommentLike,
+                updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
+                updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
+                updateUserListWithLikedPost = userPostListViewModel::updateUserListWithLikedPost,
+                updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
+                addComment = postDetailViewModel::addComment,
+                deletePost = postDetailViewModel::deletePost,
+                deleteComment = postDetailViewModel::deleteComment,
+                onIsAnonymousChanged = postDetailViewModel::setIsAnonymous,
+                modifier = modifier
+            )
+        }
+
+        is PostUiState.Failed -> {
+            PostDetailScreenFailed(
+                onNavigateUp = onNavigateUp,
+                errorMessage = (postUiState as PostUiState.Failed).errorMessage,
+                modifier = modifier
+            )
+        }
+
+        is PostUiState.Loading -> {
+            PostDetailScreenLoading(
+                onNavigateUp = onNavigateUp,
+                modifier = modifier
+            )
+        }
+    }
 }
 
 @Composable
-fun PostDetailScreen(
+fun PostDetailScreenFailed(
+    onNavigateUp: () -> Unit,
+    errorMessage: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.background(SikshaColors.White900)
+    ) {
+        TopBar(
+            title = "",
+            navigationButton = {
+                NavigateUpIcon(
+                    modifier = Modifier.clickable {
+                        onNavigateUp()
+                    }
+                )
+            }
+        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = errorMessage,
+                color = SikshaColors.Gray400,
+                fontSize = 12.sp,
+                style = MaterialTheme.typography.body2
+            )
+        }
+    }
+}
+
+@Composable
+fun PostDetailScreenLoading(
+    onNavigateUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.background(SikshaColors.White900)
+    ) {
+        TopBar(
+            title = "",
+            navigationButton = {
+                NavigateUpIcon(
+                    modifier = Modifier.clickable {
+                        onNavigateUp()
+                    }
+                )
+            }
+        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+fun PostDetailScreenSuccess(
     post: Post,
     board: Board,
     comments: LazyPagingItems<Comment>,
     postDetailEvent: SharedFlow<PostDetailEvent>,
     isAnonymous: Boolean,
     onNavigateUp: () -> Unit,
+    onNavigateToPostReport: (Long) -> Unit,
+    onNavigateToCommentReport: (Long) -> Unit,
+    onNavigateToPostEdit: (Long) -> Unit,
     togglePostLike: () -> Unit,
     refreshComments: () -> Unit,
     toggleCommentLike: (Comment) -> Unit,
@@ -130,15 +219,59 @@ fun PostDetailScreen(
     updateUserListWithLikedPost: (Post) -> Unit,
     updateUserListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
+    deletePost: (Long) -> Unit,
+    deleteComment: (Long) -> Unit,
     onIsAnonymousChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var commentInput by remember { mutableStateOf("") }
     val commentListState = rememberLazyListState()
+    var isPostDialogShowed by remember { mutableStateOf(false) }
+    var isConfirmDeleteDialogShowed by remember { mutableStateOf(false) }
+
+    if (isPostDialogShowed) {
+        PostDetailDialog(
+            isMine = post.isMine,
+            onDismissRequest = {
+                isPostDialogShowed = false
+            },
+            onClickEdit = {
+                onNavigateToPostEdit(post.id)
+            },
+            onClickDelete = {
+                isConfirmDeleteDialogShowed = true
+                isPostDialogShowed = false
+            },
+            onClickReport = {
+                isPostDialogShowed = false
+                onNavigateToPostReport(post.id)
+            },
+            onClickCancel = {
+                isPostDialogShowed = false
+            }
+        )
+    }
+
+    if (isConfirmDeleteDialogShowed) {
+        ConfirmDeleteDialog(
+            title = stringResource(R.string.community_post_delete_dialog_title),
+            description = stringResource(R.string.community_post_delete_dialog_description),
+            onDismissRequest = {
+                isConfirmDeleteDialogShowed = false
+            },
+            onConfirmDelete = {
+                deletePost(post.id)
+            },
+            onCancelDelete = {
+                isConfirmDeleteDialogShowed = false
+            }
+        )
+    }
 
     PostDetailViewEventEffect(
         postDetailEvent = postDetailEvent,
-        refreshComments = refreshComments
+        refreshComments = refreshComments,
+        onNavigateUp = onNavigateUp
     )
 
     AutoScrollCommentsEffect(
@@ -166,7 +299,8 @@ fun PostDetailScreen(
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
                     PostHeader(
-                        post = post
+                        post = post,
+                        onClick = { isPostDialogShowed = true }
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     PostBody(
@@ -181,13 +315,19 @@ fun PostDetailScreen(
                 }
                 items(comments.itemCount) {
                     comments[it]?.let { comment ->
-                        CommentItem(
-                            comment = comment,
-                            modifier = Modifier.fillMaxWidth(),
-                            onClickLike = {
-                                toggleCommentLike(comment)
-                            }
-                        )
+                        if (comment.available) {
+                            CommentItem(
+                                comment = comment,
+                                modifier = Modifier.fillMaxWidth(),
+                                onClickLike = {
+                                    toggleCommentLike(comment)
+                                },
+                                onClickReport = onNavigateToCommentReport,
+                                deleteComment = deleteComment
+                            )
+                        } else {
+                            UnavailableCommentItem()
+                        }
                         CommunityDivider()
                     }
                 }
@@ -214,7 +354,8 @@ fun PostDetailScreen(
 @Composable
 private fun PostDetailViewEventEffect(
     postDetailEvent: SharedFlow<PostDetailEvent>,
-    refreshComments: () -> Unit
+    refreshComments: () -> Unit,
+    onNavigateUp: () -> Unit
 ) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
@@ -234,6 +375,20 @@ private fun PostDetailViewEventEffect(
 
                 is PostDetailEvent.ToggleCommentLikeFailed -> {
                     Toast.makeText(context, "일시적인 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeletePostSuccess -> {
+                    onNavigateUp()
+                    Toast.makeText(context, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeletePostFailed -> {
+                    Toast.makeText(context, "게시물 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeleteCommentSuccess -> {
+                    refreshComments()
+                    Toast.makeText(context, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                is PostDetailEvent.DeleteCommentFailed -> {
+                    Toast.makeText(context, "댓글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -270,7 +425,8 @@ private suspend fun LazyListState.animateScrollToLastItem() {
 @Composable
 fun PostHeader(
     post: Post,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -303,7 +459,11 @@ fun PostHeader(
             )
         }
         Spacer(modifier = Modifier.width(7.dp))
-        EtcIcon(modifier = Modifier.size(16.dp))
+        EtcIcon(
+            modifier = Modifier
+                .size(16.dp)
+                .clickable { onClick() }
+        )
     }
 }
 
@@ -417,11 +577,46 @@ fun PostLikeButton(
 }
 
 @Composable
+fun UnavailableCommentItem(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .padding(horizontal = 20.dp)
+            .height(60.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = stringResource(R.string.community_comment_unavailable),
+            color = SikshaColors.Gray400,
+            fontSize = 12.sp,
+            style = MaterialTheme.typography.body2
+        )
+    }
+}
+
+@Composable
 fun CommentItem(
     comment: Comment,
     modifier: Modifier = Modifier,
-    onClickLike: () -> Unit = {}
+    onClickLike: () -> Unit = {},
+    onClickReport: (Long) -> Unit,
+    deleteComment: (Long) -> Unit
 ) {
+    var showCommentDetailDialog by remember { mutableStateOf(false) }
+    var showConfirmDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showConfirmDeleteDialog) {
+        ConfirmDeleteDialog(
+            title = stringResource(R.string.community_comment_delete_dialog_title),
+            description = stringResource(R.string.community_comment_delete_dialog_description),
+            onDismissRequest = { showConfirmDeleteDialog = false },
+            onConfirmDelete = { deleteComment(comment.id) },
+            onCancelDelete = { showConfirmDeleteDialog = false }
+        )
+    }
+
     Row(
         modifier = modifier
             .padding(horizontal = 20.dp, vertical = 12.dp)
@@ -462,6 +657,9 @@ fun CommentItem(
                 modifier = Modifier
                     .padding(start = 4.dp)
                     .size(16.dp)
+                    .clickable {
+                        showCommentDetailDialog = true
+                    }
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -470,6 +668,24 @@ fun CommentItem(
             isLiked = comment.isLiked,
             onClick = onClickLike,
             modifier = Modifier.align(Alignment.CenterVertically)
+        )
+    }
+
+    if (showCommentDetailDialog) {
+        CommentDetailDialog(
+            isMine = comment.isMine,
+            onDismissRequest = { showCommentDetailDialog = false },
+            onClickDelete = {
+                showCommentDetailDialog = false
+                showConfirmDeleteDialog = true
+            },
+            onClickReport = {
+                showCommentDetailDialog = false
+                onClickReport(comment.id)
+            },
+            onClickCancel = {
+                showCommentDetailDialog = false
+            }
         )
     }
 }
@@ -581,36 +797,11 @@ fun CommentInputRow(
     )
 }
 
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
-@Composable
-fun PostDetailScreenPreview() {
-    SikshaTheme {
-        PostDetailScreen(
-            post = Post(),
-            board = Board(),
-            comments = flowOf(PagingData.empty<Comment>()).collectAsLazyPagingItems(),
-            postDetailEvent = MutableSharedFlow(),
-            isAnonymous = true,
-            onNavigateUp = {},
-            togglePostLike = {},
-            refreshComments = {},
-            updateListWithLikedPost = {},
-            toggleCommentLike = {},
-            addComment = { _, _ -> },
-            updateListWithCommentAddedPost = {},
-            updateUserListWithCommentAddedPost = {},
-            updateUserListWithLikedPost = {},
-            onIsAnonymousChanged = {},
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun PostHeaderPreview() {
     SikshaTheme {
-        PostHeader(post = Post(title = "제목", createdAt = LocalDateTime.now(), nickname = "닉네임"))
+        PostHeader(post = Post(title = "제목", createdAt = LocalDateTime.now(), nickname = "닉네임"), onClick = {})
     }
 }
 
@@ -622,16 +813,6 @@ fun PostLikeButtonPreview() {
             PostLikeButton(onClick = {}, isLiked = true)
             PostLikeButton(onClick = {}, isLiked = false)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CommentItemPreview() {
-    SikshaTheme {
-        CommentItem(
-            comment = Comment(content = "댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 댓글 ", nickname = "유저이름")
-        )
     }
 }
 

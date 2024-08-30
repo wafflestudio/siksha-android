@@ -4,6 +4,11 @@ import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
+
+import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
+import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
+import retrofit2.Response
+
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
@@ -11,6 +16,7 @@ import okhttp3.MultipartBody
 import com.wafflestudio.siksha2.repositories.pagingsource.UserPostPagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -50,11 +56,24 @@ class CommunityRepository @Inject constructor(
         return api.postUnlikePost(postId).toPost()
     }
 
-    suspend fun createPost(boardId: Long, title: MultipartBody.Part, content: MultipartBody.Part, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
+    suspend fun createPost(
+        boardId: Long,
+        title: MultipartBody.Part,
+        content: MultipartBody.Part,
+        anonymous: Boolean,
+        images: List<MultipartBody.Part>
+    ): Post {
         return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
     }
 
-    suspend fun patchPost(postId: Long, boardId: Long, title: MultipartBody.Part, content: MultipartBody.Part, anonymous: Boolean, images: List<MultipartBody.Part>): Post {
+    suspend fun patchPost(
+        postId: Long,
+        boardId: Long,
+        title: MultipartBody.Part,
+        content: MultipartBody.Part,
+        anonymous: Boolean,
+        images: List<MultipartBody.Part>
+    ): Post {
         return api.postPatchPost(postId, boardId, title, content, anonymous, images).toPost()
     }
 
@@ -64,6 +83,22 @@ class CommunityRepository @Inject constructor(
 
     suspend fun unlikeComment(commentId: Long) {
         api.postUnlikeComment(commentId)
+    }
+
+    suspend fun deletePost(postId: Long): Response<Unit?> {
+        return api.deletePost(postId)
+    }
+
+    suspend fun deleteComment(commentId: Long): Response<Unit?> {
+        return api.deleteComment(commentId)
+    }
+
+    suspend fun reportPost(postId: Long, reason: String) {
+        api.reportPost(postId, ReportPostRequestBody(reason))
+    }
+
+    suspend fun reportComment(commentId: Long, reason: String) {
+        api.reportComment(commentId, ReportCommentRequestBody(reason))
     }
 
     suspend fun getTrendingPosts(): List<Post> {

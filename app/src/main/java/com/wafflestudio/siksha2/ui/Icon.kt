@@ -137,3 +137,16 @@ fun CheckSimpleIcon(
         contentDescription = "선택됨"
     )
 }
+
+@Composable
+fun SpeechBubbleIcon(
+    modifier: Modifier = Modifier,
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+) {
+    Image(
+        modifier = modifier,
+        painter = painterResource(R.drawable.ic_speech_bubble),
+        colorFilter = colorFilter,
+        contentDescription = ""
+    )
+}

@@ -3,6 +3,7 @@ package com.wafflestudio.siksha2.network
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
 import okhttp3.MultipartBody
+import retrofit2.Response
 import retrofit2.http.*
 import java.time.LocalDate
 
@@ -174,6 +175,28 @@ interface SikshaApi {
     suspend fun postUnlikeComment(
         @Path("comment_id") commentId: Long
     ): PostUnlikeCommentResponse
+
+    @DELETE("community/posts/{postId}")
+    suspend fun deletePost(
+        @Path("postId") postId: Long
+    ): Response<Unit?>
+
+    @DELETE("/community/comments/{comment_id}")
+    suspend fun deleteComment(
+        @Path("comment_id") commentId: Long
+    ): Response<Unit?>
+
+    @POST("/community/posts/{post_id}/report")
+    suspend fun reportPost(
+        @Path("post_id") postId: Long,
+        @Body requestBody: ReportPostRequestBody
+    ): ReportPostResponse
+
+    @POST("/community/comments/{comment_id}/report")
+    suspend fun reportComment(
+        @Path("comment_id") commentId: Long,
+        @Body requestBody: ReportCommentRequestBody
+    ): ReportCommentResponse
 
     @GET("/community/posts/popular/trending")
     suspend fun getTrendingPosts(): GetTrendingPostsResponse
