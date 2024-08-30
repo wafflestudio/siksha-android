@@ -10,8 +10,8 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
-import com.wafflestudio.siksha2.network.dto.GetUserDataResult
 import com.wafflestudio.siksha2.network.dto.VocParam
+import com.wafflestudio.siksha2.network.dto.core.UserDto
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
 import okhttp3.MultipartBody
@@ -83,7 +83,7 @@ class UserStatusManager @Inject constructor(
         return userDataPatch(sikshaApi.getUserData())
     }
 
-    private fun userDataPatch(userDto: GetUserDataResult): User {
+    private fun userDataPatch(userDto: UserDto): User {
         return User(id = userDto.id, nickname = userDto.nickname, profileUrl = userDto.profileUrl)
     }
 
