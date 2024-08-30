@@ -48,6 +48,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -449,7 +450,9 @@ fun PostHeader(
                 color = SikshaColors.Black900,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
-                style = SikshaTypography.body2
+                style = SikshaTypography.body2,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = post.updatedAt.toParsedTimeString(),
