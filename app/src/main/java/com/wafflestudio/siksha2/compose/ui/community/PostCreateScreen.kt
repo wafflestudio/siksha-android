@@ -46,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,10 +61,12 @@ import com.wafflestudio.siksha2.ui.CheckSimpleIcon
 import com.wafflestudio.siksha2.ui.DeletePostImageIcon
 import com.wafflestudio.siksha2.ui.ExpandOptionsIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostCreateEvent
 import com.wafflestudio.siksha2.ui.main.community.PostCreateViewModel
 import com.wafflestudio.siksha2.utils.KeyboardUtil.keyboardAsState
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -347,6 +350,7 @@ fun BoardSelectorCard(
     val textColor = if (isSelected) SikshaColors.OrangeMain else SikshaColors.Gray700
     Box(
         modifier = modifier
+            .fillMaxWidth()
             .height(35.dp)
             .clickable { onClick() }
     ) {
@@ -378,10 +382,8 @@ fun BoardSelector(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(
-                color = SikshaColors.White900,
-                shape = RoundedCornerShape(8.dp)
-            )
+            .clip(RoundedCornerShape(8.dp))
+            .background(color = SikshaColors.White900)
             .border(
                 width = 1.dp,
                 color = SikshaColors.Gray350,
@@ -497,10 +499,10 @@ fun AnonymousCheckbox(
 
 @Composable
 fun KeyboardToolbar(
-    modifier: Modifier = Modifier,
-    isAnonymous: Boolean = true,
-    onIsAnonymousChanged: (Boolean) -> Unit = {},
-    onCloseKeyboard: () -> Unit
+    isAnonymous: Boolean,
+    onIsAnonymousChanged: (Boolean) -> Unit,
+    onCloseKeyboard: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
@@ -647,5 +649,141 @@ private fun PostCreateViewEventEffect(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun BoardSelectorPreview() {
+    SikshaTheme {
+        BoardSelector(
+            boards = listOf(Board(name = "학식"), Board(name = "외식"), Board(name = "간식")),
+            currentBoard = Board(name = "학식"),
+            onSelectBoard = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PostImagesPreview() {
+    SikshaTheme {
+        PostImages(
+            imageUriList = listOf(Uri.parse("picsum.photos/200/300"), Uri.parse("picsum.photos/200/300")),
+            onDeleteImage = {},
+            onAddImage = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PostImagePreview() {
+    SikshaTheme {
+        PostImage(
+            imageUri = Uri.parse("picsum.photos/200/300"),
+            contentDescription = "",
+            onDeleteImage = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ActivatedUploadButtonPreview() {
+    SikshaTheme {
+        UploadButton(isUploadActivated = true, onUpload = { })
+    }
+}
+
+@Preview
+@Composable
+fun DeactivatedUploadButtonPreview() {
+    SikshaTheme {
+        UploadButton(isUploadActivated = false, onUpload = { })
+    }
+}
+
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Composable
+fun PostCreateScreenPreview() {
+    SikshaTheme {
+        PostCreateScreen(
+            boardsList = listOf(Board(name = "학식"), Board(name = "외식"), Board(name = "간식")),
+            currentBoard = Board(name = "학식"),
+            onNavigateUp = {},
+            onUploadSuccess = {},
+            isBoardListOpen = true,
+            onCloseBoardList = {},
+            onToggleBoardList = {},
+            onSelectBoard = {},
+            titleTextValue = "",
+            onTitleTextChanged = {},
+            contentTextValue = "",
+            onContentTextChanged = {},
+            isAnonymous = true,
+            onIsAnonymousChanged = {},
+            keyboardState = false,
+            onCloseKeyboard = {},
+            imageUriList = listOf(Uri.parse("picsum.photos/200/300"), Uri.parse("picsum.photos/200/300")),
+            onDeleteImage = {},
+            onAddImage = {},
+            onUpload = {},
+            isUploadActivated = false,
+            screenClickEnabled = true,
+            onEnableScreenClick = {},
+            onDisableScreenClick = {},
+            postCreateEvent = MutableSharedFlow()
+        )
+    }
+}
+
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Composable
+fun PostCreateScreenPreview2() {
+    SikshaTheme {
+        PostCreateScreen(
+            boardsList = listOf(Board(name = "학식"), Board(name = "외식"), Board(name = "간식")),
+            currentBoard = Board(name = "학식"),
+            onNavigateUp = {},
+            onUploadSuccess = {},
+            isBoardListOpen = false,
+            onCloseBoardList = {},
+            onToggleBoardList = {},
+            onSelectBoard = {},
+            titleTextValue = "제목제목",
+            onTitleTextChanged = {},
+            contentTextValue = "내용내용\nㅇ\nㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ\n" +
+                "ㅇ",
+            onContentTextChanged = {},
+            isAnonymous = true,
+            onIsAnonymousChanged = {},
+            keyboardState = true,
+            onCloseKeyboard = {},
+            imageUriList = listOf(Uri.parse("picsum.photos/200/300"), Uri.parse("picsum.photos/200/300")),
+            onDeleteImage = {},
+            onAddImage = {},
+            onUpload = {},
+            isUploadActivated = false,
+            screenClickEnabled = true,
+            onEnableScreenClick = {},
+            onDisableScreenClick = {},
+            postCreateEvent = MutableSharedFlow()
+        )
     }
 }
