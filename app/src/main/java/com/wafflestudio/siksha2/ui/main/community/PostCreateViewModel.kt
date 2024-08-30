@@ -224,10 +224,10 @@ class PostCreateViewModel @Inject constructor(
 }
 
 sealed interface PostCreateEvent {
-    object UploadPostSuccess: PostCreateEvent
-    object UploadPostFailed: PostCreateEvent
-    object UploadPostProcessing: PostCreateEvent
-    object FetchPostSuccess: PostCreateEvent
-    object FetchPostFailed: PostCreateEvent
-    object FetchPostProcessing: PostCreateEvent
+    object UploadPostSuccess : PostCreateEvent
+    object UploadPostFailed : PostCreateEvent
+    object UploadPostProcessing : PostCreateEvent
+    object FetchPostSuccess : PostCreateEvent
+    object FetchPostFailed : PostCreateEvent
+    object FetchPostProcessing : PostCreateEvent
 }

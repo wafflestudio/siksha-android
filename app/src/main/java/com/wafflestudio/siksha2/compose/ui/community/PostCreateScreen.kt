@@ -294,7 +294,7 @@ fun PostCreateScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(color = SikshaColors.White900Alpha80)
-                        .clickable {  }
+                        .clickable { }
                 )
             }
         }
