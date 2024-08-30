@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +25,8 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.main.community.CommentReportEvent
 import com.wafflestudio.siksha2.ui.main.community.CommentReportViewModel
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.compose.ui.community.CommunityProfilePicture
+import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.ui.SikshaTypography
 @Composable
@@ -32,6 +35,7 @@ fun CommentReportRoute(
     commentReportViewModel: CommentReportViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val user by commentReportViewModel.user.collectAsState()
 
     LaunchedEffect(Unit) {
         commentReportViewModel.commentReportEvent.collect {
@@ -51,14 +55,16 @@ fun CommentReportRoute(
         onNavigateUp = onNavigateUp,
         onClickReport = {
             commentReportViewModel.reportComment(it)
-        }
+        },
+        user = user
     )
 }
 
 @Composable
 fun CommentReportScreen(
     onNavigateUp: () -> Unit,
-    onClickReport: (String) -> Unit
+    onClickReport: (String) -> Unit,
+    user: User
 ) {
     var reportContent by remember { mutableStateOf("") }
 
@@ -114,7 +120,26 @@ fun CommentReportScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(30.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 28.dp)
+        ) {
+            CommunityProfilePicture(
+                model = user.profileUrl,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = user.nickname,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Box(
             modifier = Modifier
