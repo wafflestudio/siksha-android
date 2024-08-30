@@ -2,7 +2,6 @@ package com.wafflestudio.siksha2.ui.main.setting
 
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +13,7 @@ import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.ImageUtil.getCompressedImage
+import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -83,7 +83,7 @@ class SettingViewModel @Inject constructor(
         val imageToUpdate = getImageToUpdate(context, imageChanged)
 
         if (nicknameToUpdate == null && !imageChanged) {
-            Toast.makeText(context, "수정 사항이 없습니다", Toast.LENGTH_SHORT).show()
+            context.showToast("수정 사항이 없습니다.")
             return
         }
 
