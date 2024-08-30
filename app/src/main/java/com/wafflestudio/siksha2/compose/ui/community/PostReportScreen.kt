@@ -34,6 +34,7 @@ import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.ui.SikshaTypography
+import com.wafflestudio.siksha2.ui.SpeechBubbleIcon
 
 @Composable
 fun PostReportRoute(
@@ -102,12 +103,7 @@ fun PostReportScreen(
                 modifier = Modifier.align(Alignment.Center),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.frame_11),
-                    contentDescription = null,
-                    tint = Color.Black,
-                    modifier = Modifier.size(18.dp)
-                )
+                SpeechBubbleIcon(modifier = Modifier.size(18.dp))
                 Text(
                     text = "어떤 이유로 신고하시나요?",
                     style = TextStyle(

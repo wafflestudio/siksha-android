@@ -25,6 +25,7 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.ui.SpeechBubbleIcon
 import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.ui.main.community.CommentReportEvent
 import com.wafflestudio.siksha2.ui.main.community.CommentReportViewModel
@@ -96,12 +97,7 @@ fun CommentReportScreen(
                 modifier = Modifier.align(Alignment.Center),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.`ic_speechbubble.png`),
-                    contentDescription = null,
-                    tint = Color.Black,
-                    modifier = Modifier.size(18.dp)
-                )
+                SpeechBubbleIcon(modifier = Modifier.size(18.dp))
                 Text(
                     text = "어떤 이유로 신고하시나요?",
                     style = TextStyle(
