@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -30,7 +31,6 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -72,6 +72,7 @@ import com.wafflestudio.siksha2.ui.ThumbIcon
 import com.wafflestudio.siksha2.ui.main.community.PostDetailEvent
 import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
+import com.wafflestudio.siksha2.ui.main.community.PostUiState
 import com.wafflestudio.siksha2.ui.main.community.UserPostListViewModel
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -90,39 +91,117 @@ fun PostDetailRoute(
     userPostListViewModel: UserPostListViewModel = hiltViewModel(),
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
 ) {
-    val post by postDetailViewModel.post.collectAsState()
+    val postUiState by postDetailViewModel.postUiState.collectAsState()
     val board by postListViewModel.selectedBoard.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
     val isAnonymous by postDetailViewModel.isAnonymous.collectAsState()
 
-    PostDetailScreen(
-        post = post,
-        board = board,
-        comments = comments,
-        postDetailEvent = postDetailViewModel.postDetailEvent,
-        isAnonymous = isAnonymous,
-        onNavigateUp = onNavigateUp,
-        onNavigateToPostReport = onNavigateToPostReport,
-        onNavigateToCommentReport = onNavigateToCommentReport,
-        onNavigateToPostEdit = onNavigateToPostEdit,
-        refreshComments = { comments.refresh() },
-        togglePostLike = postDetailViewModel::togglePostLike,
-        toggleCommentLike = postDetailViewModel::toggleCommentLike,
-        updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
-        updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
-        updateUserListWithLikedPost = userPostListViewModel::updateUserListWithLikedPost,
-        updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
-        addComment = postDetailViewModel::addComment,
-        deletePost = postDetailViewModel::deletePost,
-        deleteComment = postDetailViewModel::deleteComment,
-        onIsAnonymousChanged = postDetailViewModel::setIsAnonymous,
-        modifier = modifier
-    )
+    when (postUiState) {
+        is PostUiState.Success -> {
+            PostDetailScreenSuccess(
+                post = (postUiState as PostUiState.Success).post,
+                board = board,
+                comments = comments,
+                postDetailEvent = postDetailViewModel.postDetailEvent,
+                isAnonymous = isAnonymous,
+                onNavigateUp = onNavigateUp,
+                onNavigateToPostReport = onNavigateToPostReport,
+                onNavigateToCommentReport = onNavigateToCommentReport,
+                onNavigateToPostEdit = onNavigateToPostEdit,
+                refreshComments = { comments.refresh() },
+                togglePostLike = postDetailViewModel::togglePostLike,
+                toggleCommentLike = postDetailViewModel::toggleCommentLike,
+                updateListWithLikedPost = postListViewModel::updateListWithLikedPost,
+                updateListWithCommentAddedPost = postListViewModel::updateListWithCommentAddedPost,
+                updateUserListWithLikedPost = userPostListViewModel::updateUserListWithLikedPost,
+                updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
+                addComment = postDetailViewModel::addComment,
+                deletePost = postDetailViewModel::deletePost,
+                deleteComment = postDetailViewModel::deleteComment,
+                onIsAnonymousChanged = postDetailViewModel::setIsAnonymous,
+                modifier = modifier
+            )
+        }
+
+        is PostUiState.Failed -> {
+            PostDetailScreenFailed(
+                onNavigateUp = onNavigateUp,
+                errorMessage = (postUiState as PostUiState.Failed).errorMessage,
+                modifier = modifier,
+            )
+        }
+
+        is PostUiState.Loading -> {
+            PostDetailScreenLoading(
+                onNavigateUp = onNavigateUp,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PostDetailScreen(
+fun PostDetailScreenFailed(
+    onNavigateUp: () -> Unit,
+    errorMessage: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.background(SikshaColors.White900)
+    ) {
+        TopBar(
+            title = "",
+            navigationButton = {
+                NavigateUpIcon(
+                    modifier = Modifier.clickable {
+                        onNavigateUp()
+                    }
+                )
+            }
+        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = errorMessage,
+                color = SikshaColors.Gray400,
+                fontSize = 12.sp,
+                style = MaterialTheme.typography.body2
+            )
+        }
+    }
+}
+
+@Composable
+fun PostDetailScreenLoading(
+    onNavigateUp: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.background(SikshaColors.White900)
+    ) {
+        TopBar(
+            title = "",
+            navigationButton = {
+                NavigateUpIcon(
+                    modifier = Modifier.clickable {
+                        onNavigateUp()
+                    }
+                )
+            }
+        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+}
+
+@Composable
+fun PostDetailScreenSuccess(
     post: Post,
     board: Board,
     comments: LazyPagingItems<Comment>,

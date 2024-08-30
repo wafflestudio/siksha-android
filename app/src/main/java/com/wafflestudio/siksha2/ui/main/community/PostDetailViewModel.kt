@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -29,8 +30,8 @@ class PostDetailViewModel @Inject constructor(
     private val communityRepository: CommunityRepository
 ) : ViewModel() {
 
-    private val _post = MutableStateFlow<Post>(Post())
-    val post: StateFlow<Post> = _post
+    private val _postUiState = MutableStateFlow<PostUiState>(PostUiState.Loading)
+    val postUiState: StateFlow<PostUiState> = _postUiState
 
     val commentPagingData = Pager(
         config = PagingConfig(
@@ -58,18 +59,34 @@ class PostDetailViewModel @Inject constructor(
 
     private fun refreshPost(postId: Long) {
         viewModelScope.launch {
-            _post.value = communityRepository.getPost(postId)
+            runCatching {
+                val post = communityRepository.getPost(postId)
+                if (!post.available) {
+                    _postUiState.value = PostUiState.Failed("신고가 누적되어 숨겨진 게시글입니다.")
+                    return@runCatching
+                }
+                _postUiState.value = PostUiState.Success(post)
+            }.onFailure { throwable ->
+                val errorMessage = (throwable as? HttpException)?.let {
+                    when (it.code()) {
+                        404 -> "존재하지 않는 글입니다."
+                        else -> "게시글을 불러올 수 없습니다."
+                    }
+                } ?: "게시글을 불러올 수 없습니다."
+                _postUiState.value = PostUiState.Failed(errorMessage)
+            }
         }
     }
 
     fun addComment(content: String, isAnonymous: Boolean) {
         if (content.isEmpty()) return
+        val post = (postUiState.value as? PostUiState.Success)?.post ?: return
         viewModelScope.launch {
             runCatching {
-                communityRepository.addCommentToPost(_post.value.id, content, isAnonymous)
+                communityRepository.addCommentToPost(post.id, content, isAnonymous)
             }.onSuccess {
                 _postDetailEvent.emit(PostDetailEvent.AddCommentSuccess)
-                refreshPost(post.value.id)
+                refreshPost(post.id)
             }.onFailure {
                 _postDetailEvent.emit(PostDetailEvent.AddCommentFailed)
             }
@@ -77,12 +94,16 @@ class PostDetailViewModel @Inject constructor(
     }
 
     fun togglePostLike() {
+        val post = (postUiState.value as? PostUiState.Success)?.post ?: return
         viewModelScope.launch {
             runCatching {
-                when (post.value.isLiked) {
-                    true -> _post.value = communityRepository.unlikePost(post.value.id)
-                    false -> _post.value = communityRepository.likePost(post.value.id)
+                val updatedPost = when (post.isLiked) {
+                    true -> communityRepository.unlikePost(post.id)
+                    false -> communityRepository.likePost(post.id)
                 }
+                _postUiState.value = PostUiState.Success(updatedPost)
+            }.onFailure {
+                // TODO: 예외 처리
             }
         }
     }
@@ -107,7 +128,6 @@ class PostDetailViewModel @Inject constructor(
             runCatching {
                 val response = communityRepository.deletePost(postId)
                 if (response.isSuccessful) {
-                    _post.value = Post()
                     _postDetailEvent.emit(PostDetailEvent.DeletePostSuccess)
                 } else {
                     _postDetailEvent.emit(PostDetailEvent.DeletePostFailed)
@@ -124,7 +144,9 @@ class PostDetailViewModel @Inject constructor(
                 communityRepository.deleteComment(commentId)
             }.onSuccess {
                 _postDetailEvent.emit(PostDetailEvent.DeleteCommentSuccess)
-                refreshPost(_post.value.id)
+
+                val post = (postUiState.value as? PostUiState.Success)?.post ?: return@onSuccess
+                refreshPost(post.id)
             }.onFailure {
                 _postDetailEvent.emit(PostDetailEvent.DeleteCommentFailed)
             }
@@ -134,6 +156,12 @@ class PostDetailViewModel @Inject constructor(
     fun setIsAnonymous(isAnonymous: Boolean) {
         communityRepository.setIsAnonymous(isAnonymous)
     }
+}
+
+sealed interface PostUiState {
+    class Success(val post: Post): PostUiState
+    class Failed(val errorMessage: String): PostUiState
+    object Loading: PostUiState
 }
 
 sealed interface PostDetailEvent {
