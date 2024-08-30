@@ -51,7 +51,6 @@ class CommunityRepository @Inject constructor(
         api.postUnlikeComment(commentId)
     }
 
-
     suspend fun getTrendingPosts(): List<Post> {
         return withContext(Dispatchers.IO) {
             api.getTrendingPosts().result.map {
