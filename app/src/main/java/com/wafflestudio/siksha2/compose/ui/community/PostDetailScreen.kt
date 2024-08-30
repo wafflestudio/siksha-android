@@ -114,6 +114,7 @@ fun PostDetailRoute(
         updateUserListWithCommentAddedPost = userPostListViewModel::updateUserListWithCommentAddedPost,
         addComment = postDetailViewModel::addComment,
         deletePost = postDetailViewModel::deletePost,
+        deleteComment = postDetailViewModel::deleteComment,
         onIsAnonymousChanged = postDetailViewModel::setIsAnonymous,
         modifier = modifier
     )
@@ -140,6 +141,7 @@ fun PostDetailScreen(
     updateUserListWithCommentAddedPost: (Post) -> Unit,
     addComment: (String, Boolean) -> Unit,
     deletePost: (Long) -> Unit,
+    deleteComment: (Long) -> Unit,
     onIsAnonymousChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -240,10 +242,8 @@ fun PostDetailScreen(
                             onClickLike = {
                                 toggleCommentLike(comment)
                             },
-                            onNavigateToCommentReport = onNavigateToCommentReport,
-                            onClickReport = {
-                                onNavigateToCommentReport(comment.id)
-                            }
+                            onClickReport = onNavigateToCommentReport,
+                            deleteComment = deleteComment
                         )
                         CommunityDivider()
                     }
@@ -498,10 +498,22 @@ fun CommentItem(
     comment: Comment,
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {},
-    onNavigateToCommentReport: (Long) -> Unit,
-    onClickReport: () -> Unit = {}
+    onClickReport: (Long) -> Unit,
+    deleteComment: (Long) -> Unit,
 ) {
-    var showDialog by remember { mutableStateOf(false) }
+    var showCommentDetailDialog by remember { mutableStateOf(false) }
+    var showConfirmDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showConfirmDeleteDialog) {
+        ConfirmDeleteDialog(
+            title = stringResource(R.string.community_comment_delete_dialog_title),
+            description = stringResource(R.string.community_comment_delete_dialog_description),
+            onDismissRequest = { showConfirmDeleteDialog = false },
+            onConfirmDelete = { deleteComment(comment.id) },
+            onCancelDelete = { showConfirmDeleteDialog = false}
+        )
+    }
+
     Row(
         modifier = modifier
             .padding(horizontal = 20.dp, vertical = 12.dp)
@@ -543,7 +555,7 @@ fun CommentItem(
                     .padding(start = 4.dp)
                     .size(16.dp)
                     .clickable {
-                        showDialog = true
+                        showCommentDetailDialog = true
                     }
             )
         }
@@ -556,17 +568,20 @@ fun CommentItem(
         )
     }
 
-    if (showDialog) {
+    if (showCommentDetailDialog) {
         CommentDetailDialog(
             isMine = comment.isMine,
-            onDismissRequest = { showDialog = false },
-            onClickDelete = {},
+            onDismissRequest = { showCommentDetailDialog = false },
+            onClickDelete = {
+                showCommentDetailDialog = false
+                deleteComment(comment.id)
+            },
             onClickReport = {
-                showDialog = false
-                onNavigateToCommentReport(comment.id)
+                showCommentDetailDialog = false
+                onClickReport(comment.id)
             },
             onClickCancel = {
-                showDialog = false
+                showCommentDetailDialog = false
             }
         )
     }

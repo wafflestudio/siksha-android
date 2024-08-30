@@ -185,7 +185,7 @@ interface SikshaApi {
     @DELETE("/community/comments/{comment_id}")
     suspend fun deleteComment(
         @Path("comment_id") commentId: Long
-    )
+    ): Response<Unit?>
 
     @POST("/community/posts/{post_id}/report")
     suspend fun reportPost(

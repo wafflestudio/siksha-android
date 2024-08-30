@@ -89,8 +89,8 @@ class CommunityRepository @Inject constructor(
         return api.deletePost(postId)
     }
 
-    suspend fun deleteComment(commentId: Long) {
-        api.deleteComment(commentId)
+    suspend fun deleteComment(commentId: Long): Response<Unit?> {
+        return api.deleteComment(commentId)
     }
 
     suspend fun reportPost(postId: Long, reason: String) {
