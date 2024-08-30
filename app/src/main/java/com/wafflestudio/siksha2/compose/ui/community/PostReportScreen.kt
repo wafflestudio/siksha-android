@@ -73,6 +73,7 @@ fun PostReportScreen(
     var reportContent by remember { mutableStateOf("") }
 
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(SikshaColors.White900)
@@ -94,13 +95,8 @@ fun PostReportScreen(
 
         Spacer(modifier = Modifier.height(44.dp))
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
+
             Row(
-                modifier = Modifier.align(Alignment.Center),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 SpeechBubbleIcon(modifier = Modifier.size(18.dp))
@@ -113,7 +109,7 @@ fun PostReportScreen(
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }
-        }
+
 
         Spacer(modifier = Modifier.height(62.dp))
 
@@ -156,9 +152,9 @@ fun PostReportScreen(
             },
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF9522)),
             modifier = Modifier
-                .width(343.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .height(56.dp)
-                .padding(start = 16.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             Text(
