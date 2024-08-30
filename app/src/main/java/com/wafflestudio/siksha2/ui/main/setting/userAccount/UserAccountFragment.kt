@@ -58,7 +58,7 @@ class UserAccountFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.imageView.setOnClickListener {
+        binding.cameraImage.setOnClickListener {
             showImagePickerBottomDialog()
         }
 
