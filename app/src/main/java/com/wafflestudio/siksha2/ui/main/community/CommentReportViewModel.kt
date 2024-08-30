@@ -24,7 +24,7 @@ class CommentReportViewModel @Inject constructor(
     private val _commentReportEvent = MutableSharedFlow<CommentReportEvent>()
     val commentReportEvent = _commentReportEvent.asSharedFlow()
 
-    val commentId = CommentReportFragmentArgs.fromSavedStateHandle(savedStateHandle).commentId
+    private val commentId = CommentReportFragmentArgs.fromSavedStateHandle(savedStateHandle).commentId
 
     private val _user = MutableStateFlow(User.Empty)
     val user: StateFlow<User> = _user

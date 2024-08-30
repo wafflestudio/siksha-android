@@ -24,7 +24,7 @@ class PostReportViewModel @Inject constructor(
     private val _postReportEvent = MutableSharedFlow<PostReportEvent>()
     val postReportEvent = _postReportEvent.asSharedFlow()
 
-    val postId = PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
+    private val postId = PostDetailFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
 
     private val _user = MutableStateFlow(User.Empty)
     val user: StateFlow<User> = _user
