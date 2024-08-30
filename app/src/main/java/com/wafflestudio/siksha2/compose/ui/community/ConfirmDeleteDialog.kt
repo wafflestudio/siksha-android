@@ -67,7 +67,7 @@ fun ConfirmDeleteDialog(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = SikshaColors.Gray400)
+            Divider(color = Color(0xFFE0E0E0))
             Row(
                 modifier = Modifier.height(50.dp)
             ) {
@@ -86,7 +86,7 @@ fun ConfirmDeleteDialog(
                     )
                 }
                 Divider(
-                    color = SikshaColors.Gray400,
+                    color = Color(0xFFE0E0E0),
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(1.dp)
