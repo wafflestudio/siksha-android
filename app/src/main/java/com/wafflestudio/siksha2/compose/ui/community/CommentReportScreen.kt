@@ -100,6 +100,7 @@ fun CommentReportScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             SpeechBubbleIcon(modifier = Modifier.size(18.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = "어떤 이유로 신고하시나요?",
                 style = TextStyle(
