@@ -272,7 +272,7 @@ fun PostHeader(
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CommunityProfilePicture(model = null) // TODO: 서버에서 프로필이미지 내려주면 반영하기
+        CommunityProfilePicture(model = post.profilePicture)
         Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = Modifier
@@ -430,7 +430,7 @@ fun CommentItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 CommunityProfilePicture(
-                    model = null,
+                    model = comment.profilePicture,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
