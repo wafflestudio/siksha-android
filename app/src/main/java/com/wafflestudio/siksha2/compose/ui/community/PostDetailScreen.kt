@@ -150,6 +150,7 @@ fun PostDetailScreen(
 
     if (isPostDialogShowed) {
         PostDetailDialog(
+            isMine = post.isMine,
             onDismissRequest = {
                 isPostDialogShowed = false
             },
@@ -557,6 +558,7 @@ fun CommentItem(
 
     if (showDialog) {
         CommentDetailDialog(
+            isMine = comment.isMine,
             onDismissRequest = { showDialog = false },
             onClickDelete = {},
             onClickReport = {

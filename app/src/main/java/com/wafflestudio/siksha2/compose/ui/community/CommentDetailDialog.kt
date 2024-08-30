@@ -23,6 +23,7 @@ import com.wafflestudio.siksha2.ui.SikshaColors
 
 @Composable
 fun CommentDetailDialog(
+    isMine: Boolean,
     onDismissRequest: () -> Unit,
     onClickDelete: () -> Unit,
     onClickReport: () -> Unit,
@@ -34,50 +35,54 @@ fun CommentDetailDialog(
             modifier = Modifier
                 .background(color = SikshaColors.White900, shape = RoundedCornerShape(26.dp))
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "삭제하기",
-                    fontSize = 16.sp,
-                    color = Color(0xFF797979),
+            if (isMine) {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(onClick = onClickDelete)
-                        .padding(vertical = 16.dp),
-                    textAlign = TextAlign.Center
+                        .height(55.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "삭제하기",
+                        fontSize = 16.sp,
+                        color = Color(0xFF797979),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(onClick = onClickDelete)
+                            .padding(vertical = 16.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Divider(
+                    modifier = Modifier.padding(horizontal = 11.dp),
+                    color = Color(0xFFE0E0E0),
+                    thickness = 1.dp
                 )
             }
-            Divider(
-                modifier = Modifier.padding(horizontal = 11.dp),
-                color = Color(0xFFE0E0E0),
-                thickness = 1.dp
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "신고하기",
-                    fontSize = 16.sp,
-                    color = Color(0xFF797979),
+            if (!isMine) {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(onClick = onClickReport)
-                        .padding(vertical = 16.dp),
-                    textAlign = TextAlign.Center
+                        .height(55.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "신고하기",
+                        fontSize = 16.sp,
+                        color = Color(0xFF797979),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(onClick = onClickReport)
+                            .padding(vertical = 16.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Divider(
+                    modifier = Modifier.padding(horizontal = 11.dp),
+                    color = Color(0xFFE0E0E0),
+                    thickness = 1.dp
                 )
             }
-            Divider(
-                modifier = Modifier.padding(horizontal = 11.dp),
-                color = Color(0xFFE0E0E0),
-                thickness = 1.dp
-            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -103,6 +108,7 @@ fun CommentDetailDialog(
 @Composable
 fun CommentDetailDialogPreview() {
     CommentDetailDialog(
+        isMine = false,
         onDismissRequest = {},
         onClickDelete = {},
         onClickReport = {},
