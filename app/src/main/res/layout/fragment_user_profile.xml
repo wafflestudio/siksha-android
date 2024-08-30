@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/light_gray_300"
     android:orientation="vertical"
-    tools:context=".ui.main.setting.account.SettingAccountFragment">
+    tools:context=".ui.main.setting.account.UserAccountFragment">
 
     <LinearLayout
         android:id="@+id/tool_bar"

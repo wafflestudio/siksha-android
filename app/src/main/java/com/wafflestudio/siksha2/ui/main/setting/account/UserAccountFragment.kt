@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import okio.IOException
 
 @AndroidEntryPoint
-class SettingAccountFragment : Fragment(), DefaultDialogListener {
+class UserAccountFragment : Fragment(), DefaultDialogListener {
 
     private lateinit var binding: FragmentUserAccountBinding
 

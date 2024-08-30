@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/setting_account_fragment"
-        android:name="com.wafflestudio.siksha2.ui.main.setting.account.SettingAccountFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.account.UserAccountFragment"
         android:label="fragment_setting_account"
         tools:layout="@layout/fragment_user_account" />
 
