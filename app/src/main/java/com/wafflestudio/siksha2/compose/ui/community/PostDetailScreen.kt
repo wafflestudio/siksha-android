@@ -32,7 +32,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -85,7 +84,7 @@ fun PostDetailRoute(
     onNavigateUp: () -> Unit,
     onNavigateToPostReport: (Long) -> Unit,
     onNavigateToCommentReport: (Long) -> Unit,
-    onNavigateToPostEdit:(Long)->Unit,
+    onNavigateToPostEdit: (Long) -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel(),
     userPostListViewModel: UserPostListViewModel = hiltViewModel(),
@@ -131,7 +130,7 @@ fun PostDetailScreen(
     onNavigateUp: () -> Unit,
     onNavigateToPostReport: (Long) -> Unit,
     onNavigateToCommentReport: (Long) -> Unit,
-    onNavigateToPostEdit:(Long)->Unit,
+    onNavigateToPostEdit: (Long) -> Unit,
     togglePostLike: () -> Unit,
     refreshComments: () -> Unit,
     toggleCommentLike: (Comment) -> Unit,

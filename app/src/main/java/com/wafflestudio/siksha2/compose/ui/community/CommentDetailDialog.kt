@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,7 +54,7 @@ fun CommentDetailDialog(
             Divider(
                 modifier = Modifier.padding(horizontal = 11.dp),
                 color = Color(0xFFE0E0E0),
-                thickness = 1.dp,
+                thickness = 1.dp
             )
             Box(
                 modifier = Modifier
@@ -77,7 +76,7 @@ fun CommentDetailDialog(
             Divider(
                 modifier = Modifier.padding(horizontal = 11.dp),
                 color = Color(0xFFE0E0E0),
-                thickness = 1.dp,
+                thickness = 1.dp
             )
             Box(
                 modifier = Modifier

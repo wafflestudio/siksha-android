@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +26,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.main.community.PostReportEvent
 import com.wafflestudio.siksha2.ui.main.community.PostReportViewModel
-import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.compose.ui.community.CommunityProfilePicture
 import com.wafflestudio.siksha2.models.User
