@@ -38,6 +38,7 @@
             android:gravity="center"
             android:textColor="@color/gray_700"
             android:fontFamily="@font/nanum_square_regular"
+            android:maxLines="1"
             tools:text="닉네임"/>
 
         <View
