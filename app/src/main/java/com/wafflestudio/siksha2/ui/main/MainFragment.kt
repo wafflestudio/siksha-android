@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
