@@ -75,8 +75,9 @@ class UserStatusManager @Inject constructor(
         }
     }
 
-    suspend fun sendVoc(voc: String) {
-        sikshaApi.sendVoc(VocParam(voc))
+    suspend fun sendVoc(voc: String, platform: String) {
+        val vocParam = VocParam(voc = voc, platform = platform)
+        sikshaApi.sendVoc(vocParam)
     }
 
     suspend fun getUserData(): User {
