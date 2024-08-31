@@ -16,11 +16,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.imageview.ShapeableImageView
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.databinding.DialogProfileImageBinding
 import com.wafflestudio.siksha2.databinding.FragmentUserProfileBinding
+import com.wafflestudio.siksha2.ui.common.ImageBottomDialog
 import com.wafflestudio.siksha2.ui.main.setting.SettingEvent
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
@@ -122,25 +121,11 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun showImagePickerBottomDialog() {
-        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.TransparentBottomSheetDialogTheme)
-        val dialogBinding = DialogProfileImageBinding.inflate(LayoutInflater.from(requireContext()))
-        bottomSheetDialog.setContentView(dialogBinding.root)
-
-        dialogBinding.albumButton.setOnClickListener {
-            changeToGalleryImage()
-            bottomSheetDialog.dismiss()
-        }
-
-        dialogBinding.defaultImageButton.setOnClickListener {
-            changeToDefaultImage()
-            bottomSheetDialog.dismiss()
-        }
-
-        dialogBinding.cancelButton.setOnClickListener {
-            bottomSheetDialog.dismiss()
-        }
-
-        bottomSheetDialog.show()
+        val bottomSheetFragment = ImageBottomDialog(
+            onGallerySelected = { changeToGalleryImage() },
+            onDefaultImageSelected = { changeToDefaultImage() }
+        )
+        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
     }
 
     private fun detectKeyboardVisibility() {
