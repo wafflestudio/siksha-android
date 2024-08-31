@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="80dp"
-    tools:background="@color/light_gray_300"
+    android:paddingTop="69dp"
+    tools:background="@color/white"
     tools:context=".ui.main.setting.SettingFragment">
 
     <LinearLayout
@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="horizontal"
         android:layout_gravity="center">
@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical">
 
@@ -131,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical">
 
