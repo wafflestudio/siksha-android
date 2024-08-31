@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.R
@@ -36,6 +37,16 @@ class ImageBottomDialog(
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), R.style.TransparentBottomSheetDialogTheme)
+        val dialog = BottomSheetDialog(requireContext(), R.style.TransparentBottomSheetDialogTheme)
+
+        dialog.setOnShowListener { dialogInterface ->
+            val bottomSheet = (dialogInterface as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let {
+                val background = ContextCompat.getDrawable(requireContext(), R.drawable.frame_rounded_top)
+                it.background = background
+            }
+        }
+
+        return dialog
     }
 }

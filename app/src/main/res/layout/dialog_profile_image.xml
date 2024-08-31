@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/frame_setting_layout"
+        android:background="@android:color/transparent"
         android:gravity="center">
 
         <TextView
