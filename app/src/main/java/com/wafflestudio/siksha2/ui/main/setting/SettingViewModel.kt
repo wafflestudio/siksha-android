@@ -42,8 +42,12 @@ class SettingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _userData.value = userStatusManager.getUserData()
-            checkAppVersion()
+            runCatching {
+                _userData.value = userStatusManager.getUserData()
+                checkAppVersion()
+            }.onFailure {
+                // TODO: 유저 정보 받아오지 못했을 때 처리 필요
+            }
         }
     }
 
