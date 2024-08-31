@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -98,7 +99,10 @@ class UserProfileFragment : Fragment() {
                 if (imageUrl != null) {
                     Glide.with(this).load(imageUrl).circleCrop().into(imageView)
                 } else {
-                    Glide.with(this).load(R.drawable.ic_rice_bowl).circleCrop().into(imageView)
+                    imageView.apply {
+                        setImageResource(R.drawable.ic_rice_bowl)
+                        scaleType = ImageView.ScaleType.CENTER_CROP
+                    }
                 }
             }
         }
@@ -160,7 +164,10 @@ class UserProfileFragment : Fragment() {
 
     private fun changeToDefaultImage() {
         userSettingViewModel.updateImageUri(null)
-        Glide.with(this).load(R.drawable.ic_rice_bowl).circleCrop().into(imageView)
+        imageView.apply {
+            setImageResource(R.drawable.ic_rice_bowl)
+            scaleType = ImageView.ScaleType.CENTER_CROP
+        }
         imageChanged = true
     }
 }
