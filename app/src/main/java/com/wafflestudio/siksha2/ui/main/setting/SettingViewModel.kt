@@ -38,7 +38,7 @@ class SettingViewModel @Inject constructor(
     val versionCheck: LiveData<Boolean> get() = _versionCheck
 
     val packageVersion: String = BuildConfig.VERSION_NAME
-    private val isDefaultImage: Boolean get() = userData.value?.profileUrl == null
+    private val isDefaultImage: Boolean get() = updateProfileUrl.value == null
 
     private val _settingEvent = MutableSharedFlow<SettingEvent>()
     val settingEvent = _settingEvent.asSharedFlow()
