@@ -31,6 +31,9 @@ class SettingViewModel @Inject constructor(
     private val _userData = MutableLiveData<User>()
     val userData: LiveData<User> get() = _userData
 
+    private val _updateProfileUrl = MutableLiveData<String?>()
+    val updateProfileUrl: LiveData<String?> get() = _updateProfileUrl
+
     private val _versionCheck = MutableLiveData<Boolean>()
     val versionCheck: LiveData<Boolean> get() = _versionCheck
 
@@ -89,7 +92,7 @@ class SettingViewModel @Inject constructor(
     }
 
     fun updateImageUri(uri: Uri?) {
-        _userData.value?.profileUrl = uri?.toString()
+        _updateProfileUrl.value = uri?.toString()
     }
 
     private suspend fun getNicknameToUpdate(nickname: String): String? {
@@ -106,7 +109,7 @@ class SettingViewModel @Inject constructor(
         return if (isDefaultImage) {
             null
         } else if (imageChanged) {
-            _userData.value?.profileUrl?.let {
+            _updateProfileUrl.value.let {
                 val uri = Uri.parse(it)
                 getCompressedImage(context, uri)
             }?.let { file ->
