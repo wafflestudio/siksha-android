@@ -62,7 +62,7 @@ class SettingItemRow : LinearLayout {
         val dp24 = context.dp(24)
         setPadding(dp24, dp18, dp24, dp18)
 
-        val iconSize = context.dp(30) // 24dp를 픽셀로 변환하여 사용
+        val iconSize = context.dp(30)
 
         binding.checkbox.layoutParams = LayoutParams(iconSize, iconSize)
         binding.arrowIcon.layoutParams = LayoutParams(iconSize, iconSize)
