@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentVocBinding
+import com.wafflestudio.siksha2.network.dto.VocParam
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +64,7 @@ class VocFragment : Fragment() {
         binding.submitButton.setOnClickListener {
             lifecycleScope.launch {
                 try {
-                    userStatusManager.sendVoc(binding.commentEdit.text.toString())
+                    userStatusManager.sendVoc(voc=binding.commentEdit.text.toString(),platform = "Android")
                     showToast("문의가 정상적으로 등록되었습니다.")
                     findNavController().popBackStack()
                 } catch (e: IOException) {
