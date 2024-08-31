@@ -121,7 +121,7 @@ fun PostCreateRoute(
         },
         isAnonymous = isAnonymous,
         onIsAnonymousChanged = { postCreateViewModel.setIsAnonymous(it) },
-        keyboardState = keyboardState,
+        isKeyboardOpen = keyboardState,
         onCloseKeyboard = { keyboardController?.hide() },
         imageUriList = imageUriList,
         onDeleteImage = { idx ->
@@ -154,7 +154,7 @@ fun PostCreateScreen(
     onContentTextChanged: (String) -> Unit,
     isAnonymous: Boolean,
     onIsAnonymousChanged: (Boolean) -> Unit,
-    keyboardState: Boolean,
+    isKeyboardOpen: Boolean,
     onCloseKeyboard: () -> Unit,
     imageUriList: List<Uri>,
     onDeleteImage: (Int) -> Unit,
@@ -169,6 +169,7 @@ fun PostCreateScreen(
 ) {
     val scrollState = rememberScrollState()
     val closeBoardSelectorInteractionSource = remember { MutableInteractionSource() }
+    val blockClickWhileLoadingInteractionSource = remember { MutableInteractionSource() }
 
     PostCreateViewEventEffect(
         postCreateEvent = postCreateEvent,
@@ -240,9 +241,9 @@ fun PostCreateScreen(
                                     color = SikshaColors.Gray400
                                 )
                             },
-                            modifier = Modifier.weight(weight = 1.0f, fill = keyboardState)
+                            modifier = Modifier.weight(weight = 1.0f, fill = isKeyboardOpen)
                         )
-                        if (keyboardState) {
+                        if (isKeyboardOpen) {
                             KeyboardToolbar(
                                 isAnonymous = isAnonymous,
                                 onIsAnonymousChanged = onIsAnonymousChanged,
@@ -263,15 +264,6 @@ fun PostCreateScreen(
                                 onDeleteImage = onDeleteImage,
                                 onAddImage = onAddImage
                             )
-                            Column(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Spacer(modifier = Modifier.height(20.dp))
-                                UploadButton(
-                                    isUploadActivated = isUploadActivated,
-                                    onUpload = onUpload
-                                )
-                            }
                         }
                     }
                     if (isBoardListOpen) {
@@ -291,13 +283,27 @@ fun PostCreateScreen(
                         )
                     }
                 }
+                if (!isKeyboardOpen) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        UploadButton(
+                            isUploadActivated = isUploadActivated,
+                            onUpload = onUpload
+                        )
+                    }
+                }
             }
             if (!screenClickEnabled) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(color = SikshaColors.White900Alpha80)
-                        .clickable { }
+                        .clickable(
+                            interactionSource = blockClickWhileLoadingInteractionSource,
+                            indication = null
+                        ) { }
                 )
             }
         }
@@ -332,7 +338,7 @@ fun CurrentBoard(
                 text = board.name,
                 color = SikshaColors.Gray700
             )
-            Spacer(modifier = Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(8.dp))
             ExpandOptionsIcon(
                 color = SikshaColors.Gray500
             )
@@ -362,7 +368,7 @@ fun BoardSelectorCard(
                 text = board.name,
                 color = textColor
             )
-            Spacer(modifier = Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             if (isSelected) {
                 CheckSimpleIcon()
             } else {
@@ -724,7 +730,7 @@ fun PostCreateScreenPreview() {
             onContentTextChanged = {},
             isAnonymous = true,
             onIsAnonymousChanged = {},
-            keyboardState = false,
+            isKeyboardOpen = false,
             onCloseKeyboard = {},
             imageUriList = listOf(Uri.parse("picsum.photos/200/300"), Uri.parse("picsum.photos/200/300")),
             onDeleteImage = {},
@@ -774,7 +780,7 @@ fun PostCreateScreenPreview2() {
             onContentTextChanged = {},
             isAnonymous = true,
             onIsAnonymousChanged = {},
-            keyboardState = true,
+            isKeyboardOpen = true,
             onCloseKeyboard = {},
             imageUriList = listOf(Uri.parse("picsum.photos/200/300"), Uri.parse("picsum.photos/200/300")),
             onDeleteImage = {},
