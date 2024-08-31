@@ -36,7 +36,7 @@ class VocFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val userData = userStatusManager.getUserData()
-                binding.idText.text = "ID " + userData.nickname
+                binding.idText.text = "ID " + userData.id
             } catch (e: IOException) {
                 showToast("네트워크 연결이 불안정합니다.")
             }
