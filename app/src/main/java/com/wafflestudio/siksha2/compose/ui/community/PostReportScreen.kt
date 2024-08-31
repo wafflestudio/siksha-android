@@ -51,7 +51,7 @@ fun PostReportRoute(
                 }
 
                 is PostReportEvent.ReportPostFailed -> {
-                    context.showToast("신고가 실패했습니다.")
+                    context.showToast(it.errorMessage)
                 }
             }
         }
