@@ -58,14 +58,24 @@ class UserAccountFragment : Fragment(), DefaultDialogListener {
 
             logoutRow.setOnClickListener {
                 isLogoutAction = true
-                DefaultDialog.newInstance(getString(R.string.setting_dialog_logout_content))
+                DefaultDialog.newInstance(
+                    getString(R.string.setting_dialog_logout_title),
+                    getString(R.string.setting_dialog_logout_content),
+                    getString(R.string.setting_dialog_logout_proceed),
+                    getString(R.string.setting_dialog_logout_cancel)
+                )
                     .show(childFragmentManager, "logout dialog")
             }
 
             withdrawalRow.setOnClickListener {
                 // TODO: SikshaDialogController 만들기
                 isLogoutAction = false
-                DefaultDialog.newInstance(getString(R.string.siksha_info_dialog_withdrawal_content))
+                DefaultDialog.newInstance(
+                    getString(R.string.setting_dialog_withdrawal_title),
+                    getString(R.string.setting_dialog_withdrawal_content),
+                    getString(R.string.setting_dialog_withdrawal_proceed),
+                    getString(R.string.setting_dialog_withdrawal_cancel)
+                )
                     .show(childFragmentManager, "withdrawal dialog")
             }
         }

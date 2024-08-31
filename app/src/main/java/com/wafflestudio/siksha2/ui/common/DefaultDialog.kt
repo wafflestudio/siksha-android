@@ -12,12 +12,18 @@ import com.wafflestudio.siksha2.databinding.DialogDefaultBinding
 class DefaultDialog : DialogFragment() {
 
     companion object {
-        private const val ARG_MESSAGE = "ARG_MESSAGE"
+        private const val ARG_DIALOG_TITLE = "ARG_DIALOG_TITLE"
+        private const val ARG_DIALOG_CONTENT = "ARG_DIALOG_CONTENT"
+        private const val ARG_DIALOG_POSITIVE = "ARG_DIALOG_POSITIVE"
+        private const val ARG_DIALOG_NEGATIVE = "ARG_DIALOG_NEGATIVE"
 
-        fun newInstance(message: CharSequence) =
+        fun newInstance(title: CharSequence, content: CharSequence, positiveText: CharSequence, negativeText: CharSequence) =
             DefaultDialog().apply {
                 arguments = Bundle().apply {
-                    putCharSequence(ARG_MESSAGE, message)
+                    putCharSequence(ARG_DIALOG_TITLE, title)
+                    putCharSequence(ARG_DIALOG_CONTENT, content)
+                    putCharSequence(ARG_DIALOG_POSITIVE, positiveText)
+                    putCharSequence(ARG_DIALOG_NEGATIVE, negativeText)
                 }
             }
     }
@@ -27,7 +33,10 @@ class DefaultDialog : DialogFragment() {
 
     private var listener: DefaultDialogListener? = null
 
-    private val message by lazy { arguments?.getCharSequence(ARG_MESSAGE) }
+    private val title by lazy { arguments?.getCharSequence(ARG_DIALOG_TITLE) }
+    private val content by lazy { arguments?.getCharSequence(ARG_DIALOG_CONTENT) }
+    private val positiveText by lazy { arguments?.getCharSequence(ARG_DIALOG_POSITIVE) }
+    private val negativeText by lazy { arguments?.getCharSequence(ARG_DIALOG_NEGATIVE) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +72,12 @@ class DefaultDialog : DialogFragment() {
     }
 
     private fun initView() {
-        binding.tvMessage.text = message
+        binding.apply {
+            dialogTitle.text = title
+            dialogContent.text = content
+            tvPositiveButton.text = positiveText
+            tvNegativeButton.text = negativeText
+        }
     }
 
     override fun onResume() {

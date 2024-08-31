@@ -22,7 +22,14 @@
     <string name="setting_voc_leave_message">문의할 내용을 남겨주세요.</string>
     <string name="setting_voc_hint">문의할 내용을 작성해주세요.</string>
     <string name="setting_voc_send_voc">전송하기</string>
+    <string name="setting_dialog_logout_title">로그아웃</string>
     <string name="setting_dialog_logout_content">정말로 로그아웃 하시겠습니까?</string>
+    <string name="setting_dialog_logout_proceed">로그아웃</string>
+    <string name="setting_dialog_logout_cancel">취소</string>
+    <string name="setting_dialog_withdrawal_title">회원탈퇴</string>
+    <string name="setting_dialog_withdrawal_content">회원 탈퇴 시 이 계정으로 등록된 모든 리뷰가 삭제됩니다.</string>
+    <string name="setting_dialog_withdrawal_proceed">탈퇴하기</string>
+    <string name="setting_dialog_withdrawal_cancel">취소</string>
     <string name="menu_detail_review_label">메뉴평가</string>
     <string name="leave_review_title">나의 평가 남기기</string>
     <string name="leave_review_description">식단 한 줄 평을 함께 남겨보세요!</string>
@@ -93,7 +100,6 @@
     <string name="community_comment_delete_dialog_title">댓글 삭제</string>
     <string name="community_comment_delete_dialog_description">댓글을 정말 삭제하시겠습니까?</string>
     <string name="community_comment_unavailable">신고가 누적되어 숨겨진 댓글입니다.</string>
-    <string name="siksha_info_dialog_withdrawal_content">앱 계정을 삭제합니다.\n이 계정으로 등록된 리뷰 정보들도 모두 함께 삭제됩니다.</string>
     <string name="version_text">siksha-%s</string>
     <string name="image_viewer_current_page">%1$d/%2$d</string>
     <string name="nickname_hint">닉네임을 입력하세요</string>
