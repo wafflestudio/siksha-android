@@ -48,9 +48,11 @@
 
         <activity
             android:name="com.wafflestudio.siksha2.ui.RootActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.wafflestudio.siksha2.ui.SplashActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.Siksha.Splash">
             <intent-filter>
