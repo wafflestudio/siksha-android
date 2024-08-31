@@ -5,5 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class VocParam(
-    @Json(name = "voc") val voc: String
+    @Json(name = "voc") val voc: String,
+    @Json(name = "platform") val platform: String
 )
