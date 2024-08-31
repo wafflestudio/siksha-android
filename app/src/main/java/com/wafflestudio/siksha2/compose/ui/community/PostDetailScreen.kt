@@ -74,6 +74,7 @@ import com.wafflestudio.siksha2.ui.main.community.PostDetailViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
 import com.wafflestudio.siksha2.ui.main.community.PostUiState
 import com.wafflestudio.siksha2.ui.main.community.UserPostListViewModel
+import com.wafflestudio.siksha2.utils.showImageViewer
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharedFlow
@@ -474,6 +475,7 @@ fun PostBody(
     modifier: Modifier = Modifier,
     onClickLike: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier
     ) {
@@ -503,6 +505,9 @@ fun PostBody(
                 SubcomposeAsyncImage(
                     model = images[it],
                     modifier = Modifier
+                        .clickable {
+                            context.showImageViewer(images, it)
+                        }
                         .fillMaxWidth()
                         .aspectRatio(1f)
                         .padding(start = startPadding, end = endPadding),
