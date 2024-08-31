@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="80dp"
-    tools:background="@color/light_gray_300"
+    android:paddingTop="69dp"
+    tools:background="@color/white"
     tools:context=".ui.main.setting.SettingFragment">
 
     <LinearLayout
@@ -24,7 +24,7 @@
             android:layout_height="48dp"
             android:src="@drawable/version"
             android:layout_marginVertical="12dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="11dp"/>
 
         <TextView
             android:id="@+id/nickname"
@@ -34,9 +34,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:textStyle="bold"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:gravity="center"
-            android:textColor="@color/gray_700"
+            android:textColor="@color/black"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             tools:text="닉네임"/>
@@ -47,8 +47,8 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:src="@drawable/ic_right_arrow"
             android:layout_gravity="center"
             android:layout_marginEnd="18dp" />
@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="horizontal"
         android:layout_gravity="center">
@@ -67,7 +67,7 @@
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/my_post_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="내가 쓴 글" />
 
     </LinearLayout>
@@ -76,14 +76,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical">
 
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/order_restaurant_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="식당 순서 변경" />
 
         <View
@@ -95,7 +95,7 @@
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/order_favorite_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="즐겨찾기 식당 순서 변경" />
 
         <View
@@ -107,7 +107,7 @@
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/show_empty_check_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="메뉴 없는 식당 숨기기"
             app:showArrowIcon="false"
             app:showCheckbox="true" />
@@ -121,7 +121,7 @@
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/setting_account_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="계정 관리"
             />
 
@@ -131,14 +131,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical">
 
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/voc_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="1:1 문의하기"
             app:textColor = "@color/orange_main"
             />
