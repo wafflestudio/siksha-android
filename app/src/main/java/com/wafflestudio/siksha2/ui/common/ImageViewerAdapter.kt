@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ImageViewerAdapter(
     private val images: List<String>,
-    private val onSingleTapUp: () -> Unit,
+    private val onSingleTapUp: () -> Unit
 ) : RecyclerView.Adapter<ImageViewerViewHolder>() {
     override fun getItemCount(): Int = images.size
 

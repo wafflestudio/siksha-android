@@ -41,12 +41,15 @@ class ScalableImageView @JvmOverloads constructor(
     private var savedDist = 1f
     private var mode = Mode.NONE
     private var singleTapUpListener: (() -> Unit)? = null
-    private val gestureDetector = GestureDetector(context, object : OnSingleTapUpListener() {
-        override fun onSingleTapUp(e: MotionEvent): Boolean {
-            singleTapUpListener?.invoke()
-            return false
+    private val gestureDetector = GestureDetector(
+        context,
+        object : OnSingleTapUpListener() {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                singleTapUpListener?.invoke()
+                return false
+            }
         }
-    })
+    )
 
     init {
         scaleType = ScaleType.MATRIX
@@ -250,7 +253,7 @@ class ScalableImageView @JvmOverloads constructor(
     }
 }
 
-private abstract class OnSingleTapUpListener: OnGestureListener {
+private abstract class OnSingleTapUpListener : OnGestureListener {
     override fun onDown(e: MotionEvent): Boolean {
         return false
     }
