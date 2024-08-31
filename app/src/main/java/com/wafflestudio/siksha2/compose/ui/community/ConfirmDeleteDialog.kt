@@ -2,9 +2,7 @@ package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,16 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.wafflestudio.siksha2.ui.SikshaTheme
 
 @Composable
 fun ConfirmDeleteDialog(
     onDismissRequest: () -> Unit,
     onConfirmDelete: () -> Unit,
     onCancelDelete: () -> Unit,
-    modifier: Modifier=Modifier
+    modifier: Modifier = Modifier
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
@@ -88,12 +88,12 @@ fun ConfirmDeleteDialog(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Box(
+                TextButton(
+                    onClick = onCancelDelete,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
                         .padding(vertical = 8.dp)
-                        .clickable(onClick = onCancelDelete)
                 ) {
                     Text(
                         text = "취소",
@@ -102,7 +102,6 @@ fun ConfirmDeleteDialog(
                         fontWeight = FontWeight.Bold
                     )
                 }
-
 
                 Spacer(
                     modifier = Modifier
@@ -127,5 +126,17 @@ fun ConfirmDeleteDialog(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ConfirmDeleteDialogPreview() {
+    SikshaTheme {
+        ConfirmDeleteDialog(
+            onDismissRequest = {},
+            onConfirmDelete = {},
+            onCancelDelete = {}
+        )
     }
 }
