@@ -126,17 +126,3 @@ fun PostDetailDialog(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PostDetailDialogPreview() {
-    SikshaTheme {
-        PostDetailDialog(
-            isMine = true,
-            onDismissRequest = {},
-            onClickEdit = {},
-            onClickDelete = {},
-            onClickReport = {},
-            onClickCancel = {}
-        )
-    }
-}

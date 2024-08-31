@@ -152,12 +152,11 @@
                 android:background="@drawable/frame_leave_review_button"
                 android:fontFamily="@font/nanum_square_extra_bold"
                 android:gravity="center"
-                android:letterSpacing="0.2"
                 android:paddingVertical="20dp"
                 android:text="@string/setting_voc_send_voc"
                 android:textColor="@color/white"
-                android:textSize="20dp"
-                android:layout_marginBottom="32dp"
+                android:textSize="17dp"
+                android:layout_marginBottom="66dp"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="150dp" />
 
