@@ -51,7 +51,7 @@ fun CommentReportRoute(
                 }
 
                 is CommentReportEvent.ReportCommentFailed -> {
-                    context.showToast("신고가 실패했습니다.")
+                    context.showToast(it.errorMessage)
                 }
             }
         }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,8 +50,16 @@ class CommentReportViewModel @Inject constructor(
                 communityRepository.reportComment(commentId, reportContent)
             }.onSuccess {
                 _commentReportEvent.emit(CommentReportEvent.ReportCommentSuccess)
-            }.onFailure {
-                _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed)
+            }.onFailure { throwable ->
+                when (throwable) {
+                    is HttpException -> {
+                        when (throwable.code()) {
+                            409 -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("이미 신고한 게시글입니다."))
+                            else -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("알 수 없는 오류입니다."))
+                        }
+                    }
+                    else -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("알 수 없는 오류입니다."))
+                }
             }
         }
     }
@@ -58,5 +67,5 @@ class CommentReportViewModel @Inject constructor(
 
 sealed interface CommentReportEvent {
     object ReportCommentSuccess : CommentReportEvent
-    object ReportCommentFailed : CommentReportEvent
+    class ReportCommentFailed(val errorMessage: String) : CommentReportEvent
 }
