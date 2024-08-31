@@ -24,7 +24,7 @@
             android:layout_height="48dp"
             android:src="@drawable/version"
             android:layout_marginVertical="12dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_marginStart="11dp"/>
 
         <TextView
             android:id="@+id/nickname"
@@ -34,9 +34,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:textStyle="bold"
-            android:textSize="18dp"
+            android:textSize="15dp"
             android:gravity="center"
-            android:textColor="@color/gray_700"
+            android:textColor="@color/black"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             tools:text="닉네임"/>
@@ -47,8 +47,8 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:src="@drawable/ic_right_arrow"
             android:layout_gravity="center"
             android:layout_marginEnd="18dp" />
@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="horizontal"
         android:layout_gravity="center">
@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical">
 
@@ -131,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical">
 
