@@ -40,6 +40,7 @@ fun ConfirmDeleteDialog(
     Dialog(onDismissRequest = onDismissRequest) {
         Column(
             modifier = modifier
+                .padding(horizontal = 30.dp)
                 .background(
                     color = SikshaColors.White900,
                     shape = RoundedCornerShape(26.dp)
@@ -51,7 +52,7 @@ fun ConfirmDeleteDialog(
                 text = title,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(10.dp))
