@@ -49,4 +49,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/v_header_background" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/g_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="v_header_background, tv_current_page, iv_close" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

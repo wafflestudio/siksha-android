@@ -4,9 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ActivityImageViewerBinding
+import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import java.util.ArrayList
 
 class ImageViewerActivity : Activity() {
@@ -48,7 +50,12 @@ class ImageViewerActivity : Activity() {
         setContentView(binding.root)
 
         images?.let {
-            binding.vpImages.adapter = ImageViewerAdapter(it)
+            binding.vpImages.adapter = ImageViewerAdapter(
+                images = it,
+                onSingleTapUp = {
+                    toggleHeaderVisibility()
+                }
+            )
             binding.vpImages.setCurrentItem(initialPage, false)
             setPageText(binding.vpImages.currentItem + 1, it.size)
         }
@@ -60,5 +67,9 @@ class ImageViewerActivity : Activity() {
 
     private fun setPageText(currentPage: Int, pageCount: Int) {
         binding.tvCurrentPage.text = getString(R.string.image_viewer_current_page, currentPage, pageCount)
+    }
+
+    private fun toggleHeaderVisibility() {
+        binding.gHeader.setVisibleOrGone(binding.gHeader.isVisible.not())
     }
 }

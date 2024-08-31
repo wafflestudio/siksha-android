@@ -3,7 +3,10 @@ package com.wafflestudio.siksha2.ui.common
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class ImageViewerAdapter(private val images: List<String>) : RecyclerView.Adapter<ImageViewerViewHolder>() {
+class ImageViewerAdapter(
+    private val images: List<String>,
+    private val onSingleTapUp: () -> Unit,
+) : RecyclerView.Adapter<ImageViewerViewHolder>() {
     override fun getItemCount(): Int = images.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewerViewHolder {
@@ -27,6 +30,7 @@ class ImageViewerAdapter(private val images: List<String>) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: ImageViewerViewHolder, position: Int) {
         val scalableImageView = holder.nestedScrollableHost.getChildAt(0) as? ScalableImageView
         scalableImageView?.setModel(images[position])
+        scalableImageView?.setOnSingleTapUpListener(onSingleTapUp)
     }
 }
 

@@ -6,6 +6,8 @@ import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.GestureDetector.OnGestureListener
 import android.view.MotionEvent
 import androidx.annotation.AttrRes
 import androidx.appcompat.widget.AppCompatImageView
@@ -38,6 +40,13 @@ class ScalableImageView @JvmOverloads constructor(
     private val savedMidPoint = PointF()
     private var savedDist = 1f
     private var mode = Mode.NONE
+    private var singleTapUpListener: (() -> Unit)? = null
+    private val gestureDetector = GestureDetector(context, object : OnSingleTapUpListener() {
+        override fun onSingleTapUp(e: MotionEvent): Boolean {
+            singleTapUpListener?.invoke()
+            return false
+        }
+    })
 
     init {
         scaleType = ScaleType.MATRIX
@@ -113,6 +122,8 @@ class ScalableImageView @JvmOverloads constructor(
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return true
         if (drawable == null) return true
+
+        gestureDetector.onTouchEvent(event)
 
         when (event.action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
@@ -232,5 +243,27 @@ class ScalableImageView @JvmOverloads constructor(
             currentX < 0
         }
         return res
+    }
+
+    fun setOnSingleTapUpListener(listener: (() -> Unit)?) {
+        singleTapUpListener = listener
+    }
+}
+
+private abstract class OnSingleTapUpListener: OnGestureListener {
+    override fun onDown(e: MotionEvent): Boolean {
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent) {}
+
+    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        return false
+    }
+
+    override fun onLongPress(e: MotionEvent) {}
+
+    override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        return false
     }
 }
