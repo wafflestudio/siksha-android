@@ -62,13 +62,13 @@ fun LocalDateTime.toParsedTimeString(): String {
         val days = diff.toDays()
         return when {
             days > 0 -> {
-                format(DateTimeFormatter.ISO_DATE)
+                format(DateTimeFormatter.ofPattern("yyyy/MM/dd"))
             }
             hours > 0 -> {
-                "$hours 시간 전"
+                "${hours}시간 전"
             }
             minutes > 0 -> {
-                "$minutes 분 전"
+                "${minutes}분 전"
             }
             else -> {
                 "방금 전"

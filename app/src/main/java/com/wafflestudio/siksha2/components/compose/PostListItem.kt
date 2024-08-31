@@ -1,12 +1,13 @@
 package com.wafflestudio.siksha2.components.compose
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
@@ -76,9 +78,7 @@ fun PostListItem(
                     .size(61.dp),
                 contentDescription = "",
                 loading = {
-                    CircularProgressIndicator(
-                        modifier = Modifier.padding(10.dp)
-                    )
+                    Box(modifier = Modifier.background(SikshaColors.Gray350))
                 },
                 contentScale = ContentScale.Crop
             )
