@@ -28,14 +28,14 @@ import kotlinx.coroutines.launch
 
 class UserProfileFragment : Fragment() {
     private lateinit var binding: FragmentUserProfileBinding
-    private val userSettingViewModel: SettingViewModel by activityViewModels()
+    private val settingViewModel: SettingViewModel by activityViewModels()
 
     private lateinit var imageView: ShapeableImageView
     private var imageChanged: Boolean = false
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            userSettingViewModel.updateImageUri(it)
+            settingViewModel.updateImageUri(it)
             Glide.with(this).load(it).circleCrop().into(imageView)
         }
     }
@@ -50,6 +50,8 @@ class UserProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        settingViewModel.resetProfileUrlCache()
+
         imageView = binding.imageView
 
         binding.backButton.setOnClickListener {
@@ -65,7 +67,7 @@ class UserProfileFragment : Fragment() {
         }
 
         binding.completeButton.setOnClickListener {
-            userSettingViewModel.patchUserData(
+            settingViewModel.patchUserData(
                 context = requireContext(),
                 nickname = binding.nicknameSetRow.text.toString(),
                 imageChanged = imageChanged
@@ -81,7 +83,7 @@ class UserProfileFragment : Fragment() {
         }
 
         binding.cancelButton.setOnClickListener {
-            binding.nicknameSetRow.setText(userSettingViewModel.userData.value?.nickname ?: "")
+            binding.nicknameSetRow.setText(settingViewModel.userData.value?.nickname ?: "")
             hideKeyboard()
         }
 
@@ -91,7 +93,7 @@ class UserProfileFragment : Fragment() {
 
         detectKeyboardVisibility()
 
-        userSettingViewModel.userData.observe(viewLifecycleOwner) { userData ->
+        settingViewModel.userData.observe(viewLifecycleOwner) { userData ->
             userData?.let {
                 binding.nicknameSetRow.setText(it.nickname)
 
@@ -109,7 +111,7 @@ class UserProfileFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                userSettingViewModel.settingEvent.collect {
+                settingViewModel.settingEvent.collect {
                     when (it) {
                         is SettingEvent.ChangeProfileSuccess -> {
                             findNavController().popBackStack()
@@ -163,7 +165,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun changeToDefaultImage() {
-        userSettingViewModel.updateImageUri(null)
+        settingViewModel.updateImageUri(null)
         imageView.apply {
             setImageResource(R.drawable.ic_rice_bowl)
             scaleType = ImageView.ScaleType.CENTER_CROP
