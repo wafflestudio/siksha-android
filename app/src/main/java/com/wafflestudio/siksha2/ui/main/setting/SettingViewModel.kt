@@ -94,7 +94,7 @@ class SettingViewModel @Inject constructor(
         profileUrlCache = uri?.toString()
     }
 
-    fun resetProfileUrlCache(){
+    fun resetProfileUrlCache() {
         profileUrlCache = _userData.value?.profileUrl
     }
 
@@ -109,7 +109,7 @@ class SettingViewModel @Inject constructor(
     }
 
     private suspend fun getImageToUpdate(context: Context, imageChanged: Boolean): MultipartBody.Part? {
-        if(!imageChanged || profileUrlCache == null) return null
+        if (!imageChanged || profileUrlCache == null) return null
 
         return profileUrlCache.let {
             val uri = Uri.parse(it)
