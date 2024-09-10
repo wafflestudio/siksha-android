@@ -72,20 +72,20 @@ class PostListViewModel @Inject constructor(
     val trendingPostsUiState: StateFlow<TrendingPostsUiState> = _trendingPostsUiState
 
     init {
-        viewModelScope.launch {
-            getBoards()
-            fetchTrendingPosts()
-        }
+        getBoards()
+        fetchTrendingPosts()
     }
 
-    suspend fun getBoards() {
-        try {
-            _boards.value = communityRepository.getBoards().map { board ->
-                board.toDataWithState(false)
+    fun getBoards() {
+        viewModelScope.launch {
+            try {
+                _boards.value = communityRepository.getBoards().map { board ->
+                    board.toDataWithState(false)
+                }
+                selectBoard(0)
+            } catch (e: IOException) {
+                // TODO: error handler
             }
-            selectBoard(0)
-        } catch (e: IOException) {
-            // TODO: error handler
         }
     }
 

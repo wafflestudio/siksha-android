@@ -53,14 +53,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical">
 
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/logout_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="로그아웃" />
 
         <View
@@ -72,7 +72,7 @@
         <com.wafflestudio.siksha2.components.SettingItemRow
             android:id="@+id/withdrawal_row"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:itemText="회원 탈퇴"
             app:textColor = "@color/google_gray"/>
 

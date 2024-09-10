@@ -70,6 +70,7 @@ fun PostListRoute(
         onClickCreatePost = onNewPost,
         selectedBoard = selectedBoard,
         refreshPosts = {
+            postListViewModel.getBoards()
             posts.refresh()
             postListViewModel.invalidateCache()
             postListViewModel.fetchTrendingPosts()
@@ -178,7 +179,7 @@ fun PostListScreen(
                 is LoadState.Error -> {
                     PostsErrorPlaceHolder(
                         onClickRetry = {
-                            posts.refresh()
+                            refreshPosts()
                         },
                         modifier = Modifier.fillMaxSize()
                     )

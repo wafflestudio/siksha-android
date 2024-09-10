@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -42,7 +43,10 @@ class SettingFragment : Fragment() {
             if (imageUrl != null) {
                 Glide.with(this).load(imageUrl).circleCrop().into(binding.ivProfilePicture)
             } else {
-                Glide.with(this).load(R.drawable.ic_rice_bowl).circleCrop().into(binding.ivProfilePicture)
+                binding.ivProfilePicture.apply {
+                    setImageResource(R.drawable.ic_rice_bowl)
+                    scaleType = ImageView.ScaleType.CENTER_CROP
+                }
             }
         }
 

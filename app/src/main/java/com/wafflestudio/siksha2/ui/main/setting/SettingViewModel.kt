@@ -31,14 +31,13 @@ class SettingViewModel @Inject constructor(
     private val _userData = MutableLiveData<User>()
     val userData: LiveData<User> get() = _userData
 
-    private val _updateProfileUrl = MutableLiveData<String?>()
-    val updateProfileUrl: LiveData<String?> get() = _updateProfileUrl
-
     private val _versionCheck = MutableLiveData<Boolean>()
     val versionCheck: LiveData<Boolean> get() = _versionCheck
 
     val packageVersion: String = BuildConfig.VERSION_NAME
-    private val isDefaultImage: Boolean get() = updateProfileUrl.value == null
+
+    // profileUrlCache : UserProfile Fragment가 생길 때마다 초기엔 _userData.value?.profileUrl 값으로 초기화, local에서 profile image가 변화가 생기면 저장
+    private var profileUrlCache: String? = _userData.value?.profileUrl
 
     private val _settingEvent = MutableSharedFlow<SettingEvent>()
     val settingEvent = _settingEvent.asSharedFlow()
@@ -92,7 +91,11 @@ class SettingViewModel @Inject constructor(
     }
 
     fun updateImageUri(uri: Uri?) {
-        _updateProfileUrl.value = uri?.toString()
+        profileUrlCache = uri?.toString()
+    }
+
+    fun resetProfileUrlCache() {
+        profileUrlCache = _userData.value?.profileUrl
     }
 
     private suspend fun getNicknameToUpdate(nickname: String): String? {
@@ -106,18 +109,14 @@ class SettingViewModel @Inject constructor(
     }
 
     private suspend fun getImageToUpdate(context: Context, imageChanged: Boolean): MultipartBody.Part? {
-        return if (isDefaultImage) {
-            null
-        } else if (imageChanged) {
-            _updateProfileUrl.value.let {
-                val uri = Uri.parse(it)
-                getCompressedImage(context, uri)
-            }?.let { file ->
-                val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                MultipartBody.Part.createFormData("image", file.name, requestBody)
-            }
-        } else {
-            null
+        if (!imageChanged || profileUrlCache == null) return null
+
+        return profileUrlCache.let {
+            val uri = Uri.parse(it)
+            getCompressedImage(context, uri)
+        }?.let { file ->
+            val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("image", file.name, requestBody)
         }
     }
 
@@ -137,6 +136,7 @@ class SettingViewModel @Inject constructor(
                     return@runCatching
                 }
 
+                val isDefaultImage = profileUrlCache == null
                 val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)
                 _userData.value = updatedUserData
             }.onFailure {
