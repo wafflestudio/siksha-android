@@ -41,9 +41,10 @@
 
     <ImageView
         android:id="@+id/iv_close"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginStart="30dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="9dp"
+        android:layout_marginStart="21dp"
         android:src="@drawable/ic_close_white"
         app:layout_constraintBottom_toBottomOf="@id/v_header_background"
         app:layout_constraintStart_toStartOf="parent"
