@@ -101,7 +101,6 @@ fun CancelIcon(
             colorFilter = ColorFilter.tint(color)
         )
     }
-
 }
 
 @Composable
