@@ -50,10 +50,12 @@ class SettingFragment : Fragment() {
             }
         }
 
-        if (vm.versionCheck.value == true) {
-            binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
-        } else {
-            binding.versionCheckText.text = getString(R.string.setting_need_update)
+        vm.versionCheck.observe(viewLifecycleOwner) { isLatestVersion ->
+            binding.versionCheckText.text = if (isLatestVersion) {
+                getString(R.string.setting_using_latest_version)
+            } else {
+                getString(R.string.setting_need_update)
+            }
         }
 
         binding.infoRow.setOnClickListener {
