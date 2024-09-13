@@ -50,8 +50,8 @@ class SettingFragment : Fragment() {
             }
         }
 
-        vm.versionCheck.observe(viewLifecycleOwner) { isLatestVersion ->
-            binding.versionCheckText.text = if (isLatestVersion) {
+        vm.isLatestAppVersion.observe(viewLifecycleOwner) { isLatestAppVersion ->
+            binding.versionCheckText.text = if (isLatestAppVersion) {
                 getString(R.string.setting_using_latest_version)
             } else {
                 getString(R.string.setting_need_update)
