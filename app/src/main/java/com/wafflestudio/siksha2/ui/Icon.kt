@@ -1,8 +1,10 @@
 package com.wafflestudio.siksha2.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -56,12 +58,16 @@ fun NavigateUpIcon(
     modifier: Modifier = Modifier,
     color: Color = SikshaColors.White900
 ) {
-    Image(
-        modifier = modifier.size(16.dp),
-        painter = painterResource(R.drawable.ic_back_arrow),
-        contentDescription = "navigate up",
-        colorFilter = ColorFilter.tint(color)
-    )
+    Box(
+        modifier = modifier.size(30.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_back_arrow),
+            contentDescription = "navigate up",
+            colorFilter = ColorFilter.tint(color)
+        )
+    }
 }
 
 @Composable
@@ -84,12 +90,17 @@ fun CancelIcon(
     modifier: Modifier = Modifier,
     color: Color = SikshaColors.White900
 ) {
-    Image(
-        modifier = modifier.size(12.dp),
-        painter = painterResource(R.drawable.ic_cancel),
-        contentDescription = "cancel",
-        colorFilter = ColorFilter.tint(color)
-    )
+    Box(
+        modifier = modifier.size(30.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            modifier = modifier.size(12.dp),
+            painter = painterResource(R.drawable.ic_cancel),
+            contentDescription = "cancel",
+            colorFilter = ColorFilter.tint(color)
+        )
+    }
 }
 
 @Composable
