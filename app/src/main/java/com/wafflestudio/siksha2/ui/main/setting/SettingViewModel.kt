@@ -31,8 +31,8 @@ class SettingViewModel @Inject constructor(
     private val _userData = MutableLiveData<User>()
     val userData: LiveData<User> get() = _userData
 
-    private val _versionCheck = MutableLiveData<Boolean>()
-    val versionCheck: LiveData<Boolean> get() = _versionCheck
+    private val _isLatestAppVersion = MutableLiveData<Boolean>()
+    val isLatestAppVersion: LiveData<Boolean> get() = _isLatestAppVersion
 
     val packageVersion: String = BuildConfig.VERSION_NAME
 
@@ -55,7 +55,7 @@ class SettingViewModel @Inject constructor(
 
     private suspend fun checkAppVersion() {
         val latestVersionNum = userStatusManager.getVersion()
-        _versionCheck.value = (packageVersion == latestVersionNum)
+        _isLatestAppVersion.value = (packageVersion == latestVersionNum)
     }
 
     val showEmptyRestaurantFlow = restaurantRepository.showEmptyRestaurant.asFlow()

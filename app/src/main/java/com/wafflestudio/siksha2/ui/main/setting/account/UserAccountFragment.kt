@@ -39,7 +39,7 @@ class UserAccountFragment : Fragment(), DefaultDialogListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (vm.versionCheck.value == true) {
+        if (vm.isLatestAppVersion.value == true) {
             binding.versionCheckText.text = getString(R.string.setting_using_latest_version)
         } else {
             binding.versionCheckText.text = getString(R.string.setting_need_update)
