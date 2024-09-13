@@ -27,13 +27,13 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/setup-gradle@v3
       - name: Clean build
         run: ./gradlew clean
       - name: Run ktlintDebug
         run: ./gradlew ktlintCheck
       - name: Upload ktlint report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: ktlint-result
@@ -54,7 +54,7 @@ jobs:
       - name: Run test
         run: ./gradlew testStagingDebug --stacktrace
       - name: Upload test report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: test-result
