@@ -100,6 +100,9 @@
     <string name="community_comment_delete_dialog_title">댓글 삭제</string>
     <string name="community_comment_delete_dialog_description">댓글을 정말 삭제하시겠습니까?</string>
     <string name="community_comment_unavailable">신고가 누적되어 숨겨진 댓글입니다.</string>
+    <string name="festival_toggle">축제 정보</string>
+    <string name="festival_toggle_on">ON</string>
+    <string name="festival_toggle_off">OFF</string>
     <string name="version_text">siksha-%s</string>
     <string name="image_viewer_current_page">%1$d/%2$d</string>
     <string name="nickname_hint">닉네임을 입력하세요</string>
