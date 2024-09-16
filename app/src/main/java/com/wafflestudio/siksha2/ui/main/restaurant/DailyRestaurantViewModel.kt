@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -43,6 +45,9 @@ class DailyRestaurantViewModel @Inject constructor(
 
     private val _favoriteRestaurantExists = MutableLiveData(false)
     val favoriteRestaurantExists: LiveData<Boolean> = _favoriteRestaurantExists
+
+    private val _showFestival = MutableLiveData(false)
+    val showFestival: LiveData<Boolean> = _showFestival
 
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
@@ -105,6 +110,10 @@ class DailyRestaurantViewModel @Inject constructor(
             _favoriteRestaurantExists.value =
                 restaurantRepository.getOrderedFavoriteRestaurants().isNotEmpty()
         }
+    }
+
+    fun toggleFestival() {
+        _showFestival.value = !showFestival.value!!
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {

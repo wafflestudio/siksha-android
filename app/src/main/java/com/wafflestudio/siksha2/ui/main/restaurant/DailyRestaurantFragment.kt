@@ -319,6 +319,8 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
+
+        binding.festivalTogglerButton.setOnClickListener { vm.toggleFestival() }
     }
 
     companion object {
