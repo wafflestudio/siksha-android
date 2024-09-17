@@ -14,7 +14,6 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoBottomSheet
 import com.wafflestudio.siksha2.utils.toPrettyString
@@ -323,11 +322,10 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
 
-
         if (
-            LocalDate.now().isBefore(LocalDate.of(2024,9,27))
-            && LocalDate.now().isAfter(LocalDate.of(2024,9,21))
-            ) {
+            LocalDate.now().isBefore(LocalDate.of(2024, 9, 27)) &&
+            LocalDate.now().isAfter(LocalDate.of(2024, 9, 21))
+        ) {
             binding.festivalTogglerButton.setOnClickListener {
                 vm.toggleFestival()
                 if (vm.showFestival.value == true) {
@@ -353,12 +351,10 @@ class DailyRestaurantFragment : Fragment() {
                             binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
                             binding.emptyText.setVisibleOrGone(it.isEmpty())
                             menuGroupAdapter.submitList(it)
-
                         }
                 }
             }
-        }
-        else {
+        } else {
             binding.festivalToggler.setVisibleOrGone(false)
         }
     }
