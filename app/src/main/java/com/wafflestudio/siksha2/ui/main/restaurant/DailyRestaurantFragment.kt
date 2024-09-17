@@ -332,8 +332,7 @@ class DailyRestaurantFragment : Fragment() {
                         R.color.orange_main
                     )
                 )
-            }
-            else {
+            } else {
                 binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
                 binding.festivalTogglerButton.setTextColor(
                     ContextCompat.getColor(
@@ -341,6 +340,15 @@ class DailyRestaurantFragment : Fragment() {
                         R.color.gray_500
                     )
                 )
+            }
+            viewLifecycleOwner.lifecycleScope.launch {
+                vm.getFilteredMenuGroups(isFavorite)
+                    .collect {
+                        binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                        binding.emptyText.setVisibleOrGone(it.isEmpty())
+                        menuGroupAdapter.submitList(it)
+
+                    }
             }
         }
     }
