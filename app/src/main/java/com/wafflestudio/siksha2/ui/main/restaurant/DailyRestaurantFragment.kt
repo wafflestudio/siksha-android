@@ -322,34 +322,44 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
         binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
-        binding.festivalTogglerButton.setOnClickListener {
-            vm.toggleFestival()
-            if (vm.showFestival.value == true) {
-                binding.festivalTogglerButton.setText(R.string.festival_toggle_on)
-                binding.festivalTogglerButton.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.orange_main
-                    )
-                )
-            } else {
-                binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
-                binding.festivalTogglerButton.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.gray_500
-                    )
-                )
-            }
-            viewLifecycleOwner.lifecycleScope.launch {
-                vm.getFilteredMenuGroups(isFavorite)
-                    .collect {
-                        binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
-                        binding.emptyText.setVisibleOrGone(it.isEmpty())
-                        menuGroupAdapter.submitList(it)
 
-                    }
+
+        if (
+            LocalDate.now().isBefore(LocalDate.of(2024,9,27))
+            && LocalDate.now().isAfter(LocalDate.of(2024,9,21))
+            ) {
+            binding.festivalTogglerButton.setOnClickListener {
+                vm.toggleFestival()
+                if (vm.showFestival.value == true) {
+                    binding.festivalTogglerButton.setText(R.string.festival_toggle_on)
+                    binding.festivalTogglerButton.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.orange_main
+                        )
+                    )
+                } else {
+                    binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
+                    binding.festivalTogglerButton.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.gray_500
+                        )
+                    )
+                }
+                viewLifecycleOwner.lifecycleScope.launch {
+                    vm.getFilteredMenuGroups(isFavorite)
+                        .collect {
+                            binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                            binding.emptyText.setVisibleOrGone(it.isEmpty())
+                            menuGroupAdapter.submitList(it)
+
+                        }
+                }
             }
+        }
+        else {
+            binding.festivalToggler.setVisibleOrGone(false)
         }
     }
 
