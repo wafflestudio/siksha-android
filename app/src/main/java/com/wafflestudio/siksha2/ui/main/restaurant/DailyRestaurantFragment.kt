@@ -14,6 +14,7 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoBottomSheet
 import com.wafflestudio.siksha2.utils.toPrettyString
@@ -320,7 +321,28 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
-        binding.festivalTogglerButton.setOnClickListener { vm.toggleFestival() }
+        binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
+        binding.festivalTogglerButton.setOnClickListener {
+            vm.toggleFestival()
+            if (vm.showFestival.value == true) {
+                binding.festivalTogglerButton.setText(R.string.festival_toggle_on)
+                binding.festivalTogglerButton.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.orange_main
+                    )
+                )
+            }
+            else {
+                binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
+                binding.festivalTogglerButton.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.gray_500
+                    )
+                )
+            }
+        }
     }
 
     companion object {
