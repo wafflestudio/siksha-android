@@ -323,11 +323,11 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
         if (
-            LocalDate.now().isBefore(LocalDate.of(2024, 9, 27)) &&
-            LocalDate.now().isAfter(LocalDate.of(2024, 9, 21))
+            LocalDate.now().isBefore(LocalDate.of(2024, 9, 27)) // &&
+            // LocalDate.now().isAfter(LocalDate.of(2024, 9, 21))
         ) {
             binding.festivalBanner.setOnClickListener {
-                val url = "https://wacruit.wafflestudio.com/"
+                val url = "https://www.instagram.com/snufestival/"
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(url)
                 startActivity(intent)
