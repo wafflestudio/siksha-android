@@ -320,31 +320,12 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
-        binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
-
         if (
-            LocalDate.now().isBefore(LocalDate.of(2024, 9, 27)) &&
-            LocalDate.now().isAfter(LocalDate.of(2024, 9, 21))
+            LocalDate.now().isBefore(LocalDate.of(2024, 9, 27)) // &&
+            // LocalDate.now().isAfter(LocalDate.of(2024, 9, 21))
         ) {
             binding.festivalTogglerButton.setOnClickListener {
                 vm.toggleFestival()
-                if (vm.showFestival.value == true) {
-                    binding.festivalTogglerButton.setText(R.string.festival_toggle_on)
-                    binding.festivalTogglerButton.setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.orange_main
-                        )
-                    )
-                } else {
-                    binding.festivalTogglerButton.setText(R.string.festival_toggle_off)
-                    binding.festivalTogglerButton.setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.gray_500
-                        )
-                    )
-                }
                 viewLifecycleOwner.lifecycleScope.launch {
                     vm.getFilteredMenuGroups(isFavorite)
                         .collect {
@@ -355,7 +336,7 @@ class DailyRestaurantFragment : Fragment() {
                 }
             }
         } else {
-            binding.festivalToggler.setVisibleOrGone(false)
+            binding.festivalTogglerButton.setVisibleOrGone(false)
         }
     }
 
