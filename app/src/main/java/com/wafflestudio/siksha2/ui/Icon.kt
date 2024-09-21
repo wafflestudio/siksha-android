@@ -95,7 +95,7 @@ fun CancelIcon(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            modifier = modifier.size(12.dp),
+            modifier = Modifier.size(12.dp),
             painter = painterResource(R.drawable.ic_cancel),
             contentDescription = "cancel",
             colorFilter = ColorFilter.tint(color)
