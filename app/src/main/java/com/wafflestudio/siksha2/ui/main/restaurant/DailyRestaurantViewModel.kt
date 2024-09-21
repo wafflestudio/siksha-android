@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
+import com.wafflestudio.siksha2.models.getRestaurantInfo
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,6 +44,9 @@ class DailyRestaurantViewModel @Inject constructor(
 
     private val _favoriteRestaurantExists = MutableLiveData(false)
     val favoriteRestaurantExists: LiveData<Boolean> = _favoriteRestaurantExists
+
+    private val _showFestival = MutableLiveData(false)
+    val showFestival: LiveData<Boolean> = _showFestival
 
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
@@ -107,6 +111,10 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
+    fun toggleFestival() {
+        _showFestival.value = !showFestival.value!!
+    }
+
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
         return _dateFilter.asFlow()
             .flatMapLatest {
@@ -134,6 +142,11 @@ class DailyRestaurantViewModel @Inject constructor(
                 }
             }
             .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
+            .map {
+                it.filter { item ->
+                    item.getRestaurantInfo().nameKr!!.startsWith("[축제]") == showFestival.value
+                }
+            }
             .combine(if (showOnlyFavorite) favoriteRestaurantOrder else restaurantOrder) { menuGroups, (order) ->
                 val result = mutableListOf<MenuGroup>()
                 val sortedMenuGroups = menuGroups.sortedByDescending { it.id }

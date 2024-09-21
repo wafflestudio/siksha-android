@@ -22,6 +22,22 @@
             android:layout_width="match_parent"
             android:layout_height="56dp" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/festival_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="320dp"
+                android:layout_height="50dp"
+                android:background="@drawable/festival_banner"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="53dp"
@@ -83,96 +99,123 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:orientation="horizontal">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
 
             <LinearLayout
-                android:id="@+id/breakfast_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:padding="8dp"
-                android:orientation="vertical"
-                android:gravity="center" >
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-                <ImageView
-                    android:id="@+id/tab_breakfast"
+                <LinearLayout
+                    android:id="@+id/breakfast_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_breakfast"
-                    app:tint="@color/meals_of_day_icon" />
+                    android:layout_marginEnd="16dp"
+                    android:padding="8dp"
+                    android:orientation="vertical"
+                    android:gravity="center" >
 
-                <TextView
-                    android:id="@+id/breakfast_text"
+                    <ImageView
+                        android:id="@+id/tab_breakfast"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu_breakfast"
+                        app:tint="@color/meals_of_day_icon" />
+
+                    <TextView
+                        android:id="@+id/breakfast_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:textColor="@color/gray_500"
+                        android:textSize="10dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/daily_restaurant_breakfast" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lunch_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:textColor="@color/gray_500"
-                    android:textSize="10dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/daily_restaurant_breakfast" />
+                    android:layout_marginEnd="16dp"
+                    android:padding="8dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/tab_lunch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu_lunch"
+                        app:tint="@color/meals_of_day_icon" />
+
+                    <TextView
+                        android:id="@+id/lunch_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:textColor="@color/gray_500"
+                        android:textSize="10dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/daily_restaurant_lunch" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dinner_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/tab_dinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_menu_dinner"
+                        app:tint="@color/meals_of_day_icon" />
+
+                    <TextView
+                        android:id="@+id/dinner_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanum_square_bold"
+                        android:textColor="@color/gray_500"
+                        android:textSize="10dp"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/daily_restaurant_dinner" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/lunch_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:padding="8dp"
-                android:orientation="vertical"
-                android:gravity="center">
+            <ToggleButton
+                android:id="@+id/festival_toggler_button"
+                android:layout_width="45dp"
+                android:layout_height="26dp"
+                android:gravity="center"
+                android:background="@drawable/toggle_selector_festival"
+                android:textOn=""
+                android:textOff=""
+                android:text=""
+                android:layout_marginEnd="17dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
-                <ImageView
-                    android:id="@+id/tab_lunch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_lunch"
-                    app:tint="@color/meals_of_day_icon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/lunch_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:textColor="@color/gray_500"
-                    android:textSize="10dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/daily_restaurant_lunch" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/dinner_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/tab_dinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_dinner"
-                    app:tint="@color/meals_of_day_icon" />
-
-                <TextView
-                    android:id="@+id/dinner_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:textColor="@color/gray_500"
-                    android:textSize="10dp"
-                    android:layout_marginTop="2dp"
-                    android:text="@string/daily_restaurant_dinner" />
-
-            </LinearLayout>
-
-        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/layout_menu_group_container"
