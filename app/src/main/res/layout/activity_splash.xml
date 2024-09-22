@@ -24,10 +24,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintBottom_toBottomOf="@id/guideline2"/>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/kakao_login_button"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="7dp"
         android:background="@drawable/frame_kakao_login_button"
         android:clickable="true"
@@ -44,25 +44,31 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:contentDescription="@string/splash_login_kakao_button"
-            android:src="@drawable/ic_kakao_login" />
+            android:src="@drawable/ic_kakao_login"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:ellipsize="end"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             android:text="@string/splash_login_kakao_button"
-            android:textColor="@color/kakao_brown" />
+            android:textColor="@color/kakao_brown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/google_login_button"
-        android:layout_width="200dp"
-        android:layout_height="40dp"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="46dp"
         android:background="@drawable/frame_google_login_button"
         android:clickable="true"
@@ -79,19 +85,25 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:contentDescription="@string/splash_login_google_button"
-            android:src="@drawable/ic_google_login" />
+            android:src="@drawable/ic_google_login"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
             android:ellipsize="end"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             android:text="@string/splash_login_google_button"
-            android:textColor="@color/google_gray" />
+            android:textColor="@color/google_gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <ImageView

@@ -1,7 +1,6 @@
 package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,19 +11,14 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
-import com.wafflestudio.siksha2.utils.PathUtil
+import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
-import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.format
-import id.zelory.compressor.constraint.resolution
-import id.zelory.compressor.constraint.size
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
@@ -167,7 +161,10 @@ class MenuDetailViewModel @Inject constructor(
             context.showToast("이미지 압축 중입니다.")
             _leaveReviewState.value = ReviewState.COMPRESSING
             val imageList = _imageUriList.value?.map {
-                getCompressedImage(context, it)
+                ImageUtil.getCompressedImage(context, it)
+            }?.map { file ->
+                val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                MultipartBody.Part.createFormData("images", file.name, requestBody)
             }
             val commentBody = MultipartBody.Part.createFormData("comment", comment)
             imageList?.let {
@@ -176,18 +173,6 @@ class MenuDetailViewModel @Inject constructor(
         } else {
             menuRepository.leaveMenuReview(menuId, score, comment)
         }
-    }
-
-    private suspend fun getCompressedImage(context: Context, uri: Uri): MultipartBody.Part {
-        val path = PathUtil.getPath(context, uri)
-        var file = File(path)
-        file = Compressor.compress(context, file) {
-            resolution(300, 300)
-            size(100000)
-            format(Bitmap.CompressFormat.JPEG)
-        }
-        val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("images", file.name, requestBody)
     }
 
     enum class State {

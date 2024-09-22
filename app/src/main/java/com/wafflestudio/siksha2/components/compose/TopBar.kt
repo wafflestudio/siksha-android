@@ -11,8 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
 @Composable
@@ -41,5 +44,16 @@ fun TopBar(
         ) {
             navigationButton()
         }
+    }
+}
+
+@Preview
+@Composable
+fun TopBarPreview() {
+    SikshaTheme {
+        TopBar(
+            title = "테스트",
+            navigationButton = { NavigateUpIcon() }
+        )
     }
 }

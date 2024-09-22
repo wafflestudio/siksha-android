@@ -1,12 +1,15 @@
 package com.wafflestudio.siksha2.compose.ui.community
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
@@ -22,41 +25,86 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.Chip
 import com.wafflestudio.siksha2.components.compose.PostListItem
+import com.wafflestudio.siksha2.ui.NewPostIcon
+import com.wafflestudio.siksha2.models.Board
+import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
+import com.wafflestudio.siksha2.ui.main.community.TrendingPostsUiState
+import com.wafflestudio.siksha2.utils.DataWithState
+import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PostListScreen(
+fun PostListRoute(
     onClickPost: (Long) -> Unit,
+    onNewPost: (Long) -> Unit,
     modifier: Modifier = Modifier,
     postListViewModel: PostListViewModel = hiltViewModel()
 ) {
     val boards by postListViewModel.boards.collectAsState()
+    val selectedBoard by postListViewModel.selectedBoard.collectAsState()
     val posts = postListViewModel.postPagingData.collectAsLazyPagingItems()
     val postListState = postListViewModel.postListState
-    val refresh: () -> Unit = {
-        posts.refresh()
-        postListViewModel.invalidateCache()
-    }
-    val pullRefreshState = rememberPullRefreshState(false, refresh) // 로딩 상태 표시는 PostsLoadingPlaceHolder를 이용하므로 refreshing=false
+    val trendingPostsUiState by postListViewModel.trendingPostsUiState.collectAsState()
+
+    PostListScreen(
+        boards = boards,
+        posts = posts,
+        postListState = postListState,
+        trendingPostsUiState = trendingPostsUiState,
+        onClickPost = onClickPost,
+        onClickCreatePost = onNewPost,
+        selectedBoard = selectedBoard,
+        refreshPosts = {
+            postListViewModel.getBoards()
+            posts.refresh()
+            postListViewModel.invalidateCache()
+            postListViewModel.fetchTrendingPosts()
+        },
+        selectBoard = postListViewModel::selectBoard,
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PostListScreen(
+    boards: List<DataWithState<Board, Boolean>>,
+    posts: LazyPagingItems<Post>,
+    postListState: LazyListState,
+    trendingPostsUiState: TrendingPostsUiState,
+    onClickPost: (Long) -> Unit,
+    onClickCreatePost: (Long) -> Unit,
+    selectedBoard: Board,
+    refreshPosts: () -> Unit,
+    selectBoard: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val pullRefreshState = rememberPullRefreshState(false, refreshPosts) // 로딩 상태 표시는 PostsLoadingPlaceHolder를 이용하므로 refreshing=false
 
     Column(
         modifier = modifier
             .background(SikshaColors.White900)
     ) {
         LazyRow(
-            modifier = Modifier.padding(horizontal = 28.dp, vertical = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
+            modifier = Modifier.padding(vertical = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp)
         ) {
             itemsIndexed(
                 items = boards
@@ -65,14 +113,18 @@ fun PostListScreen(
                     text = item.data.name,
                     selected = item.state,
                     onClick = {
-                        postListViewModel.selectBoard(idx)
+                        selectBoard(idx)
                     }
                 )
             }
         }
-        Divider(color = SikshaColors.Gray400, thickness = 0.5.dp)
+        Divider(
+            color = Color(0xFFF0F0F0),
+            thickness = 1.dp
+        )
         Box(
             modifier = Modifier
+                .weight(1f)
                 .pullRefresh(pullRefreshState)
         ) {
             PullRefreshIndicator(
@@ -90,6 +142,12 @@ fun PostListScreen(
                         LazyColumn(
                             state = postListState
                         ) {
+                            item {
+                                TrendingPostsBanner(
+                                    trendingPostsUiState = trendingPostsUiState,
+                                    onClickTrendingPost = onClickPost
+                                )
+                            }
                             items(
                                 count = posts.itemCount
                             ) {
@@ -102,8 +160,12 @@ fun PostListScreen(
                                         isLiked = post.isLiked,
                                         onClick = {
                                             onClickPost(post.id)
-                                        }
+                                        },
+                                        thumbnailImage = post.etc?.images?.first()
                                     )
+                                    if (it < posts.itemCount - 1) {
+                                        CommunityDivider()
+                                    }
                                 }
                             }
                         }
@@ -119,12 +181,20 @@ fun PostListScreen(
                 is LoadState.Error -> {
                     PostsErrorPlaceHolder(
                         onClickRetry = {
-                            posts.refresh()
+                            refreshPosts()
                         },
                         modifier = Modifier.fillMaxSize()
                     )
                 }
             }
+            NewPostIcon(
+                modifier = Modifier
+                    .padding(end = 30.dp, bottom = 16.dp)
+                    .align(Alignment.BottomEnd)
+                    .clickable {
+                        onClickCreatePost(selectedBoard.id)
+                    }
+            )
         }
     }
 }
@@ -186,5 +256,24 @@ fun PostsErrorPlaceHolder(
                 )
             }
         }
+    }
+}
+
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Composable
+fun PostListScreenPreview() {
+    SikshaTheme {
+        PostListScreen(
+            boards = emptyList(),
+            posts = flowOf(PagingData.empty<Post>()).collectAsLazyPagingItems(),
+            postListState = LazyListState(0, 0),
+            trendingPostsUiState = TrendingPostsUiState.Loading,
+            onClickPost = {},
+            onClickCreatePost = {},
+            selectedBoard = Board(),
+            refreshPosts = {},
+            selectBoard = {},
+            modifier = Modifier
+        )
     }
 }

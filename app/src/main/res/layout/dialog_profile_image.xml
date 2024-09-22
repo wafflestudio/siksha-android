@@ -1,0 +1,77 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@android:color/transparent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/dialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="프로필 사진 설정"
+            android:textSize="15sp"
+            android:textColor="@color/gray_900"
+            android:layout_gravity="center"
+            android:padding="16dp" />
+
+
+        <LinearLayout
+            android:id="@+id/albumRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_photo"
+                android:layout_gravity="center_vertical"
+                app:tint="@color/black"
+                android:layout_marginStart="2dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="앨범에서 사진 선택"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_marginStart="14dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/defaultImageRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_default_image"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="기본 이미지 적용"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:layout_marginStart="11dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

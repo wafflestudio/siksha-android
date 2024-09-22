@@ -4,6 +4,7 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import okhttp3.MultipartBody
+import retrofit2.Response
 import retrofit2.http.*
 import java.time.LocalDate
 
@@ -72,8 +73,21 @@ interface SikshaApi {
         @Body req: VocParam
     )
 
-    @GET("/auth/me")
+    @GET("/auth/me/image")
     suspend fun getUserData(): GetUserDataResult
+
+    @Multipart
+    @PATCH("/auth/me/image/profile")
+    suspend fun updateUserData(
+        @Part image: MultipartBody.Part?,
+        @Part("change_to_default_image") changeToDefaultImage: Boolean,
+        @Part nickname: MultipartBody.Part?
+    ): GetUserDataResult
+
+    @GET("/auth/nicknames/validate")
+    suspend fun checkNickname(
+        @Query("nickname") nickname: String
+    )
 
     @GET("/versions/android")
     suspend fun getVersion(): GetVersionResult
@@ -87,9 +101,20 @@ interface SikshaApi {
     @GET("/community/boards")
     suspend fun getBoards(): GetBoardsResult
 
+    @GET("/community/boards/{board_id}")
+    suspend fun getBoard(
+        @Path("board_id") boardId: Long
+    ): GetBoardResult
+
     @GET("/community/posts")
     suspend fun getPosts(
         @Query("board_id") boardId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Int
+    ): GetPostsResult
+
+    @GET("/community/posts/me")
+    suspend fun getUserPosts(
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
     ): GetPostsResult
@@ -121,6 +146,27 @@ interface SikshaApi {
         @Path("post_id") postId: Long
     ): PostUnlikePostResponse
 
+    @Multipart
+    @POST("/community/posts")
+    suspend fun postCreatePost(
+        @Part("board_id") boardId: Long,
+        @Part title: MultipartBody.Part,
+        @Part content: MultipartBody.Part,
+        @Part("anonymous") anonymous: Boolean,
+        @Part images: List<MultipartBody.Part>
+    ): CreatePostResponse
+
+    @Multipart
+    @PATCH("/community/posts/{post_id}")
+    suspend fun postPatchPost(
+        @Path("post_id") postId: Long,
+        @Part("board_id") boardId: Long,
+        @Part title: MultipartBody.Part,
+        @Part content: MultipartBody.Part,
+        @Part("anonymous") anonymous: Boolean,
+        @Part images: List<MultipartBody.Part>
+    ): PatchPostResponse
+
     @POST("/community/comments/{comment_id}/like")
     suspend fun postLikeComment(
         @Path("comment_id") commentId: Long
@@ -130,4 +176,29 @@ interface SikshaApi {
     suspend fun postUnlikeComment(
         @Path("comment_id") commentId: Long
     ): PostUnlikeCommentResponse
+
+    @DELETE("community/posts/{postId}")
+    suspend fun deletePost(
+        @Path("postId") postId: Long
+    ): Response<Unit?>
+
+    @DELETE("/community/comments/{comment_id}")
+    suspend fun deleteComment(
+        @Path("comment_id") commentId: Long
+    ): Response<Unit?>
+
+    @POST("/community/posts/{post_id}/report")
+    suspend fun reportPost(
+        @Path("post_id") postId: Long,
+        @Body requestBody: ReportPostRequestBody
+    ): ReportPostResponse
+
+    @POST("/community/comments/{comment_id}/report")
+    suspend fun reportComment(
+        @Path("comment_id") commentId: Long,
+        @Body requestBody: ReportCommentRequestBody
+    ): ReportCommentResponse
+
+    @GET("/community/posts/popular/trending")
+    suspend fun getTrendingPosts(): GetTrendingPostsResponse
 }

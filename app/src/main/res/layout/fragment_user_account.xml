@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray_300"
+    android:orientation="vertical"
+    tools:context=".ui.main.setting.account.UserAccountFragment">
+
+    <LinearLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@color/orange_main" >
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="12dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/nanum_square_bold"
+            android:text="@string/setting_setting_account"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:textSize="20dp" />
+
+        <!-- textview 양옆 마진 맞추기용 -->
+        <ImageView
+            android:id="@+id/back_button_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/frame_setting_layout"
+        android:orientation="vertical">
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/logout_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemText="로그아웃" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray_500"
+            android:layout_marginHorizontal="8dp" />
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/withdrawal_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemText="회원 탈퇴"
+            app:textColor = "@color/google_gray"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="bottom"
+        >
+
+        <TextView
+            android:id="@+id/version_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/gray_500"
+            tools:text="siksha-2.0.0"/>
+
+        <TextView
+            android:id="@+id/version_check_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/gray_500"
+            tools:text="최신버전을 이용중입니다."/>
+
+    </LinearLayout>
+
+</LinearLayout>

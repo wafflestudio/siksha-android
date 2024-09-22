@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
 import android.animation.ObjectAnimator
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -319,6 +321,35 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
+
+        vm.showFestival.observe(viewLifecycleOwner) {
+            binding.festivalTogglerButton.isSelected = it
+        }
+        if (
+            LocalDate.now().isBefore(LocalDate.of(2024, 9, 27)) &&
+            LocalDate.now().isAfter(LocalDate.of(2024, 9, 21))
+        ) {
+            binding.festivalBanner.setOnClickListener {
+                val url = "https://www.instagram.com/snufestival/"
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                startActivity(intent)
+            }
+            binding.festivalTogglerButton.setOnClickListener {
+                vm.toggleFestival()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    vm.getFilteredMenuGroups(isFavorite)
+                        .collect {
+                            binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                            binding.emptyText.setVisibleOrGone(it.isEmpty())
+                            menuGroupAdapter.submitList(it)
+                        }
+                }
+            }
+        } else {
+            binding.festivalTogglerButton.setVisibleOrGone(false)
+            binding.festivalBanner.setVisibleOrGone(false)
+        }
     }
 
     companion object {

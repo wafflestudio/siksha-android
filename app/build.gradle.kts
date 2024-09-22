@@ -41,7 +41,7 @@ android {
     defaultConfig {
         applicationId = "com.wafflestudio.siksha2"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -170,9 +170,6 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
 
-    // Image Compression
-    implementation("id.zelory:compressor:3.0.1")
-
     testImplementation("junit:junit:4.+")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -180,7 +177,8 @@ dependencies {
     // Compose
     implementation("androidx.compose.runtime:runtime:${Deps.Version.Compose}")
     implementation("androidx.compose.ui:ui:${Deps.Version.Compose}")
-    implementation("androidx.compose.ui:ui-tooling:${Deps.Version.Compose}")
+    debugImplementation("androidx.compose.ui:ui-tooling:${Deps.Version.Compose}")
+    implementation("androidx.compose.ui:ui-tooling-preview:${Deps.Version.Compose}")
     implementation("androidx.compose.material:material:${Deps.Version.Compose}")
     implementation("androidx.compose.foundation:foundation:${Deps.Version.ComposeFoundation}")
     implementation("androidx.compose.foundation:foundation-layout:${Deps.Version.ComposeFoundation}")

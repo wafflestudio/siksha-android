@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,36 +35,11 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (FeatureChecker.isFeatureEnabled(FeatureChecker.Feature.COMMUNITY_TAB)) {
-            initTabWithCommunity()
-        } else {
-            initTab()
-        }
+        initTab()
     }
 
     private fun initTab() {
         stateAdapter = MainFragmentStateAdapter(this)
-        binding.viewPager.apply {
-            adapter = stateAdapter
-            isUserInputEnabled = false
-            setCurrentItem(vm.getVpState(), false)
-        }
-
-        TabLayoutMediator(
-            binding.tabLayout,
-            binding.viewPager
-        ) { tab: TabLayout.Tab, i: Int ->
-            tab.icon = when (i) {
-                0 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_favorite, null)
-                1 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_main, null)
-                2 -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_setting, null)
-                else -> throw IllegalStateException("no such tab with index $i")
-            }
-        }.attach()
-    }
-
-    private fun initTabWithCommunity() {
-        stateAdapter = MainCommunityFragmentStateAdapter(this)
         binding.viewPager.apply {
             adapter = stateAdapter
             isUserInputEnabled = false

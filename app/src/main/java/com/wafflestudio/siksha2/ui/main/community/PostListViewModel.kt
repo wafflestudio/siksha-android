@@ -7,6 +7,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
@@ -49,7 +50,7 @@ class PostListViewModel @Inject constructor(
                 pageSize = ITEMS_PER_PAGE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { communityRepository.postPagingSource(board.id) }
+            pagingSourceFactory = { communityRepository.getPostPagingSource(board.id) }
         ).flow.cachedIn(viewModelScope)
     }
     private val modifiedPostsCache = MutableStateFlow(mapOf<Long, Post>())
@@ -57,6 +58,8 @@ class PostListViewModel @Inject constructor(
         combine(_postPagingData, modifiedPostsCache) { pagingData, modifiedPosts ->
             pagingData.map { post ->
                 modifiedPosts[post.id] ?: post
+            }.filter { post ->
+                post.available
             }
         }.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
@@ -65,26 +68,46 @@ class PostListViewModel @Inject constructor(
         firstVisibleItemScrollOffset = 0
     )
 
+    private val _trendingPostsUiState = MutableStateFlow<TrendingPostsUiState>(TrendingPostsUiState.Loading)
+    val trendingPostsUiState: StateFlow<TrendingPostsUiState> = _trendingPostsUiState
+
     init {
-        viewModelScope.launch {
-            getBoards()
-        }
+        getBoards()
+        fetchTrendingPosts()
     }
 
-    suspend fun getBoards() {
-        try {
-            _boards.value = communityRepository.getBoards().map { board ->
-                board.toDataWithState(false)
+    fun getBoards() {
+        viewModelScope.launch {
+            try {
+                _boards.value = communityRepository.getBoards().map { board ->
+                    board.toDataWithState(false)
+                }
+                selectBoard(0)
+            } catch (e: IOException) {
+                // TODO: error handler
             }
-            selectBoard(0)
-        } catch (e: IOException) {
-            // TODO: error handler
         }
     }
 
     fun selectBoard(boardIndex: Int) {
         _boards.value = _boards.value.mapIndexed { idx, board ->
             board.data.toDataWithState(idx == boardIndex)
+        }
+    }
+
+    fun fetchTrendingPosts() {
+        viewModelScope.launch {
+            _trendingPostsUiState.value = TrendingPostsUiState.Loading
+            runCatching {
+                val trendingPosts = communityRepository.getTrendingPosts()
+                _trendingPostsUiState.value = if (trendingPosts.isNotEmpty()) {
+                    TrendingPostsUiState.Success(communityRepository.getTrendingPosts())
+                } else {
+                    TrendingPostsUiState.Failed
+                }
+            }.onFailure {
+                _trendingPostsUiState.value = TrendingPostsUiState.Failed
+            }
         }
     }
 
@@ -101,7 +124,22 @@ class PostListViewModel @Inject constructor(
         }
     }
 
+    fun updateListWithCommentAddedPost(post: Post) {
+        val modifiedPost = post.copy(
+            commentCount = post.commentCount + 1
+        )
+        modifiedPostsCache.value = modifiedPostsCache.value.toMutableMap().apply {
+            put(post.id, modifiedPost)
+        }
+    }
+
     fun invalidateCache() {
         modifiedPostsCache.value = emptyMap()
     }
+}
+
+sealed interface TrendingPostsUiState {
+    class Success(val posts: List<Post>) : TrendingPostsUiState
+    object Failed : TrendingPostsUiState
+    object Loading : TrendingPostsUiState
 }

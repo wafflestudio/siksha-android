@@ -35,8 +35,8 @@ class VocFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
             try {
-                val id = userStatusManager.getUserData()
-                binding.idText.text = "ID " + id.toString()
+                val userData = userStatusManager.getUserData()
+                binding.idText.text = "ID " + userData.id
             } catch (e: IOException) {
                 showToast("네트워크 연결이 불안정합니다.")
             }
@@ -63,7 +63,7 @@ class VocFragment : Fragment() {
         binding.submitButton.setOnClickListener {
             lifecycleScope.launch {
                 try {
-                    userStatusManager.sendVoc(binding.commentEdit.text.toString())
+                    userStatusManager.sendVoc(voc = binding.commentEdit.text.toString(), platform = "Android")
                     showToast("문의가 정상적으로 등록되었습니다.")
                     findNavController().popBackStack()
                 } catch (e: IOException) {

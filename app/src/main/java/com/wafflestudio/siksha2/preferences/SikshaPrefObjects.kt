@@ -51,4 +51,13 @@ class SikshaPrefObjects @Inject constructor(
             serializer,
             OAuthProvider::class.java
         )
+
+    val communityIsAnonymous: Preference<Boolean> =
+        Preference(
+            "communityIsAnonymous",
+            true,
+            sharedPreferences,
+            serializer,
+            Boolean::class.java
+        )
 }

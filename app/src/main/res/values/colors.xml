@@ -13,6 +13,7 @@
     <color name="gray_500">#FFB9B9B9</color>
     <color name="light_gray_500">#FFEDE9E6</color>
     <color name="light_gray_300">#FFFAFAFA</color>
+    <color name="gray_border">#FFF0F0F0</color>
 
     <color name="orange_main">#FF9522</color>
     <color name="pink_500">#FFFD7878</color>
@@ -28,4 +29,10 @@
 
     <color name="white_dim">#EAEAEA</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorGray">#FF888888</color>
+
 </resources>
