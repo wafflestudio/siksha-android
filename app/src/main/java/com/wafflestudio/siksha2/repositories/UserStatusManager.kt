@@ -8,7 +8,9 @@ import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.models.User
+import com.wafflestudio.siksha2.models.Version
 import com.wafflestudio.siksha2.models.toUser
+import com.wafflestudio.siksha2.models.toVersion
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.VocParam
@@ -93,8 +95,8 @@ class UserStatusManager @Inject constructor(
         sikshaApi.checkNickname(nickname)
     }
 
-    suspend fun getVersion(): String {
-        return sikshaApi.getVersion().version
+    suspend fun getVersion(): Version {
+        return sikshaApi.getVersion().toVersion()
     }
 
     // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)
