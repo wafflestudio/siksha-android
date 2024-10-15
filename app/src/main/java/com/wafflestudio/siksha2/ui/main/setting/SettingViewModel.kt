@@ -60,7 +60,7 @@ class SettingViewModel @Inject constructor(
         val minVersion = version.minVersion
 
         // TODO: 버전이 잘못된 pattern을 가졌을 때의 처리 (필요한가?)
-        if(!isValidVersion(latestVersion) || !isValidVersion(minVersion) || !isValidVersion(packageVersion)){
+        if (!isValidVersion(latestVersion) || !isValidVersion(minVersion) || !isValidVersion(packageVersion)) {
             _isLatestAppVersion.value = false
             return
         }
@@ -71,9 +71,8 @@ class SettingViewModel @Inject constructor(
 
         _isLatestAppVersion.value = packageVersionCode in minVersionCode..latestVersionCode
     }
-    }
 
-    private fun versionToLong(version:String): Long{
+    private fun versionToLong(version: String): Long {
         val extractVersion = version.split("-")[0].split(".")
 
         val major = extractVersion[0].toLongOrNull() ?: 0L
