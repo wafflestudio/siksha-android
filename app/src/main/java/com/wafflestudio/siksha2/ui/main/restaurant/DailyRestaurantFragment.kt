@@ -327,7 +327,7 @@ class DailyRestaurantFragment : Fragment() {
         }
         if (
             LocalDate.now().isBefore(LocalDate.of(2024, 9, 27)) &&
-            LocalDate.now().isAfter(LocalDate.of(2024, 9, 21))
+            LocalDate.now().isAfter(LocalDate.of(2024, 9, 24))
         ) {
             binding.festivalBanner.setOnClickListener {
                 val url = "https://www.instagram.com/snufestival/"
