@@ -54,7 +54,7 @@ class ResultCall<T: Any>(
 
                     callback.onResponse(
                         this@ResultCall,
-                        Response.success(NetworkResult.Failure(errorDto.detail))
+                        Response.success(NetworkResult.Failure(errorDto.detail ?: "알 수 없는 에러입니다."))
                     )
                 }
             }
