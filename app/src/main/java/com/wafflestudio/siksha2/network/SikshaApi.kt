@@ -104,7 +104,7 @@ interface SikshaApi {
     @GET("/community/boards/{board_id}")
     suspend fun getBoard(
         @Path("board_id") boardId: Long
-    ): GetBoardResult
+    ): NetworkResult<GetBoardResult>
 
     @GET("/community/posts")
     suspend fun getPosts(

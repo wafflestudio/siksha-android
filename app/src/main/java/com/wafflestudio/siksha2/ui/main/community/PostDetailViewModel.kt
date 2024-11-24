@@ -10,7 +10,6 @@ import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
-import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,9 +32,6 @@ class PostDetailViewModel @Inject constructor(
 
     private val _postUiState = MutableStateFlow<PostUiState>(PostUiState.Loading)
     val postUiState: StateFlow<PostUiState> = _postUiState
-
-    private val _board = MutableStateFlow<Board>(Board.Empty)
-    val board: StateFlow<Board> = _board
 
     val commentPagingData = Pager(
         config = PagingConfig(
@@ -69,8 +65,18 @@ class PostDetailViewModel @Inject constructor(
                         _postUiState.value = PostUiState.Failed("신고가 누적되어 숨겨진 게시글입니다.")
                         return@onSuccess
                     }
-                    _postUiState.value = PostUiState.Success(post)
-                    _board.value = communityRepository.getBoard(post.boardId)
+                    launch {
+                        communityRepository.getBoard(post.boardId)
+                            .onSuccess { board ->
+                                _postUiState.value = PostUiState.Success(post, board)
+                            }
+                            .onFailure { message ->
+                                _postUiState.value = PostUiState.Failed(message)
+                            }
+                            .onError {
+                                _postUiState.value = PostUiState.Failed("게시판을 불러올 수 없습니다.")
+                            }
+                    }
                 }
                 .onFailure { message ->
                     _postUiState.value = PostUiState.Failed(message)
@@ -98,13 +104,14 @@ class PostDetailViewModel @Inject constructor(
 
     fun togglePostLike() {
         val post = (postUiState.value as? PostUiState.Success)?.post ?: return
+        val board = (postUiState.value as? PostUiState.Success)?.board ?: return
         viewModelScope.launch {
             runCatching {
                 val updatedPost = when (post.isLiked) {
                     true -> communityRepository.unlikePost(post.id)
                     false -> communityRepository.likePost(post.id)
                 }
-                _postUiState.value = PostUiState.Success(updatedPost)
+                _postUiState.value = PostUiState.Success(updatedPost, board)
             }.onFailure {
                 // TODO: 예외 처리
             }
@@ -162,7 +169,7 @@ class PostDetailViewModel @Inject constructor(
 }
 
 sealed interface PostUiState {
-    class Success(val post: Post) : PostUiState
+    class Success(val post: Post, val board: Board) : PostUiState
     class Failed(val errorMessage: String) : PostUiState
     object Loading : PostUiState
 }

@@ -96,12 +96,12 @@ class PostCreateViewModel @Inject constructor(
     }
 
     private suspend fun createPostInit(boardId: Long) {
-        _board.value = communityRepository.getBoard(boardId)
+        _board.value = (communityRepository.getBoard(boardId) as NetworkResult.Success).body // FIXME: 임시로 casting
     }
 
     private suspend fun editPostInit(postId: Long) {
         _post.value = (communityRepository.getPost(postId) as NetworkResult.Success).body // FIXME: 임시로 casting
-        _board.value = communityRepository.getBoard(post.value.boardId)
+        _board.value = (communityRepository.getBoard(post.value.boardId) as NetworkResult.Success).body // FIXME: 임시로 casting
         _title.value = post.value.title
         _content.value = post.value.content
         _imageUrisToUpload.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
