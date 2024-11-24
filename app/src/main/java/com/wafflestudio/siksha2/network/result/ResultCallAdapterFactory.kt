@@ -21,7 +21,7 @@ class ResultCallAdapterFactory(
         }
 
         check(returnType is ParameterizedType) {
-            "return type must be parameterized as Call<NetworkState<Foo>> or Call<NetworkState<out Foo>>"
+            "return type must be parameterized as Call<NetworkResult<Foo>> or Call<NetworkResult<out Foo>>"
         }
 
         val responseType = getParameterUpperBound(0, returnType)
@@ -31,7 +31,7 @@ class ResultCallAdapterFactory(
         }
 
         check(responseType is ParameterizedType) {
-            "Response must be parameterized as NetworkState<Foo> or NetworkState<out Foo>"
+            "Response must be parameterized as NetworkResult<Foo> or NetworkResult<out Foo>"
         }
 
         val bodyType = getParameterUpperBound(0, responseType)
