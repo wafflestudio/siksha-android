@@ -7,4 +7,11 @@ sealed interface NetworkResult<out T : Any> {
     data class Failure(val message: String) : NetworkResult<Nothing>
     data class NetworkError(val exception: IOException) : NetworkResult<Nothing>
     data class UnknownError(val t: Throwable?) : NetworkResult<Nothing>
+
+    fun <R : Any> map(transform: (T) -> R): NetworkResult<R> = when (this) {
+        is Success -> Success(transform(body))
+        is Failure -> this
+        is NetworkError -> this
+        is UnknownError -> this
+    }
 }
