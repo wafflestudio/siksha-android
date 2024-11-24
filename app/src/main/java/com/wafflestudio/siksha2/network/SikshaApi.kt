@@ -122,7 +122,7 @@ interface SikshaApi {
     @GET("/community/posts/{post_id}")
     suspend fun getPost(
         @Path("post_id") postId: Long
-    ): GetPostResult
+    ): NetworkResult<GetPostResult>
 
     @GET("/community/comments")
     suspend fun getComments(

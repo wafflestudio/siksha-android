@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
@@ -99,7 +100,7 @@ class PostCreateViewModel @Inject constructor(
     }
 
     private suspend fun editPostInit(postId: Long) {
-        _post.value = communityRepository.getPost(postId)
+        _post.value = (communityRepository.getPost(postId) as NetworkResult.Success).body // FIXME: 임시로 casting
         _board.value = communityRepository.getBoard(post.value.boardId)
         _title.value = post.value.title
         _content.value = post.value.content

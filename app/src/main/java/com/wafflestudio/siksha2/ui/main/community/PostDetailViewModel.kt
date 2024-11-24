@@ -10,6 +10,7 @@ import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -63,22 +63,22 @@ class PostDetailViewModel @Inject constructor(
 
     private fun refreshPost(postId: Long) {
         viewModelScope.launch {
-            runCatching {
-                val post = communityRepository.getPost(postId)
-                if (!post.available) {
-                    _postUiState.value = PostUiState.Failed("신고가 누적되어 숨겨진 게시글입니다.")
-                    return@runCatching
-                }
-                _postUiState.value = PostUiState.Success(post)
-                _board.value = communityRepository.getBoard(post.boardId)
-            }.onFailure { throwable ->
-                val errorMessage = (throwable as? HttpException)?.let {
-                    when (it.code()) {
-                        404 -> "존재하지 않는 글입니다."
-                        else -> "게시글을 불러올 수 없습니다."
+            when (val result = communityRepository.getPost(postId)) {
+                is NetworkResult.Success -> {
+                    val post = result.body
+                    if (!post.available) {
+                        _postUiState.value = PostUiState.Failed("신고가 누적되어 숨겨진 게시글입니다.")
+                        return@launch
                     }
-                } ?: "게시글을 불러올 수 없습니다."
-                _postUiState.value = PostUiState.Failed(errorMessage)
+                    _postUiState.value = PostUiState.Success(post)
+                    _board.value = communityRepository.getBoard(post.boardId)
+                }
+                is NetworkResult.Failure -> {
+                    _postUiState.value = PostUiState.Failed(result.message)
+                }
+                else -> {
+                    _postUiState.value = PostUiState.Failed("게시글을 불러올 수 없습니다.")
+                }
             }
         }
     }

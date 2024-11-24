@@ -11,12 +11,12 @@ import java.io.IOException
 import java.lang.IllegalStateException
 import java.lang.UnsupportedOperationException
 
-class ResultCall<T: Any>(
+class ResultCall<T : Any>(
     private val call: Call<T>,
     private val serializer: Serializer
 ) : Call<NetworkResult<T>> {
     override fun enqueue(callback: Callback<NetworkResult<T>>) {
-        call.enqueue(object: Callback<T> {
+        call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 val body = response.body()
                 val code = response.code()
@@ -35,7 +35,7 @@ class ResultCall<T: Any>(
                         )
                     }
                 } else {
-                    if(error == null) {
+                    if (error == null) {
                         callback.onResponse(
                             this@ResultCall,
                             Response.success(NetworkResult.UnknownError(IllegalStateException("errorbody is null")))
@@ -60,7 +60,7 @@ class ResultCall<T: Any>(
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                val errorResponse = when(t) {
+                val errorResponse = when (t) {
                     is IOException -> NetworkResult.NetworkError(t)
                     else -> NetworkResult.UnknownError(t)
                 }

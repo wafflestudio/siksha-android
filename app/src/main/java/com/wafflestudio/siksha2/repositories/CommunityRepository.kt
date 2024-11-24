@@ -7,6 +7,8 @@ import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 
 import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
 import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
+import com.wafflestudio.siksha2.network.dto.core.PostDto
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import retrofit2.Response
 
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
@@ -38,8 +40,8 @@ class CommunityRepository @Inject constructor(
     fun getUserPostPagingSource() = UserPostPagingSource(api)
     fun getPostPagingSource(boardId: Long) = PostPagingSource(boardId, api)
 
-    suspend fun getPost(postId: Long): Post {
-        return api.getPost(postId).toPost()
+    suspend fun getPost(postId: Long): NetworkResult<Post> {
+        return api.getPost(postId).map(PostDto::toPost)
     }
 
     fun commentPagingSource(postId: Long) = CommentPagingSource(postId, api)
