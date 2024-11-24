@@ -63,23 +63,21 @@ class PostDetailViewModel @Inject constructor(
 
     private fun refreshPost(postId: Long) {
         viewModelScope.launch {
-            when (val result = communityRepository.getPost(postId)) {
-                is NetworkResult.Success -> {
-                    val post = result.body
+            communityRepository.getPost(postId)
+                .onSuccess { post ->
                     if (!post.available) {
                         _postUiState.value = PostUiState.Failed("신고가 누적되어 숨겨진 게시글입니다.")
-                        return@launch
+                        return@onSuccess
                     }
                     _postUiState.value = PostUiState.Success(post)
                     _board.value = communityRepository.getBoard(post.boardId)
                 }
-                is NetworkResult.Failure -> {
-                    _postUiState.value = PostUiState.Failed(result.message)
+                .onFailure { message ->
+                    _postUiState.value = PostUiState.Failed(message)
                 }
-                else -> {
+                .onError {
                     _postUiState.value = PostUiState.Failed("게시글을 불러올 수 없습니다.")
                 }
-            }
         }
     }
 

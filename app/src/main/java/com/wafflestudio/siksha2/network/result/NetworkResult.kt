@@ -14,4 +14,28 @@ sealed interface NetworkResult<out T : Any> {
         is NetworkError -> this
         is UnknownError -> this
     }
+
+    fun onSuccess(action: (value: T) -> Unit): NetworkResult<T> = apply {
+        if (this is Success) action(body)
+    }
+
+    fun onFailure(action: (message: String) -> Unit): NetworkResult<T> = apply {
+        if (this is Failure) action(message)
+    }
+
+    fun onNetworkError(action: (exception: IOException) -> Unit): NetworkResult<T> = apply {
+        if (this is NetworkError) action(exception)
+    }
+
+    fun onUnknownError(action: (exception: Throwable?) -> Unit): NetworkResult<T> = apply {
+        if (this is UnknownError) action(t)
+    }
+
+    fun onError(action: (t: Throwable?) -> Unit): NetworkResult<T> = apply {
+        when (this) {
+            is NetworkError -> action(exception)
+            is UnknownError -> action(t)
+            else -> Unit
+        }
+    }
 }
