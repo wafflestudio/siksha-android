@@ -129,7 +129,7 @@ interface SikshaApi {
         @Query("post_id") postId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
-    ): GetCommentsResult
+    ): NetworkResult<GetCommentsResult>
 
     @POST("/community/comments")
     suspend fun postComment(
