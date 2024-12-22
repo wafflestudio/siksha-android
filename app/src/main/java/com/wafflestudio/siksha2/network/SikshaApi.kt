@@ -111,7 +111,7 @@ interface SikshaApi {
         @Query("board_id") boardId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
-    ): GetPostsResult
+    ): NetworkResult<GetPostsResult>
 
     @GET("/community/posts/me")
     suspend fun getUserPosts(
