@@ -23,7 +23,7 @@ interface SikshaApi {
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Long
-    ): FetchReviewsResult
+    ): NetworkResult<FetchReviewsResult>
 
     @GET("/reviews/filter")
     suspend fun fetchReviewsWithImage(
