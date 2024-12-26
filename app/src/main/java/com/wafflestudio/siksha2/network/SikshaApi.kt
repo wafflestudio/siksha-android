@@ -13,7 +13,7 @@ interface SikshaApi {
     suspend fun fetchMenuGroups(
         @Query("start_date") startDate: LocalDate,
         @Query("end_date") endDate: LocalDate
-    ): FetchMenuGroupsResult
+    ): NetworkResult<FetchMenuGroupsResult>
 
     @GET("/menus/{menu_id}")
     suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): NetworkResult<Menu>

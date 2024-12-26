@@ -34,11 +34,17 @@ class MenuRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             val startDate = date.minusDays(1)
             val endDate = date.plusDays(1)
-            val payload = sikshaApi.fetchMenuGroups(startDate, endDate).result
-                .map {
-                    DailyMenu(it.date.toLocalDate(), it)
+            when (val response = sikshaApi.fetchMenuGroups(startDate, endDate)) {
+                is NetworkResult.Success -> {
+                    val payload = response.body.result.map {
+                        DailyMenu(it.date.toLocalDate(), it)
+                    }
+                    dailyMenusDao.insertDailyMenus(payload)
                 }
-            dailyMenusDao.insertDailyMenus(payload)
+                else -> {
+                    // TODO: 캐싱 실패 시 별도 로직 필요한가?
+                }
+            }
         }
     }
 
