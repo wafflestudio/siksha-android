@@ -34,7 +34,7 @@ interface SikshaApi {
     ): NetworkResult<FetchReviewsResult>
 
     @GET("/restaurants/")
-    suspend fun fetchRestaurants(): FetchRestaurantsResult
+    suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
     @POST("/reviews/")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): LeaveReviewResult

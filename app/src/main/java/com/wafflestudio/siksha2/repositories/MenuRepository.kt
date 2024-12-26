@@ -42,7 +42,7 @@ class MenuRepository @Inject constructor(
                     dailyMenusDao.insertDailyMenus(payload)
                 }
                 else -> {
-                    // TODO: 캐싱 실패 시 별도 로직 필요한가?
+                    throw RuntimeException("")
                 }
             }
         }
