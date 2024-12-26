@@ -71,21 +71,24 @@ class MenuDetailViewModel @Inject constructor(
 
     fun refreshImages(menuId: Long) {
         viewModelScope.launch {
-            try {
-                val data = menuRepository.getFirstReviewPhotoByMenuId(menuId)
-                _imageCount.value = data.totalCount
-                val urlList = emptyList<String>().toMutableList()
-                for (i in 0 until 3) {
-                    if (i < data.result.size) {
-                        data.result[i].etc?.images?.get(0)?.let {
-                            urlList.add(it)
+            when (val response = menuRepository.getFirstReviewPhotoByMenuId(menuId)) {
+                is NetworkResult.Success -> {
+                    val data = response.body
+                    _imageCount.value = data.totalCount
+                    val urlList = emptyList<String>().toMutableList()
+                    for (i in 0 until 3) {
+                        if (i < data.result.size) {
+                            data.result[i].etc?.images?.get(0)?.let {
+                                urlList.add(it)
+                            }
                         }
                     }
+                    _imageUrlList.value = urlList
                 }
-                _imageUrlList.value = urlList
-            } catch (e: IOException) {
-                _imageUrlList.value = emptyList()
-                _networkResultState.value = State.FAILED
+                else -> {
+                    _imageUrlList.value = emptyList()
+                    _networkResultState.value = State.FAILED
+                }
             }
         }
     }

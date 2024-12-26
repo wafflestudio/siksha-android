@@ -31,7 +31,7 @@ interface SikshaApi {
         @Query("page") page: Long,
         @Query("per_page") perPage: Long,
         @Query("etc") etc: Boolean = true
-    ): FetchReviewsResult
+    ): NetworkResult<FetchReviewsResult>
 
     @GET("/restaurants/")
     suspend fun fetchRestaurants(): FetchRestaurantsResult

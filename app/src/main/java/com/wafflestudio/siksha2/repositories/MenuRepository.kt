@@ -93,7 +93,7 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewDistribution(menuId).dist
     }
 
-    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
+    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): NetworkResult<FetchReviewsResult> {
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
