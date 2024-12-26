@@ -103,4 +103,7 @@
     <string name="version_text">siksha-%s</string>
     <string name="image_viewer_current_page">%1$d/%2$d</string>
     <string name="nickname_hint">닉네임을 입력하세요</string>
+    <string name="kakao_app_key">efa8f59f5de6e39bb0977d2e1ee505d7</string>
+    <string name="kakao_scheme">kakaoefa8f59f5de6e39bb0977d2e1ee505d7</string>
+    <string name="kakaolink_host">kakaolink</string>
 </resources>
