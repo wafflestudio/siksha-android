@@ -62,7 +62,7 @@ interface SikshaApi {
 
     @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):
-        FetchRecommendationReviewCommentsResult
+        NetworkResult<FetchRecommendationReviewCommentsResult>
 
     @GET("/reviews/dist")
     suspend fun fetchReviewDistribution(@Query("menu_id") menuId: Long):
