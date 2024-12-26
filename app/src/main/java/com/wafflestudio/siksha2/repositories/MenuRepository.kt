@@ -77,11 +77,11 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): LeaveReviewResult {
+    suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): NetworkResult<LeaveReviewResult> {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
     }
 
-    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: MultipartBody.Part, images: List<MultipartBody.Part>): LeaveReviewResult {
+    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: MultipartBody.Part, images: List<MultipartBody.Part>): NetworkResult<LeaveReviewResult> {
         return sikshaApi.leaveMenuReviewImages(menuId, score, comment, images)
     }
 

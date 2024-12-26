@@ -37,7 +37,7 @@ interface SikshaApi {
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
     @POST("/reviews/")
-    suspend fun leaveMenuReview(@Body req: LeaveReviewParam): LeaveReviewResult
+    suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
     @Multipart
     @POST("/reviews/images")
@@ -46,7 +46,7 @@ interface SikshaApi {
         @Part("score") score: Long,
         @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
-    ): LeaveReviewResult
+    ): NetworkResult<LeaveReviewResult>
 
     @POST("/auth/login/kakao")
     suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): LoginOAuthResult

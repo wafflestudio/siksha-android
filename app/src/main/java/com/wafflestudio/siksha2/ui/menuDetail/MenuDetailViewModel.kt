@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
+import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -63,7 +65,10 @@ class MenuDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = menuRepository.getMenuById(menuId)
             when (result) {
-                is NetworkResult.Success -> _networkResultState.value = State.SUCCESS
+                is NetworkResult.Success -> {
+                    _menu.value = result.body
+                    _networkResultState.value = State.SUCCESS
+                }
                 else -> _networkResultState.value = State.FAILED
             }
         }
@@ -158,9 +163,11 @@ class MenuDetailViewModel @Inject constructor(
         _menu.postValue(updatedMenu)
     }
 
-    suspend fun leaveReview(context: Context, score: Double, comment: String) {
-        val menuId = _menu.value?.id ?: return
-        if (_imageUriList.value?.isNotEmpty() == true) {
+    suspend fun leaveReview(context: Context, score: Double, comment: String): NetworkResult<LeaveReviewResult>? {
+        Timber.d("LeaveReview ${_menu.value?.id}")
+        val menuId = _menu.value?.id ?: return null
+        Timber.d("not null")
+        val response = if (_imageUriList.value?.isNotEmpty() == true) {
             context.showToast("이미지 압축 중입니다.")
             _leaveReviewState.value = ReviewState.COMPRESSING
             val imageList = _imageUriList.value?.map {
@@ -175,7 +182,16 @@ class MenuDetailViewModel @Inject constructor(
             }
         } else {
             menuRepository.leaveMenuReview(menuId, score, comment)
+            // menuRepository.leaveMenuReview(-1, score, comment)
         }
+        when (response) {
+            is NetworkResult.Success -> Timber.d("Succcess")
+            is NetworkResult.NetworkError -> Timber.d("NetworkError")
+            is NetworkResult.Failure -> Timber.d("Failure: " + response.message)
+            is NetworkResult.UnknownError -> Timber.d("UnknownError")
+            else -> Timber.d("null")
+        }
+        return response
     }
 
     enum class State {

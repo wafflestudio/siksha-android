@@ -40,6 +40,7 @@
     <string name="leave_review_quote">\'</string>
     <string name="leave_review_add_photo">사진 추가</string>
     <string name="leave_review_max_image_toast">사진은 최대 3개까지 등록할 수 있습니다.</string>
+    <string name="leave_review_success">평가가 등록되었습니다.</string>
     <string name="menu_detail_toolbar">리뷰</string>
     <string name="menu_detail_no_review">아직 해당 메뉴의 리뷰가 없습니다.\n리뷰를 남겨보세요</string>
     <string name="menu_detail_review_people_total">총</string>
@@ -54,6 +55,7 @@
     <string name="reorder_no_restaurant">순서를 지정할 식당이 없습니다.</string>
     <string name="favorite_empty">즐겨찾기에 추가된 식당이 없습니다.\n식당 탭에서 별을 눌러 추가해보세요.</string>
     <string name="common_network_error">네트워크 연결이 불안정합니다.</string>
+    <string name="common_unknown_error">알 수 없는 오류가 발생했습니다.</string>
     <string name="leave_review_hint">식단 평가</string>
     <string name="leave_review_text_count">%1$d 자 / %2$d 자</string>
     <string name="common_back">돌아가기</string>
