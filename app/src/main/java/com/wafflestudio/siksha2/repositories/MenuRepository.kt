@@ -60,7 +60,7 @@ class MenuRepository @Inject constructor(
     }
 
     suspend fun getMenuById(menuId: Long): NetworkResult<Menu> {
-        return sikshaApi.fetchMenuById(-1L)
+        return sikshaApi.fetchMenuById(menuId)
     }
 
     fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
