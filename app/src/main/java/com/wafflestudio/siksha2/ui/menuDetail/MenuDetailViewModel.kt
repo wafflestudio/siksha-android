@@ -21,7 +21,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -120,10 +119,9 @@ class MenuDetailViewModel @Inject constructor(
 
     fun refreshReviewDistribution(menuId: Long) {
         viewModelScope.launch {
-            try {
-                _reviewDistribution.value = menuRepository.getReviewDistribution(menuId)
-            } catch (e: IOException) {
-                _reviewDistribution.value = emptyList()
+            when (val response = menuRepository.getReviewDistribution(menuId)) {
+                is NetworkResult.Success -> _reviewDistribution.value = response.body.dist
+                else -> _reviewDistribution.value = emptyList()
             }
         }
     }

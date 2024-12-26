@@ -66,7 +66,7 @@ interface SikshaApi {
 
     @GET("/reviews/dist")
     suspend fun fetchReviewDistribution(@Query("menu_id") menuId: Long):
-        FetchReviewDistributionResult
+        NetworkResult<FetchReviewDistributionResult>
 
     @POST("/voc")
     suspend fun sendVoc(

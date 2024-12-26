@@ -9,6 +9,7 @@ import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.FetchRecommendationReviewCommentsResult
+import com.wafflestudio.siksha2.network.dto.FetchReviewDistributionResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
@@ -90,8 +91,8 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchRecommendationReviewComments(score)
     }
 
-    suspend fun getReviewDistribution(menuId: Long): List<Long> {
-        return sikshaApi.fetchReviewDistribution(menuId).dist
+    suspend fun getReviewDistribution(menuId: Long): NetworkResult<FetchReviewDistributionResult> {
+        return sikshaApi.fetchReviewDistribution(menuId)
     }
 
     suspend fun getFirstReviewPhotoByMenuId(menuId: Long): NetworkResult<FetchReviewsResult> {
