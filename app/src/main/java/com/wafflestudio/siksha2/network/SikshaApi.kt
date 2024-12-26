@@ -49,10 +49,10 @@ interface SikshaApi {
     ): NetworkResult<LeaveReviewResult>
 
     @POST("/auth/login/kakao")
-    suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): LoginOAuthResult
+    suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): NetworkResult<LoginOAuthResult>
 
     @POST("/auth/login/google")
-    suspend fun loginGoogle(@Header("google-token") googleToken: String): LoginOAuthResult
+    suspend fun loginGoogle(@Header("google-token") googleToken: String): NetworkResult<LoginOAuthResult>
 
     @DELETE("/auth/")
     suspend fun deleteAccount()

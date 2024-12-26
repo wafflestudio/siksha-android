@@ -11,7 +11,9 @@ import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.models.toUser
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.LoginOAuthResult
 import com.wafflestudio.siksha2.network.dto.VocParam
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
 import okhttp3.MultipartBody
@@ -24,14 +26,21 @@ class UserStatusManager @Inject constructor(
     private val sikshaApi: SikshaApi,
     private val sikshaPrefObjects: SikshaPrefObjects
 ) {
-    suspend fun loginWithOAuthToken(provider: OAuthProvider, token: String) {
+    suspend fun loginWithOAuthToken(provider: OAuthProvider, token: String): NetworkResult<LoginOAuthResult> {
         val tokenWithPrefix = attachBearerPrefix(token)
-        val (accessToken) = when (provider) {
+        val response = when (provider) {
             OAuthProvider.GOOGLE -> sikshaApi.loginGoogle(tokenWithPrefix)
             OAuthProvider.KAKAO -> sikshaApi.loginKakao(tokenWithPrefix)
         }
-        sikshaPrefObjects.oAuthProvider.setValue(provider)
-        sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+        when (response) {
+            is NetworkResult.Success -> {
+                val accessToken = response.body.accessToken
+                sikshaPrefObjects.oAuthProvider.setValue(provider)
+                sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+            }
+            else -> { }
+        }
+        return response
     }
 
     suspend fun refreshUserToken() {
