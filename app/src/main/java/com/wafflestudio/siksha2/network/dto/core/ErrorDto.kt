@@ -20,5 +20,5 @@ data class ErrorDetail(
 
 @JsonClass(generateAdapter = true)
 data class ErrorDto(
-    val detail: String?
+    val message: String?
 )
