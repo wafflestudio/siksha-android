@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMenuGroupBinding
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
+import com.wafflestudio.siksha2.utils.KakaoLinkHelper
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
@@ -15,7 +16,8 @@ class MenuGroupAdapter(
     private val onMenuGroupInfoClickListener: (Long) -> Unit,
     private val onMenuGroupToggleFavoriteClickListener: (Long) -> Unit,
     private val onMenuItemToggleLikeClickListener: (menuId: Long, isCurrentlyLiked: Boolean) -> Unit,
-    private val onMenuItemClickListener: (Long) -> Unit
+    private val onMenuItemClickListener: (Long) -> Unit,
+    private val onMenuGroupShareClickListener: (Long) -> Unit
 ) : ListAdapter<MenuGroup, MenuGroupAdapter.MenuGroupViewHolder>(diffCallback) {
     private lateinit var recyclerView: RecyclerView
 
@@ -48,6 +50,19 @@ class MenuGroupAdapter(
                 onMenuGroupToggleFavoriteClickListener.invoke(menuGroup.id)
             }
             favoriteToggle.isSelected = menuGroup.isFavorite
+
+            shareButton.setOnClickListener {
+                val menuData = menuGroup.menus.map {
+                    (it.nameKr ?: "메뉴 이름 없음") to (it.price?.toString() ?: "가격 없음")
+                }
+                KakaoLinkHelper.shareMenu(
+                    holder.itemView.context,
+                    menuGroup.nameKr ?: "식당 이름 없음",
+                    menuData = menuData,
+                    menuGroupId = menuGroup.id
+                )
+            }
+
 
             menuList.setVisibleOrGone(menuGroup.menus.isEmpty().not())
             menuEmpty.setVisibleOrGone(menuGroup.menus.isEmpty())

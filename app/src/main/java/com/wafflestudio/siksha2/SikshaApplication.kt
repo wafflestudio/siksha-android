@@ -14,6 +14,6 @@ class SikshaApplication : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
-        KakaoSdk.init(this, getString(R.string.kakao_key))
+        KakaoSdk.init(this, resources.getString(R.string.kakao_app_key))
     }
 }

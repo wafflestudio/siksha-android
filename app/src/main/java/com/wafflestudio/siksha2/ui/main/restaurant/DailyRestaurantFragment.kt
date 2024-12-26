@@ -16,6 +16,7 @@ import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoBottomSheet
+import com.wafflestudio.siksha2.utils.KakaoLinkHelper
 import com.wafflestudio.siksha2.utils.toPrettyString
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
@@ -161,7 +162,26 @@ class DailyRestaurantFragment : Fragment() {
                         vm.dateFilter.value == LocalDate.now()
                     )
                 findNavController().navigate(action)
+            },
+            onMenuGroupShareClickListener = { menuGroupId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val menuGroup = vm.getMenuGroupById(menuGroupId)
+                    if (menuGroup != null) {
+                        val menuData = menuGroup.menus.take(5).map {
+                            (it.nameKr ?: "메뉴 이름 없음") to (it.price?.toString() ?: "가격 없음")
+                        }
+                        KakaoLinkHelper.shareMenu(
+                            requireContext(),
+                            menuGroup.nameKr ?: "식당 이름 없음",
+                            menuData,
+                            menuGroup.id
+                        )
+                    } else {
+                        showToast("해당 메뉴 그룹을 찾을 수 없습니다.", Toast.LENGTH_SHORT)
+                    }
+                }
             }
+
         )
 
         binding.calendarSelectView.updateDate(LocalDate.now())

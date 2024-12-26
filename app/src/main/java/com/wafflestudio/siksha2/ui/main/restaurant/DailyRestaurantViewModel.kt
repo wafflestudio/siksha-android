@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -148,4 +149,12 @@ class DailyRestaurantViewModel @Inject constructor(
     suspend fun getRestaurantInfo(id: Long): RestaurantInfo? {
         return restaurantRepository.getRestaurantById(id)
     }
+
+    suspend fun getMenuGroupById(menuGroupId: Long): MenuGroup? {
+        return getFilteredMenuGroups(false)
+            .map { menuGroups -> menuGroups.find { it.id == menuGroupId } }
+            .firstOrNull()
+    }
+
+
 }
