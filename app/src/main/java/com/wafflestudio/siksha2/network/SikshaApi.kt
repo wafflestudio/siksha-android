@@ -71,7 +71,7 @@ interface SikshaApi {
     @POST("/voc")
     suspend fun sendVoc(
         @Body req: VocParam
-    )
+    ): NetworkResult<Unit>
 
     @GET("/auth/me/image")
     suspend fun getUserData(): GetUserDataResult

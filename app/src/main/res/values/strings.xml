@@ -22,6 +22,7 @@
     <string name="setting_voc_leave_message">문의할 내용을 남겨주세요.</string>
     <string name="setting_voc_hint">문의할 내용을 작성해주세요.</string>
     <string name="setting_voc_send_voc">전송하기</string>
+    <string name="send_voc_success">문의가 정상적으로 등록되었습니다.</string>
     <string name="setting_dialog_logout_title">로그아웃</string>
     <string name="setting_dialog_logout_content">정말로 로그아웃 하시겠습니까?</string>
     <string name="setting_dialog_logout_proceed">로그아웃</string>
