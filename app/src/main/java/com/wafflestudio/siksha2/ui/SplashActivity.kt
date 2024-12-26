@@ -30,7 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -164,12 +163,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private suspend fun checkLoginStatus(): Boolean {
-        return try {
-            userStatusManager.refreshUserToken()
-            true
-        } catch (e: HttpException) {
-            // do nothing - 다시 로그인 시나리오 타게 냅두기
-            false
-        }
+        return userStatusManager.refreshUserToken()
     }
 }

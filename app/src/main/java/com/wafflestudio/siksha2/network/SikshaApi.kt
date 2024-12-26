@@ -58,7 +58,7 @@ interface SikshaApi {
     suspend fun deleteAccount()
 
     @POST("/auth/refresh")
-    suspend fun refreshToken(@Header("authorization-token") token: String): LoginOAuthResult
+    suspend fun refreshToken(@Header("authorization-token") token: String): NetworkResult<LoginOAuthResult>
 
     @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):

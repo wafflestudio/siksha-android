@@ -43,10 +43,17 @@ class UserStatusManager @Inject constructor(
         return response
     }
 
-    suspend fun refreshUserToken() {
+    suspend fun refreshUserToken(): Boolean {
         sikshaPrefObjects.accessToken.getValue().let {
-            val (accessToken) = sikshaApi.refreshToken(it)
-            sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+            when (val response = sikshaApi.refreshToken(it)) {
+                is NetworkResult.Success -> {
+                    val accessToken = response.body.accessToken
+                    sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+                    return true
+                }
+                // 로그인 실패시 do nothing -> 다시 로그인 시나리오 타게 냅두기
+                else -> return false
+            }
         }
     }
 
