@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,25 +44,50 @@ class SettingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            viewModelScope.launch {
-                when (val response = userStatusManager.getUserData()) {
-                    is NetworkResult.Success -> _userData.value = response.body
-                    is NetworkResult.Failure -> _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
-                    is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
-                    else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
-                }
+            when (val response = userStatusManager.getUserData()) {
+                is NetworkResult.Success -> _userData.value = response.body
+                is NetworkResult.Failure -> _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
+                is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
             }
+            checkAppVersion()
         }
     }
 
     private suspend fun checkAppVersion() {
         when (val response = userStatusManager.getVersion()) {
             is NetworkResult.Success -> {
-                val latestVersionNum = response.body
-                _isLatestAppVersion.value = (packageVersion == latestVersionNum)
+                val version = response.body
+                val latestVersion = version.version
+                val minVersion = version.minVersion
+                if (!isValidVersion(latestVersion) || !isValidVersion(minVersion) || !isValidVersion(packageVersion)) {
+                    _isLatestAppVersion.value = false
+                    return
+                }
+                val latestVersionCode = versionToLong(latestVersion)
+                val minVersionCode = versionToLong(minVersion)
+                val packageVersionCode = versionToLong(packageVersion)
+
+                _isLatestAppVersion.value = packageVersionCode in minVersionCode..latestVersionCode
             }
             else -> { }
         }
+    }
+
+    private fun versionToLong(version: String): Long {
+        val extractVersion = version.split("-")[0].split(".")
+
+        val major = extractVersion[0].toLongOrNull() ?: 0L
+        val minor = extractVersion[1].toLongOrNull() ?: 0L
+        val patch = extractVersion[2].toLongOrNull() ?: 0L
+
+        return major * 10000 + minor * 100 + patch
+    }
+
+    // Check the version has pattern of 3.1.1 or 2.3.4-rc.1
+    private fun isValidVersion(version: String): Boolean {
+        val verRegex = Regex("^\\d+\\.\\d+\\.\\d+(-rc\\.\\d+)?$")
+        return verRegex.matches(version)
     }
 
     val showEmptyRestaurantFlow = restaurantRepository.showEmptyRestaurant.asFlow()
@@ -128,7 +152,6 @@ class SettingViewModel @Inject constructor(
     }
 
     fun patchUserData(context: Context, imageChanged: Boolean, nickname: String) {
-        Timber.d("Enter patchUserData")
         viewModelScope.launch {
             if (nickname.isEmpty()) {
                 _settingEvent.emit(SettingEvent.ChangeProfileFailed("닉네임 칸이 비어있습니다."))
@@ -166,7 +189,6 @@ class SettingViewModel @Inject constructor(
                     _settingEvent.emit(SettingEvent.ChangeProfileSuccess)
                 }
                 is NetworkResult.Failure -> {
-                    Timber.d("Network Failure")
                     _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
                 }
                 is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))

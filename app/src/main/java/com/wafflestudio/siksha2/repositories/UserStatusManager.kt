@@ -8,7 +8,9 @@ import com.google.android.gms.common.api.Scope
 import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.models.User
+import com.wafflestudio.siksha2.models.Version
 import com.wafflestudio.siksha2.models.toUser
+import com.wafflestudio.siksha2.models.toVersion
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.GetVersionResult
@@ -104,7 +106,6 @@ class UserStatusManager @Inject constructor(
 
     suspend fun updateUserProfile(nickname: String?, changeToDefaultImage: Boolean, image: MultipartBody.Part?): NetworkResult<User> {
         val nicknameBody = nickname?.let { MultipartBody.Part.createFormData("nickname", it) }
-        Timber.d("updateUserProfile")
         return sikshaApi.updateUserData(image, changeToDefaultImage, nicknameBody).map(UserDto::toUser)
     }
 
@@ -112,8 +113,8 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.checkNickname(nickname)
     }
 
-    suspend fun getVersion(): NetworkResult<String> {
-        return sikshaApi.getVersion().map(GetVersionResult::version)
+    suspend fun getVersion(): NetworkResult<Version> {
+        return sikshaApi.getVersion().map(GetVersionResult::toVersion)
     }
 
     // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)

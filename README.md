@@ -64,4 +64,5 @@ Live 빌드를 위해 다음 파일들이 필요합니다.
 ## Maintainers
 - [@eastshine2741](https://github.com/eastshine2741)
 - [@wjshim2003](https://github.com/wjshim2003)
-
+- [@kevin990222](https://github.com/kevin990222)
+- [@junahjeon2002](https://github.com/junahjeon2002)
