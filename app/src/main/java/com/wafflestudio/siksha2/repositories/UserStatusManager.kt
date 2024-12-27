@@ -11,6 +11,7 @@ import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.models.toUser
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.GetVersionResult
 import com.wafflestudio.siksha2.network.dto.LoginOAuthResult
 import com.wafflestudio.siksha2.network.dto.VocParam
 import com.wafflestudio.siksha2.network.dto.core.UserDto
@@ -111,8 +112,8 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.checkNickname(nickname)
     }
 
-    suspend fun getVersion(): String {
-        return sikshaApi.getVersion().version
+    suspend fun getVersion(): NetworkResult<String> {
+        return sikshaApi.getVersion().map(GetVersionResult::version)
     }
 
     // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)

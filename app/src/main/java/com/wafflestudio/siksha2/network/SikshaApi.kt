@@ -90,7 +90,7 @@ interface SikshaApi {
     ): NetworkResult<Unit>
 
     @GET("/versions/android")
-    suspend fun getVersion(): GetVersionResult
+    suspend fun getVersion(): NetworkResult<GetVersionResult>
 
     @POST("/menus/{menu_id}/like")
     suspend fun postLikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse

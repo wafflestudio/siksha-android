@@ -57,8 +57,13 @@ class SettingViewModel @Inject constructor(
     }
 
     private suspend fun checkAppVersion() {
-        val latestVersionNum = userStatusManager.getVersion()
-        _isLatestAppVersion.value = (packageVersion == latestVersionNum)
+        when (val response = userStatusManager.getVersion()) {
+            is NetworkResult.Success -> {
+                val latestVersionNum = response.body
+                _isLatestAppVersion.value = (packageVersion == latestVersionNum)
+            }
+            else -> { }
+        }
     }
 
     val showEmptyRestaurantFlow = restaurantRepository.showEmptyRestaurant.asFlow()
