@@ -93,10 +93,10 @@ interface SikshaApi {
     suspend fun getVersion(): NetworkResult<GetVersionResult>
 
     @POST("/menus/{menu_id}/like")
-    suspend fun postLikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+    suspend fun postLikeMenu(@Path("menu_id") menuId: Long): NetworkResult<MenuLikeOrUnlikeResponse>
 
     @POST("/menus/{menu_id}/unlike")
-    suspend fun postUnlikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+    suspend fun postUnlikeMenu(@Path("menu_id") menuId: Long): NetworkResult<MenuLikeOrUnlikeResponse>
 
     @GET("/community/boards")
     suspend fun getBoards(): GetBoardsResult

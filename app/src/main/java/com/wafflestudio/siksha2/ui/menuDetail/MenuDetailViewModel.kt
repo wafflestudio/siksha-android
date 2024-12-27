@@ -154,12 +154,18 @@ class MenuDetailViewModel @Inject constructor(
         _leaveReviewState.value = ReviewState.WAITING
     }
 
-    suspend fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
-        val updatedMenu = when (isCurrentlyLiked) {
+    suspend fun toggleLike(id: Long, isCurrentlyLiked: Boolean): NetworkResult<Menu> {
+        val menuUpdateResponse = when (isCurrentlyLiked) {
             true -> menuRepository.unlikeMenuById(id)
             false -> menuRepository.likeMenuById(id)
         }
-        _menu.postValue(updatedMenu)
+        when (menuUpdateResponse) {
+            is NetworkResult.Success -> {
+                _menu.postValue(menuUpdateResponse.body)
+            }
+            else -> { }
+        }
+        return menuUpdateResponse
     }
 
     suspend fun leaveReview(context: Context, score: Double, comment: String): NetworkResult<LeaveReviewResult>? {
@@ -181,14 +187,6 @@ class MenuDetailViewModel @Inject constructor(
             }
         } else {
             menuRepository.leaveMenuReview(menuId, score, comment)
-            // menuRepository.leaveMenuReview(-1, score, comment)
-        }
-        when (response) {
-            is NetworkResult.Success -> Timber.d("Succcess")
-            is NetworkResult.NetworkError -> Timber.d("NetworkError")
-            is NetworkResult.Failure -> Timber.d("Failure: " + response.message)
-            is NetworkResult.UnknownError -> Timber.d("UnknownError")
-            else -> Timber.d("null")
         }
         return response
     }

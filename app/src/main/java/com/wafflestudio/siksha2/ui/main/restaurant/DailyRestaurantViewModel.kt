@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.MealsOfDay
+import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -73,8 +75,8 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
-    suspend fun toggleMenuLike(id: Long, isCurrentlyLiked: Boolean) {
-        when (isCurrentlyLiked) {
+    suspend fun toggleMenuLike(id: Long, isCurrentlyLiked: Boolean): NetworkResult<Menu> {
+        return when (isCurrentlyLiked) {
             true -> menuRepository.unlikeMenuById(id)
             false -> menuRepository.likeMenuById(id)
         }

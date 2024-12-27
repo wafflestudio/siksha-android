@@ -99,19 +99,31 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
-    suspend fun likeMenuById(menuId: Long): Menu {
+    suspend fun likeMenuById(menuId: Long): NetworkResult<Menu> {
         return withContext(Dispatchers.IO) {
-            val menu = sikshaApi.postLikeMenu(menuId)
-            updateMenuInLocal(menu)
-            return@withContext menu
+            val response = sikshaApi.postLikeMenu(menuId)
+            when (response) {
+                is NetworkResult.Success -> {
+                    val menu = response.body
+                    updateMenuInLocal(menu)
+                }
+                else -> { }
+            }
+            return@withContext response
         }
     }
 
-    suspend fun unlikeMenuById(menuId: Long): Menu {
+    suspend fun unlikeMenuById(menuId: Long): NetworkResult<Menu> {
         return withContext(Dispatchers.IO) {
-            val menu = sikshaApi.postUnlikeMenu(menuId)
-            updateMenuInLocal(menu)
-            return@withContext menu
+            val response = sikshaApi.postUnlikeMenu(menuId)
+            when (response) {
+                is NetworkResult.Success -> {
+                    val menu = response.body
+                    updateMenuInLocal(menu)
+                }
+                else -> { }
+            }
+            return@withContext response
         }
     }
 

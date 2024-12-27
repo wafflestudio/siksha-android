@@ -13,13 +13,13 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.IOException
 import kotlin.math.round
 
 @AndroidEntryPoint
@@ -185,10 +185,11 @@ class MenuDetailFragment : Fragment() {
         binding.menuLikeButton.setOnClickListener {
             vm.menu.value?.isLiked?.let {
                 viewLifecycleOwner.lifecycleScope.launch {
-                    try {
-                        vm.toggleLike(args.menuId, it)
-                    } catch (e: IOException) {
-                        showToast(getString(R.string.common_network_error))
+                    when (val response = vm.toggleLike(args.menuId, it)) {
+                        is NetworkResult.Success -> { }
+                        is NetworkResult.Failure -> showToast(response.message)
+                        is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                        else -> showToast(getString(R.string.common_unknown_error))
                     }
                 }
             }
