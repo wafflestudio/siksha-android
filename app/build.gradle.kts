@@ -3,7 +3,7 @@ import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    id("com.android.application") version "8.1.1"
+    id("com.android.application") version "8.1.4"
     id("org.jetbrains.kotlin.android") version "1.8.10"
     id("org.jetbrains.kotlin.plugin.parcelize") version "1.8.10"
     id("org.jetbrains.kotlin.kapt") version "1.8.10"

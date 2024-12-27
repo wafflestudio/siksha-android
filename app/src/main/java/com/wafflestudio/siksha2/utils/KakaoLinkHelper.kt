@@ -27,6 +27,7 @@ object KakaoLinkHelper {
         )
 
         if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
+            Toast.makeText(context, "식단을 공유합니다.", Toast.LENGTH_SHORT).show()
             ShareClient.instance.shareDefault(context, feedTemplate) { sharingResult, error ->
                 if (error != null) {
                     Toast.makeText(context, "공유에 실패했습니다: ${error.message}", Toast.LENGTH_SHORT).show()
