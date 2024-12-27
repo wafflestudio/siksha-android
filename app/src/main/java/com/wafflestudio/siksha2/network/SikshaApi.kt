@@ -82,12 +82,12 @@ interface SikshaApi {
         @Part image: MultipartBody.Part?,
         @Part("change_to_default_image") changeToDefaultImage: Boolean,
         @Part nickname: MultipartBody.Part?
-    ): GetUserDataResult
+    ): NetworkResult<GetUserDataResult>
 
     @GET("/auth/nicknames/validate")
     suspend fun checkNickname(
         @Query("nickname") nickname: String
-    )
+    ): NetworkResult<Unit>
 
     @GET("/versions/android")
     suspend fun getVersion(): GetVersionResult

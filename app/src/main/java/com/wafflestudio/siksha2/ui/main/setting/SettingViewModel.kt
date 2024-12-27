@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.HttpException
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -101,13 +101,12 @@ class SettingViewModel @Inject constructor(
         profileUrlCache = _userData.value?.profileUrl
     }
 
-    private suspend fun getNicknameToUpdate(nickname: String): String? {
+    private suspend fun getNicknameToUpdate(nickname: String): NetworkResult<String>? {
         val currentNickname = _userData.value?.nickname
-        if (currentNickname == nickname) {
-            return null
+        return if (currentNickname == nickname) {
+            null
         } else {
-            userStatusManager.checkNickname(nickname)
-            return nickname
+            userStatusManager.checkNickname(nickname).map { _ -> nickname }
         }
     }
 
@@ -117,51 +116,56 @@ class SettingViewModel @Inject constructor(
         return profileUrlCache.let {
             val uri = Uri.parse(it)
             getCompressedImage(context, uri)
-        }?.let { file ->
+        }.let { file ->
             val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("image", file.name, requestBody)
         }
     }
 
     fun patchUserData(context: Context, imageChanged: Boolean, nickname: String) {
+        Timber.d("Enter patchUserData")
         viewModelScope.launch {
-            runCatching {
-                if (nickname.isEmpty()) {
-                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("닉네임 칸이 비어있습니다."))
-                    return@runCatching
+            if (nickname.isEmpty()) {
+                _settingEvent.emit(SettingEvent.ChangeProfileFailed("닉네임 칸이 비어있습니다."))
+                return@launch
+            }
+
+            val nicknameToUpdate: String?
+            when (val nicknameToUpdateResponse = getNicknameToUpdate(nickname)) {
+                is NetworkResult.Failure -> {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(nicknameToUpdateResponse.message))
+                    return@launch
                 }
-
-                val nicknameToUpdate = getNicknameToUpdate(nickname)
-                val imageToUpdate = getImageToUpdate(context, imageChanged)
-
-                if (nicknameToUpdate == null && !imageChanged) {
-                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("수정 사항이 없습니다."))
-                    return@runCatching
+                is NetworkResult.NetworkError -> {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                    return@launch
                 }
-
-                val isDefaultImage = profileUrlCache == null
-                val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)
-                _userData.value = updatedUserData
-            }.onFailure {
-                when (it) {
-                    is HttpException -> {
-                        when (it.code()) {
-                            409 -> {
-                                _settingEvent.emit(SettingEvent.ChangeProfileFailed("이미 존재하는 닉네임입니다."))
-                            }
-
-                            else -> {
-                                _settingEvent.emit(SettingEvent.ChangeProfileFailed("일시적인 오류가 발생했습니다."))
-                            }
-                        }
-                    }
-
-                    else -> {
-                        _settingEvent.emit(SettingEvent.ChangeProfileFailed("일시적인 오류가 발생했습니다."))
-                    }
+                is NetworkResult.UnknownError -> {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
+                    return@launch
                 }
-            }.onSuccess {
-                _settingEvent.emit(SettingEvent.ChangeProfileSuccess)
+                is NetworkResult.Success -> { nicknameToUpdate = nicknameToUpdateResponse.body }
+                else -> nicknameToUpdate = null
+            }
+            val imageToUpdate = getImageToUpdate(context, imageChanged)
+
+            if (nicknameToUpdate == null && !imageChanged) {
+                _settingEvent.emit(SettingEvent.ChangeProfileFailed("수정 사항이 없습니다."))
+                return@launch
+            }
+
+            val isDefaultImage = profileUrlCache == null
+            when (val response = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)) {
+                is NetworkResult.Success -> {
+                    _userData.value = response.body
+                    _settingEvent.emit(SettingEvent.ChangeProfileSuccess)
+                }
+                is NetworkResult.Failure -> {
+                    Timber.d("Network Failure")
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
+                }
+                is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
             }
         }
     }

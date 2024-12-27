@@ -25,6 +25,7 @@ import com.wafflestudio.siksha2.ui.main.setting.SettingEvent
 import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class UserProfileFragment : Fragment() {
     private lateinit var binding: FragmentUserProfileBinding
@@ -119,6 +120,7 @@ class UserProfileFragment : Fragment() {
 
                         is SettingEvent.ChangeProfileFailed -> {
                             showToast(it.errorMessage)
+                            Timber.d("ChangeProfileFailed")
                         }
                     }
                 }

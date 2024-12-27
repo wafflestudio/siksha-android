@@ -101,13 +101,14 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.getUserData().map(UserDto::toUser)
     }
 
-    suspend fun updateUserProfile(nickname: String?, changeToDefaultImage: Boolean, image: MultipartBody.Part?): User {
+    suspend fun updateUserProfile(nickname: String?, changeToDefaultImage: Boolean, image: MultipartBody.Part?): NetworkResult<User> {
         val nicknameBody = nickname?.let { MultipartBody.Part.createFormData("nickname", it) }
-        return sikshaApi.updateUserData(image, changeToDefaultImage, nicknameBody).toUser()
+        Timber.d("updateUserProfile")
+        return sikshaApi.updateUserData(image, changeToDefaultImage, nicknameBody).map(UserDto::toUser)
     }
 
-    suspend fun checkNickname(nickname: String) {
-        sikshaApi.checkNickname(nickname)
+    suspend fun checkNickname(nickname: String): NetworkResult<Unit> {
+        return sikshaApi.checkNickname(nickname)
     }
 
     suspend fun getVersion(): String {
