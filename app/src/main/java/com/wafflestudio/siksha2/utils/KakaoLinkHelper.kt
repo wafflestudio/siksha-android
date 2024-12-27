@@ -6,11 +6,9 @@ import com.kakao.sdk.template.model.FeedTemplate
 import com.kakao.sdk.template.model.Content
 import com.kakao.sdk.template.model.Link
 import com.kakao.sdk.share.ShareClient
-import com.kakao.sdk.common.util.KakaoCustomTabsClient
-import com.kakao.sdk.common.model.KakaoSdkError
 
 object KakaoLinkHelper {
-    fun shareMenu(context: Context, restaurantName: String, menuData: List<Pair<String, String>>,menuGroupId: Long) {
+    fun shareMenu(context: Context, restaurantName: String, menuData: List<Pair<String, String>>, menuGroupId: Long) {
         val menuText = menuData.joinToString("\n") { "${it.first}: ${it.second}" }
 
         val webUrl = "https://siksha.wafflestudio.com"

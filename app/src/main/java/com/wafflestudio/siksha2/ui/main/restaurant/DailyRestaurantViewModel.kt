@@ -155,6 +155,4 @@ class DailyRestaurantViewModel @Inject constructor(
             .map { menuGroups -> menuGroups.find { it.id == menuGroupId } }
             .firstOrNull()
     }
-
-
 }

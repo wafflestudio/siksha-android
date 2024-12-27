@@ -159,7 +159,7 @@ dependencies {
     // misc
     implementation("com.github.woxthebox:draglistview:1.7.2")
     implementation("com.kakao.sdk:v2-user:2.4.1")
-    implementation ("com.kakao.sdk:v2-share:2.11.2")
+    implementation("com.kakao.sdk:v2-share:2.11.2")
     implementation("com.google.android.gms:play-services-auth:20.5.0")
     implementation("com.airbnb.android:lottie:5.2.0")
 
