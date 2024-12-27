@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.repositories
 
 import com.wafflestudio.siksha2.models.Board
+import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
@@ -8,6 +9,7 @@ import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
 import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
 import com.wafflestudio.siksha2.network.dto.core.BoardDto
+import com.wafflestudio.siksha2.network.dto.core.CommentDto
 import com.wafflestudio.siksha2.network.dto.core.PostDto
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import retrofit2.Response
@@ -80,12 +82,12 @@ class CommunityRepository @Inject constructor(
         return api.postPatchPost(postId, boardId, title, content, anonymous, images).map(PostDto::toPost)
     }
 
-    suspend fun likeComment(commentId: Long) {
-        api.postLikeComment(commentId)
+    suspend fun likeComment(commentId: Long): NetworkResult<Comment> {
+        return api.postLikeComment(commentId).map(CommentDto::toComment)
     }
 
-    suspend fun unlikeComment(commentId: Long) {
-        api.postUnlikeComment(commentId)
+    suspend fun unlikeComment(commentId: Long): NetworkResult<Comment> {
+        return api.postUnlikeComment(commentId).map(CommentDto::toComment)
     }
 
     suspend fun deletePost(postId: Long): Response<Unit?> {

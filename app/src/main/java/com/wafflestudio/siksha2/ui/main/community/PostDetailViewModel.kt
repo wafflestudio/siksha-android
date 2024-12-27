@@ -125,15 +125,13 @@ class PostDetailViewModel @Inject constructor(
 
     fun toggleCommentLike(comment: Comment) {
         viewModelScope.launch {
-            runCatching {
-                when (comment.isLiked) {
-                    true -> communityRepository.unlikeComment(comment.id)
-                    false -> communityRepository.likeComment(comment.id)
-                }
-            }.onSuccess {
-                _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeSuccess)
-            }.onFailure {
-                _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeFailed)
+            val response = when (comment.isLiked) {
+                true -> communityRepository.unlikeComment(comment.id)
+                false -> communityRepository.likeComment(comment.id)
+            }
+            when (response) {
+                is NetworkResult.Success -> _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeSuccess)
+                else -> _postDetailEvent.emit(PostDetailEvent.ToggleCommentLikeFailed)
             }
         }
     }

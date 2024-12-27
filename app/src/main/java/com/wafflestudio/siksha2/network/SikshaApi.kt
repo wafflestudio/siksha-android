@@ -170,12 +170,12 @@ interface SikshaApi {
     @POST("/community/comments/{comment_id}/like")
     suspend fun postLikeComment(
         @Path("comment_id") commentId: Long
-    ): PostLikeCommentResponse
+    ): NetworkResult<PostLikeCommentResponse>
 
     @POST("/community/comments/{comment_id}/unlike")
     suspend fun postUnlikeComment(
         @Path("comment_id") commentId: Long
-    ): PostUnlikeCommentResponse
+    ): NetworkResult<PostUnlikeCommentResponse>
 
     @DELETE("community/posts/{postId}")
     suspend fun deletePost(
