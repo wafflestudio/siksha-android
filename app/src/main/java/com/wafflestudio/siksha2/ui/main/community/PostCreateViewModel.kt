@@ -142,11 +142,18 @@ class PostCreateViewModel @Inject constructor(
                 }
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
                 val contentBody = MultipartBody.Part.createFormData("content", content.value)
-                var response: Post?
-                imageList.let {
-                    response = communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
+                val response: NetworkResult<Post> = imageList.let {
+                    communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
                 }
-                _createdPostId.value = response?.id ?: -1
+                when (response) {
+                    is NetworkResult.Success -> {
+                        _createdPostId.value = response.body.id
+                    }
+                    else -> {
+                        _postCreateEvent.emit(PostCreateEvent.UploadPostFailed)
+                        return@launch
+                    }
+                }
             }.onSuccess {
                 _postCreateEvent.emit(PostCreateEvent.UploadPostSuccess)
             }.onFailure {
@@ -173,7 +180,15 @@ class PostCreateViewModel @Inject constructor(
                 val response = imageList.let {
                     communityRepository.patchPost(_post.value.id, boardId, titleBody, contentBody, anonymous, imageList)
                 }
-                _createdPostId.value = response.id
+                when (response) {
+                    is NetworkResult.Success -> {
+                        _createdPostId.value = response.body.id
+                    }
+                    else -> {
+                        _postCreateEvent.emit(PostCreateEvent.UploadPostFailed)
+                        return@launch
+                    }
+                }
             }.onSuccess {
                 _postCreateEvent.emit(PostCreateEvent.UploadPostSuccess)
             }.onFailure {

@@ -154,7 +154,7 @@ interface SikshaApi {
         @Part content: MultipartBody.Part,
         @Part("anonymous") anonymous: Boolean,
         @Part images: List<MultipartBody.Part>
-    ): CreatePostResponse
+    ): NetworkResult<CreatePostResponse>
 
     @Multipart
     @PATCH("/community/posts/{post_id}")
@@ -165,7 +165,7 @@ interface SikshaApi {
         @Part content: MultipartBody.Part,
         @Part("anonymous") anonymous: Boolean,
         @Part images: List<MultipartBody.Part>
-    ): PatchPostResponse
+    ): NetworkResult<PatchPostResponse>
 
     @POST("/community/comments/{comment_id}/like")
     suspend fun postLikeComment(

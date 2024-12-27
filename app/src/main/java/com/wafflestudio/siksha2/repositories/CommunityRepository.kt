@@ -65,8 +65,8 @@ class CommunityRepository @Inject constructor(
         content: MultipartBody.Part,
         anonymous: Boolean,
         images: List<MultipartBody.Part>
-    ): Post {
-        return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
+    ): NetworkResult<Post> {
+        return api.postCreatePost(boardId, title, content, anonymous, images).map(PostDto::toPost)
     }
 
     suspend fun patchPost(
@@ -76,8 +76,8 @@ class CommunityRepository @Inject constructor(
         content: MultipartBody.Part,
         anonymous: Boolean,
         images: List<MultipartBody.Part>
-    ): Post {
-        return api.postPatchPost(postId, boardId, title, content, anonymous, images).toPost()
+    ): NetworkResult<Post> {
+        return api.postPatchPost(postId, boardId, title, content, anonymous, images).map(PostDto::toPost)
     }
 
     suspend fun likeComment(commentId: Long) {
