@@ -108,10 +108,10 @@ class CommunityRepository @Inject constructor(
         return api.reportComment(commentId, ReportCommentRequestBody(reason))
     }
 
-    suspend fun getTrendingPosts(): List<Post> {
+    suspend fun getTrendingPosts(): NetworkResult<List<Post>> {
         return withContext(Dispatchers.IO) {
-            api.getTrendingPosts().result.map {
-                it.toPost()
+            api.getTrendingPosts().map {
+                it.result.map(PostDto::toPost)
             }
         }
     }

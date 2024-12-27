@@ -200,5 +200,5 @@ interface SikshaApi {
     ): NetworkResult<ReportCommentResponse>
 
     @GET("/community/posts/popular/trending")
-    suspend fun getTrendingPosts(): GetTrendingPostsResponse
+    suspend fun getTrendingPosts(): NetworkResult<GetTrendingPostsResponse>
 }

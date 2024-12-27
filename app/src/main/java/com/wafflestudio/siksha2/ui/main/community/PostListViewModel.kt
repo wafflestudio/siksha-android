@@ -101,15 +101,16 @@ class PostListViewModel @Inject constructor(
     fun fetchTrendingPosts() {
         viewModelScope.launch {
             _trendingPostsUiState.value = TrendingPostsUiState.Loading
-            runCatching {
-                val trendingPosts = communityRepository.getTrendingPosts()
-                _trendingPostsUiState.value = if (trendingPosts.isNotEmpty()) {
-                    TrendingPostsUiState.Success(communityRepository.getTrendingPosts())
-                } else {
-                    TrendingPostsUiState.Failed
+            when (val response = communityRepository.getTrendingPosts()) {
+                is NetworkResult.Success -> {
+                    val trendingPosts = response.body
+                    _trendingPostsUiState.value = if (trendingPosts.isNotEmpty()) {
+                        TrendingPostsUiState.Success(trendingPosts)
+                    } else {
+                        TrendingPostsUiState.Failed
+                    }
                 }
-            }.onFailure {
-                _trendingPostsUiState.value = TrendingPostsUiState.Failed
+                else -> _trendingPostsUiState.value = TrendingPostsUiState.Failed
             }
         }
     }
