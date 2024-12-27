@@ -30,8 +30,8 @@ class CommunityRepository @Inject constructor(
 ) {
     val isAnonymous = sikshaPrefObjects.communityIsAnonymous.asFlow()
 
-    suspend fun getBoards(): List<Board> {
-        return api.getBoards().map { it.toBoard() }
+    suspend fun getBoards(): NetworkResult<List<Board>> {
+        return api.getBoards().map { it.map(BoardDto::toBoard) }
     }
 
     suspend fun getBoard(boardId: Long): NetworkResult<Board> {

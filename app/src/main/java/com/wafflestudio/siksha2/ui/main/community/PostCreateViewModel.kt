@@ -75,7 +75,7 @@ class PostCreateViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             runCatching {
-                _boards.value = communityRepository.getBoards()
+                _boards.value = (communityRepository.getBoards() as NetworkResult.Success).body
                 val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
                 val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
                 _postCreateEvent.emit(PostCreateEvent.FetchPostProcessing)

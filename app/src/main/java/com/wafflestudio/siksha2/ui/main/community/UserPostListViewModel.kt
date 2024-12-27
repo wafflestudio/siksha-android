@@ -10,6 +10,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource
 import com.wafflestudio.siksha2.utils.Selectable
@@ -18,10 +19,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,13 +58,15 @@ class UserPostListViewModel@Inject constructor(
     }
 
     private suspend fun getBoards() {
-        try {
-            // Fetch the boards and map them with the state
-            _boards.value = communityRepository.getBoards().mapIndexed { index, board ->
-                board.toDataWithState(index == 0) // Always select the first board
+        when (val response = communityRepository.getBoards()) {
+            is NetworkResult.Success -> {
+                _boards.value = response.body.mapIndexed { index, board ->
+                    board.toDataWithState(index == 0) // Always select the first board
+                }
             }
-        } catch (e: IOException) {
-            // TODO: error handler
+            else -> {
+                // TODO: Error handling
+            }
         }
     }
 

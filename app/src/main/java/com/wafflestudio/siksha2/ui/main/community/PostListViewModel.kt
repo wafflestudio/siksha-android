@@ -11,6 +11,7 @@ import androidx.paging.filter
 import androidx.paging.map
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.PostPagingSource.Companion.ITEMS_PER_PAGE
 import com.wafflestudio.siksha2.utils.Selectable
@@ -26,7 +27,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -78,13 +78,16 @@ class PostListViewModel @Inject constructor(
 
     fun getBoards() {
         viewModelScope.launch {
-            try {
-                _boards.value = communityRepository.getBoards().map { board ->
-                    board.toDataWithState(false)
+            when (val response = communityRepository.getBoards()) {
+                is NetworkResult.Success -> {
+                    _boards.value = response.body.map { board ->
+                        board.toDataWithState(false)
+                    }
+                    selectBoard(0)
                 }
-                selectBoard(0)
-            } catch (e: IOException) {
-                // TODO: error handler
+                else -> {
+                    // TODO: error handling
+                }
             }
         }
     }
