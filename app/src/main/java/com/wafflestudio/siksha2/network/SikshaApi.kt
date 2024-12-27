@@ -139,12 +139,12 @@ interface SikshaApi {
     @POST("/community/posts/{post_id}/like")
     suspend fun postLikePost(
         @Path("post_id") postId: Long
-    ): PostLikePostResponse
+    ): NetworkResult<PostLikePostResponse>
 
     @POST("/community/posts/{post_id}/unlike")
     suspend fun postUnlikePost(
         @Path("post_id") postId: Long
-    ): PostUnlikePostResponse
+    ): NetworkResult<PostUnlikePostResponse>
 
     @Multipart
     @POST("/community/posts")

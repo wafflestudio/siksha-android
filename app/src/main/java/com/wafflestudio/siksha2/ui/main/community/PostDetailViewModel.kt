@@ -108,14 +108,17 @@ class PostDetailViewModel @Inject constructor(
         val post = (postUiState.value as? PostUiState.Success)?.post ?: return
         val board = (postUiState.value as? PostUiState.Success)?.board ?: return
         viewModelScope.launch {
-            runCatching {
-                val updatedPost = when (post.isLiked) {
-                    true -> communityRepository.unlikePost(post.id)
-                    false -> communityRepository.likePost(post.id)
+            val togglePostListResponse = when (post.isLiked) {
+                true -> communityRepository.unlikePost(post.id)
+                false -> communityRepository.likePost(post.id)
+            }
+            when (togglePostListResponse) {
+                is NetworkResult.Success -> {
+                    _postUiState.value = PostUiState.Success(togglePostListResponse.body, board)
                 }
-                _postUiState.value = PostUiState.Success(updatedPost, board)
-            }.onFailure {
-                // TODO: 예외 처리
+                is NetworkResult.Failure -> _postUiState.value = PostUiState.Failed(togglePostListResponse.message)
+                is NetworkResult.NetworkError -> _postUiState.value = PostUiState.Failed("네트워크 연결이 불안정합니다.")
+                else -> _postUiState.value = PostUiState.Failed("알 수 없는 오류가 발생했습니다.")
             }
         }
     }

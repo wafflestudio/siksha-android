@@ -51,12 +51,12 @@ class CommunityRepository @Inject constructor(
         return api.postComment(PostCommentRequestBody(postId, content, isAnonymous)).map {}
     }
 
-    suspend fun likePost(postId: Long): Post {
-        return api.postLikePost(postId).toPost()
+    suspend fun likePost(postId: Long): NetworkResult<Post> {
+        return api.postLikePost(postId).map(PostDto::toPost)
     }
 
-    suspend fun unlikePost(postId: Long): Post {
-        return api.postUnlikePost(postId).toPost()
+    suspend fun unlikePost(postId: Long): NetworkResult<Post> {
+        return api.postUnlikePost(postId).map(PostDto::toPost)
     }
 
     suspend fun createPost(
