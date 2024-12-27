@@ -8,6 +8,8 @@ import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 
 import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
 import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
+import com.wafflestudio.siksha2.network.dto.ReportCommentResponse
+import com.wafflestudio.siksha2.network.dto.ReportPostResponse
 import com.wafflestudio.siksha2.network.dto.core.BoardDto
 import com.wafflestudio.siksha2.network.dto.core.CommentDto
 import com.wafflestudio.siksha2.network.dto.core.PostDto
@@ -98,12 +100,12 @@ class CommunityRepository @Inject constructor(
         return api.deleteComment(commentId)
     }
 
-    suspend fun reportPost(postId: Long, reason: String) {
-        api.reportPost(postId, ReportPostRequestBody(reason))
+    suspend fun reportPost(postId: Long, reason: String): NetworkResult<ReportPostResponse> {
+        return api.reportPost(postId, ReportPostRequestBody(reason))
     }
 
-    suspend fun reportComment(commentId: Long, reason: String) {
-        api.reportComment(commentId, ReportCommentRequestBody(reason))
+    suspend fun reportComment(commentId: Long, reason: String): NetworkResult<ReportCommentResponse> {
+        return api.reportComment(commentId, ReportCommentRequestBody(reason))
     }
 
     suspend fun getTrendingPosts(): List<Post> {

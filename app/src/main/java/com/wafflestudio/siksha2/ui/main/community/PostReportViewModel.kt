@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,20 +47,11 @@ class PostReportViewModel @Inject constructor(
 
     fun reportPost(reportContent: String) {
         viewModelScope.launch {
-            runCatching {
-                communityRepository.reportPost(postId, reportContent)
-            }.onSuccess {
-                _postReportEvent.emit(PostReportEvent.ReportPostSuccess)
-            }.onFailure { throwable ->
-                when (throwable) {
-                    is HttpException -> {
-                        when (throwable.code()) {
-                            409 -> _postReportEvent.emit(PostReportEvent.ReportPostFailed("이미 신고한 게시글입니다."))
-                            else -> _postReportEvent.emit(PostReportEvent.ReportPostFailed("알 수 없는 오류입니다."))
-                        }
-                    }
-                    else -> _postReportEvent.emit(PostReportEvent.ReportPostFailed("알 수 없는 오류입니다."))
-                }
+            when (val response = communityRepository.reportPost(postId, reportContent)) {
+                is NetworkResult.Success -> _postReportEvent.emit(PostReportEvent.ReportPostSuccess)
+                is NetworkResult.Failure -> _postReportEvent.emit(PostReportEvent.ReportPostFailed(response.message))
+                is NetworkResult.NetworkError -> _postReportEvent.emit(PostReportEvent.ReportPostFailed("네트워크 연결이 불안정합니다."))
+                else -> _postReportEvent.emit(PostReportEvent.ReportPostFailed("알 수 없는 오류가 발생했습니다."))
             }
         }
     }

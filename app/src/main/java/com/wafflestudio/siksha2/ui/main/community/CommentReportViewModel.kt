@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,20 +49,11 @@ class CommentReportViewModel @Inject constructor(
 
     fun reportComment(reportContent: String) {
         viewModelScope.launch {
-            runCatching {
-                communityRepository.reportComment(commentId, reportContent)
-            }.onSuccess {
-                _commentReportEvent.emit(CommentReportEvent.ReportCommentSuccess)
-            }.onFailure { throwable ->
-                when (throwable) {
-                    is HttpException -> {
-                        when (throwable.code()) {
-                            409 -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("이미 신고한 게시글입니다."))
-                            else -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("알 수 없는 오류입니다."))
-                        }
-                    }
-                    else -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("알 수 없는 오류입니다."))
-                }
+            when (val response = communityRepository.reportComment(commentId, reportContent)) {
+                is NetworkResult.Success -> _commentReportEvent.emit(CommentReportEvent.ReportCommentSuccess)
+                is NetworkResult.Failure -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed(response.message))
+                is NetworkResult.NetworkError -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("네트워크 연결이 불안정합니다."))
+                else -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("알 수 없는 오류가 발생했습니다."))
             }
         }
     }

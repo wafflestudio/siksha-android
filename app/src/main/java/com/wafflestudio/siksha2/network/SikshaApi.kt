@@ -191,13 +191,13 @@ interface SikshaApi {
     suspend fun reportPost(
         @Path("post_id") postId: Long,
         @Body requestBody: ReportPostRequestBody
-    ): ReportPostResponse
+    ): NetworkResult<ReportPostResponse>
 
     @POST("/community/comments/{comment_id}/report")
     suspend fun reportComment(
         @Path("comment_id") commentId: Long,
         @Body requestBody: ReportCommentRequestBody
-    ): ReportCommentResponse
+    ): NetworkResult<ReportCommentResponse>
 
     @GET("/community/posts/popular/trending")
     suspend fun getTrendingPosts(): GetTrendingPostsResponse
