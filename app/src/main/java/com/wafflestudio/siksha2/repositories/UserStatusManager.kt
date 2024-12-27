@@ -13,6 +13,7 @@ import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.LoginOAuthResult
 import com.wafflestudio.siksha2.network.dto.VocParam
+import com.wafflestudio.siksha2.network.dto.core.UserDto
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
@@ -96,8 +97,8 @@ class UserStatusManager @Inject constructor(
         return sikshaApi.sendVoc(vocParam)
     }
 
-    suspend fun getUserData(): User {
-        return sikshaApi.getUserData().toUser()
+    suspend fun getUserData(): NetworkResult<User> {
+        return sikshaApi.getUserData().map(UserDto::toUser)
     }
 
     suspend fun updateUserProfile(nickname: String?, changeToDefaultImage: Boolean, image: MultipartBody.Part?): User {

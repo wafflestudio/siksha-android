@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.User
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,10 +37,13 @@ class CommentReportViewModel @Inject constructor(
 
     private fun fetchUser() {
         viewModelScope.launch {
-            runCatching {
-                _user.value = userStatusManager.getUserData()
-            }.onFailure {
-                // TODO: 예외 대응 필요
+            when (val response = userStatusManager.getUserData()) {
+                is NetworkResult.Success -> {
+                    _user.value = response.body
+                }
+                is NetworkResult.Failure -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed(response.message))
+                is NetworkResult.NetworkError -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("네트워크 연결이 불안정합니다."))
+                else -> _commentReportEvent.emit(CommentReportEvent.ReportCommentFailed("알 수 없는 오류가 발생했습니다."))
             }
         }
     }

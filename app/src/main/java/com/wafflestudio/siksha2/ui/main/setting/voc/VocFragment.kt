@@ -16,7 +16,6 @@ import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,11 +33,14 @@ class VocFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
-            try {
-                val userData = userStatusManager.getUserData()
-                binding.idText.text = "ID " + userData.id
-            } catch (e: IOException) {
-                showToast("네트워크 연결이 불안정합니다.")
+            when (val response = userStatusManager.getUserData()) {
+                is NetworkResult.Success -> {
+                    val userData = response.body
+                    binding.idText.text = "ID " + userData.id
+                }
+                is NetworkResult.Failure -> showToast(response.message)
+                is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                else -> showToast(getString(R.string.common_unknown_error))
             }
         }
         binding.commentEdit.filters = binding.commentEdit.filters + InputFilter.LengthFilter(500)

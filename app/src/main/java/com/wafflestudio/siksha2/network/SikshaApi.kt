@@ -74,7 +74,7 @@ interface SikshaApi {
     ): NetworkResult<Unit>
 
     @GET("/auth/me/image")
-    suspend fun getUserData(): GetUserDataResult
+    suspend fun getUserData(): NetworkResult<GetUserDataResult>
 
     @Multipart
     @PATCH("/auth/me/image/profile")

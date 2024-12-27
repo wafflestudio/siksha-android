@@ -10,6 +10,7 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.models.RestaurantOrder
 import com.wafflestudio.siksha2.models.User
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.ImageUtil.getCompressedImage
@@ -44,11 +45,13 @@ class SettingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            runCatching {
-                _userData.value = userStatusManager.getUserData()
-                checkAppVersion()
-            }.onFailure {
-                // TODO: 유저 정보 받아오지 못했을 때 처리 필요
+            viewModelScope.launch {
+                when (val response = userStatusManager.getUserData()) {
+                    is NetworkResult.Success -> _userData.value = response.body
+                    is NetworkResult.Failure -> _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
+                    is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                    else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
+                }
             }
         }
     }
