@@ -10,6 +10,7 @@ import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.repositories.pagingsource.CommentPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -91,13 +92,14 @@ class PostDetailViewModel @Inject constructor(
         if (content.isEmpty()) return
         val post = (postUiState.value as? PostUiState.Success)?.post ?: return
         viewModelScope.launch {
-            runCatching {
-                communityRepository.addCommentToPost(post.id, content, isAnonymous)
-            }.onSuccess {
-                _postDetailEvent.emit(PostDetailEvent.AddCommentSuccess)
-                refreshPost(post.id)
-            }.onFailure {
-                _postDetailEvent.emit(PostDetailEvent.AddCommentFailed)
+            when (communityRepository.addCommentToPost(post.id, content, isAnonymous)) {
+                is NetworkResult.Success -> {
+                    _postDetailEvent.emit(PostDetailEvent.AddCommentSuccess)
+                    refreshPost(post.id)
+                }
+                else -> {
+                    _postDetailEvent.emit(PostDetailEvent.AddCommentFailed)
+                }
             }
         }
     }
