@@ -117,7 +117,7 @@ interface SikshaApi {
     suspend fun getUserPosts(
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
-    ): GetPostsResult
+    ): NetworkResult<GetPostsResult>
 
     @GET("/community/posts/{post_id}")
     suspend fun getPost(
@@ -134,7 +134,7 @@ interface SikshaApi {
     @POST("/community/comments")
     suspend fun postComment(
         @Body body: PostCommentRequestBody
-    ): PostCommentResponse
+    ): NetworkResult<PostCommentResponse>
 
     @POST("/community/posts/{post_id}/like")
     suspend fun postLikePost(
