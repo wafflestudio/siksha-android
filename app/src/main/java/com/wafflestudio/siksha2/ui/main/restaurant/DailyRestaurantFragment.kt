@@ -166,22 +166,23 @@ class DailyRestaurantFragment : Fragment() {
             onMenuGroupShareClickListener = { menuGroupId ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     val menuGroup = vm.getMenuGroupById(menuGroupId)
+                    val shareDate = vm.dateFilter.value ?: LocalDate.now()
+
                     if (menuGroup != null) {
                         val menuData = menuGroup.menus.take(5).map {
                             (it.nameKr ?: "메뉴 이름 없음") to (it.price?.toString() ?: "가격 없음")
                         }
-                        KakaoLinkHelper.shareMenu(
+                        KakaoLinkHelper.shareMenuWithTemplate(
                             requireContext(),
-                            menuGroup.nameKr ?: "식당 이름 없음",
                             menuData,
-                            menuGroup.id
+                            menuGroup.nameKr ?: "식당 이름 없음",
+                            shareDate
                         )
                     } else {
                         showToast("해당 메뉴 그룹을 찾을 수 없습니다.", Toast.LENGTH_SHORT)
                     }
                 }
             }
-
         )
 
         binding.calendarSelectView.updateDate(LocalDate.now())
