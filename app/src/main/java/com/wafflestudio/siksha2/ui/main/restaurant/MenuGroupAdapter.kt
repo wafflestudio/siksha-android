@@ -15,7 +15,8 @@ class MenuGroupAdapter(
     private val onMenuGroupInfoClickListener: (Long) -> Unit,
     private val onMenuGroupToggleFavoriteClickListener: (Long) -> Unit,
     private val onMenuItemToggleLikeClickListener: (menuId: Long, isCurrentlyLiked: Boolean) -> Unit,
-    private val onMenuItemClickListener: (Long) -> Unit
+    private val onMenuItemClickListener: (Long) -> Unit,
+    private val onMenuGroupShareClickListener: (Long) -> Unit
 ) : ListAdapter<MenuGroup, MenuGroupAdapter.MenuGroupViewHolder>(diffCallback) {
     private lateinit var recyclerView: RecyclerView
 
@@ -48,6 +49,9 @@ class MenuGroupAdapter(
                 onMenuGroupToggleFavoriteClickListener.invoke(menuGroup.id)
             }
             favoriteToggle.isSelected = menuGroup.isFavorite
+            shareButton.setOnClickListener {
+                onMenuGroupShareClickListener.invoke(menuGroup.id)
+            }
 
             menuList.setVisibleOrGone(menuGroup.menus.isEmpty().not())
             menuEmpty.setVisibleOrGone(menuGroup.menus.isEmpty())
