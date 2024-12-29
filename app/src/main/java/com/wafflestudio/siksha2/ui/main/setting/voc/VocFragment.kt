@@ -11,12 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentVocBinding
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,11 +33,14 @@ class VocFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
-            try {
-                val userData = userStatusManager.getUserData()
-                binding.idText.text = "ID " + userData.id
-            } catch (e: IOException) {
-                showToast("네트워크 연결이 불안정합니다.")
+            when (val response = userStatusManager.getUserData()) {
+                is NetworkResult.Success -> {
+                    val userData = response.body
+                    binding.idText.text = "ID " + userData.id
+                }
+                is NetworkResult.Failure -> showToast(response.message)
+                is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                else -> showToast(getString(R.string.common_unknown_error))
             }
         }
         binding.commentEdit.filters = binding.commentEdit.filters + InputFilter.LengthFilter(500)
@@ -62,13 +64,14 @@ class VocFragment : Fragment() {
 
         binding.submitButton.setOnClickListener {
             lifecycleScope.launch {
-                try {
-                    userStatusManager.sendVoc(voc = binding.commentEdit.text.toString(), platform = "Android")
-                    showToast("문의가 정상적으로 등록되었습니다.")
-                    findNavController().popBackStack()
-                } catch (e: IOException) {
-                    Timber.e(e)
-                    showToast("네트워크 연결이 불안정합니다.")
+                when (val response = userStatusManager.sendVoc(voc = binding.commentEdit.text.toString(), platform = "Android")) {
+                    is NetworkResult.Success -> {
+                        showToast(getString(R.string.send_voc_success))
+                        findNavController().popBackStack()
+                    }
+                    is NetworkResult.Failure -> showToast(response.message)
+                    is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                    else -> showToast(getString(R.string.common_unknown_error))
                 }
             }
         }

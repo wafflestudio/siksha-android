@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.result.NetworkResult
 
 class CommentPagingSource(
     val postId: Long,
@@ -12,12 +13,16 @@ class CommentPagingSource(
 
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, Comment> {
         val page = params.key ?: STARTING_KEY
-        val response = api.getComments(postId, page, params.loadSize)
-        return LoadResult.Page(
-            data = response.result.map { it.toComment() },
-            prevKey = if (page == STARTING_KEY) null else page - 1,
-            nextKey = if (response.hasNext) page + (params.loadSize / ITEMS_PER_PAGE) else null
-        )
+        return when (val response = api.getComments(postId, page, params.loadSize)) {
+            is NetworkResult.Success -> {
+                LoadResult.Page(
+                    data = response.body.result.map { it.toComment() },
+                    prevKey = if (page == STARTING_KEY) null else page - 1,
+                    nextKey = if (response.body.hasNext) page + (params.loadSize / ITEMS_PER_PAGE) else null
+                )
+            }
+            else -> LoadResult.Error(RuntimeException(""))
+        }
     }
 
     override fun getRefreshKey(state: PagingState<Long, Comment>): Long? {

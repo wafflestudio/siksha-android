@@ -3,7 +3,6 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +13,7 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoBottomSheet
 import com.wafflestudio.siksha2.utils.KakaoLinkHelper
@@ -22,7 +22,6 @@ import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.IOException
 import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.math.abs
@@ -148,10 +147,11 @@ class DailyRestaurantFragment : Fragment() {
             },
             onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
                 viewLifecycleOwner.lifecycleScope.launch {
-                    try {
-                        vm.toggleMenuLike(menuId, isCurrentlyLiked)
-                    } catch (e: IOException) {
-                        showToast(getString(R.string.common_network_error), Toast.LENGTH_SHORT)
+                    when (val response = vm.toggleMenuLike(menuId, isCurrentlyLiked)) {
+                        is NetworkResult.Success -> { }
+                        is NetworkResult.Failure -> showToast(response.message)
+                        is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                        else -> showToast(getString(R.string.common_unknown_error))
                     }
                 }
             },

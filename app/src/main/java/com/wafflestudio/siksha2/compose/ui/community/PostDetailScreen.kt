@@ -94,7 +94,6 @@ fun PostDetailRoute(
     postDetailViewModel: PostDetailViewModel = hiltViewModel()
 ) {
     val postUiState by postDetailViewModel.postUiState.collectAsState()
-    val board by postDetailViewModel.board.collectAsState()
     val comments = postDetailViewModel.commentPagingData.collectAsLazyPagingItems()
     val isAnonymous by postDetailViewModel.isAnonymous.collectAsState()
 
@@ -102,7 +101,7 @@ fun PostDetailRoute(
         is PostUiState.Success -> {
             PostDetailScreenSuccess(
                 post = (postUiState as PostUiState.Success).post,
-                board = board,
+                board = (postUiState as PostUiState.Success).board,
                 comments = comments,
                 postDetailEvent = postDetailViewModel.postDetailEvent,
                 isAnonymous = isAnonymous,

@@ -3,10 +3,12 @@ package com.wafflestudio.siksha2.repositories
 import com.wafflestudio.siksha2.db.RestaurantsDao
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,8 +24,15 @@ class RestaurantRepository @Inject constructor(
 
     suspend fun syncWithServer() {
         withContext(Dispatchers.IO) {
-            val data = sikshaApi.fetchRestaurants()
-            restaurantsDao.update(data.result)
+            when (val response = sikshaApi.fetchRestaurants()) {
+                is NetworkResult.Success -> {
+                    val data = response.body
+                    restaurantsDao.update(data.result)
+                }
+                else -> {
+                    throw IOException("")
+                }
+            }
         }
     }
 

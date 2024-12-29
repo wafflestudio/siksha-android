@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.CommunityRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
@@ -74,7 +75,7 @@ class PostCreateViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             runCatching {
-                _boards.value = communityRepository.getBoards()
+                _boards.value = (communityRepository.getBoards() as NetworkResult.Success).body
                 val boardId: Long = PostCreateFragmentArgs.fromSavedStateHandle(savedStateHandle).boardId
                 val postId: Long = PostEditFragmentArgs.fromSavedStateHandle(savedStateHandle).postId
                 _postCreateEvent.emit(PostCreateEvent.FetchPostProcessing)
@@ -95,12 +96,12 @@ class PostCreateViewModel @Inject constructor(
     }
 
     private suspend fun createPostInit(boardId: Long) {
-        _board.value = communityRepository.getBoard(boardId)
+        _board.value = (communityRepository.getBoard(boardId) as NetworkResult.Success).body // FIXME: 임시로 casting
     }
 
     private suspend fun editPostInit(postId: Long) {
-        _post.value = communityRepository.getPost(postId)
-        _board.value = communityRepository.getBoard(post.value.boardId)
+        _post.value = (communityRepository.getPost(postId) as NetworkResult.Success).body // FIXME: 임시로 casting
+        _board.value = (communityRepository.getBoard(post.value.boardId) as NetworkResult.Success).body // FIXME: 임시로 casting
         _title.value = post.value.title
         _content.value = post.value.content
         _imageUrisToUpload.value = post.value.etc?.images?.map { Uri.parse(it) } ?: listOf()
@@ -141,11 +142,18 @@ class PostCreateViewModel @Inject constructor(
                 }
                 val titleBody = MultipartBody.Part.createFormData("title", title.value)
                 val contentBody = MultipartBody.Part.createFormData("content", content.value)
-                var response: Post?
-                imageList.let {
-                    response = communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
+                val response: NetworkResult<Post> = imageList.let {
+                    communityRepository.createPost(boardId, titleBody, contentBody, anonymous, imageList)
                 }
-                _createdPostId.value = response?.id ?: -1
+                when (response) {
+                    is NetworkResult.Success -> {
+                        _createdPostId.value = response.body.id
+                    }
+                    else -> {
+                        _postCreateEvent.emit(PostCreateEvent.UploadPostFailed)
+                        return@launch
+                    }
+                }
             }.onSuccess {
                 _postCreateEvent.emit(PostCreateEvent.UploadPostSuccess)
             }.onFailure {
@@ -172,7 +180,15 @@ class PostCreateViewModel @Inject constructor(
                 val response = imageList.let {
                     communityRepository.patchPost(_post.value.id, boardId, titleBody, contentBody, anonymous, imageList)
                 }
-                _createdPostId.value = response.id
+                when (response) {
+                    is NetworkResult.Success -> {
+                        _createdPostId.value = response.body.id
+                    }
+                    else -> {
+                        _postCreateEvent.emit(PostCreateEvent.UploadPostFailed)
+                        return@launch
+                    }
+                }
             }.onSuccess {
                 _postCreateEvent.emit(PostCreateEvent.UploadPostSuccess)
             }.onFailure {

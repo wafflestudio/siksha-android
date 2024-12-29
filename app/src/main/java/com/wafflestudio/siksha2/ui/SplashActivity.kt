@@ -21,6 +21,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ActivitySplashBinding
 import com.wafflestudio.siksha2.network.OAuthProvider
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
@@ -29,9 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import timber.log.Timber
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -87,14 +86,18 @@ class SplashActivity : AppCompatActivity() {
 
     private fun onOAuthSuccess(provider: OAuthProvider, token: String) {
         lifecycleScope.launch {
-            try {
-                userStatusManager.loginWithOAuthToken(provider, token)
-                startActivity(Intent(this@SplashActivity, RootActivity::class.java))
-                finish()
-            } catch (e: HttpException) {
-                showToast("인증 실패")
-            } catch (e: IOException) {
-                showToast(getString(R.string.common_network_error))
+            when (val loginResponse = userStatusManager.loginWithOAuthToken(provider, token)) {
+                is NetworkResult.Success -> {
+                    startActivity(Intent(this@SplashActivity, RootActivity::class.java))
+                    finish()
+                }
+                is NetworkResult.Failure -> {
+                    showToast(loginResponse.message)
+                }
+                is NetworkResult.NetworkError -> {
+                    showToast(getString(R.string.common_network_error))
+                }
+                else -> showToast(getString(R.string.common_unknown_error))
             }
         }
     }
@@ -160,12 +163,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private suspend fun checkLoginStatus(): Boolean {
-        return try {
-            userStatusManager.refreshUserToken()
-            true
-        } catch (e: HttpException) {
-            // do nothing - 다시 로그인 시나리오 타게 냅두기
-            false
-        }
+        return userStatusManager.refreshUserToken()
     }
 }

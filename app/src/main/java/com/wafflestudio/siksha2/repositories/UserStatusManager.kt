@@ -13,7 +13,11 @@ import com.wafflestudio.siksha2.models.toUser
 import com.wafflestudio.siksha2.models.toVersion
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.GetVersionResult
+import com.wafflestudio.siksha2.network.dto.LoginOAuthResult
 import com.wafflestudio.siksha2.network.dto.VocParam
+import com.wafflestudio.siksha2.network.dto.core.UserDto
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
 import okhttp3.MultipartBody
@@ -26,20 +30,34 @@ class UserStatusManager @Inject constructor(
     private val sikshaApi: SikshaApi,
     private val sikshaPrefObjects: SikshaPrefObjects
 ) {
-    suspend fun loginWithOAuthToken(provider: OAuthProvider, token: String) {
+    suspend fun loginWithOAuthToken(provider: OAuthProvider, token: String): NetworkResult<LoginOAuthResult> {
         val tokenWithPrefix = attachBearerPrefix(token)
-        val (accessToken) = when (provider) {
+        val response = when (provider) {
             OAuthProvider.GOOGLE -> sikshaApi.loginGoogle(tokenWithPrefix)
             OAuthProvider.KAKAO -> sikshaApi.loginKakao(tokenWithPrefix)
         }
-        sikshaPrefObjects.oAuthProvider.setValue(provider)
-        sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+        when (response) {
+            is NetworkResult.Success -> {
+                val accessToken = response.body.accessToken
+                sikshaPrefObjects.oAuthProvider.setValue(provider)
+                sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+            }
+            else -> { }
+        }
+        return response
     }
 
-    suspend fun refreshUserToken() {
+    suspend fun refreshUserToken(): Boolean {
         sikshaPrefObjects.accessToken.getValue().let {
-            val (accessToken) = sikshaApi.refreshToken(it)
-            sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+            when (val response = sikshaApi.refreshToken(it)) {
+                is NetworkResult.Success -> {
+                    val accessToken = response.body.accessToken
+                    sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+                    return true
+                }
+                // 로그인 실패시 do nothing -> 다시 로그인 시나리오 타게 냅두기
+                else -> return false
+            }
         }
     }
 
@@ -77,26 +95,26 @@ class UserStatusManager @Inject constructor(
         }
     }
 
-    suspend fun sendVoc(voc: String, platform: String) {
+    suspend fun sendVoc(voc: String, platform: String): NetworkResult<Unit> {
         val vocParam = VocParam(voc = voc, platform = platform)
-        sikshaApi.sendVoc(vocParam)
+        return sikshaApi.sendVoc(vocParam)
     }
 
-    suspend fun getUserData(): User {
-        return sikshaApi.getUserData().toUser()
+    suspend fun getUserData(): NetworkResult<User> {
+        return sikshaApi.getUserData().map(UserDto::toUser)
     }
 
-    suspend fun updateUserProfile(nickname: String?, changeToDefaultImage: Boolean, image: MultipartBody.Part?): User {
+    suspend fun updateUserProfile(nickname: String?, changeToDefaultImage: Boolean, image: MultipartBody.Part?): NetworkResult<User> {
         val nicknameBody = nickname?.let { MultipartBody.Part.createFormData("nickname", it) }
-        return sikshaApi.updateUserData(image, changeToDefaultImage, nicknameBody).toUser()
+        return sikshaApi.updateUserData(image, changeToDefaultImage, nicknameBody).map(UserDto::toUser)
     }
 
-    suspend fun checkNickname(nickname: String) {
-        sikshaApi.checkNickname(nickname)
+    suspend fun checkNickname(nickname: String): NetworkResult<Unit> {
+        return sikshaApi.checkNickname(nickname)
     }
 
-    suspend fun getVersion(): Version {
-        return sikshaApi.getVersion().toVersion()
+    suspend fun getVersion(): NetworkResult<Version> {
+        return sikshaApi.getVersion().map(GetVersionResult::toVersion)
     }
 
     // TODO: applicationContext 주입받아서 사용 (but google login 에서 activity 필요...)

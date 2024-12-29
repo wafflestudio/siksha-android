@@ -1,12 +1,19 @@
 package com.wafflestudio.siksha2.repositories
 
 import com.wafflestudio.siksha2.models.Board
+import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.PostCommentRequestBody
 
 import com.wafflestudio.siksha2.network.dto.ReportPostRequestBody
 import com.wafflestudio.siksha2.network.dto.ReportCommentRequestBody
+import com.wafflestudio.siksha2.network.dto.ReportCommentResponse
+import com.wafflestudio.siksha2.network.dto.ReportPostResponse
+import com.wafflestudio.siksha2.network.dto.core.BoardDto
+import com.wafflestudio.siksha2.network.dto.core.CommentDto
+import com.wafflestudio.siksha2.network.dto.core.PostDto
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import retrofit2.Response
 
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
@@ -27,33 +34,33 @@ class CommunityRepository @Inject constructor(
 ) {
     val isAnonymous = sikshaPrefObjects.communityIsAnonymous.asFlow()
 
-    suspend fun getBoards(): List<Board> {
-        return api.getBoards().map { it.toBoard() }
+    suspend fun getBoards(): NetworkResult<List<Board>> {
+        return api.getBoards().map { it.map(BoardDto::toBoard) }
     }
 
-    suspend fun getBoard(boardId: Long): Board {
-        return api.getBoard(boardId).toBoard()
+    suspend fun getBoard(boardId: Long): NetworkResult<Board> {
+        return api.getBoard(boardId).map(BoardDto::toBoard)
     }
 
     fun getUserPostPagingSource() = UserPostPagingSource(api)
     fun getPostPagingSource(boardId: Long) = PostPagingSource(boardId, api)
 
-    suspend fun getPost(postId: Long): Post {
-        return api.getPost(postId).toPost()
+    suspend fun getPost(postId: Long): NetworkResult<Post> {
+        return api.getPost(postId).map(PostDto::toPost)
     }
 
     fun commentPagingSource(postId: Long) = CommentPagingSource(postId, api)
 
-    suspend fun addCommentToPost(postId: Long, content: String, isAnonymous: Boolean) {
-        api.postComment(PostCommentRequestBody(postId, content, isAnonymous))
+    suspend fun addCommentToPost(postId: Long, content: String, isAnonymous: Boolean): NetworkResult<Unit> {
+        return api.postComment(PostCommentRequestBody(postId, content, isAnonymous)).map {}
     }
 
-    suspend fun likePost(postId: Long): Post {
-        return api.postLikePost(postId).toPost()
+    suspend fun likePost(postId: Long): NetworkResult<Post> {
+        return api.postLikePost(postId).map(PostDto::toPost)
     }
 
-    suspend fun unlikePost(postId: Long): Post {
-        return api.postUnlikePost(postId).toPost()
+    suspend fun unlikePost(postId: Long): NetworkResult<Post> {
+        return api.postUnlikePost(postId).map(PostDto::toPost)
     }
 
     suspend fun createPost(
@@ -62,8 +69,8 @@ class CommunityRepository @Inject constructor(
         content: MultipartBody.Part,
         anonymous: Boolean,
         images: List<MultipartBody.Part>
-    ): Post {
-        return api.postCreatePost(boardId, title, content, anonymous, images).toPost()
+    ): NetworkResult<Post> {
+        return api.postCreatePost(boardId, title, content, anonymous, images).map(PostDto::toPost)
     }
 
     suspend fun patchPost(
@@ -73,16 +80,16 @@ class CommunityRepository @Inject constructor(
         content: MultipartBody.Part,
         anonymous: Boolean,
         images: List<MultipartBody.Part>
-    ): Post {
-        return api.postPatchPost(postId, boardId, title, content, anonymous, images).toPost()
+    ): NetworkResult<Post> {
+        return api.postPatchPost(postId, boardId, title, content, anonymous, images).map(PostDto::toPost)
     }
 
-    suspend fun likeComment(commentId: Long) {
-        api.postLikeComment(commentId)
+    suspend fun likeComment(commentId: Long): NetworkResult<Comment> {
+        return api.postLikeComment(commentId).map(CommentDto::toComment)
     }
 
-    suspend fun unlikeComment(commentId: Long) {
-        api.postUnlikeComment(commentId)
+    suspend fun unlikeComment(commentId: Long): NetworkResult<Comment> {
+        return api.postUnlikeComment(commentId).map(CommentDto::toComment)
     }
 
     suspend fun deletePost(postId: Long): Response<Unit?> {
@@ -93,18 +100,18 @@ class CommunityRepository @Inject constructor(
         return api.deleteComment(commentId)
     }
 
-    suspend fun reportPost(postId: Long, reason: String) {
-        api.reportPost(postId, ReportPostRequestBody(reason))
+    suspend fun reportPost(postId: Long, reason: String): NetworkResult<ReportPostResponse> {
+        return api.reportPost(postId, ReportPostRequestBody(reason))
     }
 
-    suspend fun reportComment(commentId: Long, reason: String) {
-        api.reportComment(commentId, ReportCommentRequestBody(reason))
+    suspend fun reportComment(commentId: Long, reason: String): NetworkResult<ReportCommentResponse> {
+        return api.reportComment(commentId, ReportCommentRequestBody(reason))
     }
 
-    suspend fun getTrendingPosts(): List<Post> {
+    suspend fun getTrendingPosts(): NetworkResult<List<Post>> {
         return withContext(Dispatchers.IO) {
-            api.getTrendingPosts().result.map {
-                it.toPost()
+            api.getTrendingPosts().map {
+                it.result.map(PostDto::toPost)
             }
         }
     }

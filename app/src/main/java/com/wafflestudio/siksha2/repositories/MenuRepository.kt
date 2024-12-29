@@ -8,9 +8,12 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.FetchRecommendationReviewCommentsResult
+import com.wafflestudio.siksha2.network.dto.FetchReviewDistributionResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -33,11 +36,17 @@ class MenuRepository @Inject constructor(
         withContext(Dispatchers.IO) {
             val startDate = date.minusDays(1)
             val endDate = date.plusDays(1)
-            val payload = sikshaApi.fetchMenuGroups(startDate, endDate).result
-                .map {
-                    DailyMenu(it.date.toLocalDate(), it)
+            when (val response = sikshaApi.fetchMenuGroups(startDate, endDate)) {
+                is NetworkResult.Success -> {
+                    val payload = response.body.result.map {
+                        DailyMenu(it.date.toLocalDate(), it)
+                    }
+                    dailyMenusDao.insertDailyMenus(payload)
                 }
-            dailyMenusDao.insertDailyMenus(payload)
+                else -> {
+                    throw RuntimeException("")
+                }
+            }
         }
     }
 
@@ -52,7 +61,7 @@ class MenuRepository @Inject constructor(
         return dailyMenusDao.getDailyMenuByDate(date)
     }
 
-    suspend fun getMenuById(menuId: Long): Menu {
+    suspend fun getMenuById(menuId: Long): NetworkResult<Menu> {
         return sikshaApi.fetchMenuById(menuId)
     }
 
@@ -70,39 +79,51 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): LeaveReviewResult {
+    suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): NetworkResult<LeaveReviewResult> {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
     }
 
-    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: MultipartBody.Part, images: List<MultipartBody.Part>): LeaveReviewResult {
+    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: MultipartBody.Part, images: List<MultipartBody.Part>): NetworkResult<LeaveReviewResult> {
         return sikshaApi.leaveMenuReviewImages(menuId, score, comment, images)
     }
 
-    suspend fun getReviewRecommendationComments(score: Long): String {
-        return sikshaApi.fetchRecommendationReviewComments(score).comment
+    suspend fun getReviewRecommendationComments(score: Long): NetworkResult<FetchRecommendationReviewCommentsResult> {
+        return sikshaApi.fetchRecommendationReviewComments(score)
     }
 
-    suspend fun getReviewDistribution(menuId: Long): List<Long> {
-        return sikshaApi.fetchReviewDistribution(menuId).dist
+    suspend fun getReviewDistribution(menuId: Long): NetworkResult<FetchReviewDistributionResult> {
+        return sikshaApi.fetchReviewDistribution(menuId)
     }
 
-    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): FetchReviewsResult {
+    suspend fun getFirstReviewPhotoByMenuId(menuId: Long): NetworkResult<FetchReviewsResult> {
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
-    suspend fun likeMenuById(menuId: Long): Menu {
+    suspend fun likeMenuById(menuId: Long): NetworkResult<Menu> {
         return withContext(Dispatchers.IO) {
-            val menu = sikshaApi.postLikeMenu(menuId)
-            updateMenuInLocal(menu)
-            return@withContext menu
+            val response = sikshaApi.postLikeMenu(menuId)
+            when (response) {
+                is NetworkResult.Success -> {
+                    val menu = response.body
+                    updateMenuInLocal(menu)
+                }
+                else -> { }
+            }
+            return@withContext response
         }
     }
 
-    suspend fun unlikeMenuById(menuId: Long): Menu {
+    suspend fun unlikeMenuById(menuId: Long): NetworkResult<Menu> {
         return withContext(Dispatchers.IO) {
-            val menu = sikshaApi.postUnlikeMenu(menuId)
-            updateMenuInLocal(menu)
-            return@withContext menu
+            val response = sikshaApi.postUnlikeMenu(menuId)
+            when (response) {
+                is NetworkResult.Success -> {
+                    val menu = response.body
+                    updateMenuInLocal(menu)
+                }
+                else -> { }
+            }
+            return@withContext response
         }
     }
 

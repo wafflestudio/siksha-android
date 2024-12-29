@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -12,17 +13,17 @@ interface SikshaApi {
     suspend fun fetchMenuGroups(
         @Query("start_date") startDate: LocalDate,
         @Query("end_date") endDate: LocalDate
-    ): FetchMenuGroupsResult
+    ): NetworkResult<FetchMenuGroupsResult>
 
     @GET("/menus/{menu_id}")
-    suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): Menu
+    suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): NetworkResult<Menu>
 
     @GET("/reviews/")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Long
-    ): FetchReviewsResult
+    ): NetworkResult<FetchReviewsResult>
 
     @GET("/reviews/filter")
     suspend fun fetchReviewsWithImage(
@@ -30,13 +31,13 @@ interface SikshaApi {
         @Query("page") page: Long,
         @Query("per_page") perPage: Long,
         @Query("etc") etc: Boolean = true
-    ): FetchReviewsResult
+    ): NetworkResult<FetchReviewsResult>
 
     @GET("/restaurants/")
-    suspend fun fetchRestaurants(): FetchRestaurantsResult
+    suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
     @POST("/reviews/")
-    suspend fun leaveMenuReview(@Body req: LeaveReviewParam): LeaveReviewResult
+    suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
     @Multipart
     @POST("/reviews/images")
@@ -45,35 +46,35 @@ interface SikshaApi {
         @Part("score") score: Long,
         @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
-    ): LeaveReviewResult
+    ): NetworkResult<LeaveReviewResult>
 
     @POST("/auth/login/kakao")
-    suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): LoginOAuthResult
+    suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): NetworkResult<LoginOAuthResult>
 
     @POST("/auth/login/google")
-    suspend fun loginGoogle(@Header("google-token") googleToken: String): LoginOAuthResult
+    suspend fun loginGoogle(@Header("google-token") googleToken: String): NetworkResult<LoginOAuthResult>
 
     @DELETE("/auth/")
     suspend fun deleteAccount()
 
     @POST("/auth/refresh")
-    suspend fun refreshToken(@Header("authorization-token") token: String): LoginOAuthResult
+    suspend fun refreshToken(@Header("authorization-token") token: String): NetworkResult<LoginOAuthResult>
 
     @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):
-        FetchRecommendationReviewCommentsResult
+        NetworkResult<FetchRecommendationReviewCommentsResult>
 
     @GET("/reviews/dist")
     suspend fun fetchReviewDistribution(@Query("menu_id") menuId: Long):
-        FetchReviewDistributionResult
+        NetworkResult<FetchReviewDistributionResult>
 
     @POST("/voc")
     suspend fun sendVoc(
         @Body req: VocParam
-    )
+    ): NetworkResult<Unit>
 
     @GET("/auth/me/image")
-    suspend fun getUserData(): GetUserDataResult
+    suspend fun getUserData(): NetworkResult<GetUserDataResult>
 
     @Multipart
     @PATCH("/auth/me/image/profile")
@@ -81,69 +82,69 @@ interface SikshaApi {
         @Part image: MultipartBody.Part?,
         @Part("change_to_default_image") changeToDefaultImage: Boolean,
         @Part nickname: MultipartBody.Part?
-    ): GetUserDataResult
+    ): NetworkResult<GetUserDataResult>
 
     @GET("/auth/nicknames/validate")
     suspend fun checkNickname(
         @Query("nickname") nickname: String
-    )
+    ): NetworkResult<Unit>
 
     @GET("/versions/android")
-    suspend fun getVersion(): GetVersionResult
+    suspend fun getVersion(): NetworkResult<GetVersionResult>
 
     @POST("/menus/{menu_id}/like")
-    suspend fun postLikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+    suspend fun postLikeMenu(@Path("menu_id") menuId: Long): NetworkResult<MenuLikeOrUnlikeResponse>
 
     @POST("/menus/{menu_id}/unlike")
-    suspend fun postUnlikeMenu(@Path("menu_id") menuId: Long): MenuLikeOrUnlikeResponse
+    suspend fun postUnlikeMenu(@Path("menu_id") menuId: Long): NetworkResult<MenuLikeOrUnlikeResponse>
 
     @GET("/community/boards")
-    suspend fun getBoards(): GetBoardsResult
+    suspend fun getBoards(): NetworkResult<GetBoardsResult>
 
     @GET("/community/boards/{board_id}")
     suspend fun getBoard(
         @Path("board_id") boardId: Long
-    ): GetBoardResult
+    ): NetworkResult<GetBoardResult>
 
     @GET("/community/posts")
     suspend fun getPosts(
         @Query("board_id") boardId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
-    ): GetPostsResult
+    ): NetworkResult<GetPostsResult>
 
     @GET("/community/posts/me")
     suspend fun getUserPosts(
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
-    ): GetPostsResult
+    ): NetworkResult<GetPostsResult>
 
     @GET("/community/posts/{post_id}")
     suspend fun getPost(
         @Path("post_id") postId: Long
-    ): GetPostResult
+    ): NetworkResult<GetPostResult>
 
     @GET("/community/comments")
     suspend fun getComments(
         @Query("post_id") postId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Int
-    ): GetCommentsResult
+    ): NetworkResult<GetCommentsResult>
 
     @POST("/community/comments")
     suspend fun postComment(
         @Body body: PostCommentRequestBody
-    ): PostCommentResponse
+    ): NetworkResult<PostCommentResponse>
 
     @POST("/community/posts/{post_id}/like")
     suspend fun postLikePost(
         @Path("post_id") postId: Long
-    ): PostLikePostResponse
+    ): NetworkResult<PostLikePostResponse>
 
     @POST("/community/posts/{post_id}/unlike")
     suspend fun postUnlikePost(
         @Path("post_id") postId: Long
-    ): PostUnlikePostResponse
+    ): NetworkResult<PostUnlikePostResponse>
 
     @Multipart
     @POST("/community/posts")
@@ -153,7 +154,7 @@ interface SikshaApi {
         @Part content: MultipartBody.Part,
         @Part("anonymous") anonymous: Boolean,
         @Part images: List<MultipartBody.Part>
-    ): CreatePostResponse
+    ): NetworkResult<CreatePostResponse>
 
     @Multipart
     @PATCH("/community/posts/{post_id}")
@@ -164,17 +165,17 @@ interface SikshaApi {
         @Part content: MultipartBody.Part,
         @Part("anonymous") anonymous: Boolean,
         @Part images: List<MultipartBody.Part>
-    ): PatchPostResponse
+    ): NetworkResult<PatchPostResponse>
 
     @POST("/community/comments/{comment_id}/like")
     suspend fun postLikeComment(
         @Path("comment_id") commentId: Long
-    ): PostLikeCommentResponse
+    ): NetworkResult<PostLikeCommentResponse>
 
     @POST("/community/comments/{comment_id}/unlike")
     suspend fun postUnlikeComment(
         @Path("comment_id") commentId: Long
-    ): PostUnlikeCommentResponse
+    ): NetworkResult<PostUnlikeCommentResponse>
 
     @DELETE("community/posts/{postId}")
     suspend fun deletePost(
@@ -190,14 +191,14 @@ interface SikshaApi {
     suspend fun reportPost(
         @Path("post_id") postId: Long,
         @Body requestBody: ReportPostRequestBody
-    ): ReportPostResponse
+    ): NetworkResult<ReportPostResponse>
 
     @POST("/community/comments/{comment_id}/report")
     suspend fun reportComment(
         @Path("comment_id") commentId: Long,
         @Body requestBody: ReportCommentRequestBody
-    ): ReportCommentResponse
+    ): NetworkResult<ReportCommentResponse>
 
     @GET("/community/posts/popular/trending")
-    suspend fun getTrendingPosts(): GetTrendingPostsResponse
+    suspend fun getTrendingPosts(): NetworkResult<GetTrendingPostsResponse>
 }

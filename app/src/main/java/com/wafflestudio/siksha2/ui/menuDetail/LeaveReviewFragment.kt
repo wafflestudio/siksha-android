@@ -23,12 +23,11 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.OnRatingChangeListener
 import com.wafflestudio.siksha2.components.ReviewImageView
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
-import okio.IOException
-import retrofit2.HttpException
 
 class LeaveReviewFragment : Fragment() {
     private lateinit var binding: FragmentLeaveReviewBinding
@@ -139,27 +138,30 @@ class LeaveReviewFragment : Fragment() {
 
         binding.submitButton.setOnClickListener {
             lifecycleScope.launch {
-                try {
-                    vm.leaveReview(
-                        context = requireContext(),
-                        score = binding.rating.rating.toDouble(),
-                        comment = binding.commentEdit.text.toString().ifEmpty {
-                            binding.commentEdit.hint.toString()
-                        }
-                    )
-                    showToast("평가가 등록되었습니다.")
-                    findNavController().popBackStack()
-                } catch (e: HttpException) {
-                    // TODO: 서버에 400 이 더 적절하지 않을 지 믈어보기
-                    if (e.code() == 403) {
-                        showToast("같은 메뉴에 리뷰를 여러 번 남길 수 없습니다.")
+                val response = vm.leaveReview(
+                    context = requireContext(),
+                    score = binding.rating.rating.toDouble(),
+                    comment = binding.commentEdit.text.toString().ifEmpty {
+                        binding.commentEdit.hint.toString()
                     }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    showToast("네트워크 연결이 불안정합니다.")
-                } finally {
-                    vm.notifySendReviewEnd()
+                )
+                when (response) {
+                    is NetworkResult.Success -> {
+                        // showToast(R.string.leave_review_success.toString())
+                        showToast(getString(R.string.leave_review_success))
+                        findNavController().popBackStack()
+                    }
+                    is NetworkResult.Failure -> {
+                        showToast(response.message)
+                    }
+                    is NetworkResult.NetworkError -> {
+                        showToast(getString(R.string.common_network_error))
+                    }
+                    else -> {
+                        showToast(getString(R.string.common_unknown_error))
+                    }
                 }
+                vm.notifySendReviewEnd()
             }
         }
 

@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
+import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
@@ -18,7 +20,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.IOException
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,32 +62,37 @@ class MenuDetailViewModel @Inject constructor(
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
-            try {
-                _menu.value = menuRepository.getMenuById(menuId)
-                _networkResultState.value = State.SUCCESS
-            } catch (e: IOException) {
-                _networkResultState.value = State.FAILED
+            val result = menuRepository.getMenuById(menuId)
+            when (result) {
+                is NetworkResult.Success -> {
+                    _menu.value = result.body
+                    _networkResultState.value = State.SUCCESS
+                }
+                else -> _networkResultState.value = State.FAILED
             }
         }
     }
 
     fun refreshImages(menuId: Long) {
         viewModelScope.launch {
-            try {
-                val data = menuRepository.getFirstReviewPhotoByMenuId(menuId)
-                _imageCount.value = data.totalCount
-                val urlList = emptyList<String>().toMutableList()
-                for (i in 0 until 3) {
-                    if (i < data.result.size) {
-                        data.result[i].etc?.images?.get(0)?.let {
-                            urlList.add(it)
+            when (val response = menuRepository.getFirstReviewPhotoByMenuId(menuId)) {
+                is NetworkResult.Success -> {
+                    val data = response.body
+                    _imageCount.value = data.totalCount
+                    val urlList = emptyList<String>().toMutableList()
+                    for (i in 0 until 3) {
+                        if (i < data.result.size) {
+                            data.result[i].etc?.images?.get(0)?.let {
+                                urlList.add(it)
+                            }
                         }
                     }
+                    _imageUrlList.value = urlList
                 }
-                _imageUrlList.value = urlList
-            } catch (e: IOException) {
-                _imageUrlList.value = emptyList()
-                _networkResultState.value = State.FAILED
+                else -> {
+                    _imageUrlList.value = emptyList()
+                    _networkResultState.value = State.FAILED
+                }
             }
         }
     }
@@ -101,20 +108,20 @@ class MenuDetailViewModel @Inject constructor(
     fun getRecommendationReview(score: Long) {
         // TODO: LruCache 로 캐싱해놓고 꺼내쓰기
         viewModelScope.launch {
-            try {
-                _commentHint.value = menuRepository.getReviewRecommendationComments(score)
-            } catch (e: IOException) {
-                _commentHint.value = ""
+            when (val response = menuRepository.getReviewRecommendationComments(score)) {
+                is NetworkResult.Success -> {
+                    _commentHint.value = response.body.comment
+                }
+                else -> _commentHint.value = ""
             }
         }
     }
 
     fun refreshReviewDistribution(menuId: Long) {
         viewModelScope.launch {
-            try {
-                _reviewDistribution.value = menuRepository.getReviewDistribution(menuId)
-            } catch (e: IOException) {
-                _reviewDistribution.value = emptyList()
+            when (val response = menuRepository.getReviewDistribution(menuId)) {
+                is NetworkResult.Success -> _reviewDistribution.value = response.body.dist
+                else -> _reviewDistribution.value = emptyList()
             }
         }
     }
@@ -147,17 +154,25 @@ class MenuDetailViewModel @Inject constructor(
         _leaveReviewState.value = ReviewState.WAITING
     }
 
-    suspend fun toggleLike(id: Long, isCurrentlyLiked: Boolean) {
-        val updatedMenu = when (isCurrentlyLiked) {
+    suspend fun toggleLike(id: Long, isCurrentlyLiked: Boolean): NetworkResult<Menu> {
+        val menuUpdateResponse = when (isCurrentlyLiked) {
             true -> menuRepository.unlikeMenuById(id)
             false -> menuRepository.likeMenuById(id)
         }
-        _menu.postValue(updatedMenu)
+        when (menuUpdateResponse) {
+            is NetworkResult.Success -> {
+                _menu.postValue(menuUpdateResponse.body)
+            }
+            else -> { }
+        }
+        return menuUpdateResponse
     }
 
-    suspend fun leaveReview(context: Context, score: Double, comment: String) {
-        val menuId = _menu.value?.id ?: return
-        if (_imageUriList.value?.isNotEmpty() == true) {
+    suspend fun leaveReview(context: Context, score: Double, comment: String): NetworkResult<LeaveReviewResult>? {
+        Timber.d("LeaveReview ${_menu.value?.id}")
+        val menuId = _menu.value?.id ?: return null
+        Timber.d("not null")
+        val response = if (_imageUriList.value?.isNotEmpty() == true) {
             context.showToast("이미지 압축 중입니다.")
             _leaveReviewState.value = ReviewState.COMPRESSING
             val imageList = _imageUriList.value?.map {
@@ -173,6 +188,7 @@ class MenuDetailViewModel @Inject constructor(
         } else {
             menuRepository.leaveMenuReview(menuId, score, comment)
         }
+        return response
     }
 
     enum class State {

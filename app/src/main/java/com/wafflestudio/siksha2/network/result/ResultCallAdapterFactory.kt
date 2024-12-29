@@ -1,0 +1,41 @@
+package com.wafflestudio.siksha2.network.result
+
+import com.wafflestudio.siksha2.preferences.serializer.Serializer
+import retrofit2.Call
+import retrofit2.CallAdapter
+import retrofit2.Retrofit
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
+
+class ResultCallAdapterFactory(
+    private val serializer: Serializer
+) : CallAdapter.Factory() {
+
+    override fun get(
+        returnType: Type,
+        annotations: Array<out Annotation>,
+        retrofit: Retrofit
+    ): CallAdapter<*, *>? {
+        if (getRawType(returnType) != Call::class.java) {
+            return null
+        }
+
+        check(returnType is ParameterizedType) {
+            "return type must be parameterized as Call<NetworkResult<Foo>> or Call<NetworkResult<out Foo>>"
+        }
+
+        val responseType = getParameterUpperBound(0, returnType)
+
+        if (getRawType(responseType) != NetworkResult::class.java) {
+            return null
+        }
+
+        check(responseType is ParameterizedType) {
+            "Response must be parameterized as NetworkResult<Foo> or NetworkResult<out Foo>"
+        }
+
+        val bodyType = getParameterUpperBound(0, responseType)
+
+        return ResultCallAdapter<Any>(bodyType, serializer)
+    }
+}

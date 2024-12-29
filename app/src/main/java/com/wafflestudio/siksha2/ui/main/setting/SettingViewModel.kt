@@ -10,6 +10,7 @@ import com.wafflestudio.siksha2.BuildConfig
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.models.RestaurantOrder
 import com.wafflestudio.siksha2.models.User
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import com.wafflestudio.siksha2.repositories.UserStatusManager
 import com.wafflestudio.siksha2.utils.ImageUtil.getCompressedImage
@@ -20,7 +21,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,32 +44,34 @@ class SettingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            runCatching {
-                _userData.value = userStatusManager.getUserData()
-                checkAppVersion()
-            }.onFailure {
-                // TODO: 유저 정보 받아오지 못했을 때 처리 필요
+            when (val response = userStatusManager.getUserData()) {
+                is NetworkResult.Success -> _userData.value = response.body
+                is NetworkResult.Failure -> _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
+                is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
             }
+            checkAppVersion()
         }
     }
 
     private suspend fun checkAppVersion() {
-        val version = userStatusManager.getVersion()
+        when (val response = userStatusManager.getVersion()) {
+            is NetworkResult.Success -> {
+                val version = response.body
+                val latestVersion = version.version
+                val minVersion = version.minVersion
+                if (!isValidVersion(latestVersion) || !isValidVersion(minVersion) || !isValidVersion(packageVersion)) {
+                    _isLatestAppVersion.value = false
+                    return
+                }
+                val latestVersionCode = versionToLong(latestVersion)
+                val minVersionCode = versionToLong(minVersion)
+                val packageVersionCode = versionToLong(packageVersion)
 
-        val latestVersion = version.version
-        val minVersion = version.minVersion
-
-        // TODO: 버전이 잘못된 pattern을 가졌을 때의 처리 (필요한가?)
-        if (!isValidVersion(latestVersion) || !isValidVersion(minVersion) || !isValidVersion(packageVersion)) {
-            _isLatestAppVersion.value = false
-            return
+                _isLatestAppVersion.value = packageVersionCode in minVersionCode..latestVersionCode
+            }
+            else -> { }
         }
-
-        val latestVersionCode = versionToLong(latestVersion)
-        val minVersionCode = versionToLong(minVersion)
-        val packageVersionCode = versionToLong(packageVersion)
-
-        _isLatestAppVersion.value = packageVersionCode in minVersionCode..latestVersionCode
     }
 
     private fun versionToLong(version: String): Long {
@@ -128,13 +130,12 @@ class SettingViewModel @Inject constructor(
         profileUrlCache = _userData.value?.profileUrl
     }
 
-    private suspend fun getNicknameToUpdate(nickname: String): String? {
+    private suspend fun getNicknameToUpdate(nickname: String): NetworkResult<String>? {
         val currentNickname = _userData.value?.nickname
-        if (currentNickname == nickname) {
-            return null
+        return if (currentNickname == nickname) {
+            null
         } else {
-            userStatusManager.checkNickname(nickname)
-            return nickname
+            userStatusManager.checkNickname(nickname).map { _ -> nickname }
         }
     }
 
@@ -144,7 +145,7 @@ class SettingViewModel @Inject constructor(
         return profileUrlCache.let {
             val uri = Uri.parse(it)
             getCompressedImage(context, uri)
-        }?.let { file ->
+        }.let { file ->
             val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("image", file.name, requestBody)
         }
@@ -152,43 +153,46 @@ class SettingViewModel @Inject constructor(
 
     fun patchUserData(context: Context, imageChanged: Boolean, nickname: String) {
         viewModelScope.launch {
-            runCatching {
-                if (nickname.isEmpty()) {
-                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("닉네임 칸이 비어있습니다."))
-                    return@runCatching
+            if (nickname.isEmpty()) {
+                _settingEvent.emit(SettingEvent.ChangeProfileFailed("닉네임 칸이 비어있습니다."))
+                return@launch
+            }
+
+            val nicknameToUpdate: String?
+            when (val nicknameToUpdateResponse = getNicknameToUpdate(nickname)) {
+                is NetworkResult.Failure -> {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(nicknameToUpdateResponse.message))
+                    return@launch
                 }
-
-                val nicknameToUpdate = getNicknameToUpdate(nickname)
-                val imageToUpdate = getImageToUpdate(context, imageChanged)
-
-                if (nicknameToUpdate == null && !imageChanged) {
-                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("수정 사항이 없습니다."))
-                    return@runCatching
+                is NetworkResult.NetworkError -> {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                    return@launch
                 }
-
-                val isDefaultImage = profileUrlCache == null
-                val updatedUserData = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)
-                _userData.value = updatedUserData
-            }.onFailure {
-                when (it) {
-                    is HttpException -> {
-                        when (it.code()) {
-                            409 -> {
-                                _settingEvent.emit(SettingEvent.ChangeProfileFailed("이미 존재하는 닉네임입니다."))
-                            }
-
-                            else -> {
-                                _settingEvent.emit(SettingEvent.ChangeProfileFailed("일시적인 오류가 발생했습니다."))
-                            }
-                        }
-                    }
-
-                    else -> {
-                        _settingEvent.emit(SettingEvent.ChangeProfileFailed("일시적인 오류가 발생했습니다."))
-                    }
+                is NetworkResult.UnknownError -> {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
+                    return@launch
                 }
-            }.onSuccess {
-                _settingEvent.emit(SettingEvent.ChangeProfileSuccess)
+                is NetworkResult.Success -> { nicknameToUpdate = nicknameToUpdateResponse.body }
+                else -> nicknameToUpdate = null
+            }
+            val imageToUpdate = getImageToUpdate(context, imageChanged)
+
+            if (nicknameToUpdate == null && !imageChanged) {
+                _settingEvent.emit(SettingEvent.ChangeProfileFailed("수정 사항이 없습니다."))
+                return@launch
+            }
+
+            val isDefaultImage = profileUrlCache == null
+            when (val response = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)) {
+                is NetworkResult.Success -> {
+                    _userData.value = response.body
+                    _settingEvent.emit(SettingEvent.ChangeProfileSuccess)
+                }
+                is NetworkResult.Failure -> {
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
+                }
+                is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
             }
         }
     }

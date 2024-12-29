@@ -4,33 +4,25 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.network.SikshaApi
-import retrofit2.HttpException
-import java.io.IOException
+import com.wafflestudio.siksha2.network.result.NetworkResult
 
 class UserPostPagingSource(
     private val api: SikshaApi
 ) : PagingSource<Long, Post>() {
     override suspend fun load(params: LoadParams<Long>): LoadResult<Long, Post> {
         val page = params.key ?: PostPagingSource.STARTING_KEY
-        return try {
-            val response = api.getUserPosts(
-                page = page,
-                perPage = params.loadSize
-            )
-
-            LoadResult.Page(
-                data = response.result.map { it.toPost() },
-                prevKey = when (page) {
-                    PostPagingSource.STARTING_KEY -> null
-                    else -> page - 1
-                },
-                nextKey = if (response.hasNext) page + params.loadSize / PostPagingSource.ITEMS_PER_PAGE else null
-            )
-        } catch (e: HttpException) {
-            e.printStackTrace()
-            LoadResult.Error(e)
-        } catch (e: IOException) {
-            LoadResult.Error(e)
+        return when (val response = api.getUserPosts(page, params.loadSize)) {
+            is NetworkResult.Success -> {
+                LoadResult.Page(
+                    data = response.body.result.map { it.toPost() },
+                    prevKey = when (page) {
+                        PostPagingSource.STARTING_KEY -> null
+                        else -> page - 1
+                    },
+                    nextKey = if (response.body.hasNext) page + params.loadSize / ITEMS_PER_PAGE else null
+                )
+            }
+            else -> LoadResult.Error(RuntimeException(""))
         }
     }
 
@@ -40,5 +32,6 @@ class UserPostPagingSource(
 
     companion object {
         const val STARTING_KEY = 1L
+        const val ITEMS_PER_PAGE = 10
     }
 }
