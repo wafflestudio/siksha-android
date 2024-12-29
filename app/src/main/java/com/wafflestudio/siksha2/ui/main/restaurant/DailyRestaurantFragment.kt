@@ -179,7 +179,7 @@ class DailyRestaurantFragment : Fragment() {
                             shareDate
                         )
                     } else {
-                        showToast("해당 메뉴 그룹을 찾을 수 없습니다.", Toast.LENGTH_SHORT)
+                        showToast("해당 메뉴 그룹을 찾을 수 없습니다.")
                     }
                 }
             }
