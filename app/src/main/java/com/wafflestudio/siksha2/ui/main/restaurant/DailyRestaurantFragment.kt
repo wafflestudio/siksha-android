@@ -1,8 +1,11 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.Manifest
 import android.animation.ObjectAnimator
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,6 +32,20 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
     private val vm: DailyRestaurantViewModel by viewModels()
+
+//    private val locationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//        result ->
+//
+//    }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            // TODO: placeholder 삭제
+            showToast("위치 권한이 허용되었습니다.")
+        } else {
+            showToast("위치 기반 필터링 이용을 위해 위치 권한을 허용해 주세요.")
+        }
+    }
 
     private lateinit var binding: FragmentDailyRestaurantBinding
     private lateinit var menuGroupAdapter: MenuGroupAdapter
@@ -340,6 +357,21 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
+
+        requestPermission {
+            // TODO: placeholder 삭제
+            showToast("위치 권한이 허용되었습니다.")
+        }
+    }
+
+    private fun requestPermission(onGranted: () -> Unit) {
+        // TODO: SDK 버전에 따른 처리 필요한지 확인
+        val permission = Manifest.permission.ACCESS_FINE_LOCATION
+        if (ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
+            onGranted()
+        } else {
+            requestPermissionLauncher.launch(permission)
+        }
     }
 
     companion object {
