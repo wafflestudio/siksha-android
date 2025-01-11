@@ -18,4 +18,7 @@
     <declare-styleable name="ReviewImageView">
         <attr name="showDeleteIcon" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="MenuFilterItem">
+        <attr name="filterText" format="string" />
+    </declare-styleable>
 </resources>
