@@ -20,5 +20,7 @@
     </declare-styleable>
     <declare-styleable name="MenuFilterItem">
         <attr name="filterText" format="string" />
+        <attr name="showArrow" format="boolean"/>
+        <attr name="showCheck" format="boolean"/>
     </declare-styleable>
 </resources>

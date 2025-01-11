@@ -178,12 +178,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/menu_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:src="@drawable/ic_filter_bar"
                 app:tint="@color/meals_of_day_icon">
             </ImageView>
@@ -191,39 +193,54 @@
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp">
+                >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    >
 
                     <com.wafflestudio.siksha2.components.MenuFilterItem
-                        app:filterText="거리"  android:layout_height="" android:layout_width=""/>
-
-                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                        android:id = "@+id/filter_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:showArrow="true"
+                        app:filterText="거리" />
+
+                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                        android:id = "@+id/filter_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:showArrow="true"
                         app:filterText="가격" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterItem
+                        android:id = "@+id/filter_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:showArrow="false"
                         app:filterText="영업중" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterItem
+                        android:id = "@+id/filter_review"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:showArrow="false"
                         app:filterText="리뷰" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterItem
+                        android:id = "@+id/filter_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:showArrow="true"
                         app:filterText="평점" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterItem
+                        android:id = "@+id/filter_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:showArrow="true"
                         app:filterText="카테고리" />
 
                 </LinearLayout>
