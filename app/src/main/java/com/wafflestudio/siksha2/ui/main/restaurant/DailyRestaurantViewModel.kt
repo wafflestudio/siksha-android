@@ -38,6 +38,11 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _isCalendarVisible = MutableLiveData<Boolean>(false)
     val isCalendarVisible: LiveData<Boolean> = _isCalendarVisible
 
+    private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
+        MenuFilterCondition(null, null, null, false, false, null)
+    )
+    val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
+
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
     // 현재 앱 시작시에 Network 연결 없을 때 노티하는 중
     // 앱 사용 중에도 Network 연결 없어질 시 인지 할 수 있어야함.
@@ -110,6 +115,30 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
+    fun setDistance(distance: Float?) {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(distance = distance)
+    }
+
+    fun setMinPrice(minPrice: Float?) {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(minPrice = minPrice)
+    }
+
+    fun setMaxPrice(maxPrice: Float?) {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(maxPrice = maxPrice)
+    }
+
+    fun setIsOpen(isOpen: Boolean) {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(isOpen = isOpen)
+    }
+
+    fun setHasReview(hasReview: Boolean) {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(hasReview = hasReview)
+    }
+
+    fun setMinRating(minRating: Float?) {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(minRating = minRating)
+    }
+
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
         return _dateFilter.asFlow()
             .flatMapLatest {
@@ -157,4 +186,13 @@ class DailyRestaurantViewModel @Inject constructor(
             .map { menuGroups -> menuGroups.find { it.id == menuGroupId } }
             .firstOrNull()
     }
+
+    data class MenuFilterCondition(
+        val distance: Float?,
+        val minPrice: Float?,
+        val maxPrice: Float?,
+        val isOpen: Boolean,
+        val hasReview: Boolean,
+        val minRating: Float?
+    )
 }
