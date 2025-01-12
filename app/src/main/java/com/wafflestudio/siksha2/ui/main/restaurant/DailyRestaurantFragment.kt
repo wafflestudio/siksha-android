@@ -3,15 +3,20 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
+import android.location.LocationRequest
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationServices
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
@@ -32,6 +37,10 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
     private val vm: DailyRestaurantViewModel by viewModels()
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
 
 //    private val locationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 //        result ->
@@ -358,9 +367,22 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
-        requestPermission {
-            // TODO: placeholder 삭제
-            showToast("위치 권한이 허용되었습니다.")
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermission {
+                // TODO: placeholder 삭제
+                showToast("위치 권한이 허용되었습니다.")
+            }
+        } else {
+            fusedLocationProviderClient.lastLocation
+                .addOnSuccessListener { location ->
+                    vm.updateLocation(location)
+                }
         }
     }
 

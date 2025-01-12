@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -37,6 +39,9 @@ class DailyRestaurantViewModel @Inject constructor(
 
     private val _isCalendarVisible = MutableLiveData<Boolean>(false)
     val isCalendarVisible: LiveData<Boolean> = _isCalendarVisible
+
+    private val _currentLocation = MutableLiveData<Location?>()
+    val currentLocation: LiveData<Location?> = _currentLocation
 
     private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
         MenuFilterCondition(null, null, null, false, false, null)
@@ -113,6 +118,11 @@ class DailyRestaurantViewModel @Inject constructor(
             _favoriteRestaurantExists.value =
                 restaurantRepository.getOrderedFavoriteRestaurants().isNotEmpty()
         }
+    }
+
+    fun updateLocation(location: Location?) {
+        _currentLocation.value = location
+        Timber.d("(${_currentLocation.value?.latitude}, ${_currentLocation.value?.longitude})")
     }
 
     fun setDistance(distance: Float?) {
