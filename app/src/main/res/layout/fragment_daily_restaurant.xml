@@ -219,14 +219,12 @@
                         android:id = "@+id/filter_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:showArrow="false"
                         app:filterText="영업중" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterItem
                         android:id = "@+id/filter_review"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:showArrow="false"
                         app:filterText="리뷰" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterItem
