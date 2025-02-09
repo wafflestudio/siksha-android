@@ -9,8 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 
 class FilterDialogFragment(
-    private val mode: String,
-    private val onFilterApplied: (Int, Int, Int) -> Unit
+    private val mode: String
 ) : BottomSheetDialogFragment() {
     private var _binding: DialogFilterBinding? = null
     private val binding get() = _binding!!
@@ -55,15 +54,29 @@ class FilterDialogFragment(
 
         // 적용 버튼
         binding.btnApply.setOnClickListener {
-            onFilterApplied(selectedDistance, selectedMinPrice, selectedMaxPrice)
+            // onFilterApplied(selectedDistance, selectedMinPrice, selectedMaxPrice)
             dismiss()
         }
 
-        if (mode == "distance_only") {
-            binding.priceSection.visibility = View.GONE
-            binding.openSection.visibility = View.GONE
-            binding.reviewSection.visibility = View.GONE
-            binding.ratingSection.visibility = View.GONE
+        if (mode == "full") {
+            binding.distanceSection.visibility = View.VISIBLE
+            binding.priceSection.visibility = View.VISIBLE
+            binding.openSection.visibility = View.VISIBLE
+            binding.reviewSection.visibility = View.VISIBLE
+            binding.ratingSection.visibility = View.VISIBLE
+            binding.categorySection.visibility = View.VISIBLE
+        } else if (mode == "distance_only") {
+            binding.distanceSection.visibility = View.VISIBLE
+        } else if (mode == "price_only") {
+            binding.priceSection.visibility = View.VISIBLE
+        } else if (mode == "open_only") {
+            binding.openSection.visibility = View.VISIBLE
+        } else if (mode == "review_only") {
+            binding.reviewSection.visibility = View.VISIBLE
+        } else if (mode == "rating_only") {
+            binding.ratingSection.visibility = View.VISIBLE
+        } else if (mode == "category_only") {
+            binding.categorySection.visibility = View.VISIBLE
         }
     }
 

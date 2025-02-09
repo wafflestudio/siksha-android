@@ -21,7 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id = "@+id/distance_section">
+        android:id = "@+id/distance_section"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvDistance"
@@ -44,7 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id = "@+id/price_section">
+        android:id = "@+id/price_section"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvPriceRange"
@@ -68,7 +70,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id = "@+id/open_section">
+        android:id = "@+id/open_section"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -104,7 +107,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id = "@+id/review_section">
+        android:id = "@+id/review_section"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -140,7 +144,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id = "@+id/rating_section">
+        android:id = "@+id/rating_section"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -181,6 +186,16 @@
                 android:layout_height="wrap_content"
                 android:text="4.5★" />
         </RadioGroup>
+    </LinearLayout>
+
+    <!-- 카테고리 필터 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id = "@+id/category_section"
+        android:visibility="gone">
+
     </LinearLayout>
 
     <!-- 버튼 영역 -->
