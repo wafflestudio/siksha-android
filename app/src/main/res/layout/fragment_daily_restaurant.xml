@@ -201,40 +201,40 @@
                     android:orientation="horizontal"
                     >
 
-                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                    <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:showArrow="true"
                         app:filterText="거리" />
 
-                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                    <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:showArrow="true"
                         app:filterText="가격" />
 
-                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                    <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:filterText="영업중" />
 
-                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                    <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_review"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:filterText="리뷰" />
 
-                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                    <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:showArrow="true"
                         app:filterText="평점" />
 
-                    <com.wafflestudio.siksha2.components.MenuFilterItem
+                    <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
