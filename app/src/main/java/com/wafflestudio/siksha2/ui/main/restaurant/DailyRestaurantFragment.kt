@@ -340,6 +340,41 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
+
+        binding.menuFilter.setOnClickListener {
+            val filterDialog = FilterDialogFragment("full")
+            filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
+
+        binding.filterDistance.setOnClickListener {
+            val filterDialog = FilterDialogFragment("distance_only")
+            filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
+
+        binding.filterPrice.setOnClickListener {
+            val filterDialog = FilterDialogFragment("price_only")
+            filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
+
+        binding.filterOpen.setOnClickListener {
+            val filterDialog = FilterDialogFragment("open_only")
+            filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
+
+        binding.filterReview.setOnClickListener {
+            val filterDialog = FilterDialogFragment("review_only")
+            filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
+
+        binding.filterRating.setOnClickListener {
+            val filterDialog = FilterDialogFragment("rating_only")
+            filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
+
+        binding.filterCategory.setOnClickListener {
+            val filterDialog = FilterDialogFragment("category_only")
+            filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
     }
 
     companion object {
