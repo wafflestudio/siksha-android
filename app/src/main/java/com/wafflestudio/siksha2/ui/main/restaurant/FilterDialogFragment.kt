@@ -38,14 +38,14 @@ class FilterDialogFragment(
 
         // 거리 조절 리스너
         binding.seekBarDistance.setOnSeekBarChangeListener(object :
-            android.widget.SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
-                selectedDistance = progress
-                binding.tvDistance.text = "${progress}m 이내"
-            }
-            override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {}
-        })
+                android.widget.SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+                    selectedDistance = progress
+                    binding.tvDistance.text = "${progress}m 이내"
+                }
+                override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {}
+            })
 
         // 초기화 버튼
         binding.btnReset.setOnClickListener {
