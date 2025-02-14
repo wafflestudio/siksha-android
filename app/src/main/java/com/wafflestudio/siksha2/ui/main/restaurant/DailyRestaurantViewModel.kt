@@ -40,7 +40,7 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _isCalendarVisible = MutableLiveData<Boolean>(false)
     val isCalendarVisible: LiveData<Boolean> = _isCalendarVisible
 
-    private val _currentLocation = MutableLiveData<Location?>()
+    private val _currentLocation = MutableLiveData<Location?>(null)
     val currentLocation: LiveData<Location?> = _currentLocation
 
     private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
@@ -129,6 +129,13 @@ class DailyRestaurantViewModel @Inject constructor(
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(distance = distance)
     }
 
+    fun getDistance(menuGroup: MenuGroup): Float? {
+        val result = FloatArray(1)
+        if (menuGroup.latitude == null || menuGroup.longitude == null) return null
+        Location.distanceBetween(menuGroup.latitude, menuGroup.longitude, _currentLocation.value!!.latitude, _currentLocation.value!!.longitude, result)
+        return result[0]
+    }
+
     fun setMinPrice(minPrice: Float?) {
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(minPrice = minPrice)
     }
@@ -184,6 +191,37 @@ class DailyRestaurantViewModel @Inject constructor(
                 }
                 result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
                 result
+            }
+            // 사용자 필터
+            .map { menuGroupList ->
+                _menuFilterCondition.value?.distance?.let {
+                    menuGroupList.filter { item ->
+                        getDistance(item)?.let {
+                            it <= _menuFilterCondition.value?.distance!!
+                        } ?: true
+                    }
+                } ?: menuGroupList
+            }
+            .map { menuGroupList ->
+                menuGroupList.map { restaurant ->
+                    val newRestaurant = restaurant.copy(
+                        menus = restaurant.menus.filter { menu ->
+                            menu.price?.let { menuPrice ->
+                                (
+                                    _menuFilterCondition.value?.maxPrice?.let {
+                                        menuPrice <= it
+                                    } ?: true
+                                    ) &&
+                                    (
+                                        _menuFilterCondition.value?.minPrice?.let {
+                                            menuPrice >= it
+                                        } ?: true
+                                        )
+                            } ?: true
+                        }
+                    )
+                    newRestaurant
+                }
             }
     }
 
