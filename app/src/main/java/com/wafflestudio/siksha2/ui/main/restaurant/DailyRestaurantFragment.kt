@@ -3,7 +3,6 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 import android.Manifest
 import android.animation.ObjectAnimator
 import android.content.pm.PackageManager
-import android.location.LocationRequest
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
@@ -368,6 +369,16 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        locationRequest = LocationRequest.Builder(5000).build()
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                val location = locationResult.lastLocation
+                vm.updateLocation(location)
+            }
+        }
+
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -379,10 +390,7 @@ class DailyRestaurantFragment : Fragment() {
                 showToast("위치 권한이 허용되었습니다.")
             }
         } else {
-            fusedLocationProviderClient.lastLocation
-                .addOnSuccessListener { location ->
-                    vm.updateLocation(location)
-                }
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
         }
     }
 
