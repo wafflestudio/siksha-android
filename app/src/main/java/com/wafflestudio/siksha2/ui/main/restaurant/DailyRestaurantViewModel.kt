@@ -218,6 +218,18 @@ class DailyRestaurantViewModel @Inject constructor(
                                         } ?: true
                                         )
                             } ?: true
+                        }.filter { menu ->
+                            when (menu.score) {
+                                null -> {
+                                    _menuFilterCondition.value?.hasReview?.let { !it } ?: true
+                                }
+                                else -> {
+                                    _menuFilterCondition.value?.hasReview ?: true &&
+                                        _menuFilterCondition.value?.minRating?.let {
+                                            menu.score >= it
+                                        } ?: true
+                                }
+                            }
                         }
                     )
                     newRestaurant
