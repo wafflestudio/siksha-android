@@ -22,7 +22,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -176,10 +179,30 @@ class DailyRestaurantViewModel @Inject constructor(
                 menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
             }
             .combine(allRestaurant) { menuGroups, allRes ->
-                menuGroups.map { item ->
-                    item.copy(
-                        isFavorite = allRes.find { item.id == it.id }?.isFavorite ?: false
+                val dateTime = LocalDateTime.now()
+                val date = dateTime.toLocalDate()
+                val time = dateTime.toLocalTime()
+                menuGroups.map { menuGroup ->
+                    menuGroup.copy(
+                        isFavorite = allRes.find { menuGroup.id == it.id }?.isFavorite ?: false
                     )
+                }.filter { menuGroup ->
+                    val restaurantInfo = allRes.find { menuGroup.id == it.id }
+                    val operatingHour = restaurantInfo?.etc?.operatingHours?.let {
+                        when (date.dayOfWeek) {
+                            DayOfWeek.SATURDAY -> it.saturday
+                            DayOfWeek.SUNDAY -> it.holiday
+                            else -> it.weekdays
+                        }
+                    }
+                    if (operatingHour.isNullOrEmpty()) {
+                        true
+                    } else {
+                        operatingHour.any { interval ->
+                            val (start, end) = interval.split("-").map { LocalTime.parse(it) }
+                            time in start..end
+                        }
+                    }
                 }
             }
             .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
