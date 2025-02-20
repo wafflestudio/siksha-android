@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:orientation="vertical">
+
+    <!-- 필터 제목 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="필터"
+        android:textColorHint="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="10dp"/>
+
+    <!-- 거리 설정 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id = "@+id/distance_section"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="400m 이내"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <SeekBar
+            android:id="@+id/seekBarDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="1000"
+            android:progress="400" />
+    </LinearLayout>
+
+    <!-- 가격 설정 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id = "@+id/price_section"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvPriceRange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5,000원 ~ 8,000원"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="10dp"/>
+
+        <SeekBar
+            android:id="@+id/seekBarPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="20000"
+            android:progress="8000" />
+    </LinearLayout>
+
+    <!-- 영업 시간 선택 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id = "@+id/open_section"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="영업시간"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupOperatingHours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioAllHours"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전체"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioOpenNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="영업 중" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <!-- 리뷰 필터 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id = "@+id/review_section"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리뷰"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioAllReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전체"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioWithReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="리뷰 있음" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <!-- 평점 필터 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id = "@+id/rating_section"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="최소 평점"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioRatingAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="모두"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioRating35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3.5★" />
+
+            <RadioButton
+                android:id="@+id/radioRating40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.0★" />
+
+            <RadioButton
+                android:id="@+id/radioRating45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.5★" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <!-- 카테고리 필터 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id = "@+id/category_section"
+        android:visibility="gone">
+
+    </LinearLayout>
+
+    <!-- 버튼 영역 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp">
+
+        <Button
+            android:id="@+id/btnReset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="초기화"
+            android:backgroundTint="@color/gray_500" />
+
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="적용"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/orange_main" />
+    </LinearLayout>
+
+
+</LinearLayout>
