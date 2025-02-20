@@ -402,7 +402,7 @@ class DailyRestaurantFragment : Fragment() {
             val filterDialog = FilterDialogFragment(FilterMode.CATEGORY)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
-        
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         locationRequest = LocationRequest.Builder(5000).build()
