@@ -1,14 +1,23 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.Manifest
 import android.animation.ObjectAnimator
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
@@ -29,6 +38,24 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
     private val vm: DailyRestaurantViewModel by viewModels()
+
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+
+//    private val locationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//        result ->
+//
+//    }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            // TODO: placeholder 삭제
+            showToast("위치 권한이 허용되었습니다.")
+        } else {
+            showToast("위치 기반 필터링 이용을 위해 위치 권한을 허용해 주세요.")
+        }
+    }
 
     private lateinit var binding: FragmentDailyRestaurantBinding
     private lateinit var menuGroupAdapter: MenuGroupAdapter
@@ -374,6 +401,41 @@ class DailyRestaurantFragment : Fragment() {
         binding.filterCategory.setOnClickListener {
             val filterDialog = FilterDialogFragment(FilterMode.CATEGORY)
             filterDialog.show(parentFragmentManager, "FilterDialog")
+        }
+        
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        locationRequest = LocationRequest.Builder(5000).build()
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                val location = locationResult.lastLocation
+                vm.updateLocation(location)
+            }
+        }
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermission {
+                // TODO: placeholder 삭제
+                showToast("위치 권한이 허용되었습니다.")
+            }
+        } else {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
+        }
+    }
+
+    private fun requestPermission(onGranted: () -> Unit) {
+        // TODO: SDK 버전에 따른 처리 필요한지 확인
+        val permission = Manifest.permission.ACCESS_FINE_LOCATION
+        if (ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
+            onGranted()
+        } else {
+            requestPermissionLauncher.launch(permission)
         }
     }
 
