@@ -9,7 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 
 class FilterDialogFragment(
-    private val mode: String
+    private val mode: FilterMode
 ) : BottomSheetDialogFragment() {
     private var _binding: DialogFilterBinding? = null
     private val binding get() = _binding!!
@@ -58,25 +58,21 @@ class FilterDialogFragment(
             dismiss()
         }
 
-        if (mode == "full") {
-            binding.distanceSection.visibility = View.VISIBLE
-            binding.priceSection.visibility = View.VISIBLE
-            binding.openSection.visibility = View.VISIBLE
-            binding.reviewSection.visibility = View.VISIBLE
-            binding.ratingSection.visibility = View.VISIBLE
-            binding.categorySection.visibility = View.VISIBLE
-        } else if (mode == "distance_only") {
-            binding.distanceSection.visibility = View.VISIBLE
-        } else if (mode == "price_only") {
-            binding.priceSection.visibility = View.VISIBLE
-        } else if (mode == "open_only") {
-            binding.openSection.visibility = View.VISIBLE
-        } else if (mode == "review_only") {
-            binding.reviewSection.visibility = View.VISIBLE
-        } else if (mode == "rating_only") {
-            binding.ratingSection.visibility = View.VISIBLE
-        } else if (mode == "category_only") {
-            binding.categorySection.visibility = View.VISIBLE
+        when (mode) {
+            FilterMode.FULL -> {
+                binding.distanceSection.visibility = View.VISIBLE
+                binding.priceSection.visibility = View.VISIBLE
+                binding.openSection.visibility = View.VISIBLE
+                binding.reviewSection.visibility = View.VISIBLE
+                binding.ratingSection.visibility = View.VISIBLE
+                binding.categorySection.visibility = View.VISIBLE
+            }
+            FilterMode.DISTANCE -> binding.distanceSection.visibility = View.VISIBLE
+            FilterMode.PRICE -> binding.priceSection.visibility = View.VISIBLE
+            FilterMode.OPEN -> binding.openSection.visibility = View.VISIBLE
+            FilterMode.REVIEW -> binding.reviewSection.visibility = View.VISIBLE
+            FilterMode.RATING -> binding.ratingSection.visibility = View.VISIBLE
+            FilterMode.CATEGORY -> binding.categorySection.visibility = View.VISIBLE
         }
     }
 

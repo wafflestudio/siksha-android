@@ -342,37 +342,37 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
         binding.menuFilter.setOnClickListener {
-            val filterDialog = FilterDialogFragment("full")
+            val filterDialog = FilterDialogFragment(FilterMode.FULL)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterDistance.setOnClickListener {
-            val filterDialog = FilterDialogFragment("distance_only")
+            val filterDialog = FilterDialogFragment(FilterMode.DISTANCE)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterPrice.setOnClickListener {
-            val filterDialog = FilterDialogFragment("price_only")
+            val filterDialog = FilterDialogFragment(FilterMode.PRICE)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterOpen.setOnClickListener {
-            val filterDialog = FilterDialogFragment("open_only")
+            val filterDialog = FilterDialogFragment(FilterMode.OPEN)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterReview.setOnClickListener {
-            val filterDialog = FilterDialogFragment("review_only")
+            val filterDialog = FilterDialogFragment(FilterMode.REVIEW)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterRating.setOnClickListener {
-            val filterDialog = FilterDialogFragment("rating_only")
+            val filterDialog = FilterDialogFragment(FilterMode.RATING)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterCategory.setOnClickListener {
-            val filterDialog = FilterDialogFragment("category_only")
+            val filterDialog = FilterDialogFragment(FilterMode.CATEGORY)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
     }
