@@ -105,82 +105,44 @@ class FilterDialogFragment(
     }
 
     private fun setupPriceSection() {
-        binding.seekBarMin.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    // 500원 단위로 반올림
-                    val roundedProgress = (progress / 500) * 500
-                    binding.seekBarMin.progress = roundedProgress
+        binding.dualRangeSeekBar.selectedMin = selectedMinPrice
+        binding.dualRangeSeekBar.selectedMax = selectedMaxPrice
 
-                    // 최소값이 최대값보다 커지지 않도록 보정
-                    if (binding.seekBarMin.progress >= binding.seekBarMax.progress - 500) {
-                        binding.seekBarMin.progress = binding.seekBarMax.progress - 500
-                    }
-                    updatePriceRangeText() // 최소값 변경 후 말풍선 업데이트
-                }
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        updatePriceRangeText(selectedMinPrice, selectedMaxPrice)
 
+        binding.dualRangeSeekBar.setOnRangeChangeListener { min, max ->
+            selectedMinPrice = (min / 500) * 500
+            selectedMaxPrice = (max / 500) * 500
 
-        binding.seekBarMax.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    var roundedProgress = (progress / 500) * 500
-
-                    // ✅ 최대값이 최소값보다 작아지지 않도록 보정
-                    if (roundedProgress <= binding.seekBarMin.progress + 500) {
-                        roundedProgress = binding.seekBarMin.progress + 500
-                    }
-
-                    // ✅ 값이 변경될 때만 업데이트
-                    if (binding.seekBarMax.progress != roundedProgress) {
-                        binding.seekBarMax.progress = roundedProgress
-                        updatePriceRangeText()
-                    }
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+            updatePriceRangeText(selectedMinPrice, selectedMaxPrice)
+        }
     }
 
-    private fun updatePriceRangeText() {
-        val minPrice = binding.seekBarMin.progress
-        val maxPrice = binding.seekBarMax.progress
 
-        // 15,000원이 넘으면 "15,000원 이상"으로 표시
-        val maxPriceText = if (maxPrice >= 15000) {
-            "15,000원 이상"
-        } else {
-            "${maxPrice}원"
-        }
 
+    private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
+        val maxPriceText = if (maxPrice >= 15000) "15,000원 이상" else "${maxPrice}원"
         binding.tvPriceRange.text = "${minPrice}원 ~ $maxPriceText"
 
-        // 중앙 말풍선 위치 계산
-        val minThumbX = calculateThumbXPrice(binding.seekBarMin, minPrice)
-        val maxThumbX = calculateThumbXPrice(binding.seekBarMax, maxPrice)
+        val minThumbX = calculateThumbX(binding.dualRangeSeekBar, minPrice)
+        val maxThumbX = calculateThumbX(binding.dualRangeSeekBar, maxPrice)
 
-        val middleX = (minThumbX + maxThumbX) / 2 // 두 thumb의 중간 좌표 계산
+        val middleX = (minThumbX + maxThumbX) / 2
+        binding.tvPriceRange.x = middleX
 
-        // 중앙 말풍선 위치 업데이트
-        binding.tvPriceRange.translationX = middleX
-        binding.tvPriceRange.translationY = binding.seekBarMax.y - 100f // thumb 위로 배치
+        binding.tvPriceRange.translationY = binding.dualRangeSeekBar.y - binding.dualRangeSeekBar.height - 40f
     }
 
-    private fun calculateThumbXPrice(seekBar: SeekBar, progress: Int): Float {
-        val max = seekBar.max
-        val availableWidth = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
+    private fun calculateThumbX(seekBar: View, value: Int): Float {
+        val dualSeekBar = seekBar as DualRangeSeekBar
+        val max = dualSeekBar.maxValue
+        val availableWidth = dualSeekBar.width - dualSeekBar.paddingLeft - dualSeekBar.paddingRight
 
-        // 실제 thumb 위치 계산
-        val thumbPosX = seekBar.paddingLeft + (progress.toFloat() / max) * availableWidth
+        val thumbPosX = dualSeekBar.paddingLeft + (value.toFloat() / max) * availableWidth
 
-        // tvPriceRange의 width를 고려하여 가운데 정렬
         return thumbPosX - (binding.tvPriceRange.width / 2)
     }
+
 
 
     private fun setupCategorySelection() {
@@ -197,10 +159,10 @@ class FilterDialogFragment(
 
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = dpToPx(56)  // 56dp
-                    height = dpToPx(34) // 34dp
+                    height = dpToPx(42) // 34dp
                     columnSpec = GridLayout.spec(index % 5)
                     rowSpec = GridLayout.spec(if (index < 5) 0 else 1)
-                    setMargins(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4))
+                    setMargins(dpToPx(6), dpToPx(6), dpToPx(6), dpToPx(6))
                 }
 
                 gravity = Gravity.CENTER
@@ -306,7 +268,6 @@ class FilterDialogFragment(
         binding.seekBarDistance.progress = selectedDistance
 
         updateDistanceText(selectedDistance)
-        updatePriceRangeText()
 
         for (i in 0 until binding.gridCategory.childCount) {
             val chip = binding.gridCategory.getChildAt(i) as? Chip

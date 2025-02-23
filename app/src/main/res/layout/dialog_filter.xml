@@ -118,32 +118,10 @@
             android:textSize="12sp"
             android:textStyle="bold" />
 
-        <RelativeLayout
+        <com.wafflestudio.siksha2.ui.main.restaurant.DualRangeSeekBar
+            android:id="@+id/dualRangeSeekBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <!-- 최소값 SeekBar (왼쪽 thumb) -->
-            <SeekBar
-                android:id="@+id/seekBarMin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="15000"
-                android:progress="5000"
-                android:thumbTint="@color/orange_main"
-                android:progressTint="@color/orange_main"
-                android:progressBackgroundTint="@color/gray_500"/>
-
-            <!-- 최대값 SeekBar (오른쪽 thumb) -->
-            <SeekBar
-                android:id="@+id/seekBarMax"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="15000"
-                android:progress="8000"
-                android:thumbTint="@color/orange_main"
-                android:progressTint="@color/orange_main"
-                android:progressBackgroundTint="@color/gray_500"/>
-        </RelativeLayout>
+            android:layout_height="40dp" />
     </LinearLayout>
 
 
@@ -153,7 +131,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/open_section"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -200,7 +178,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/review_section"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -248,7 +226,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/rating_section"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
