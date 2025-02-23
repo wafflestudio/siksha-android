@@ -205,12 +205,14 @@ class FilterDialogFragment(
 
                 gravity = Gravity.CENTER
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
-                setPadding(0, 0, 0, 0)
+                setPadding(10, 10, 10, 10)
 
                 setChipBackgroundColorResource(R.color.chip_default_bg)
-                setChipStrokeColorResource(R.color.orange_main)
+                setChipStrokeColor(ColorStateList.valueOf(Color.parseColor("#DFDFDF")))
                 setChipStrokeWidth(1f)
                 setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
+
+                chipCornerRadius = dpToPx(30).toFloat()
 
                 if (category == "전체") {
                     isChecked = true
