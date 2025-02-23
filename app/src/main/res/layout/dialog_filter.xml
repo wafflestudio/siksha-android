@@ -156,6 +156,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:text="전체"
+                android:textColor="#000000"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" />
@@ -166,6 +167,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:text="영업 중"
+                android:textColor="#000000"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" />
@@ -203,6 +205,7 @@
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
@@ -214,6 +217,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:button="@null"
+                android:textColor="#000000"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
         </RadioGroup>
@@ -251,6 +255,7 @@
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
@@ -262,6 +267,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:button="@null"
+                android:textColor="#000000"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
 
@@ -271,6 +277,7 @@
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
@@ -282,6 +289,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:button="@null"
+                android:textColor="#000000"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
 
