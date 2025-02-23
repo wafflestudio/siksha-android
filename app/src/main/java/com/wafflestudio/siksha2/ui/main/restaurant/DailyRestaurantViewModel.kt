@@ -268,30 +268,6 @@ class DailyRestaurantViewModel @Inject constructor(
                 menuGroupList.map { restaurant ->
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
-                            menu.price?.let { menuPrice ->
-                                (
-                                    _menuFilterCondition.value?.maxPrice?.let {
-                                        menuPrice <= it
-                                    } ?: true
-                                    ) &&
-                                    (
-                                        _menuFilterCondition.value?.minPrice?.let {
-                                            menuPrice >= it
-                                        } ?: true
-                                        )
-
-
-                            } ?: true
-                        }
-                    )
-                    newRestaurant
-                }
-            }
-            // ✅ 카테고리 필터 적용
-            .map { menuGroupList ->
-                menuGroupList.map { restaurant ->
-                    val newRestaurant = restaurant.copy(
-                        menus = restaurant.menus.filter { menu ->
                             val priceCheck = menu.price?.let { menuPrice ->
                                 (_menuFilterCondition.value?.maxPrice?.let { menuPrice <= it } ?: true) &&
                                     (_menuFilterCondition.value?.minPrice?.let { menuPrice >= it } ?: true)
