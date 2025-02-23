@@ -47,7 +47,7 @@ class DailyRestaurantViewModel @Inject constructor(
     val currentLocation: LiveData<Location?> = _currentLocation
 
     private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
-        MenuFilterCondition(null, null, null, false, false, null)
+        MenuFilterCondition(null, null, null, false, false, null, null)
     )
     val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
 
@@ -147,6 +147,7 @@ class DailyRestaurantViewModel @Inject constructor(
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(maxPrice = maxPrice)
     }
 
+
     fun setIsOpen(isOpen: Boolean) {
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(isOpen = isOpen)
     }
@@ -158,6 +159,11 @@ class DailyRestaurantViewModel @Inject constructor(
     fun setMinRating(minRating: Float?) {
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(minRating = minRating)
     }
+
+    fun setCategories(categories: List<String>?) {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(categories = categories)
+    }
+
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
         return _dateFilter.asFlow()
@@ -258,6 +264,49 @@ class DailyRestaurantViewModel @Inject constructor(
                     newRestaurant
                 }
             }
+            .map { menuGroupList ->
+                menuGroupList.map { restaurant ->
+                    val newRestaurant = restaurant.copy(
+                        menus = restaurant.menus.filter { menu ->
+                            menu.price?.let { menuPrice ->
+                                (
+                                    _menuFilterCondition.value?.maxPrice?.let {
+                                        menuPrice <= it
+                                    } ?: true
+                                    ) &&
+                                    (
+                                        _menuFilterCondition.value?.minPrice?.let {
+                                            menuPrice >= it
+                                        } ?: true
+                                        )
+
+
+                            } ?: true
+                        }
+                    )
+                    newRestaurant
+                }
+            }
+            // ✅ 카테고리 필터 적용
+            .map { menuGroupList ->
+                menuGroupList.map { restaurant ->
+                    val newRestaurant = restaurant.copy(
+                        menus = restaurant.menus.filter { menu ->
+                            val priceCheck = menu.price?.let { menuPrice ->
+                                (_menuFilterCondition.value?.maxPrice?.let { menuPrice <= it } ?: true) &&
+                                    (_menuFilterCondition.value?.minPrice?.let { menuPrice >= it } ?: true)
+                            } ?: true
+
+                            val categoryCheck = _menuFilterCondition.value?.categories?.let { selectedCategories ->
+                                selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
+                            } ?: true
+
+                            priceCheck && categoryCheck
+                        }
+                    )
+                    newRestaurant
+                }
+            }
     }
 
     suspend fun getRestaurantInfo(id: Long): RestaurantInfo? {
@@ -276,6 +325,7 @@ class DailyRestaurantViewModel @Inject constructor(
         val maxPrice: Float?,
         val isOpen: Boolean,
         val hasReview: Boolean,
-        val minRating: Float?
+        val minRating: Float?,
+        val categories: List<String>?
     )
 }

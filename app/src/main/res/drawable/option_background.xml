@@ -1,0 +1,7 @@
+<!-- res/drawable/option_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 선택된 상태일 때 -->
+    <item android:state_checked="true" android:drawable="@drawable/option_background_selected"/>
+    <!-- 선택되지 않은 상태일 때 -->
+    <item android:drawable="@drawable/option_background_unselected"/>
+</selector>

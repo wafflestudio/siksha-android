@@ -1,0 +1,20 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- 배경색 -->
+    <solid android:color="@android:color/white"/>
+
+    <!-- 모서리 둥글게 -->
+    <corners android:radius="12dp"/>
+
+    <!-- 테두리 설정 -->
+    <stroke
+        android:width="2dp"
+        android:color="#DFDFDF"/>
+
+    <padding
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp"
+        android:bottom="1dp"/>
+</shape>

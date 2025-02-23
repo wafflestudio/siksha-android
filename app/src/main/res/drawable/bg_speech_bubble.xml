@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F0F0F0"/>
+            <corners android:radius="4dp"/>
+        </shape>
+    </item>
+    <!-- 말풍선 화살표 -->
+    <item android:gravity="bottom|center_horizontal">
+        <rotate android:fromDegrees="45" android:toDegrees="45" android:pivotX="50%" android:pivotY="0%">
+            <shape android:shape="rectangle">
+                <size android:width="8dp" android:height="8dp"/>
+                <solid android:color="#F0F0F0"/>
+            </shape>
+        </rotate>
+    </item>
+</layer-list>

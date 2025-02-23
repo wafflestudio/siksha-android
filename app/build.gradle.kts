@@ -40,7 +40,7 @@ android {
 
     defaultConfig {
         applicationId = "com.wafflestudio.siksha2"
-        minSdk = 31
+        minSdk = 30
         targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -195,4 +195,6 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    implementation ("com.google.android.flexbox:flexbox:3.0.0")
 }

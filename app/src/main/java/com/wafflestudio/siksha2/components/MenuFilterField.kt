@@ -52,4 +52,14 @@ class MenuFilterField : LinearLayout {
     fun setText(text: String) {
         binding.filter.text = text
     }
+
+    fun setPriceRange(minPrice: Int, maxPrice: Int) {
+        val priceText = if (maxPrice >= 15000) {
+            "$minPrice 원 ~ 15,000원 이상"
+        } else {
+            "$minPrice 원 ~ $maxPrice 원"
+        }
+        binding.filter.text = priceText
+    }
+
 }
