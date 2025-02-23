@@ -15,7 +15,6 @@ import android.widget.SeekBar
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -35,7 +34,6 @@ class FilterDialogFragment(
     private val selectedCategories = mutableSetOf<String>() // 선택된 카테고리 저장
     private val categoryList = listOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페") // 카테고리 목록
 
-
     var onFilterApplied: ((FilterData) -> Unit)? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -53,7 +51,6 @@ class FilterDialogFragment(
 
         return dialog
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = DialogFilterBinding.inflate(inflater, container, false)
@@ -89,7 +86,6 @@ class FilterDialogFragment(
         })
     }
 
-
     private fun calculateThumbX(seekBar: SeekBar, progress: Int): Float {
         val max = seekBar.max
         val availableWidth = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
@@ -98,7 +94,6 @@ class FilterDialogFragment(
 
         return thumbPosX - (binding.tvDistance.width / 2)
     }
-
 
     private fun updateDistanceText(distance: Int) {
         binding.tvDistance.text = "${distance}m 이내"
@@ -117,8 +112,6 @@ class FilterDialogFragment(
             updatePriceRangeText(selectedMinPrice, selectedMaxPrice)
         }
     }
-
-
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
         val maxPriceText = if (maxPrice >= 15000) "15,000원 이상" else "${maxPrice}원"
@@ -143,8 +136,6 @@ class FilterDialogFragment(
         return thumbPosX - (binding.tvPriceRange.width / 2)
     }
 
-
-
     private fun setupCategorySelection() {
         val categoryList = listOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페")
         binding.gridCategory.removeAllViews()
@@ -158,7 +149,7 @@ class FilterDialogFragment(
                 checkedIcon = null
 
                 layoutParams = GridLayout.LayoutParams().apply {
-                    width = dpToPx(56)  // 56dp
+                    width = dpToPx(56) // 56dp
                     height = dpToPx(42) // 34dp
                     columnSpec = GridLayout.spec(index % 5)
                     rowSpec = GridLayout.spec(if (index < 5) 0 else 1)
@@ -213,7 +204,6 @@ class FilterDialogFragment(
         }
     }
 
-
     fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -221,8 +211,6 @@ class FilterDialogFragment(
             Resources.getSystem().displayMetrics
         ).toInt()
     }
-
-
 
     private fun setupButtons() {
         binding.btnReset.setOnClickListener {
@@ -286,7 +274,6 @@ class FilterDialogFragment(
         )
         onFilterApplied?.invoke(selectedFilterData)
     }
-
 
     data class FilterData(
         val distance: Int,

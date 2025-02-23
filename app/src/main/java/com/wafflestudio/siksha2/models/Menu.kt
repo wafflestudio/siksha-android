@@ -19,7 +19,7 @@ data class Menu(
     @Json(name = "review_cnt") val reviewCount: Long?,
     @Json(name = "is_liked") var isLiked: Boolean?,
     @Json(name = "like_cnt") var likeCount: Long?,
-    @Json(name="category") val category: String?
+    @Json(name = "category") val category: String?
 ) {
     @JsonClass(generateAdapter = true)
     data class Extra(

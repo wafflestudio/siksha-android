@@ -147,7 +147,6 @@ class DailyRestaurantViewModel @Inject constructor(
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(maxPrice = maxPrice)
     }
 
-
     fun setIsOpen(isOpen: Boolean) {
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(isOpen = isOpen)
     }
@@ -163,7 +162,6 @@ class DailyRestaurantViewModel @Inject constructor(
     fun setCategories(categories: List<String>?) {
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(categories = categories)
     }
-
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
         return _dateFilter.asFlow()

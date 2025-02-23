@@ -61,5 +61,4 @@ class MenuFilterField : LinearLayout {
         }
         binding.filter.text = priceText
     }
-
 }
