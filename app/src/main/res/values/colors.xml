@@ -35,4 +35,9 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="colorGray">#FF888888</color>
 
+    <color name="chip_selected_bg">#FFE8CE</color>
+    <color name="chip_default_bg">#FFFFFF</color>
+    <color name="chip_stroke">#FFE8CE</color>
+    <color name="chip_text_color">#000000</color>
+
 </resources>
