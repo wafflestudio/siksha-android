@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.SeekBar
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -169,7 +168,9 @@ class FilterDialogFragment(
                 setChipStrokeWidth(1f)
                 setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
 
-                chipCornerRadius = dpToPx(30).toFloat()
+                shapeAppearanceModel = shapeAppearanceModel.toBuilder()
+                    .setAllCornerSizes(dpToPx(30).toFloat())
+                    .build()
 
                 if (category == "전체") {
                     isChecked = true
@@ -179,8 +180,11 @@ class FilterDialogFragment(
                 setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
                         setChipBackgroundColorResource(R.color.chip_selected_bg)
+                        chipStrokeWidth = dpToPx(1).toFloat()
+                        setChipStrokeColorResource(R.color.orange_main)
                     } else {
                         setChipBackgroundColorResource(R.color.chip_default_bg)
+                        chipStrokeWidth = 0f
                     }
 
                     if (category == "전체" && isChecked) {
