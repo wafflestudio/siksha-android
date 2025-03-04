@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@drawable/frame_rounded_top"
     android:padding="20dp"
     android:orientation="vertical">
 
@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="필터"
-        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="거리"
         android:textSize="16sp"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:gravity="center_vertical"
         android:visibility="gone"/>
@@ -45,7 +45,7 @@
             android:text="거리"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:layout_marginTop="16dp"/>
 
         <!-- 거리 말풍선 -->
@@ -99,7 +99,7 @@
             android:text="가격"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:layout_marginTop="16dp"/>
 
         <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
@@ -139,7 +139,7 @@
             android:text="영업시간"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:paddingTop="10dp"/>
 
         <RadioGroup
@@ -156,7 +156,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:text="전체"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" />
@@ -167,7 +167,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:text="영업 중"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" />
@@ -188,7 +188,7 @@
             android:text="리뷰"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:paddingTop="10dp"/>
 
         <RadioGroup
@@ -205,7 +205,7 @@
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
@@ -217,7 +217,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:button="@null"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
         </RadioGroup>
@@ -238,7 +238,7 @@
             android:text="최소 평점"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:paddingTop="10dp"/>
 
         <RadioGroup
@@ -255,7 +255,7 @@
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
@@ -267,7 +267,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:button="@null"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
 
@@ -277,7 +277,7 @@
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
@@ -289,7 +289,7 @@
                 android:layout_height="34dp"
                 android:layout_weight="1"
                 android:button="@null"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:gravity="center"
                 android:background="@drawable/option_background" /> <!-- 배경 추가 -->
 
@@ -311,7 +311,7 @@
             android:text="카테고리"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:paddingBottom="8dp"/>
 
         <GridLayout

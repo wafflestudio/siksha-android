@@ -86,6 +86,10 @@ class FilterDialogFragment(
         })
     }
 
+    override fun getTheme(): Int {
+        return R.style.RoundedBottomSheetDialogTheme
+    }
+
     private fun calculateThumbX(seekBar: SeekBar, progress: Int): Float {
         val max = seekBar.max
         val availableWidth = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
