@@ -247,7 +247,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="8dp"
-            android:background="@drawable/toggle_background"> <!-- background 추가 -->
+            android:background="@drawable/toggle_background">
 
             <RadioButton
                 android:id="@+id/radioRatingAll"
@@ -258,7 +258,7 @@
                 android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
-                android:background="@drawable/option_background" /> <!-- 배경 추가 -->
+                android:background="@drawable/option_background" />
 
             <RadioButton
                 android:id="@+id/radioRating35"
@@ -269,7 +269,7 @@
                 android:button="@null"
                 android:textColor="@color/black"
                 android:gravity="center"
-                android:background="@drawable/option_background" /> <!-- 배경 추가 -->
+                android:background="@drawable/option_background" />
 
             <RadioButton
                 android:id="@+id/radioRating40"
@@ -280,7 +280,7 @@
                 android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
-                android:background="@drawable/option_background" /> <!-- 배경 추가 -->
+                android:background="@drawable/option_background" />
 
             <RadioButton
                 android:id="@+id/radioRating45"
@@ -291,7 +291,7 @@
                 android:button="@null"
                 android:textColor="@color/black"
                 android:gravity="center"
-                android:background="@drawable/option_background" /> <!-- 배경 추가 -->
+                android:background="@drawable/option_background" />
 
         </RadioGroup>
     </LinearLayout>
