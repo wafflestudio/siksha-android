@@ -24,6 +24,7 @@
 
     <style name="RoundedBottomSheet" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/frame_rounded_top</item>
+        <item name="android:layout_marginTop">56dp</item>
     </style>
 
     <style name="RoundedBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
