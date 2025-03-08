@@ -62,6 +62,7 @@ class FilterDialogFragment(
         setupDistanceSection()
         setupPriceSection()
         setupCategorySelection()
+        // setupRatings()
         setupButtons()
         setupVisibility()
     }

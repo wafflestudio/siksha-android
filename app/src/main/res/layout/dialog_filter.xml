@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_filter_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/frame_rounded_top"
-    android:padding="20dp"
+    android:background="@color/transparent"
+    android:paddingHorizontal="16dp"
     android:orientation="vertical">
 
     <!-- 필터 제목 -->
@@ -17,17 +19,6 @@
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:paddingBottom="10dp"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="거리"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:gravity="center_vertical"
-        android:visibility="gone"/>
-
 
     <!-- 거리 필터 -->
     <LinearLayout
@@ -117,6 +108,11 @@
             android:textColor="#707070"
             android:textSize="12sp"
             android:textStyle="bold" />
+
+<!--        <com.google.android.material.slider.RangeSlider-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:values="@array/initial_slider_values"/>-->
 
         <com.wafflestudio.siksha2.ui.main.restaurant.DualRangeSeekBar
             android:id="@+id/dualRangeSeekBar"
@@ -241,59 +237,140 @@
             android:textColor="@color/black"
             android:paddingTop="10dp"/>
 
-        <RadioGroup
-            android:id="@+id/radioGroupRating"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/toggle_background">
+            android:layout_marginTop="14.5dp">
 
-            <RadioButton
-                android:id="@+id/radioRatingAll"
-                android:text="모두"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:button="@null"
-                android:gravity="center"
-                android:background="@drawable/option_background" />
+            <RadioGroup
+                android:id="@+id/radioGroupRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/toggle_background"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-            <RadioButton
-                android:id="@+id/radioRating35"
-                android:text="3.5★"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:button="@null"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:background="@drawable/option_background" />
+                <RadioButton
+                    android:id="@+id/radioRatingAll"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/option_background"/>
 
-            <RadioButton
-                android:id="@+id/radioRating40"
-                android:text="4.0★"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:button="@null"
-                android:gravity="center"
-                android:background="@drawable/option_background" />
+                <RadioButton
+                    android:id="@+id/radioRating35"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/option_background"/>
 
-            <RadioButton
-                android:id="@+id/radioRating45"
-                android:text="4.5★"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:button="@null"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:background="@drawable/option_background" />
+                <RadioButton
+                    android:id="@+id/radioRating40"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/option_background"/>
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioRating45"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:background="@drawable/option_background"/>
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="모두"
+                    android:textColor="@color/black"
+                    android:gravity="center" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3.5"
+                        android:textColor="@color/black"
+                        app:drawableEndCompat="@drawable/ic_full_star_filter"
+                        android:drawablePadding="4dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4.0"
+                        android:textColor="@color/black"
+                        app:drawableEndCompat="@drawable/ic_full_star_filter"
+                        android:drawablePadding="4dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4.5"
+                        android:textColor="@color/black"
+                        app:drawableEndCompat="@drawable/ic_full_star_filter"
+                        android:drawablePadding="4dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </LinearLayout>
 
     <!-- 카테고리 필터 -->
