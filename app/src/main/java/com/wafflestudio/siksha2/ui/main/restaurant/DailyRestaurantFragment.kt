@@ -387,7 +387,7 @@ class DailyRestaurantFragment : Fragment() {
                     } else {
                         "가격"
                     },
-                    it.maxPrice == null || it.minPrice == null
+                    it.maxPrice == null && it.minPrice == null
                 )
 
                 binding.filterOpen.showCheck(it.isOpen)
@@ -395,8 +395,8 @@ class DailyRestaurantFragment : Fragment() {
 
                 binding.filterRating.setFilter(it.minRating?.toString() ?: "평점", it.minRating == null)
                 binding.filterCategory.setFilter(
-                    it.categories?.joinToString(", ") ?: "카테고리",
-                    it.categories.isNullOrEmpty()
+                    it.categories?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
+                    it.categories?.isEmpty() ?: true
                 )
             }
         }

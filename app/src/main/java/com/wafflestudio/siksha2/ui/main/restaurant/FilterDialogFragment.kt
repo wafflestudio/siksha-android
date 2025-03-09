@@ -65,6 +65,8 @@ class FilterDialogFragment(
         setupObservers()
         setupSeekBarListeners()
         setupRatingSelection()
+        setupOperatingSelection()
+        setupReviewSelection()
         setupCategorySelection()
         setupButtons()
         setupVisibility()
@@ -163,6 +165,18 @@ class FilterDialogFragment(
             3.5f -> binding.radioGroupRating.check(R.id.radioRating35)
             4.0f -> binding.radioGroupRating.check(R.id.radioRating40)
             4.5f -> binding.radioGroupRating.check(R.id.radioRating45)
+        }
+    }
+
+    private fun setupOperatingSelection() {
+        binding.operatingHoursGroup.setOnCheckedChangeListener { _, checkedId ->
+            vm.setIsOpen(checkedId == R.id.optionOperating) // "영업 중" 선택 시 true
+        }
+    }
+
+    private fun setupReviewSelection() {
+        binding.radioGroupReview.setOnCheckedChangeListener { _, checkedId ->
+            vm.setHasReview(checkedId == R.id.radioWithReviews) // "리뷰 있음" 선택 시 true
         }
     }
 
@@ -325,6 +339,9 @@ class FilterDialogFragment(
                 vm.setDistance(selectedDistance)
                 vm.setMinPrice(selectedMinPrice)
                 vm.setMaxPrice(selectedMaxPrice)
+                vm.setIsOpen(binding.operatingHoursGroup.checkedRadioButtonId == R.id.optionOperating)
+                vm.setHasReview(binding.radioGroupReview.checkedRadioButtonId == R.id.radioWithReviews)
+                vm.setMinRating(if (selectedRating == 0f) null else selectedRating)
                 vm.setCategories(if (selectedCategories.contains("전체")) null else selectedCategories)
             }
             else -> {}
