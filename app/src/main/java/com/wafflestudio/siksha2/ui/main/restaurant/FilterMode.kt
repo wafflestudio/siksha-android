@@ -4,8 +4,6 @@ enum class FilterMode {
     FULL,
     DISTANCE,
     PRICE,
-    OPEN,
-    REVIEW,
     RATING,
     CATEGORY;
 

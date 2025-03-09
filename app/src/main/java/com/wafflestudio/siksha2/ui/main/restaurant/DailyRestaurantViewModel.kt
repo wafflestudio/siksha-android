@@ -151,8 +151,20 @@ class DailyRestaurantViewModel @Inject constructor(
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(isOpen = isOpen)
     }
 
+    fun toggleOpenFilter() {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
+            isOpen = _menuFilterCondition.value?.isOpen?.not() ?: false
+        )
+    }
+
     fun setHasReview(hasReview: Boolean) {
         _menuFilterCondition.value = _menuFilterCondition.value?.copy(hasReview = hasReview)
+    }
+
+    fun toggleReviewFilter() {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
+            hasReview = _menuFilterCondition.value?.hasReview?.not() ?: false
+        )
     }
 
     fun setMinRating(minRating: Float?) {

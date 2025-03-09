@@ -48,6 +48,7 @@ class MenuFilterField : LinearLayout {
 
     fun showCheck(show: Boolean) {
         binding.check.visibility = if (show) View.VISIBLE else View.GONE
+        updateStyle(!show) // check 표시가 있으면 active
     }
 
     fun setFilter(text: String, isNull: Boolean) {
