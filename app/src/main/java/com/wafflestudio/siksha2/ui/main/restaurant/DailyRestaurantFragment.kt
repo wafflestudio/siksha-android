@@ -393,7 +393,10 @@ class DailyRestaurantFragment : Fragment() {
                 binding.filterOpen.showCheck(it.isOpen)
                 binding.filterReview.showCheck(it.hasReview)
 
-                binding.filterRating.setFilter(it.minRating?.toString() ?: "평점", it.minRating == null)
+                binding.filterRating.setFilter(
+                    it.minRating?.let { rating -> "평점 $rating 이상" } ?: "평점",
+                    it.minRating == null
+                )
                 binding.filterCategory.setFilter(
                     it.categories?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
                     it.categories?.isEmpty() ?: true
