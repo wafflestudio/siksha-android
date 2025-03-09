@@ -361,6 +361,29 @@ class DailyRestaurantFragment : Fragment() {
             binding.dateBefore.setVisibleOrGone(!visibility)
         }
 
+        vm.menuFilterCondition.observe(viewLifecycleOwner) { condition->
+            condition.let {
+                binding.filterDistance.setFilter(it.distance?.toString() ?: "거리", it.distance == null)
+                binding.filterPrice.setFilter(
+                    if (it.minPrice != null && it.maxPrice != null) {
+                        "${it.minPrice} ~ ${it.maxPrice}"
+                    } else {
+                        "가격"
+                    }, it.maxPrice == null || it.minPrice == null
+                )
+
+                binding.filterOpen.setFilter(if (it.isOpen) "영업 중" else "영업 여부", !it.isOpen)
+                binding.filterOpen.showCheck(!it.isOpen)
+
+                binding.filterReview.setFilter(if (it.hasReview) "리뷰 있음" else "리뷰 여부", !it.hasReview)
+                binding.filterReview.showCheck(!it.hasReview)
+
+                binding.filterRating.setFilter(it.minRating?.toString() ?: "평점", it.minRating==null)
+                binding.filterCategory.setFilter(it.categories.toString() ?: "카테고리", it.categories==null)
+            }
+
+        }
+
         binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
         binding.lunchLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
         binding.dinnerLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
