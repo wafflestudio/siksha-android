@@ -50,7 +50,7 @@ class MenuFilterField : LinearLayout {
         binding.check.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    fun setFilter(text: String, isNull:Boolean) {
+    fun setFilter(text: String, isNull: Boolean) {
         binding.filter.text = text
         updateStyle(isNull)
     }
@@ -63,5 +63,4 @@ class MenuFilterField : LinearLayout {
         }
         binding.filterBackground.background = ContextCompat.getDrawable(context, backgroundRes)
     }
-
 }
