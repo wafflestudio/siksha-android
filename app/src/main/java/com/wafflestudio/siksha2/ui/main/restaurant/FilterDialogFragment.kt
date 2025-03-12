@@ -33,10 +33,10 @@ class FilterDialogFragment(
     private var selectedDistance: Float = 1000f
     private var selectedMinPrice: Float = 0f
     private var selectedMaxPrice: Float = 15000f
+    private var selectedOperating: Boolean = false
+    private var selectedReview: Boolean = false
     private var selectedRating: Float = 0f
     private val selectedCategories = mutableListOf<String>()
-
-    var onFilterApplied: ((FilterData) -> Unit)? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -93,6 +93,12 @@ class FilterDialogFragment(
             if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
                 selectedCategories.clear()
                 selectedCategories.addAll(filterCondition.categories ?: emptyList())
+            }
+            if (mode == FilterMode.FULL) {
+                selectedOperating = filterCondition.isOpen ?: false
+                selectedReview = filterCondition.hasReview ?: false
+                binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
+                binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
             }
         }
     }
@@ -170,13 +176,13 @@ class FilterDialogFragment(
 
     private fun setupOperatingSelection() {
         binding.operatingHoursGroup.setOnCheckedChangeListener { _, checkedId ->
-            vm.setIsOpen(checkedId == R.id.optionOperating) // "영업 중" 선택 시 true
+            selectedOperating = checkedId == R.id.optionOperating
         }
     }
 
     private fun setupReviewSelection() {
         binding.radioGroupReview.setOnCheckedChangeListener { _, checkedId ->
-            vm.setHasReview(checkedId == R.id.radioWithReviews) // "리뷰 있음" 선택 시 true
+            selectedReview = checkedId == R.id.radioWithReviews
         }
     }
 
@@ -289,71 +295,72 @@ class FilterDialogFragment(
         when (mode) {
             FilterMode.DISTANCE -> {
                 selectedDistance = 1000f
-                vm.setDistance(null)
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(distance = null))
             }
             FilterMode.PRICE -> {
                 selectedMinPrice = 0f
                 selectedMaxPrice = 15000f
-                vm.setMinPrice(null)
-                vm.setMaxPrice(null)
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minPrice = null, maxPrice = null))
             }
             FilterMode.RATING -> {
                 selectedRating = 0f
-                vm.setMinRating(null)
                 updateRatingSelection(0f)
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minRating = null))
             }
             FilterMode.CATEGORY -> {
                 selectedCategories.clear()
-                vm.setCategories(null)
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(categories = null))
             }
             FilterMode.FULL -> {
                 selectedDistance = 1000f
                 selectedMinPrice = 0f
                 selectedMaxPrice = 15000f
+                selectedOperating = false
+                selectedReview = false
                 selectedRating = 0f
                 selectedCategories.clear()
-                vm.setDistance(null)
-                vm.setMinPrice(null)
-                vm.setMaxPrice(null)
-                vm.setIsOpen(false)
-                vm.setHasReview(false)
-                vm.setMinRating(null)
-                vm.setCategories(null)
+                vm.setMenuFilterCondition(
+                    MenuFilterCondition(
+                        null,
+                        null,
+                        null,
+                        false,
+                        false,
+                        null,
+                        null
+                    )
+                )
             }
-            else -> {}
         }
     }
 
     private fun applyFiltersByMode() {
-        when (mode) {
-            FilterMode.DISTANCE -> vm.setDistance(selectedDistance)
-            FilterMode.PRICE -> {
-                vm.setMinPrice(selectedMinPrice)
-                vm.setMaxPrice(selectedMaxPrice)
-            }
-            FilterMode.RATING -> {
-                vm.setMinRating(if (selectedRating == 0f) null else selectedRating)
-            }
-            FilterMode.CATEGORY -> vm.setCategories(if (selectedCategories.contains("전체")) null else selectedCategories)
-            FilterMode.FULL -> {
-                vm.setDistance(selectedDistance)
-                vm.setMinPrice(selectedMinPrice)
-                vm.setMaxPrice(selectedMaxPrice)
-                vm.setIsOpen(binding.operatingHoursGroup.checkedRadioButtonId == R.id.optionOperating)
-                vm.setHasReview(binding.radioGroupReview.checkedRadioButtonId == R.id.radioWithReviews)
-                vm.setMinRating(if (selectedRating == 0f) null else selectedRating)
-                vm.setCategories(if (selectedCategories.contains("전체")) null else selectedCategories)
-            }
-            else -> {}
+        val updatedCondition = when (mode) {
+            FilterMode.DISTANCE -> vm.getCurrentCondition().copy(
+                distance = selectedDistance
+            )
+            FilterMode.PRICE -> vm.getCurrentCondition().copy(
+                minPrice = selectedMinPrice,
+                maxPrice = selectedMaxPrice
+            )
+            FilterMode.RATING -> vm.getCurrentCondition().copy(
+                minRating = if (selectedRating == 0f) null else selectedRating
+            )
+            FilterMode.CATEGORY -> vm.getCurrentCondition().copy(
+                categories = if (selectedCategories.contains("전체")) null else selectedCategories
+            )
+            FilterMode.FULL -> vm.getCurrentCondition().copy(
+                distance = selectedDistance,
+                minPrice = selectedMinPrice,
+                maxPrice = selectedMaxPrice,
+                isOpen = selectedOperating,
+                hasReview = selectedReview,
+                minRating = if (selectedRating == 0f) null else selectedRating,
+                categories = if (selectedCategories.contains("전체")) null else selectedCategories
+            )
         }
+        vm.setMenuFilterCondition(updatedCondition)
     }
-
-    data class FilterData(
-        val distance: Int,
-        val minPrice: Int,
-        val maxPrice: Int,
-        val categories: List<String>
-    )
 
     override fun onDestroyView() {
         super.onDestroyView()
