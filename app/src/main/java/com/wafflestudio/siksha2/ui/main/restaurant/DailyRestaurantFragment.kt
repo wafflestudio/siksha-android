@@ -9,7 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,11 +33,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
+import java.util.Locale
 import kotlin.math.abs
 
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
-    private val vm: DailyRestaurantViewModel by viewModels()
+    private val vm: DailyRestaurantViewModel by activityViewModels()
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -361,6 +362,48 @@ class DailyRestaurantFragment : Fragment() {
             binding.dateBefore.setVisibleOrGone(!visibility)
         }
 
+        vm.menuFilterCondition.observe(viewLifecycleOwner) { condition ->
+            condition.let {
+                binding.filterDistance.setFilter(
+                    it.distance?.let { distance ->
+                        if (distance >= 1000) {
+                            "1km 이상"
+                        } else {
+                            "${distance.toInt()}m 이내"
+                        }
+                    } ?: "거리",
+                    it.distance == null
+                )
+
+                binding.filterPrice.setFilter(
+                    if (it.minPrice != null && it.maxPrice != null) {
+                        if (it.maxPrice == 15000f) {
+                            "${String.format(Locale.getDefault(), "%,d", it.minPrice.toInt())}원 ~ " +
+                                "${String.format(Locale.getDefault(), "%,d", it.maxPrice.toInt())}원 이상"
+                        } else {
+                            "${String.format(Locale.getDefault(), "%,d", it.minPrice.toInt())}원 ~ " +
+                                "${String.format(Locale.getDefault(), "%,d", it.maxPrice.toInt())}원"
+                        }
+                    } else {
+                        "가격"
+                    },
+                    it.maxPrice == null && it.minPrice == null
+                )
+
+                binding.filterOpen.showCheck(it.isOpen)
+                binding.filterReview.showCheck(it.hasReview)
+
+                binding.filterRating.setFilter(
+                    it.minRating?.let { rating -> "평점 $rating 이상" } ?: "평점",
+                    it.minRating == null
+                )
+                binding.filterCategory.setFilter(
+                    it.categories?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
+                    it.categories?.isEmpty() ?: true
+                )
+            }
+        }
+
         binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
         binding.lunchLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
         binding.dinnerLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
@@ -384,13 +427,11 @@ class DailyRestaurantFragment : Fragment() {
         }
 
         binding.filterOpen.setOnClickListener {
-            val filterDialog = FilterDialogFragment(FilterMode.OPEN)
-            filterDialog.show(parentFragmentManager, "FilterDialog")
+            vm.toggleOpenFilter()
         }
 
         binding.filterReview.setOnClickListener {
-            val filterDialog = FilterDialogFragment(FilterMode.REVIEW)
-            filterDialog.show(parentFragmentManager, "FilterDialog")
+            vm.toggleReviewFilter()
         }
 
         binding.filterRating.setOnClickListener {

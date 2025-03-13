@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemMenuFilterFieldBinding
 
@@ -37,7 +38,7 @@ class MenuFilterField : LinearLayout {
 
             showArrow(showArrow)
             showCheck(showCheck)
-            setText(text)
+            setFilter(text, true)
         }
     }
 
@@ -47,18 +48,20 @@ class MenuFilterField : LinearLayout {
 
     fun showCheck(show: Boolean) {
         binding.check.visibility = if (show) View.VISIBLE else View.GONE
+        updateStyle(!show) // check 표시가 있으면 active
     }
 
-    fun setText(text: String) {
+    fun setFilter(text: String, isNull: Boolean) {
         binding.filter.text = text
+        updateStyle(isNull)
     }
 
-    fun setPriceRange(minPrice: Int, maxPrice: Int) {
-        val priceText = if (maxPrice >= 15000) {
-            "$minPrice 원 ~ 15,000원 이상"
+    private fun updateStyle(isNull: Boolean) {
+        val backgroundRes = if (isNull) {
+            R.drawable.frame_menu_filter_field
         } else {
-            "$minPrice 원 ~ $maxPrice 원"
+            R.drawable.frame_menu_filter_field_active
         }
-        binding.filter.text = priceText
+        binding.filterBackground.background = ContextCompat.getDrawable(context, backgroundRes)
     }
 }

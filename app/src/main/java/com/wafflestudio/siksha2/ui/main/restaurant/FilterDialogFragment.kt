@@ -14,6 +14,7 @@ import android.widget.GridLayout
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
@@ -26,14 +27,15 @@ class FilterDialogFragment(
     private var _binding: DialogFilterBinding? = null
     private val binding get() = _binding!!
 
-    private var selectedDistance = 400
-    private var selectedMinPrice = 500
-    private var selectedMaxPrice = 1500
+    private val vm: DailyRestaurantViewModel by activityViewModels()
 
-    private val selectedCategories = mutableSetOf<String>() // 선택된 카테고리 저장
-    private val categoryList = listOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페") // 카테고리 목록
-
-    var onFilterApplied: ((FilterData) -> Unit)? = null
+    private var selectedDistance: Float = 1000f
+    private var selectedMinPrice: Float = 0f
+    private var selectedMaxPrice: Float = 15000f
+    private var selectedOperating: Boolean = false
+    private var selectedReview: Boolean = false
+    private var selectedRating: Float = 0f
+    private val selectedCategories = mutableListOf<String>()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -59,31 +61,69 @@ class FilterDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupDistanceSection()
-        setupPriceSection()
+        setupObservers()
+        setupSeekBarListeners()
+        setupRatingSelection()
+        setupOperatingSelection()
+        setupReviewSelection()
         setupCategorySelection()
-        // setupRatings()
         setupButtons()
         setupVisibility()
     }
 
-    private fun setupDistanceSection() {
-        binding.seekBarDistance.progress = selectedDistance
-        updateDistanceText(selectedDistance)
-
-        binding.seekBarDistance.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (seekBar != null) {
-                    val thumbX = calculateThumbX(seekBar, progress)
-
-                    binding.tvDistance.x = thumbX
-
-                    binding.tvDistance.text = "${progress}m 이내"
-                }
+    private fun setupObservers() {
+        vm.menuFilterCondition.observe(viewLifecycleOwner) { filterCondition ->
+            if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
+                selectedDistance = filterCondition.distance ?: 1000f
+                binding.seekBarDistance.progress = selectedDistance.toInt()
+                updateDistanceText(selectedDistance.toInt())
             }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+            if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
+                selectedMinPrice = filterCondition.minPrice ?: 0f
+                selectedMaxPrice = filterCondition.maxPrice ?: 15000f
+                binding.dualRangeSeekBar.selectedMin = selectedMinPrice.toInt()
+                binding.dualRangeSeekBar.selectedMax = selectedMaxPrice.toInt()
+                updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
+            }
+            if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
+                selectedRating = filterCondition.minRating ?: 0f
+                updateRatingSelection(selectedRating)
+            }
+            if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
+                selectedCategories.clear()
+                selectedCategories.addAll(filterCondition.categories ?: emptyList())
+            }
+            if (mode == FilterMode.FULL) {
+                selectedOperating = filterCondition.isOpen ?: false
+                selectedReview = filterCondition.hasReview ?: false
+                binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
+                binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
+            }
+        }
+    }
+
+    private fun setupSeekBarListeners() {
+        if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
+            binding.seekBarDistance.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    if (fromUser) {
+                        selectedDistance = progress.toFloat()
+                        updateDistanceText(progress)
+                    }
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+        }
+
+        if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
+            binding.dualRangeSeekBar.setOnRangeChangeListener { min, max ->
+                selectedMinPrice = min.toFloat()
+                selectedMaxPrice = max.toFloat()
+                updatePriceRangeText(min.toInt(), max.toInt())
+            }
+        }
     }
 
     override fun getTheme(): Int {
@@ -100,21 +140,7 @@ class FilterDialogFragment(
     }
 
     private fun updateDistanceText(distance: Int) {
-        binding.tvDistance.text = "${distance}m 이내"
-    }
-
-    private fun setupPriceSection() {
-        binding.dualRangeSeekBar.selectedMin = selectedMinPrice
-        binding.dualRangeSeekBar.selectedMax = selectedMaxPrice
-
-        updatePriceRangeText(selectedMinPrice, selectedMaxPrice)
-
-        binding.dualRangeSeekBar.setOnRangeChangeListener { min, max ->
-            selectedMinPrice = (min / 500) * 500
-            selectedMaxPrice = (max / 500) * 500
-
-            updatePriceRangeText(selectedMinPrice, selectedMaxPrice)
-        }
+        binding.tvDistance.text = if (distance >= 1000) "1km 이상" else "${distance}m 이내"
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
@@ -138,6 +164,39 @@ class FilterDialogFragment(
         val thumbPosX = dualSeekBar.paddingLeft + (value.toFloat() / max) * availableWidth
 
         return thumbPosX - (binding.tvPriceRange.width / 2)
+    }
+
+    private fun setupRatingSelection() {
+        binding.radioGroupRating.setOnCheckedChangeListener { _, checkedId ->
+            selectedRating = when (checkedId) {
+                R.id.radioRatingAll -> 0f
+                R.id.radioRating35 -> 3.5f
+                R.id.radioRating40 -> 4.0f
+                R.id.radioRating45 -> 4.5f
+                else -> 0f
+            }
+        }
+    }
+
+    private fun updateRatingSelection(rating: Float) {
+        when (rating) {
+            0f -> binding.radioGroupRating.check(R.id.radioRatingAll)
+            3.5f -> binding.radioGroupRating.check(R.id.radioRating35)
+            4.0f -> binding.radioGroupRating.check(R.id.radioRating40)
+            4.5f -> binding.radioGroupRating.check(R.id.radioRating45)
+        }
+    }
+
+    private fun setupOperatingSelection() {
+        binding.operatingHoursGroup.setOnCheckedChangeListener { _, checkedId ->
+            selectedOperating = checkedId == R.id.optionOperating
+        }
+    }
+
+    private fun setupReviewSelection() {
+        binding.radioGroupReview.setOnCheckedChangeListener { _, checkedId ->
+            selectedReview = checkedId == R.id.radioWithReviews
+        }
     }
 
     private fun setupCategorySelection() {
@@ -223,15 +282,12 @@ class FilterDialogFragment(
 
     private fun setupButtons() {
         binding.btnReset.setOnClickListener {
-            resetFilters()
-            for (i in 0 until binding.gridCategory.childCount) {
-                val chip = binding.gridCategory.getChildAt(i) as? Chip
-                chip?.isChecked = false
-            }
+            resetFiltersByMode()
+            dismiss()
         }
 
         binding.btnApply.setOnClickListener {
-            applyFilters()
+            applyFiltersByMode()
             dismiss()
         }
     }
@@ -248,48 +304,81 @@ class FilterDialogFragment(
             }
             FilterMode.DISTANCE -> binding.distanceSection.visibility = View.VISIBLE
             FilterMode.PRICE -> binding.priceSection.visibility = View.VISIBLE
-            FilterMode.OPEN -> binding.openSection.visibility = View.VISIBLE
-            FilterMode.REVIEW -> binding.reviewSection.visibility = View.VISIBLE
             FilterMode.RATING -> binding.ratingSection.visibility = View.VISIBLE
             FilterMode.CATEGORY -> binding.categorySection.visibility = View.VISIBLE
         }
     }
 
-    private fun resetFilters() {
-        selectedDistance = 400
-        selectedMinPrice = 500
-        selectedMaxPrice = 15000
-        selectedCategories.clear()
-        selectedCategories.add("전체")
-
-        binding.seekBarDistance.progress = selectedDistance
-
-        updateDistanceText(selectedDistance)
-
-        for (i in 0 until binding.gridCategory.childCount) {
-            val chip = binding.gridCategory.getChildAt(i) as? Chip
-            if (chip != null) {
-                chip.isChecked = chip.text == "전체" // '전체' Chip만 유지
+    private fun resetFiltersByMode() {
+        when (mode) {
+            FilterMode.DISTANCE -> {
+                selectedDistance = 1000f
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(distance = null))
+            }
+            FilterMode.PRICE -> {
+                selectedMinPrice = 0f
+                selectedMaxPrice = 15000f
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minPrice = null, maxPrice = null))
+            }
+            FilterMode.RATING -> {
+                selectedRating = 0f
+                updateRatingSelection(0f)
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minRating = null))
+            }
+            FilterMode.CATEGORY -> {
+                selectedCategories.clear()
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(categories = null))
+            }
+            FilterMode.FULL -> {
+                selectedDistance = 1000f
+                selectedMinPrice = 0f
+                selectedMaxPrice = 15000f
+                selectedOperating = false
+                selectedReview = false
+                selectedRating = 0f
+                selectedCategories.clear()
+                vm.setMenuFilterCondition(
+                    MenuFilterCondition(
+                        null,
+                        null,
+                        null,
+                        false,
+                        false,
+                        null,
+                        null
+                    )
+                )
             }
         }
     }
 
-    private fun applyFilters() {
-        val selectedFilterData = FilterData(
-            distance = selectedDistance,
-            minPrice = selectedMinPrice,
-            maxPrice = selectedMaxPrice,
-            categories = if (selectedCategories.contains("전체")) emptyList() else selectedCategories.toList()
-        )
-        onFilterApplied?.invoke(selectedFilterData)
+    private fun applyFiltersByMode() {
+        val updatedCondition = when (mode) {
+            FilterMode.DISTANCE -> vm.getCurrentCondition().copy(
+                distance = selectedDistance
+            )
+            FilterMode.PRICE -> vm.getCurrentCondition().copy(
+                minPrice = selectedMinPrice,
+                maxPrice = selectedMaxPrice
+            )
+            FilterMode.RATING -> vm.getCurrentCondition().copy(
+                minRating = if (selectedRating == 0f) null else selectedRating
+            )
+            FilterMode.CATEGORY -> vm.getCurrentCondition().copy(
+                categories = if (selectedCategories.contains("전체")) null else selectedCategories
+            )
+            FilterMode.FULL -> vm.getCurrentCondition().copy(
+                distance = selectedDistance,
+                minPrice = selectedMinPrice,
+                maxPrice = selectedMaxPrice,
+                isOpen = selectedOperating,
+                hasReview = selectedReview,
+                minRating = if (selectedRating == 0f) null else selectedRating,
+                categories = if (selectedCategories.contains("전체")) null else selectedCategories
+            )
+        }
+        vm.setMenuFilterCondition(updatedCondition)
     }
-
-    data class FilterData(
-        val distance: Int,
-        val minPrice: Int,
-        val maxPrice: Int,
-        val categories: List<String>
-    )
 
     override fun onDestroyView() {
         super.onDestroyView()
