@@ -11,15 +11,20 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.DayOfWeek
@@ -31,7 +36,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DailyRestaurantViewModel @Inject constructor(
     private val menuRepository: MenuRepository,
-    private val restaurantRepository: RestaurantRepository
+    private val restaurantRepository: RestaurantRepository,
+    private val sikshaPrefObjects: SikshaPrefObjects
 ) : ViewModel() {
 
     private val _dateFilter = MutableLiveData<LocalDate>(LocalDate.now())
@@ -46,20 +52,9 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _currentLocation = MutableLiveData<Location?>(null)
     val currentLocation: LiveData<Location?> = _currentLocation
 
-    private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
-        MenuFilterCondition(null, null, null, false, false, null, null)
-    )
-    val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
-
-    private val defaultCondition = MenuFilterCondition(
-        null,
-        null,
-        null,
-        false,
-        false,
-        null,
-        null
-    )
+    private val _menuFilterCondition = MutableStateFlow(sikshaPrefObjects.menuFilterCondition.getValue())
+    val menuFilterCondition: StateFlow<MenuFilterCondition> = _menuFilterCondition
+        .stateIn(viewModelScope, SharingStarted.Eagerly, sikshaPrefObjects.menuFilterCondition.getValue())
 
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
     // 현재 앱 시작시에 Network 연결 없을 때 노티하는 중
@@ -140,29 +135,47 @@ class DailyRestaurantViewModel @Inject constructor(
 
     fun getDistance(menuGroup: MenuGroup): Float? {
         val result = FloatArray(1)
-        if (menuGroup.latitude == null || menuGroup.longitude == null) return null
-        Location.distanceBetween(menuGroup.latitude, menuGroup.longitude, _currentLocation.value!!.latitude, _currentLocation.value!!.longitude, result)
+        val location = _currentLocation.value
+
+        if (menuGroup.latitude == null || menuGroup.longitude == null || location == null) {
+            return null
+        }
+
+        Location.distanceBetween(
+            menuGroup.latitude,
+            menuGroup.longitude,
+            location.latitude,
+            location.longitude,
+            result
+        )
         return result[0]
     }
 
+
     fun getCurrentCondition(): MenuFilterCondition {
-        return menuFilterCondition.value ?: defaultCondition
+        return _menuFilterCondition.value
     }
 
     fun setMenuFilterCondition(condition: MenuFilterCondition) {
         _menuFilterCondition.value = condition
+        sikshaPrefObjects.menuFilterCondition.setValue(condition) // ✅ SharedPreferences에 저장
     }
 
     fun toggleOpenFilter() {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
-            isOpen = _menuFilterCondition.value?.isOpen?.not() ?: false
+        val currentCondition = _menuFilterCondition.value
+        val newCondition = currentCondition.copy(
+            isOpen = !currentCondition.isOpen
         )
+        setMenuFilterCondition(newCondition)
     }
 
+
     fun toggleReviewFilter() {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
-            hasReview = _menuFilterCondition.value?.hasReview?.not() ?: false
+        val currentCondition = _menuFilterCondition.value
+        val newCondition = currentCondition.copy(
+            hasReview = !currentCondition.hasReview
         )
+        setMenuFilterCondition(newCondition)
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
