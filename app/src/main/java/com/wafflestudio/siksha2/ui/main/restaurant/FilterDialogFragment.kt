@@ -16,11 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
+import kotlinx.coroutines.launch
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -73,32 +75,34 @@ class FilterDialogFragment(
     }
 
     private fun setupObservers() {
-        vm.menuFilterCondition.observe(viewLifecycleOwner) { filterCondition ->
-            if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-                selectedDistance = filterCondition.distance ?: 1000f
-                binding.seekBarDistance.progress = selectedDistance.toInt()
-                updateDistanceText(selectedDistance.toInt())
-            }
-            if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                selectedMinPrice = filterCondition.minPrice ?: 0f
-                selectedMaxPrice = filterCondition.maxPrice ?: 15000f
-                binding.dualRangeSeekBar.selectedMin = selectedMinPrice.toInt()
-                binding.dualRangeSeekBar.selectedMax = selectedMaxPrice.toInt()
-                updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
-            }
-            if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
-                selectedRating = filterCondition.minRating ?: 0f
-                updateRatingSelection(selectedRating)
-            }
-            if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
-                selectedCategories.clear()
-                selectedCategories.addAll(filterCondition.categories ?: emptyList())
-            }
-            if (mode == FilterMode.FULL) {
-                selectedOperating = filterCondition.isOpen ?: false
-                selectedReview = filterCondition.hasReview ?: false
-                binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
-                binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.menuFilterCondition.collect { filterCondition ->
+                if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
+                    selectedDistance = filterCondition.distance ?: 1000f
+                    binding.seekBarDistance.progress = selectedDistance.toInt()
+                    updateDistanceText(selectedDistance.toInt())
+                }
+                if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
+                    selectedMinPrice = filterCondition.minPrice ?: 0f
+                    selectedMaxPrice = filterCondition.maxPrice ?: 15000f
+                    binding.dualRangeSeekBar.selectedMin = selectedMinPrice.toInt()
+                    binding.dualRangeSeekBar.selectedMax = selectedMaxPrice.toInt()
+                    updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
+                }
+                if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
+                    selectedRating = filterCondition.minRating ?: 0f
+                    updateRatingSelection(selectedRating)
+                }
+                if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
+                    selectedCategories.clear()
+                    selectedCategories.addAll(filterCondition.categories ?: emptyList())
+                }
+                if (mode == FilterMode.FULL) {
+                    selectedOperating = filterCondition.isOpen ?: false
+                    selectedReview = filterCondition.hasReview ?: false
+                    binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
+                    binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
+                }
             }
         }
     }
