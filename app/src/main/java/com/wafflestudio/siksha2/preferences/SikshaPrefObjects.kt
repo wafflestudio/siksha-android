@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.wafflestudio.siksha2.models.RestaurantOrder
 import com.wafflestudio.siksha2.network.OAuthProvider
 import com.wafflestudio.siksha2.preferences.serializer.Serializer
+import com.wafflestudio.siksha2.ui.main.restaurant.MenuFilterCondition
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -59,5 +60,22 @@ class SikshaPrefObjects @Inject constructor(
             sharedPreferences,
             serializer,
             Boolean::class.java
+        )
+
+    val menuFilterCondition: Preference<MenuFilterCondition> =
+        Preference(
+            "menuFilterCondition",
+            MenuFilterCondition(
+                distance = null,
+                minPrice = null,
+                maxPrice = null,
+                isOpen = false,
+                hasReview = false,
+                minRating = null,
+                categories = null
+            ),
+            sharedPreferences,
+            serializer,
+            MenuFilterCondition::class.java
         )
 }
