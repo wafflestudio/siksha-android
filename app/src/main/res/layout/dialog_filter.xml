@@ -71,7 +71,7 @@
             android:thumbTint="@color/orange_main"
             android:progressTint="@color/orange_main"
             android:progressBackgroundTint="@color/gray_500"
-            android:paddingVertical="8dp"/>
+            android:paddingVertical="8dp" />
     </LinearLayout>
 
     <!-- 가격 필터 -->
@@ -104,20 +104,27 @@
             android:gravity="center"
             android:paddingStart="6dp"
             android:paddingEnd="6dp"
-            android:text="5,000원 ~ 8,000원"
             android:textColor="#707070"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="5,000원 ~ 8,000원" />
 
-<!--        <com.google.android.material.slider.RangeSlider-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:values="@array/initial_slider_values"/>-->
-
-        <com.wafflestudio.siksha2.ui.main.restaurant.DualRangeSeekBar
-            android:id="@+id/dualRangeSeekBar"
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/priceRangeSlider"
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="wrap_content"
+            app:thumbRadius="9dp"
+            app:thumbColor="@color/orange_main"
+            app:haloColor="@android:color/transparent"
+            app:trackColorActive="@color/orange_main"
+            app:trackColorInactive="@color/gray_200"
+            app:trackHeight="4dp"
+            android:valueFrom="3000.0"
+            android:valueTo="10000.0"
+            android:stepSize="500.0"
+            app:tickVisible="false"
+            app:values="@array/initial_slider_values"
+            app:labelBehavior="gone"/>
     </LinearLayout>
 
 

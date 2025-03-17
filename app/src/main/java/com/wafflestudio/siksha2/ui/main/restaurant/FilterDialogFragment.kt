@@ -30,8 +30,8 @@ class FilterDialogFragment(
     private val vm: DailyRestaurantViewModel by activityViewModels()
 
     private var selectedDistance: Float = 1000f
-    private var selectedMinPrice: Float = 0f
-    private var selectedMaxPrice: Float = 15000f
+    private var selectedMinPrice: Float = 3000f
+    private var selectedMaxPrice: Float = 10000f
     private var selectedOperating: Boolean = false
     private var selectedReview: Boolean = false
     private var selectedRating: Float = 0f
@@ -53,7 +53,7 @@ class FilterDialogFragment(
         return dialog
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DialogFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -79,10 +79,10 @@ class FilterDialogFragment(
                 updateDistanceText(selectedDistance.toInt())
             }
             if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                selectedMinPrice = filterCondition.minPrice ?: 0f
-                selectedMaxPrice = filterCondition.maxPrice ?: 15000f
-                binding.dualRangeSeekBar.selectedMin = selectedMinPrice.toInt()
-                binding.dualRangeSeekBar.selectedMax = selectedMaxPrice.toInt()
+                selectedMinPrice = filterCondition.minPrice ?: 3000f
+                selectedMaxPrice = filterCondition.maxPrice ?: 10000f
+                binding.priceRangeSlider.valueFrom = selectedMinPrice
+                binding.priceRangeSlider.valueTo = selectedMaxPrice
                 updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
             }
             if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
@@ -94,8 +94,8 @@ class FilterDialogFragment(
                 selectedCategories.addAll(filterCondition.categories ?: emptyList())
             }
             if (mode == FilterMode.FULL) {
-                selectedOperating = filterCondition.isOpen ?: false
-                selectedReview = filterCondition.hasReview ?: false
+                selectedOperating = filterCondition.isOpen
+                selectedReview = filterCondition.hasReview
                 binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
                 binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
             }
@@ -118,10 +118,9 @@ class FilterDialogFragment(
         }
 
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-            binding.dualRangeSeekBar.setOnRangeChangeListener { min, max ->
-                selectedMinPrice = min.toFloat()
-                selectedMaxPrice = max.toFloat()
-                updatePriceRangeText(min.toInt(), max.toInt())
+            binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
+                val values = slider.values
+                updatePriceRangeText(values[0].toInt(), values[1].toInt())
             }
         }
     }
@@ -130,40 +129,14 @@ class FilterDialogFragment(
         return R.style.RoundedBottomSheetDialogTheme
     }
 
-    private fun calculateThumbX(seekBar: SeekBar, progress: Int): Float {
-        val max = seekBar.max
-        val availableWidth = seekBar.width - seekBar.paddingLeft - seekBar.paddingRight
-
-        val thumbPosX = seekBar.paddingLeft + (progress.toFloat() / max) * availableWidth
-
-        return thumbPosX - (binding.tvDistance.width / 2)
-    }
-
     private fun updateDistanceText(distance: Int) {
         binding.tvDistance.text = if (distance >= 1000) "1km 이상" else "${distance}m 이내"
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
-        val maxPriceText = if (maxPrice >= 15000) "15,000원 이상" else "${maxPrice}원"
-        binding.tvPriceRange.text = "${minPrice}원 ~ $maxPriceText"
-
-        val minThumbX = calculateThumbX(binding.dualRangeSeekBar, minPrice)
-        val maxThumbX = calculateThumbX(binding.dualRangeSeekBar, maxPrice)
-
-        val middleX = (minThumbX + maxThumbX) / 2
-        binding.tvPriceRange.x = middleX
-
-        binding.tvPriceRange.translationY = binding.dualRangeSeekBar.y - binding.dualRangeSeekBar.height - 40f
-    }
-
-    private fun calculateThumbX(seekBar: View, value: Int): Float {
-        val dualSeekBar = seekBar as DualRangeSeekBar
-        val max = dualSeekBar.maxValue
-        val availableWidth = dualSeekBar.width - dualSeekBar.paddingLeft - dualSeekBar.paddingRight
-
-        val thumbPosX = dualSeekBar.paddingLeft + (value.toFloat() / max) * availableWidth
-
-        return thumbPosX - (binding.tvPriceRange.width / 2)
+        val minPriceText = if (minPrice <= 3000) "3,000원 이하" else "${minPrice}원"
+        val maxPriceText = if (maxPrice >= 10000) "10,000원 이상" else "${maxPrice}원"
+        binding.tvPriceRange.text = "$minPriceText ~ $maxPriceText"
     }
 
     private fun setupRatingSelection() {
@@ -224,8 +197,8 @@ class FilterDialogFragment(
                 setPadding(10, 10, 10, 10)
 
                 setChipBackgroundColorResource(R.color.chip_default_bg)
-                setChipStrokeColor(ColorStateList.valueOf(Color.parseColor("#DFDFDF")))
-                setChipStrokeWidth(1f)
+                chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#DFDFDF"))
+                chipStrokeWidth = 1f
                 setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
 
                 shapeAppearanceModel = shapeAppearanceModel.toBuilder()
@@ -272,7 +245,7 @@ class FilterDialogFragment(
         }
     }
 
-    fun dpToPx(dp: Int): Int {
+    private fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             dp.toFloat(),
@@ -316,8 +289,8 @@ class FilterDialogFragment(
                 vm.setMenuFilterCondition(vm.getCurrentCondition().copy(distance = null))
             }
             FilterMode.PRICE -> {
-                selectedMinPrice = 0f
-                selectedMaxPrice = 15000f
+                selectedMinPrice = 3000f
+                selectedMaxPrice = 10000f
                 vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minPrice = null, maxPrice = null))
             }
             FilterMode.RATING -> {
@@ -331,8 +304,8 @@ class FilterDialogFragment(
             }
             FilterMode.FULL -> {
                 selectedDistance = 1000f
-                selectedMinPrice = 0f
-                selectedMaxPrice = 15000f
+                selectedMinPrice = 3000f
+                selectedMaxPrice = 10000f
                 selectedOperating = false
                 selectedReview = false
                 selectedRating = 0f

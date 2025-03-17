@@ -46,11 +46,6 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _currentLocation = MutableLiveData<Location?>(null)
     val currentLocation: LiveData<Location?> = _currentLocation
 
-    private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
-        MenuFilterCondition(null, null, null, false, false, null, null)
-    )
-    val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
-
     private val defaultCondition = MenuFilterCondition(
         null,
         null,
@@ -60,6 +55,10 @@ class DailyRestaurantViewModel @Inject constructor(
         null,
         null
     )
+    private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
+        defaultCondition
+    )
+    val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
 
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
     // 현재 앱 시작시에 Network 연결 없을 때 노티하는 중
