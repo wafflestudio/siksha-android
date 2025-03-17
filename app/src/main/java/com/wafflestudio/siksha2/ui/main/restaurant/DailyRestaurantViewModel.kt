@@ -51,6 +51,16 @@ class DailyRestaurantViewModel @Inject constructor(
     )
     val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
 
+    private val defaultCondition = MenuFilterCondition(
+        null,
+        null,
+        null,
+        false,
+        false,
+        null,
+        null
+    )
+
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
     // 현재 앱 시작시에 Network 연결 없을 때 노티하는 중
     // 앱 사용 중에도 Network 연결 없어질 시 인지 할 수 있어야함.
@@ -128,10 +138,6 @@ class DailyRestaurantViewModel @Inject constructor(
         Timber.d("(${_currentLocation.value?.latitude}, ${_currentLocation.value?.longitude})")
     }
 
-    fun setDistance(distance: Float?) {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(distance = distance)
-    }
-
     fun getDistance(menuGroup: MenuGroup): Float? {
         val result = FloatArray(1)
         if (menuGroup.latitude == null || menuGroup.longitude == null) return null
@@ -139,28 +145,24 @@ class DailyRestaurantViewModel @Inject constructor(
         return result[0]
     }
 
-    fun setMinPrice(minPrice: Float?) {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(minPrice = minPrice)
+    fun getCurrentCondition(): MenuFilterCondition {
+        return menuFilterCondition.value ?: defaultCondition
     }
 
-    fun setMaxPrice(maxPrice: Float?) {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(maxPrice = maxPrice)
+    fun setMenuFilterCondition(condition: MenuFilterCondition) {
+        _menuFilterCondition.value = condition
     }
 
-    fun setIsOpen(isOpen: Boolean) {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(isOpen = isOpen)
+    fun toggleOpenFilter() {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
+            isOpen = _menuFilterCondition.value?.isOpen?.not() ?: false
+        )
     }
 
-    fun setHasReview(hasReview: Boolean) {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(hasReview = hasReview)
-    }
-
-    fun setMinRating(minRating: Float?) {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(minRating = minRating)
-    }
-
-    fun setCategories(categories: List<String>?) {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(categories = categories)
+    fun toggleReviewFilter() {
+        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
+            hasReview = _menuFilterCondition.value?.hasReview?.not() ?: false
+        )
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
@@ -292,14 +294,4 @@ class DailyRestaurantViewModel @Inject constructor(
             .map { menuGroups -> menuGroups.find { it.id == menuGroupId } }
             .firstOrNull()
     }
-
-    data class MenuFilterCondition(
-        val distance: Float?,
-        val minPrice: Float?,
-        val maxPrice: Float?,
-        val isOpen: Boolean,
-        val hasReview: Boolean,
-        val minRating: Float?,
-        val categories: List<String>?
-    )
 }
