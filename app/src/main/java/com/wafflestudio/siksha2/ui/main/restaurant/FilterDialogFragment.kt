@@ -73,13 +73,13 @@ class FilterDialogFragment(
     private fun setupObservers() {
         vm.menuFilterCondition.observe(viewLifecycleOwner) { filterCondition ->
             if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-                selectedDistance = filterCondition.distance ?: 1000f
+                selectedDistance = filterCondition.distance
                 binding.distanceRangeSlider.values = listOf(selectedDistance)
                 updateDistanceText(selectedDistance.toInt())
             }
             if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                selectedMinPrice = filterCondition.minPrice ?: 3000f
-                selectedMaxPrice = filterCondition.maxPrice ?: 10000f
+                selectedMinPrice = filterCondition.minPrice
+                selectedMaxPrice = filterCondition.maxPrice
                 binding.priceRangeSlider.valueFrom = selectedMinPrice
                 binding.priceRangeSlider.valueTo = selectedMaxPrice
                 updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
@@ -103,17 +103,6 @@ class FilterDialogFragment(
 
     private fun setupSeekBarListeners() {
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-//            binding.seekBarDistance.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                    if (fromUser) {
-//                        selectedDistance = progress.toFloat()
-//                        updateDistanceText(progress)
-//                    }
-//                }
-//
-//                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-//                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-//            })
             binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
                 val value = slider.values[0]
                 updateDistanceText(value.toInt())
@@ -289,12 +278,12 @@ class FilterDialogFragment(
         when (mode) {
             FilterMode.DISTANCE -> {
                 selectedDistance = 1000f
-                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(distance = null))
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(distance = selectedDistance))
             }
             FilterMode.PRICE -> {
                 selectedMinPrice = 3000f
                 selectedMaxPrice = 10000f
-                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minPrice = null, maxPrice = null))
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minPrice = selectedMinPrice, maxPrice = selectedMaxPrice))
             }
             FilterMode.RATING -> {
                 selectedRating = 0f
@@ -315,13 +304,13 @@ class FilterDialogFragment(
                 selectedCategories.clear()
                 vm.setMenuFilterCondition(
                     MenuFilterCondition(
-                        null,
-                        null,
-                        null,
-                        false,
-                        false,
-                        null,
-                        null
+                        distance = 1000f,
+                        minPrice = 3000f,
+                        maxPrice = 10000f,
+                        isOpen = false,
+                        hasReview = false,
+                        minRating = null,
+                        categories = null
                     )
                 )
             }

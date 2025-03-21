@@ -47,17 +47,15 @@ class DailyRestaurantViewModel @Inject constructor(
     val currentLocation: LiveData<Location?> = _currentLocation
 
     private val defaultCondition = MenuFilterCondition(
-        null,
-        null,
-        null,
-        false,
-        false,
-        null,
-        null
+        distance = 1000f,
+        minPrice = 3000f,
+        maxPrice = 10000f,
+        isOpen = false,
+        hasReview = false,
+        minRating = null,
+        categories = null
     )
-    private val _menuFilterCondition = MutableLiveData<MenuFilterCondition>(
-        defaultCondition
-    )
+    private val _menuFilterCondition = MutableLiveData(defaultCondition)
     val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
 
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
@@ -222,10 +220,10 @@ class DailyRestaurantViewModel @Inject constructor(
             }
             // 사용자 필터
             .map { menuGroupList ->
-                _menuFilterCondition.value?.distance?.let {
+                _menuFilterCondition.value?.distance?.let { distance ->
                     menuGroupList.filter { item ->
                         getDistance(item)?.let {
-                            it <= _menuFilterCondition.value?.distance!!
+                            it <= distance
                         } ?: true
                     }
                 } ?: menuGroupList
@@ -237,12 +235,12 @@ class DailyRestaurantViewModel @Inject constructor(
                             menu.price?.let { menuPrice ->
                                 (
                                     _menuFilterCondition.value?.maxPrice?.let {
-                                        menuPrice <= it
+                                        menuPrice <= it || it == 10000f
                                     } ?: true
                                     ) &&
                                     (
                                         _menuFilterCondition.value?.minPrice?.let {
-                                            menuPrice >= it
+                                            menuPrice >= it || it == 3000f
                                         } ?: true
                                         )
                             } ?: true
