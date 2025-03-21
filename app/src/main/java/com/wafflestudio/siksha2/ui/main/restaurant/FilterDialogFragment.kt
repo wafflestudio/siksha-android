@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
-import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
@@ -75,7 +74,7 @@ class FilterDialogFragment(
         vm.menuFilterCondition.observe(viewLifecycleOwner) { filterCondition ->
             if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
                 selectedDistance = filterCondition.distance ?: 1000f
-                binding.seekBarDistance.progress = selectedDistance.toInt()
+                binding.distanceRangeSlider.values = listOf(selectedDistance)
                 updateDistanceText(selectedDistance.toInt())
             }
             if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
@@ -104,17 +103,21 @@ class FilterDialogFragment(
 
     private fun setupSeekBarListeners() {
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-            binding.seekBarDistance.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if (fromUser) {
-                        selectedDistance = progress.toFloat()
-                        updateDistanceText(progress)
-                    }
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            })
+//            binding.seekBarDistance.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+//                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                    if (fromUser) {
+//                        selectedDistance = progress.toFloat()
+//                        updateDistanceText(progress)
+//                    }
+//                }
+//
+//                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+//                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+//            })
+            binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
+                val value = slider.values[0]
+                updateDistanceText(value.toInt())
+            }
         }
 
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {

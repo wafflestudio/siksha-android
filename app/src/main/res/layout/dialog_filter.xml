@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <!-- 거리 필터 제목 -->
         <TextView
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_speech_bubble"
-                android:text="400m 이내"
+                tools:text="400m 이내"
                 android:textSize="12sp"
                 android:textColor="#707070"
                 android:textStyle="bold"
@@ -60,18 +60,19 @@
                 android:paddingEnd="6dp"/>
         </FrameLayout>
 
-        <!-- 거리 SeekBar (크기 조정) -->
-        <SeekBar
-            android:id="@+id/seekBarDistance"
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/distanceRangeSlider"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:max="1000"
-            android:progress="400"
-            android:splitTrack="false"
-            android:thumbTint="@color/orange_main"
-            android:progressTint="@color/orange_main"
-            android:progressBackgroundTint="@color/gray_500"
-            android:paddingVertical="8dp" />
+            android:layout_height="wrap_content"
+            app:thumbRadius="9dp"
+            app:thumbColor="@color/orange_main"
+            app:haloColor="@android:color/transparent"
+            app:trackColorActive="@color/orange_main"
+            app:trackColorInactive="@color/gray_200"
+            app:trackHeight="4dp"
+            android:valueFrom="0.0"
+            android:valueTo="1000.0"
+            app:labelBehavior="gone"/>
     </LinearLayout>
 
     <!-- 가격 필터 -->
@@ -80,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <!-- 가격 필터 제목 -->
         <TextView
