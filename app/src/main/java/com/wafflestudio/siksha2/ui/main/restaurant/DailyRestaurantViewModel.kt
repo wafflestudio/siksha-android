@@ -11,15 +11,20 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.DayOfWeek
@@ -31,16 +36,17 @@ import javax.inject.Inject
 @HiltViewModel
 class DailyRestaurantViewModel @Inject constructor(
     private val menuRepository: MenuRepository,
-    private val restaurantRepository: RestaurantRepository
+    private val restaurantRepository: RestaurantRepository,
+    private val sikshaPrefObjects: SikshaPrefObjects
 ) : ViewModel() {
 
-    private val _dateFilter = MutableLiveData<LocalDate>(LocalDate.now())
+    private val _dateFilter = MutableLiveData(LocalDate.now())
     val dateFilter: LiveData<LocalDate> = _dateFilter
 
-    private val _mealsOfDayFilter = MutableLiveData<MealsOfDay>(MealsOfDay.LU)
+    private val _mealsOfDayFilter = MutableLiveData(MealsOfDay.LU)
     val mealsOfDayFilter: LiveData<MealsOfDay> = _mealsOfDayFilter
 
-    private val _isCalendarVisible = MutableLiveData<Boolean>(false)
+    private val _isCalendarVisible = MutableLiveData(false)
     val isCalendarVisible: LiveData<Boolean> = _isCalendarVisible
 
     private val _currentLocation = MutableLiveData<Location?>(null)
@@ -55,8 +61,9 @@ class DailyRestaurantViewModel @Inject constructor(
         minRating = null,
         categories = null
     )
-    private val _menuFilterCondition = MutableLiveData(defaultCondition)
-    val menuFilterCondition: LiveData<MenuFilterCondition> = _menuFilterCondition
+    private val _menuFilterCondition = MutableStateFlow(sikshaPrefObjects.menuFilterCondition.getValue())
+    val menuFilterCondition: StateFlow<MenuFilterCondition> = _menuFilterCondition
+        .stateIn(viewModelScope, SharingStarted.Eagerly, sikshaPrefObjects.menuFilterCondition.getValue())
 
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
     // 현재 앱 시작시에 Network 연결 없을 때 노티하는 중
@@ -135,31 +142,47 @@ class DailyRestaurantViewModel @Inject constructor(
         Timber.d("(${_currentLocation.value?.latitude}, ${_currentLocation.value?.longitude})")
     }
 
-    fun getDistance(menuGroup: MenuGroup): Float? {
+    private fun getDistance(menuGroup: MenuGroup): Float? {
         val result = FloatArray(1)
-        if (menuGroup.latitude == null || menuGroup.longitude == null) return null
-        Location.distanceBetween(menuGroup.latitude, menuGroup.longitude, _currentLocation.value!!.latitude, _currentLocation.value!!.longitude, result)
+        val location = _currentLocation.value
+
+        if (menuGroup.latitude == null || menuGroup.longitude == null || location == null) {
+            return null
+        }
+
+        Location.distanceBetween(
+            menuGroup.latitude,
+            menuGroup.longitude,
+            location.latitude,
+            location.longitude,
+            result
+        )
         return result[0]
     }
 
     fun getCurrentCondition(): MenuFilterCondition {
-        return menuFilterCondition.value ?: defaultCondition
+        return _menuFilterCondition.value
     }
 
     fun setMenuFilterCondition(condition: MenuFilterCondition) {
         _menuFilterCondition.value = condition
+        sikshaPrefObjects.menuFilterCondition.setValue(condition) // ✅ SharedPreferences에 저장
     }
 
     fun toggleOpenFilter() {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
-            isOpen = _menuFilterCondition.value?.isOpen?.not() ?: false
+        val currentCondition = _menuFilterCondition.value
+        val newCondition = currentCondition.copy(
+            isOpen = !currentCondition.isOpen
         )
+        setMenuFilterCondition(newCondition)
     }
 
     fun toggleReviewFilter() {
-        _menuFilterCondition.value = _menuFilterCondition.value?.copy(
-            hasReview = _menuFilterCondition.value?.hasReview?.not() ?: false
+        val currentCondition = _menuFilterCondition.value
+        val newCondition = currentCondition.copy(
+            hasReview = !currentCondition.hasReview
         )
+        setMenuFilterCondition(newCondition)
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
@@ -220,38 +243,32 @@ class DailyRestaurantViewModel @Inject constructor(
             }
             // 사용자 필터
             .map { menuGroupList ->
-                _menuFilterCondition.value?.distance?.let { distance ->
+                _menuFilterCondition.value.distance.let { distance ->
                     menuGroupList.filter { item ->
                         getDistance(item)?.let {
                             it <= distance
                         } ?: true
                     }
-                } ?: menuGroupList
+                }
             }
             .map { menuGroupList ->
                 menuGroupList.map { restaurant ->
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
                             menu.price?.let { menuPrice ->
-                                (
-                                    _menuFilterCondition.value?.maxPrice?.let {
-                                        menuPrice <= it || it == 10000f
-                                    } ?: true
-                                    ) &&
-                                    (
-                                        _menuFilterCondition.value?.minPrice?.let {
-                                            menuPrice >= it || it == 3000f
-                                        } ?: true
-                                        )
+                                val minPrice = _menuFilterCondition.value.minPrice
+                                val maxPrice = _menuFilterCondition.value.maxPrice
+                                ((menuPrice >= minPrice) || (minPrice == 3000f)) &&
+                                    ((menuPrice <= maxPrice) || (minPrice == 10000f))
                             } ?: true
                         }.filter { menu ->
                             when (menu.score) {
                                 null -> {
-                                    _menuFilterCondition.value?.hasReview?.let { !it } ?: true
+                                    _menuFilterCondition.value.hasReview
                                 }
                                 else -> {
-                                    _menuFilterCondition.value?.hasReview ?: true &&
-                                        _menuFilterCondition.value?.minRating?.let {
+                                    _menuFilterCondition.value.hasReview &&
+                                        _menuFilterCondition.value.minRating?.let {
                                             menu.score >= it
                                         } ?: true
                                 }
@@ -265,16 +282,9 @@ class DailyRestaurantViewModel @Inject constructor(
                 menuGroupList.map { restaurant ->
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
-                            val priceCheck = menu.price?.let { menuPrice ->
-                                (_menuFilterCondition.value?.maxPrice?.let { menuPrice <= it } ?: true) &&
-                                    (_menuFilterCondition.value?.minPrice?.let { menuPrice >= it } ?: true)
-                            } ?: true
-
-                            val categoryCheck = _menuFilterCondition.value?.categories?.let { selectedCategories ->
+                            _menuFilterCondition.value.categories?.let { selectedCategories ->
                                 selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
                             } ?: true
-
-                            priceCheck && categoryCheck
                         }
                     )
                     newRestaurant

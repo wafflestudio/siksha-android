@@ -238,16 +238,6 @@ class DailyRestaurantFragment : Fragment() {
             true
         }
 
-//        binding.menuGroupList.setOnTouchListener { _, p1 ->
-//            gestureDetector.onTouchEvent(p1)
-//            true
-//        }
-//
-//        binding.emptyText.setOnTouchListener { _, p1 ->
-//            gestureDetector.onTouchEvent(p1)
-//            true
-//        }
-
         vm.favoriteRestaurantExists.observe(viewLifecycleOwner) {
             if (isFavorite) {
                 binding.emptyFavorite.root.setVisibleOrGone(it.not())
@@ -362,44 +352,44 @@ class DailyRestaurantFragment : Fragment() {
             binding.dateBefore.setVisibleOrGone(!visibility)
         }
 
-        vm.menuFilterCondition.observe(viewLifecycleOwner) { condition ->
-            condition.let {
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.menuFilterCondition.collect { condition ->
                 binding.filterDistance.setFilter(
-                    it.distance?.let { distance ->
+                    condition.distance?.let { distance ->
                         if (distance >= 1000) {
                             "1km 이상"
                         } else {
                             "${distance.toInt()}m 이내"
                         }
                     } ?: "거리",
-                    it.distance == null
+                    condition.distance == null
                 )
 
                 binding.filterPrice.setFilter(
-                    if (it.minPrice != null && it.maxPrice != null) {
-                        if (it.maxPrice == 15000f) {
-                            "${String.format(Locale.getDefault(), "%,d", it.minPrice.toInt())}원 ~ " +
-                                "${String.format(Locale.getDefault(), "%,d", it.maxPrice.toInt())}원 이상"
+                    if (condition.minPrice != null && condition.maxPrice != null) {
+                        if (condition.maxPrice == 10000f) {
+                            "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원 ~ " +
+                                "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원 이상"
                         } else {
-                            "${String.format(Locale.getDefault(), "%,d", it.minPrice.toInt())}원 ~ " +
-                                "${String.format(Locale.getDefault(), "%,d", it.maxPrice.toInt())}원"
+                            "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원 ~ " +
+                                "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원"
                         }
                     } else {
                         "가격"
                     },
-                    it.maxPrice == null && it.minPrice == null
+                    condition.maxPrice == null && condition.minPrice == null
                 )
 
-                binding.filterOpen.showCheck(it.isOpen)
-                binding.filterReview.showCheck(it.hasReview)
+                binding.filterOpen.showCheck(condition.isOpen)
+                binding.filterReview.showCheck(condition.hasReview)
 
                 binding.filterRating.setFilter(
-                    it.minRating?.let { rating -> "평점 $rating 이상" } ?: "평점",
-                    it.minRating == null
+                    condition.minRating?.let { rating -> "평점 $rating 이상" } ?: "평점",
+                    condition.minRating == null
                 )
                 binding.filterCategory.setFilter(
-                    it.categories?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
-                    it.categories?.isEmpty() ?: true
+                    condition.categories?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
+                    condition.categories?.isEmpty() ?: true
                 )
             }
         }

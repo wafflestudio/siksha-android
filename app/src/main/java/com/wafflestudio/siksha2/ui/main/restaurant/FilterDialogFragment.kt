@@ -14,11 +14,13 @@ import android.widget.GridLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
+import kotlinx.coroutines.launch
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -29,8 +31,8 @@ class FilterDialogFragment(
     private val vm: DailyRestaurantViewModel by activityViewModels()
 
     private var selectedDistance: Float = 1000f
-    private var selectedMinPrice: Float = 3000f
-    private var selectedMaxPrice: Float = 10000f
+    private var selectedMinPrice: Float = 0f
+    private var selectedMaxPrice: Float = 15000f
     private var selectedOperating: Boolean = false
     private var selectedReview: Boolean = false
     private var selectedRating: Float = 0f
@@ -71,32 +73,34 @@ class FilterDialogFragment(
     }
 
     private fun setupObservers() {
-        vm.menuFilterCondition.observe(viewLifecycleOwner) { filterCondition ->
-            if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-                selectedDistance = filterCondition.distance
-                binding.distanceRangeSlider.values = listOf(selectedDistance)
-                updateDistanceText(selectedDistance.toInt())
-            }
-            if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                selectedMinPrice = filterCondition.minPrice
-                selectedMaxPrice = filterCondition.maxPrice
-                binding.priceRangeSlider.valueFrom = selectedMinPrice
-                binding.priceRangeSlider.valueTo = selectedMaxPrice
-                updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
-            }
-            if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
-                selectedRating = filterCondition.minRating ?: 0f
-                updateRatingSelection(selectedRating)
-            }
-            if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
-                selectedCategories.clear()
-                selectedCategories.addAll(filterCondition.categories ?: emptyList())
-            }
-            if (mode == FilterMode.FULL) {
-                selectedOperating = filterCondition.isOpen
-                selectedReview = filterCondition.hasReview
-                binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
-                binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.menuFilterCondition.collect { filterCondition ->
+                if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
+                    selectedDistance = filterCondition.distance
+                    binding.distanceRangeSlider.values = listOf(selectedDistance)
+                    updateDistanceText(selectedDistance.toInt())
+                }
+                if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
+                    selectedMinPrice = filterCondition.minPrice
+                    selectedMaxPrice = filterCondition.maxPrice
+                    binding.priceRangeSlider.valueFrom = selectedMinPrice
+                    binding.priceRangeSlider.valueTo = selectedMaxPrice
+                    updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
+                }
+                if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
+                    selectedRating = filterCondition.minRating ?: 0f
+                    updateRatingSelection(selectedRating)
+                }
+                if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
+                    selectedCategories.clear()
+                    selectedCategories.addAll(filterCondition.categories ?: emptyList())
+                }
+                if (mode == FilterMode.FULL) {
+                    selectedOperating = filterCondition.isOpen
+                    selectedReview = filterCondition.hasReview
+                    binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
+                    binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
+                }
             }
         }
     }
