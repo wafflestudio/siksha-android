@@ -6,7 +6,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,7 @@ import com.google.android.material.chip.Chip
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -182,57 +182,77 @@ class FilterDialogFragment(
 
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = dpToPx(56) // 56dp
-                    height = dpToPx(42) // 34dp
+                    height = dpToPx(48) // 34dp
                     columnSpec = GridLayout.spec(index % 5)
                     rowSpec = GridLayout.spec(if (index < 5) 0 else 1)
-                    setMargins(dpToPx(6), dpToPx(6), dpToPx(6), dpToPx(6))
+                    setMargins(
+                        if (index % 5 != 0) dpToPx(4) else 0,
+                        if (index >= 5) dpToPx(4) else 0,
+                        if (index % 5 != 4) dpToPx(4) else 0,
+                        if (index < 5) dpToPx(4) else 0
+                    )
                 }
-
-                gravity = Gravity.CENTER
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 setPadding(10, 10, 10, 10)
-
-                setChipBackgroundColorResource(R.color.chip_default_bg)
-                chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#DFDFDF"))
-                chipStrokeWidth = 1f
                 setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
-
                 shapeAppearanceModel = shapeAppearanceModel.toBuilder()
                     .setAllCornerSizes(dpToPx(30).toFloat())
                     .build()
 
                 if (category == "전체") {
                     isChecked = true
-                    setChipBackgroundColorResource(R.color.chip_selected_bg)
+                    setSelectedCategoryChip(this)
+                } else {
+                    setUnselectedCategoryChip(this)
                 }
 
                 setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
-                        setChipBackgroundColorResource(R.color.chip_selected_bg)
-                        chipStrokeWidth = dpToPx(1).toFloat()
-                        setChipStrokeColorResource(R.color.orange_main)
+                        setSelectedCategoryChip(this)
                     } else {
-                        setChipBackgroundColorResource(R.color.chip_default_bg)
-                        chipStrokeWidth = 0f
+                        setUnselectedCategoryChip(this)
                     }
 
-                    if (category == "전체" && isChecked) {
-                        binding.gridCategory.children.forEach { chipView ->
-                            (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked = false
+                    // selectedCategories와의 상호작용
+                    if (category == "전체") {
+                        Timber.d("$category, $isChecked")
+                        // "전체"가 선택된 경우, clear
+                        if (isChecked) {
+                            binding.gridCategory.children.forEach { chipView ->
+                                (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked = false
+                            }
+                            selectedCategories.clear()
+                            selectedCategories.add("전체")
                         }
-                        selectedCategories.clear()
-                        selectedCategories.add("전체")
-                    } else if (isChecked) {
+                        // 아무것도 선택되지 않은 상태에서는 "전체"가 선택 해제되지 않음
+                        else if (!binding.gridCategory.children.any { chipView ->
+                            (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked == true
+                        }
+                        ) {
+                            this.isChecked = true
+                            setSelectedCategoryChip(this)
+                        }
+                    } else {
                         val allChip = binding.gridCategory.children
                             .mapNotNull { it as? Chip }
                             .firstOrNull { it.text == "전체" }
-
-                        allChip?.isChecked = false
-                        selectedCategories.remove("전체")
-
-                        selectedCategories.add(category)
-                    } else {
-                        selectedCategories.remove(category)
+                        // "전체" 이외가 선택되면 "전체"를 선택 해제
+                        if (isChecked) {
+                            selectedCategories.add(category)
+                            allChip?.isChecked = false
+                            selectedCategories.remove("전체")
+                        } else {
+                            selectedCategories.remove(category)
+                            // "전체" 이외 모두 선택 해제되면, "전체"를 활성화
+                            if (!binding.gridCategory.children.any { chipView ->
+                                (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked == true
+                            }
+                            ) {
+                                allChip?.isChecked = true
+                                selectedCategories.clear()
+                                selectedCategories.add("전체")
+                            }
+                        }
                     }
                 }
             }
@@ -247,6 +267,22 @@ class FilterDialogFragment(
             dp.toFloat(),
             Resources.getSystem().displayMetrics
         ).toInt()
+    }
+
+    private fun setSelectedCategoryChip(chip: Chip) {
+        chip.apply {
+            setChipBackgroundColorResource(R.color.chip_selected_bg)
+            chipStrokeWidth = dpToPx(1).toFloat()
+            setChipStrokeColorResource(R.color.orange_main)
+        }
+    }
+
+    private fun setUnselectedCategoryChip(chip: Chip) {
+        chip.apply {
+            setChipBackgroundColorResource(R.color.chip_default_bg)
+            chipStrokeWidth = dpToPx(1).toFloat()
+            chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#DFDFDF"))
+        }
     }
 
     private fun setupButtons() {
