@@ -177,7 +177,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="9dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
@@ -193,6 +193,7 @@
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:scrollbars="none"
                 >
 
                 <LinearLayout
@@ -219,7 +220,7 @@
                         android:id = "@+id/filter_open"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:filterText="영업중" />
+                        app:filterText="영업 중" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_review"
@@ -232,7 +233,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:showArrow="true"
-                        app:filterText="평점" />
+                        app:filterText="최소 평점" />
 
                     <com.wafflestudio.siksha2.components.MenuFilterField
                         android:id = "@+id/filter_category"
