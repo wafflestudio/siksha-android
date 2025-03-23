@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <!-- 거리 필터 제목 -->
         <TextView
@@ -81,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <!-- 가격 필터 제목 -->
         <TextView
@@ -135,7 +135,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/open_section"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -184,7 +184,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/review_section"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -234,7 +234,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/rating_section"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -387,7 +387,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         android:paddingTop="16dp">
 
         <TextView
@@ -411,28 +411,42 @@
     </LinearLayout>
 
     <!-- 버튼 영역 -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="20dp">
+        android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:id="@+id/btnReset"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:clickable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnApply"
+            android:layout_marginEnd="7dp"
+            android:gravity="center"
             android:text="초기화"
             android:textColor="@color/white"
-            android:backgroundTint="@color/gray_500" />
+            android:background="@color/gray_500"
+            app:layout_constraintDimensionRatio="9:2"/>
 
-        <Button
+        <TextView
             android:id="@+id/btnApply"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:clickable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnReset"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
             android:text="적용"
             android:textColor="@color/black"
-            android:backgroundTint="@color/orange_main" />
-    </LinearLayout>
+            android:background="@color/orange_main"
+            app:layout_constraintDimensionRatio="9:2"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

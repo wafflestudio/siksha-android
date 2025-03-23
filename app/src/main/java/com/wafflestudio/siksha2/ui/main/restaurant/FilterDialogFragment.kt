@@ -4,11 +4,13 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Outline
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.GridLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -285,16 +287,30 @@ class FilterDialogFragment(
         }
     }
 
+    private fun View.setHalfCircleCorners() {
+        outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline) {
+                val radius = view.height / 2f
+//              x  outline.setRoundRect(0, 0, (view.width + radius).toInt(), view.height, radius)
+//                outline.setRoundRect((0 - radius).toInt(), 0, view.width, view.height, radius)
+                outline.setRoundRect(0, 0, view.width, view.height, radius)
+            }
+        }
+        clipToOutline = true
+    }
+
     private fun setupButtons() {
         binding.btnReset.setOnClickListener {
             resetFiltersByMode()
             dismiss()
         }
+        binding.btnReset.post { binding.btnReset.setHalfCircleCorners() }
 
         binding.btnApply.setOnClickListener {
             applyFiltersByMode()
             dismiss()
         }
+        binding.btnApply.post { binding.btnApply.setHalfCircleCorners() }
     }
 
     private fun setupVisibility() {
