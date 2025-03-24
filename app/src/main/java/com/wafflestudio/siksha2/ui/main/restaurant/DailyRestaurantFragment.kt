@@ -394,7 +394,7 @@ class DailyRestaurantFragment : Fragment() {
                 binding.filterReview.showCheck(condition.hasReview)
 
                 binding.filterRating.setFilter(
-                    condition.minRating?.let { rating -> "평점 $rating 이상" } ?: "평점",
+                    condition.minRating?.let { rating -> "평점 $rating 이상" } ?: "최소 평점",
                     condition.minRating == null
                 )
                 binding.filterCategory.setFilter(

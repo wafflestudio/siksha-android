@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.components
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -57,11 +58,14 @@ class MenuFilterField : LinearLayout {
     }
 
     private fun updateStyle(isNull: Boolean) {
-        val backgroundRes = if (isNull) {
-            R.drawable.frame_menu_filter_field
+        if (isNull) {
+            binding.filterBackground.background =
+                ContextCompat.getDrawable(context, R.drawable.frame_menu_filter_field)
+            binding.filter.setTypeface(null, Typeface.NORMAL)
         } else {
-            R.drawable.frame_menu_filter_field_active
+            binding.filterBackground.background =
+                ContextCompat.getDrawable(context, R.drawable.frame_menu_filter_field_active)
+            binding.filter.setTypeface(null, Typeface.BOLD)
         }
-        binding.filterBackground.background = ContextCompat.getDrawable(context, backgroundRes)
     }
 }
