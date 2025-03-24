@@ -9,6 +9,7 @@
     <color name="transparent">#00000000</color>
 
     <color name="gray_900">#FF4F4F4F</color>
+    <color name="gray_800">#FF4C4D50</color>
     <color name="gray_700">#FF707070</color>
     <color name="gray_500">#FFB9B9B9</color>
     <color name="light_gray_500">#FFEDE9E6</color>
