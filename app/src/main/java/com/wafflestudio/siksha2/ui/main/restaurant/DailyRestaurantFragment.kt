@@ -355,29 +355,19 @@ class DailyRestaurantFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { condition ->
                 binding.filterDistance.setFilter(
-                    condition.distance?.let { distance ->
-                        if (distance >= 1000) {
-                            "1km 이상"
-                        } else {
-                            "${distance.toInt()}m 이내"
-                        }
-                    } ?: "거리",
-                    condition.distance == null
+                    if (condition.distance >= 1000) "거리" else "${condition.distance.toInt()}m 이내",
+                    condition.distance >= 1000f
                 )
 
                 binding.filterPrice.setFilter(
-                    if (condition.minPrice != null && condition.maxPrice != null) {
-                        if (condition.maxPrice == 10000f) {
-                            "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원 ~ " +
-                                "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원 이상"
-                        } else {
-                            "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원 ~ " +
-                                "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원"
-                        }
+                    if (condition.minPrice > 3000f || condition.maxPrice < 10000f) {
+                        val minPriceText = if (condition.minPrice <= 3000) "3,000원 이하" else "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원"
+                        val maxPriceText = if (condition.maxPrice >= 10000) "10,000원 이상" else "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원"
+                        "$minPriceText ~ $maxPriceText"
                     } else {
                         "가격"
                     },
-                    condition.maxPrice == null && condition.minPrice == null
+                    condition.maxPrice == 10000f && condition.minPrice == 3000f
                 )
 
                 binding.filterOpen.showCheck(condition.isOpen)

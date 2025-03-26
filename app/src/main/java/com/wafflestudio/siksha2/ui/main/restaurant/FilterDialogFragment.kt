@@ -33,7 +33,7 @@ class FilterDialogFragment(
     private val vm: DailyRestaurantViewModel by activityViewModels()
 
     private var selectedDistance: Float = 1000f
-    private var selectedMinPrice: Float = 0f
+    private var selectedMinPrice: Float = 3000f
     private var selectedMaxPrice: Float = 15000f
     private var selectedOperating: Boolean = false
     private var selectedReview: Boolean = false
@@ -111,6 +111,7 @@ class FilterDialogFragment(
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
             binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
                 val value = slider.values[0]
+                selectedDistance = value
                 updateDistanceText(value.toInt())
             }
         }
@@ -118,6 +119,8 @@ class FilterDialogFragment(
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
             binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
                 val values = slider.values
+                selectedMinPrice = values[0]
+                selectedMaxPrice = values[1]
                 updatePriceRangeText(values[0].toInt(), values[1].toInt())
             }
         }
