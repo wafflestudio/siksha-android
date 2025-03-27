@@ -34,7 +34,7 @@ class FilterDialogFragment(
 
     private var selectedDistance: Float = 1000f
     private var selectedMinPrice: Float = 3000f
-    private var selectedMaxPrice: Float = 15000f
+    private var selectedMaxPrice: Float = 10000f
     private var selectedOperating: Boolean = false
     private var selectedReview: Boolean = false
     private var selectedRating: Float = 0f
@@ -85,8 +85,10 @@ class FilterDialogFragment(
                 if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
                     selectedMinPrice = filterCondition.minPrice
                     selectedMaxPrice = filterCondition.maxPrice
-                    binding.priceRangeSlider.valueFrom = selectedMinPrice
-                    binding.priceRangeSlider.valueTo = selectedMaxPrice
+                    binding.priceRangeSlider.values = listOf(
+                        selectedMinPrice.coerceIn(3000f, 10000f),
+                        selectedMaxPrice.coerceIn(3000f, 10000f)
+                    )
                     updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
                 }
                 if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
