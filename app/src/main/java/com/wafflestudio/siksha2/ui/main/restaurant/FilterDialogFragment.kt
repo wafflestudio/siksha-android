@@ -4,15 +4,14 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Outline
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.GridLayout
-import android.widget.SeekBar
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
@@ -23,6 +22,7 @@ import com.google.android.material.chip.Chip
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -33,8 +33,8 @@ class FilterDialogFragment(
     private val vm: DailyRestaurantViewModel by activityViewModels()
 
     private var selectedDistance: Float = 1000f
-    private var selectedMinPrice: Float = 0f
-    private var selectedMaxPrice: Float = 15000f
+    private var selectedMinPrice: Float = 3000f
+    private var selectedMaxPrice: Float = 10000f
     private var selectedOperating: Boolean = false
     private var selectedReview: Boolean = false
     private var selectedRating: Float = 0f
@@ -56,7 +56,7 @@ class FilterDialogFragment(
         return dialog
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DialogFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -78,15 +78,17 @@ class FilterDialogFragment(
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { filterCondition ->
                 if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-                    selectedDistance = filterCondition.distance ?: 1000f
-                    binding.seekBarDistance.progress = selectedDistance.toInt()
+                    selectedDistance = filterCondition.distance
+                    binding.distanceRangeSlider.values = listOf(selectedDistance)
                     updateDistanceText(selectedDistance.toInt())
                 }
                 if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                    selectedMinPrice = filterCondition.minPrice ?: 0f
-                    selectedMaxPrice = filterCondition.maxPrice ?: 15000f
-                    binding.dualRangeSeekBar.selectedMin = selectedMinPrice.toInt()
-                    binding.dualRangeSeekBar.selectedMax = selectedMaxPrice.toInt()
+                    selectedMinPrice = filterCondition.minPrice
+                    selectedMaxPrice = filterCondition.maxPrice
+                    binding.priceRangeSlider.values = listOf(
+                        selectedMinPrice.coerceIn(3000f, 10000f),
+                        selectedMaxPrice.coerceIn(3000f, 10000f)
+                    )
                     updatePriceRangeText(selectedMinPrice.toInt(), selectedMaxPrice.toInt())
                 }
                 if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
@@ -98,8 +100,8 @@ class FilterDialogFragment(
                     selectedCategories.addAll(filterCondition.categories ?: emptyList())
                 }
                 if (mode == FilterMode.FULL) {
-                    selectedOperating = filterCondition.isOpen ?: false
-                    selectedReview = filterCondition.hasReview ?: false
+                    selectedOperating = filterCondition.isOpen
+                    selectedReview = filterCondition.hasReview
                     binding.operatingHoursGroup.check(if (selectedOperating) R.id.optionOperating else R.id.optionAll)
                     binding.radioGroupReview.check(if (selectedReview) R.id.radioWithReviews else R.id.radioAllReviews)
                 }
@@ -109,52 +111,35 @@ class FilterDialogFragment(
 
     private fun setupSeekBarListeners() {
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-            binding.seekBarDistance.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if (fromUser) {
-                        selectedDistance = progress.toFloat()
-                        updateDistanceText(progress)
-                    }
-                }
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-            })
+            binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
+                val value = slider.values[0]
+                selectedDistance = value
+                updateDistanceText(value.toInt())
+            }
         }
 
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-            binding.dualRangeSeekBar.setOnRangeChangeListener { min, max ->
-                selectedMinPrice = min.toFloat()
-                selectedMaxPrice = max.toFloat()
-                updatePriceRangeText(min.toInt(), max.toInt())
+            binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
+                val values = slider.values
+                selectedMinPrice = values[0]
+                selectedMaxPrice = values[1]
+                updatePriceRangeText(values[0].toInt(), values[1].toInt())
             }
         }
     }
 
+    override fun getTheme(): Int {
+        return R.style.RoundedBottomSheetDialogTheme
+    }
+
     private fun updateDistanceText(distance: Int) {
-        binding.tvDistance.text = if (distance >= 1000) "1km 이상" else "${distance.toInt()}m 이내"
+        binding.tvDistance.text = if (distance >= 1000) "1km 이상" else "${distance}m 이내"
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
-        val maxPriceText = if (maxPrice >= 15000) "15,000원 이상" else "${maxPrice}원"
-        binding.tvPriceRange.text = "${minPrice}원 ~ $maxPriceText"
-
-        val minThumbX = calculateThumbX(binding.dualRangeSeekBar, minPrice)
-        val maxThumbX = calculateThumbX(binding.dualRangeSeekBar, maxPrice)
-
-        val middleX = (minThumbX + maxThumbX) / 2
-        binding.tvPriceRange.x = middleX
-
-        binding.tvPriceRange.translationY = binding.dualRangeSeekBar.y - binding.dualRangeSeekBar.height - 40f
-    }
-
-    private fun calculateThumbX(seekBar: View, value: Int): Float {
-        val dualSeekBar = seekBar as DualRangeSeekBar
-        val max = dualSeekBar.maxValue
-        val availableWidth = dualSeekBar.width - dualSeekBar.paddingLeft - dualSeekBar.paddingRight
-
-        val thumbPosX = dualSeekBar.paddingLeft + (value.toFloat() / max) * availableWidth
-
-        return thumbPosX - (binding.tvPriceRange.width / 2)
+        val minPriceText = if (minPrice <= 3000) "3,000원 이하" else "${minPrice}원"
+        val maxPriceText = if (maxPrice >= 10000) "10,000원 이상" else "${maxPrice}원"
+        binding.tvPriceRange.text = "$minPriceText ~ $maxPriceText"
     }
 
     private fun setupRatingSelection() {
@@ -204,52 +189,77 @@ class FilterDialogFragment(
 
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = dpToPx(56) // 56dp
-                    height = dpToPx(42) // 34dp
+                    height = dpToPx(48) // 34dp
                     columnSpec = GridLayout.spec(index % 5)
                     rowSpec = GridLayout.spec(if (index < 5) 0 else 1)
-                    setMargins(dpToPx(6), dpToPx(6), dpToPx(6), dpToPx(6))
+                    setMargins(
+                        if (index % 5 != 0) dpToPx(4) else 0,
+                        if (index >= 5) dpToPx(4) else 0,
+                        if (index % 5 != 4) dpToPx(4) else 0,
+                        if (index < 5) dpToPx(4) else 0
+                    )
                 }
-
-                gravity = Gravity.CENTER
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 setPadding(10, 10, 10, 10)
-
-                setChipBackgroundColorResource(R.color.chip_default_bg)
-                setChipStrokeColor(ColorStateList.valueOf(Color.parseColor("#DFDFDF")))
-                setChipStrokeWidth(1f)
                 setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
-
-                chipCornerRadius = dpToPx(30).toFloat()
+                shapeAppearanceModel = shapeAppearanceModel.toBuilder()
+                    .setAllCornerSizes(dpToPx(30).toFloat())
+                    .build()
 
                 if (category == "전체") {
                     isChecked = true
-                    setChipBackgroundColorResource(R.color.chip_selected_bg)
+                    setSelectedCategoryChip(this)
+                } else {
+                    setUnselectedCategoryChip(this)
                 }
 
                 setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
-                        setChipBackgroundColorResource(R.color.chip_selected_bg)
+                        setSelectedCategoryChip(this)
                     } else {
-                        setChipBackgroundColorResource(R.color.chip_default_bg)
+                        setUnselectedCategoryChip(this)
                     }
 
-                    if (category == "전체" && isChecked) {
-                        binding.gridCategory.children.forEach { chipView ->
-                            (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked = false
+                    // selectedCategories와의 상호작용
+                    if (category == "전체") {
+                        Timber.d("$category, $isChecked")
+                        // "전체"가 선택된 경우, clear
+                        if (isChecked) {
+                            binding.gridCategory.children.forEach { chipView ->
+                                (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked = false
+                            }
+                            selectedCategories.clear()
+                            selectedCategories.add("전체")
                         }
-                        selectedCategories.clear()
-                        selectedCategories.add("전체")
-                    } else if (isChecked) {
+                        // 아무것도 선택되지 않은 상태에서는 "전체"가 선택 해제되지 않음
+                        else if (!binding.gridCategory.children.any { chipView ->
+                            (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked == true
+                        }
+                        ) {
+                            this.isChecked = true
+                            setSelectedCategoryChip(this)
+                        }
+                    } else {
                         val allChip = binding.gridCategory.children
                             .mapNotNull { it as? Chip }
                             .firstOrNull { it.text == "전체" }
-
-                        allChip?.isChecked = false
-                        selectedCategories.remove("전체")
-
-                        selectedCategories.add(category)
-                    } else {
-                        selectedCategories.remove(category)
+                        // "전체" 이외가 선택되면 "전체"를 선택 해제
+                        if (isChecked) {
+                            selectedCategories.add(category)
+                            allChip?.isChecked = false
+                            selectedCategories.remove("전체")
+                        } else {
+                            selectedCategories.remove(category)
+                            // "전체" 이외 모두 선택 해제되면, "전체"를 활성화
+                            if (!binding.gridCategory.children.any { chipView ->
+                                (chipView as? Chip)?.takeIf { it.text != "전체" }?.isChecked == true
+                            }
+                            ) {
+                                allChip?.isChecked = true
+                                selectedCategories.clear()
+                                selectedCategories.add("전체")
+                            }
+                        }
                     }
                 }
             }
@@ -258,7 +268,7 @@ class FilterDialogFragment(
         }
     }
 
-    fun dpToPx(dp: Int): Int {
+    private fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             dp.toFloat(),
@@ -266,16 +276,46 @@ class FilterDialogFragment(
         ).toInt()
     }
 
+    private fun setSelectedCategoryChip(chip: Chip) {
+        chip.apply {
+            setChipBackgroundColorResource(R.color.chip_selected_bg)
+            chipStrokeWidth = dpToPx(1).toFloat()
+            setChipStrokeColorResource(R.color.orange_main)
+        }
+    }
+
+    private fun setUnselectedCategoryChip(chip: Chip) {
+        chip.apply {
+            setChipBackgroundColorResource(R.color.chip_default_bg)
+            chipStrokeWidth = dpToPx(1).toFloat()
+            chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#DFDFDF"))
+        }
+    }
+
+    private fun View.setHalfCircleCorners() {
+        outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(view: View, outline: Outline) {
+                val radius = view.height / 2f
+//              x  outline.setRoundRect(0, 0, (view.width + radius).toInt(), view.height, radius)
+//                outline.setRoundRect((0 - radius).toInt(), 0, view.width, view.height, radius)
+                outline.setRoundRect(0, 0, view.width, view.height, radius)
+            }
+        }
+        clipToOutline = true
+    }
+
     private fun setupButtons() {
         binding.btnReset.setOnClickListener {
             resetFiltersByMode()
             dismiss()
         }
+        binding.btnReset.post { binding.btnReset.setHalfCircleCorners() }
 
         binding.btnApply.setOnClickListener {
             applyFiltersByMode()
             dismiss()
         }
+        binding.btnApply.post { binding.btnApply.setHalfCircleCorners() }
     }
 
     private fun setupVisibility() {
@@ -299,12 +339,12 @@ class FilterDialogFragment(
         when (mode) {
             FilterMode.DISTANCE -> {
                 selectedDistance = 1000f
-                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(distance = null))
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(distance = selectedDistance))
             }
             FilterMode.PRICE -> {
-                selectedMinPrice = 0f
-                selectedMaxPrice = 15000f
-                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minPrice = null, maxPrice = null))
+                selectedMinPrice = 3000f
+                selectedMaxPrice = 10000f
+                vm.setMenuFilterCondition(vm.getCurrentCondition().copy(minPrice = selectedMinPrice, maxPrice = selectedMaxPrice))
             }
             FilterMode.RATING -> {
                 selectedRating = 0f
@@ -317,21 +357,21 @@ class FilterDialogFragment(
             }
             FilterMode.FULL -> {
                 selectedDistance = 1000f
-                selectedMinPrice = 0f
-                selectedMaxPrice = 15000f
+                selectedMinPrice = 3000f
+                selectedMaxPrice = 10000f
                 selectedOperating = false
                 selectedReview = false
                 selectedRating = 0f
                 selectedCategories.clear()
                 vm.setMenuFilterCondition(
                     MenuFilterCondition(
-                        null,
-                        null,
-                        null,
-                        false,
-                        false,
-                        null,
-                        null
+                        distance = 1000f,
+                        minPrice = 3000f,
+                        maxPrice = 10000f,
+                        isOpen = false,
+                        hasReview = false,
+                        minRating = null,
+                        categories = null
                     )
                 )
             }

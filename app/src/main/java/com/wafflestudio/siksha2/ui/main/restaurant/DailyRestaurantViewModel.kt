@@ -40,18 +40,27 @@ class DailyRestaurantViewModel @Inject constructor(
     private val sikshaPrefObjects: SikshaPrefObjects
 ) : ViewModel() {
 
-    private val _dateFilter = MutableLiveData<LocalDate>(LocalDate.now())
+    private val _dateFilter = MutableLiveData(LocalDate.now())
     val dateFilter: LiveData<LocalDate> = _dateFilter
 
-    private val _mealsOfDayFilter = MutableLiveData<MealsOfDay>(MealsOfDay.LU)
+    private val _mealsOfDayFilter = MutableLiveData(MealsOfDay.LU)
     val mealsOfDayFilter: LiveData<MealsOfDay> = _mealsOfDayFilter
 
-    private val _isCalendarVisible = MutableLiveData<Boolean>(false)
+    private val _isCalendarVisible = MutableLiveData(false)
     val isCalendarVisible: LiveData<Boolean> = _isCalendarVisible
 
     private val _currentLocation = MutableLiveData<Location?>(null)
     val currentLocation: LiveData<Location?> = _currentLocation
 
+    private val defaultCondition = MenuFilterCondition(
+        distance = 1000f,
+        minPrice = 3000f,
+        maxPrice = 10000f,
+        isOpen = false,
+        hasReview = false,
+        minRating = null,
+        categories = null
+    )
     private val _menuFilterCondition = MutableStateFlow(sikshaPrefObjects.menuFilterCondition.getValue())
     val menuFilterCondition: StateFlow<MenuFilterCondition> = _menuFilterCondition
         .stateIn(viewModelScope, SharingStarted.Eagerly, sikshaPrefObjects.menuFilterCondition.getValue())
@@ -133,7 +142,7 @@ class DailyRestaurantViewModel @Inject constructor(
         Timber.d("(${_currentLocation.value?.latitude}, ${_currentLocation.value?.longitude})")
     }
 
-    fun getDistance(menuGroup: MenuGroup): Float? {
+    private fun getDistance(menuGroup: MenuGroup): Float? {
         val result = FloatArray(1)
         val location = _currentLocation.value
 
@@ -234,38 +243,32 @@ class DailyRestaurantViewModel @Inject constructor(
             }
             // 사용자 필터
             .map { menuGroupList ->
-                _menuFilterCondition.value?.distance?.let {
+                _menuFilterCondition.value.distance.let { distance ->
                     menuGroupList.filter { item ->
                         getDistance(item)?.let {
-                            it <= _menuFilterCondition.value?.distance!!
+                            it <= distance
                         } ?: true
                     }
-                } ?: menuGroupList
+                }
             }
             .map { menuGroupList ->
                 menuGroupList.map { restaurant ->
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
                             menu.price?.let { menuPrice ->
-                                (
-                                    _menuFilterCondition.value?.maxPrice?.let {
-                                        menuPrice <= it
-                                    } ?: true
-                                    ) &&
-                                    (
-                                        _menuFilterCondition.value?.minPrice?.let {
-                                            menuPrice >= it
-                                        } ?: true
-                                        )
+                                val minPrice = _menuFilterCondition.value.minPrice
+                                val maxPrice = _menuFilterCondition.value.maxPrice
+                                ((menuPrice >= minPrice) || (minPrice == 3000f)) &&
+                                    ((menuPrice <= maxPrice) || (minPrice == 10000f))
                             } ?: true
                         }.filter { menu ->
                             when (menu.score) {
                                 null -> {
-                                    _menuFilterCondition.value?.hasReview?.let { !it } ?: true
+                                    _menuFilterCondition.value.hasReview
                                 }
                                 else -> {
-                                    _menuFilterCondition.value?.hasReview ?: true &&
-                                        _menuFilterCondition.value?.minRating?.let {
+                                    _menuFilterCondition.value.hasReview &&
+                                        _menuFilterCondition.value.minRating?.let {
                                             menu.score >= it
                                         } ?: true
                                 }
@@ -279,16 +282,9 @@ class DailyRestaurantViewModel @Inject constructor(
                 menuGroupList.map { restaurant ->
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
-                            val priceCheck = menu.price?.let { menuPrice ->
-                                (_menuFilterCondition.value?.maxPrice?.let { menuPrice <= it } ?: true) &&
-                                    (_menuFilterCondition.value?.minPrice?.let { menuPrice >= it } ?: true)
-                            } ?: true
-
-                            val categoryCheck = _menuFilterCondition.value?.categories?.let { selectedCategories ->
+                            _menuFilterCondition.value.categories?.let { selectedCategories ->
                                 selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
                             } ?: true
-
-                            priceCheck && categoryCheck
                         }
                     )
                     newRestaurant

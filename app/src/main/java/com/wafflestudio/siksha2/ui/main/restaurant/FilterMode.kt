@@ -15,9 +15,9 @@ enum class FilterMode {
 }
 
 data class MenuFilterCondition(
-    val distance: Float?,
-    val minPrice: Float?,
-    val maxPrice: Float?,
+    val distance: Float,
+    val minPrice: Float,
+    val maxPrice: Float,
     val isOpen: Boolean,
     val hasReview: Boolean,
     val minRating: Float?,
