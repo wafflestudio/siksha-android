@@ -92,7 +92,7 @@ class FilterDialogFragment(
         }
     }
 
-    private fun setupDistanceSelection(){
+    private fun setupDistanceSelection() {
         binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
             val value = slider.values[0]
             selectedCondition = selectedCondition.copy(distance = value)
@@ -100,7 +100,7 @@ class FilterDialogFragment(
         }
     }
 
-    private fun setupPriceSelection(){
+    private fun setupPriceSelection() {
         binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
             selectedCondition = selectedCondition.copy(
@@ -226,9 +226,10 @@ class FilterDialogFragment(
                     }
                 }
             }
-
             binding.gridCategory.addView(chip)
         }
+
+        updateCategorySelection(selectedCondition.categories)
     }
 
     private fun setupButtons() {
@@ -292,7 +293,7 @@ class FilterDialogFragment(
                 }
 
                 chip.isChecked = isSelected
-                
+
                 if (isSelected) {
                     setSelectedCategoryChip(chip)
                 } else {
