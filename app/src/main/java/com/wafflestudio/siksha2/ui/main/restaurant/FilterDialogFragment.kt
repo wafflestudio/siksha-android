@@ -22,7 +22,6 @@ import com.google.android.material.chip.Chip
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -84,14 +83,11 @@ class FilterDialogFragment(
                     updateDistanceText(newCondition.distance.toInt())
                 }
                 if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                    binding.priceRangeSlider.values = listOf(
-                        newCondition.minPrice.coerceIn(3000f, 10000f),
-                        newCondition.maxPrice.coerceIn(3000f, 10000f)
-                    )
+                    binding.priceRangeSlider.values = listOf(newCondition.minPrice, newCondition.maxPrice)
                     updatePriceRangeText(newCondition.minPrice.toInt(), newCondition.maxPrice.toInt())
                 }
                 if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
-                    updateRatingSelection(newCondition.minRating ?: 0f)
+                    updateRatingSelection(newCondition.minRating)
                 }
                 if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
                     //Todo
