@@ -374,12 +374,16 @@ class DailyRestaurantFragment : Fragment() {
                 binding.filterReview.showCheck(condition.hasReview)
 
                 binding.filterRating.setFilter(
-                    condition.minRating?.let { rating -> "평점 $rating 이상" } ?: "최소 평점",
-                    condition.minRating == null
+                    if(condition.minRating != 0f){
+                        condition.minRating.let { rating -> "평점 $rating 이상" }
+                    }else{
+                        "최소 평점"
+                    },
+                    condition.minRating == 0f
                 )
                 binding.filterCategory.setFilter(
-                    condition.categories?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
-                    condition.categories?.isEmpty() ?: true
+                    condition.categories.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
+                    condition.categories.isEmpty()
                 )
             }
         }

@@ -71,8 +71,8 @@ class SikshaPrefObjects @Inject constructor(
                 maxPrice = 10000f,
                 isOpen = false,
                 hasReview = false,
-                minRating = null,
-                categories = null
+                minRating = 0f,
+                categories = emptySet()
             ),
             sharedPreferences,
             serializer,

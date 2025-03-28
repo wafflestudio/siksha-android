@@ -52,15 +52,6 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _currentLocation = MutableLiveData<Location?>(null)
     val currentLocation: LiveData<Location?> = _currentLocation
 
-    private val defaultCondition = MenuFilterCondition(
-        distance = 1000f,
-        minPrice = 3000f,
-        maxPrice = 10000f,
-        isOpen = false,
-        hasReview = false,
-        minRating = null,
-        categories = null
-    )
     private val _menuFilterCondition = MutableStateFlow(sikshaPrefObjects.menuFilterCondition.getValue())
     val menuFilterCondition: StateFlow<MenuFilterCondition> = _menuFilterCondition
         .stateIn(viewModelScope, SharingStarted.Eagerly, sikshaPrefObjects.menuFilterCondition.getValue())
@@ -268,7 +259,7 @@ class DailyRestaurantViewModel @Inject constructor(
                                 }
                                 else -> {
                                     _menuFilterCondition.value.hasReview &&
-                                        _menuFilterCondition.value.minRating?.let {
+                                        _menuFilterCondition.value.minRating.let {
                                             menu.score >= it
                                         } ?: true
                                 }
@@ -282,7 +273,7 @@ class DailyRestaurantViewModel @Inject constructor(
                 menuGroupList.map { restaurant ->
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
-                            _menuFilterCondition.value.categories?.let { selectedCategories ->
+                            _menuFilterCondition.value.categories.let { selectedCategories ->
                                 selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
                             } ?: true
                         }
