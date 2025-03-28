@@ -59,7 +59,8 @@ class FilterDialogFragment(
 
         setupObservers()
 
-        setupSeekBarListeners()
+        setupDistanceSelection()
+        setupPriceSelection()
         setupRatingSelection()
         setupOperatingSelection()
         setupReviewSelection()
@@ -78,46 +79,35 @@ class FilterDialogFragment(
             vm.menuFilterCondition.collect { newCondition ->
                 selectedCondition = newCondition // selected 값에 new 먼저 저장
 
-                if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-                    binding.distanceRangeSlider.values = listOf(newCondition.distance)
-                    updateDistanceText(newCondition.distance.toInt())
-                }
-                if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                    binding.priceRangeSlider.values = listOf(newCondition.minPrice, newCondition.maxPrice)
-                    updatePriceRangeText(newCondition.minPrice.toInt(), newCondition.maxPrice.toInt())
-                }
-                if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
-                    updateRatingSelection(newCondition.minRating)
-                }
-                if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
-                    //Todo
-                }
-                if (mode == FilterMode.FULL) {
-                    binding.operatingHoursGroup.check(if (newCondition.isOpen) R.id.optionOperating else R.id.optionAll)
-                    binding.radioGroupReview.check(if (newCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
-                }
+                binding.distanceRangeSlider.values = listOf(newCondition.distance)
+                binding.priceRangeSlider.values = listOf(newCondition.minPrice, newCondition.maxPrice)
+                binding.operatingHoursGroup.check(if (newCondition.isOpen) R.id.optionOperating else R.id.optionAll)
+                binding.radioGroupReview.check(if (newCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
+
+                updateDistanceText(newCondition.distance.toInt())
+                updatePriceRangeText(newCondition.minPrice.toInt(), newCondition.maxPrice.toInt())
+                updateRatingSelection(newCondition.minRating)
+                updateCategorySelection(newCondition.categories)
             }
         }
     }
 
-    private fun setupSeekBarListeners() {
-        if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-            binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
-                val value = slider.values[0]
-                selectedCondition = selectedCondition.copy(distance = value)
-                updateDistanceText(value.toInt())
-            }
+    private fun setupDistanceSelection(){
+        binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
+            val value = slider.values[0]
+            selectedCondition = selectedCondition.copy(distance = value)
+            updateDistanceText(selectedCondition.distance.toInt())
         }
+    }
 
-        if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-            binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
-                val values = slider.values
-                selectedCondition = selectedCondition.copy(
-                    minPrice = values[0],
-                    maxPrice = values[1]
-                )
-                updatePriceRangeText(values[0].toInt(), values[1].toInt())
-            }
+    private fun setupPriceSelection(){
+        binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
+            val values = slider.values
+            selectedCondition = selectedCondition.copy(
+                minPrice = values[0],
+                maxPrice = values[1]
+            )
+            updatePriceRangeText(selectedCondition.minPrice.toInt(), selectedCondition.maxPrice.toInt())
         }
     }
 
@@ -291,6 +281,26 @@ class FilterDialogFragment(
         }
     }
 
+    private fun updateCategorySelection(category: Set<String>) {
+        binding.gridCategory.children
+            .filterIsInstance<Chip>()
+            .forEach { chip ->
+                val isSelected = if (category.isEmpty()) {
+                    chip.text == "전체"
+                } else {
+                    category.contains(chip.text.toString())
+                }
+
+                chip.isChecked = isSelected
+                
+                if (isSelected) {
+                    setSelectedCategoryChip(chip)
+                } else {
+                    setUnselectedCategoryChip(chip)
+                }
+            }
+    }
+
     private fun dpToPx(dp: Int): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
@@ -326,8 +336,6 @@ class FilterDialogFragment(
         }
         clipToOutline = true
     }
-
-
 
     private fun resetFiltersByMode() {
         val originalCondition = vm.getCurrentCondition()
