@@ -79,15 +79,24 @@ class FilterDialogFragment(
             vm.menuFilterCondition.collect { newCondition ->
                 selectedCondition = newCondition // selected 값에 new 먼저 저장
 
-                binding.distanceRangeSlider.values = listOf(newCondition.distance)
-                binding.priceRangeSlider.values = listOf(newCondition.minPrice, newCondition.maxPrice)
-                binding.operatingHoursGroup.check(if (newCondition.isOpen) R.id.optionOperating else R.id.optionAll)
-                binding.radioGroupReview.check(if (newCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
-
-                updateDistanceText(newCondition.distance.toInt())
-                updatePriceRangeText(newCondition.minPrice.toInt(), newCondition.maxPrice.toInt())
-                updateRatingSelection(newCondition.minRating)
-                updateCategorySelection(newCondition.categories)
+                if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
+                    binding.distanceRangeSlider.values = listOf(newCondition.distance)
+                    updateDistanceText(newCondition.distance.toInt())
+                }
+                if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
+                    binding.priceRangeSlider.values = listOf(newCondition.minPrice, newCondition.maxPrice)
+                    updatePriceRangeText(newCondition.minPrice.toInt(), newCondition.maxPrice.toInt())
+                }
+                if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
+                    updateRatingSelection(newCondition.minRating)
+                }
+                if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
+                    updateCategorySelection(newCondition.categories)
+                }
+                if (mode == FilterMode.FULL) {
+                    binding.operatingHoursGroup.check(if (newCondition.isOpen) R.id.optionOperating else R.id.optionAll)
+                    binding.radioGroupReview.check(if (newCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
+                }
             }
         }
     }
