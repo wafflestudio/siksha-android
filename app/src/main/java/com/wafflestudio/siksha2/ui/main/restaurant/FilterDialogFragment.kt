@@ -112,6 +112,7 @@ class FilterDialogFragment(
     }
 
     private fun setupPriceSelection() {
+        binding.priceRangeSlider.setMinSeparationValue(500f)
         binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
             val values = slider.values
             selectedCondition = selectedCondition.copy(
