@@ -33,6 +33,8 @@ class FilterDialogFragment(
     private val defaultCondition = MenuFilterCondition.DEFAULT // Default 값 참고용 (val)
     private var selectedCondition = MenuFilterCondition.DEFAULT // 사용할 값 (var)
 
+    private val categorySet = listOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페")
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -149,7 +151,6 @@ class FilterDialogFragment(
     }
 
     private fun setupCategorySelection() {
-        val categorySet = setOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페")
         binding.gridCategory.removeAllViews()
 
         categorySet.forEachIndexed { index, category ->
@@ -233,18 +234,22 @@ class FilterDialogFragment(
                             }
                         }
                     }
+                    selectedCondition = selectedCondition.copy(
+                        categories = selectedCondition.categories
+                            .filter { it in categorySet }
+                            .sortedBy { categorySet.indexOf(it) }
+                            .toCollection(LinkedHashSet())
+                    )
                 }
             }
             binding.gridCategory.addView(chip)
         }
-
         updateCategorySelection(selectedCondition.categories)
     }
 
     private fun setupButtons() {
         binding.btnReset.setOnClickListener {
             resetFiltersByMode()
-            dismiss()
         }
         binding.btnReset.post { binding.btnReset.setHalfCircleCorners() }
 
@@ -358,6 +363,7 @@ class FilterDialogFragment(
             FilterMode.FULL -> MenuFilterCondition.DEFAULT
         }
         vm.setMenuFilterCondition(selectedCondition)
+        setupObservers() // 뷰모델을 안거치고 변화를 감지하기 위해 수동으로 호출
     }
 
     private fun applyFiltersByMode() {
