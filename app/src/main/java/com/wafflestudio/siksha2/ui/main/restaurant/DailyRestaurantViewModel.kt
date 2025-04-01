@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -131,7 +130,6 @@ class DailyRestaurantViewModel @Inject constructor(
 
     fun updateLocation(location: Location?) {
         _currentLocation.value = location
-        Timber.d("(${_currentLocation.value?.latitude}, ${_currentLocation.value?.longitude})")
     }
 
     private fun getDistance(menuGroup: MenuGroup): Float? {
