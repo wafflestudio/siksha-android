@@ -79,27 +79,30 @@ class FilterDialogFragment(
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { newCondition ->
-                selectedCondition = newCondition // selected 값에 new 먼저 저장
-
-                if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
-                    binding.distanceRangeSlider.values = listOf(newCondition.distance)
-                    updateDistanceText(newCondition.distance.toInt())
-                }
-                if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
-                    binding.priceRangeSlider.values = listOf(newCondition.minPrice, newCondition.maxPrice)
-                    updatePriceRangeText(newCondition.minPrice.toInt(), newCondition.maxPrice.toInt())
-                }
-                if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
-                    updateRatingSelection(newCondition.minRating)
-                }
-                if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
-                    updateCategorySelection(newCondition.categories)
-                }
-                if (mode == FilterMode.FULL) {
-                    binding.operatingHoursGroup.check(if (newCondition.isOpen) R.id.optionOperating else R.id.optionAll)
-                    binding.radioGroupReview.check(if (newCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
-                }
+                selectedCondition = newCondition
+                updateCondition()
             }
+        }
+    }
+
+    private fun updateCondition() {
+        if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
+            binding.distanceRangeSlider.values = listOf(selectedCondition.distance)
+            updateDistanceText(selectedCondition.distance.toInt())
+        }
+        if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
+            binding.priceRangeSlider.values = listOf(selectedCondition.minPrice, selectedCondition.maxPrice)
+            updatePriceRangeText(selectedCondition.minPrice.toInt(), selectedCondition.maxPrice.toInt())
+        }
+        if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
+            updateRatingSelection(selectedCondition.minRating)
+        }
+        if (mode == FilterMode.CATEGORY || mode == FilterMode.FULL) {
+            updateCategorySelection(selectedCondition.categories)
+        }
+        if (mode == FilterMode.FULL) {
+            binding.operatingHoursGroup.check(if (selectedCondition.isOpen) R.id.optionOperating else R.id.optionAll)
+            binding.radioGroupReview.check(if (selectedCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
         }
     }
 
@@ -354,30 +357,29 @@ class FilterDialogFragment(
     }
 
     private fun resetFiltersByMode() {
-        val originalCondition = vm.getCurrentCondition()
-
         selectedCondition = when (mode) {
-            FilterMode.DISTANCE -> originalCondition.copy(distance = defaultCondition.distance)
-            FilterMode.PRICE -> originalCondition.copy(minPrice = defaultCondition.minPrice, maxPrice = defaultCondition.maxPrice)
-            FilterMode.RATING -> originalCondition.copy(minRating = defaultCondition.minRating)
-            FilterMode.CATEGORY -> originalCondition.copy(categories = defaultCondition.categories)
+            FilterMode.DISTANCE -> selectedCondition.copy(distance = defaultCondition.distance)
+            FilterMode.PRICE -> selectedCondition.copy(minPrice = defaultCondition.minPrice, maxPrice = defaultCondition.maxPrice)
+            FilterMode.RATING -> selectedCondition.copy(minRating = defaultCondition.minRating)
+            FilterMode.CATEGORY -> selectedCondition.copy(categories = defaultCondition.categories)
             FilterMode.FULL -> MenuFilterCondition.DEFAULT
         }
-        vm.setMenuFilterCondition(selectedCondition)
-        setupObservers() // 뷰모델을 안거치고 변화를 감지하기 위해 수동으로 호출
+
+        updateCondition()
     }
 
     private fun applyFiltersByMode() {
         val originalCondition = vm.getCurrentCondition()
 
-        val updatedCondition = when (mode) {
+        val applyCondition = when (mode) {
             FilterMode.DISTANCE -> originalCondition.copy(distance = selectedCondition.distance)
             FilterMode.PRICE -> originalCondition.copy(minPrice = selectedCondition.minPrice, maxPrice = selectedCondition.maxPrice)
             FilterMode.RATING -> originalCondition.copy(minRating = selectedCondition.minRating)
             FilterMode.CATEGORY -> originalCondition.copy(categories = selectedCondition.categories)
             FilterMode.FULL -> selectedCondition
         }
-        vm.setMenuFilterCondition(updatedCondition)
+
+        vm.setMenuFilterCondition(applyCondition)
     }
 
     override fun onDestroyView() {
