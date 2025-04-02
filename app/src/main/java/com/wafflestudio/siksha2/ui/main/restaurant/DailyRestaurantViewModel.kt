@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -231,7 +230,6 @@ class DailyRestaurantViewModel @Inject constructor(
             }
             // 사용자 필터
             .map { menuGroupList ->
-                Timber.d(menuGroupList.toString())
                 menuGroupList.filter { item ->
                     _menuFilterCondition.value.distance == default.distance ||
                         getDistance(item)?.let {
