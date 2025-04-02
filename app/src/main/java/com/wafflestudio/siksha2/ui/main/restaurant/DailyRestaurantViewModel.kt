@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -191,9 +192,6 @@ class DailyRestaurantViewModel @Inject constructor(
                     }
                 }
             }
-            .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
-                menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
-            }
             .combine(allRestaurant) { menuGroups, allRes ->
                 val dateTime = LocalDateTime.now()
                 val date = dateTime.toLocalDate()
@@ -233,12 +231,12 @@ class DailyRestaurantViewModel @Inject constructor(
             }
             // 사용자 필터
             .map { menuGroupList ->
-                _menuFilterCondition.value.distance.let { distance ->
-                    menuGroupList.filter { item ->
+                Timber.d(menuGroupList.toString())
+                menuGroupList.filter { item ->
+                    _menuFilterCondition.value.distance == default.distance ||
                         getDistance(item)?.let {
-                            it <= distance
+                            it <= _menuFilterCondition.value.distance
                         } ?: true
-                    }
                 }
             }
             .map { menuGroupList ->
@@ -254,13 +252,11 @@ class DailyRestaurantViewModel @Inject constructor(
                         }.filter { menu ->
                             when (menu.score) {
                                 null -> {
-                                    _menuFilterCondition.value.hasReview
+                                    !_menuFilterCondition.value.hasReview &&
+                                        _menuFilterCondition.value.minRating == default.minRating
                                 }
                                 else -> {
-                                    _menuFilterCondition.value.hasReview &&
-                                        _menuFilterCondition.value.minRating.let {
-                                            menu.score >= it
-                                        }
+                                    _menuFilterCondition.value.minRating <= menu.score
                                 }
                             }
                         }
@@ -274,11 +270,14 @@ class DailyRestaurantViewModel @Inject constructor(
                         menus = restaurant.menus.filter { menu ->
                             _menuFilterCondition.value.categories.let { selectedCategories ->
                                 selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
-                            } ?: true
+                            }
                         }
                     )
                     newRestaurant
                 }
+            }
+            .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
+                menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
             }
     }
 

@@ -13,8 +13,10 @@ import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.GridLayout
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -259,6 +261,7 @@ class FilterDialogFragment(
 
         binding.btnApply.setOnClickListener {
             applyFiltersByMode()
+            setFragmentResult("FilterDialog", bundleOf())
             dismiss()
         }
         binding.btnApply.post { binding.btnApply.setHalfCircleCorners() }

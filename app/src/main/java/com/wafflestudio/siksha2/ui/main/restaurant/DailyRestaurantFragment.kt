@@ -247,14 +247,7 @@ class DailyRestaurantFragment : Fragment() {
         }
         binding.menuGroupList.itemAnimator = null
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            vm.getFilteredMenuGroups(isFavorite)
-                .collect {
-                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
-                    binding.emptyText.setVisibleOrGone(it.isEmpty())
-                    menuGroupAdapter.submitList(it)
-                }
-        }
+        getFilteredMenuGroups()
 
         binding.layoutSelectCalendar.setOnClickListener {
             vm.toggleCalendarVisibility()
@@ -396,6 +389,10 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
+        parentFragmentManager.setFragmentResultListener("FilterDialog", this) { _, _ ->
+            getFilteredMenuGroups()
+        }
+
         binding.menuFilter.setOnClickListener {
             val filterDialog = FilterDialogFragment(FilterMode.FULL)
             filterDialog.show(parentFragmentManager, "FilterDialog")
@@ -413,10 +410,12 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.filterOpen.setOnClickListener {
             vm.toggleOpenFilter()
+            getFilteredMenuGroups()
         }
 
         binding.filterReview.setOnClickListener {
             vm.toggleReviewFilter()
+            getFilteredMenuGroups()
         }
 
         binding.filterRating.setOnClickListener {
@@ -452,6 +451,17 @@ class DailyRestaurantFragment : Fragment() {
             }
         } else {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
+        }
+    }
+
+    private fun getFilteredMenuGroups() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.getFilteredMenuGroups(isFavorite)
+                .collect {
+                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    binding.emptyText.setVisibleOrGone(it.isEmpty())
+                    menuGroupAdapter.submitList(it)
+                }
         }
     }
 
