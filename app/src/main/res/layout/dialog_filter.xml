@@ -15,11 +15,12 @@
         android:layout_height="wrap_content"
         android:text="필터"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:paddingBottom="10dp"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/nanum_square_extra_bold"/>
 
     <!-- 거리 필터 -->
     <LinearLayout
@@ -39,7 +40,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <!-- 거리 말풍선 -->
         <LinearLayout
@@ -56,18 +58,18 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_speech_bubble"
                 tools:text="400m 이내"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textColor="#707070"
-                android:textStyle="bold"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 android:paddingStart="6dp"
-                android:paddingEnd="6dp"/>
+                android:paddingEnd="6dp"
+                android:fontFamily="@font/nanum_square_bold"/>
             <!-- 화살표 -->
             <ImageView
                 android:id="@+id/triangle"
                 android:layout_width="8dp"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:src="@drawable/bg_triangle"
                 android:layout_gravity="center" />
         </LinearLayout>
@@ -105,7 +107,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <LinearLayout
             android:id="@+id/priceBubble"
@@ -127,15 +130,15 @@
                 android:paddingStart="6dp"
                 android:paddingEnd="6dp"
                 android:textColor="#707070"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                tools:text="5,000원 ~ 8,000원" />
+                android:textSize="13sp"
+                tools:text="5,000원 ~ 8,000원"
+                android:fontFamily="@font/nanum_square_bold"/>
 
             <!-- 화살표 -->
             <ImageView
                 android:id="@+id/triangle2"
                 android:layout_width="8dp"
-                android:layout_height="8dp"
+                android:layout_height="5dp"
                 android:src="@drawable/bg_triangle"
                 android:layout_gravity="center" />
         </LinearLayout>
@@ -175,7 +178,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="20dp"/>
+            android:paddingTop="20dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <RadioGroup
             android:id="@+id/operatingHoursGroup"
@@ -194,7 +198,8 @@
                 android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
-                android:background="@drawable/option_background" />
+                android:background="@drawable/option_background"
+                android:fontFamily="@font/nanum_square_bold"/>
 
             <RadioButton
                 android:id="@+id/optionOperating"
@@ -205,7 +210,8 @@
                 android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
-                android:background="@drawable/option_background" />
+                android:background="@drawable/option_background"
+                android:fontFamily="@font/nanum_square_bold"/>
         </RadioGroup>
     </LinearLayout>
 
@@ -225,7 +231,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="20dp"/>
+            android:paddingTop="20dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <RadioGroup
             android:id="@+id/radioGroupReview"
@@ -238,6 +245,7 @@
             <RadioButton
                 android:id="@+id/radioAllReviews"
                 android:text="전체"
+                android:fontFamily="@font/nanum_square_bold"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
@@ -249,6 +257,7 @@
             <RadioButton
                 android:id="@+id/radioWithReviews"
                 android:text="리뷰 있음"
+                android:fontFamily="@font/nanum_square_bold"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
@@ -276,7 +285,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="20dp"/>
+            android:paddingTop="20dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -344,7 +354,8 @@
                     android:layout_weight="1"
                     android:text="모두"
                     android:textColor="@color/black"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:fontFamily="@font/nanum_square_bold"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
@@ -356,6 +367,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3.5"
+                        android:fontFamily="@font/nanum_square_bold"
                         android:textColor="@color/black"
                         app:drawableEndCompat="@drawable/ic_full_star_filter"
                         android:drawablePadding="4dp"
@@ -376,6 +388,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.0"
+                        android:fontFamily="@font/nanum_square_bold"
                         android:textColor="@color/black"
                         app:drawableEndCompat="@drawable/ic_full_star_filter"
                         android:drawablePadding="4dp"
@@ -396,6 +409,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.5"
+                        android:fontFamily="@font/nanum_square_bold"
                         android:textColor="@color/black"
                         app:drawableEndCompat="@drawable/ic_full_star_filter"
                         android:drawablePadding="4dp"
@@ -430,7 +444,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingBottom="8dp"/>
+            android:paddingBottom="8dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <GridLayout
             android:id="@+id/gridCategory"
@@ -462,6 +477,7 @@
             android:layout_marginEnd="7dp"
             android:gravity="center"
             android:text="초기화"
+            android:fontFamily="@font/nanum_square_bold"
             android:textColor="@color/white"
             android:background="@color/gray_500"
             app:layout_constraintDimensionRatio="9:2"/>
@@ -478,6 +494,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center"
             android:text="적용"
+            android:fontFamily="@font/nanum_square_bold"
             android:textColor="@color/black"
             android:background="@color/orange_main"
             app:layout_constraintDimensionRatio="9:2"/>
