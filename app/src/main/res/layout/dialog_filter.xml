@@ -18,7 +18,8 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"
+        android:layout_marginTop="30dp"/>
 
     <!-- 거리 필터 -->
     <LinearLayout
@@ -26,7 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <!-- 거리 필터 제목 -->
         <TextView
@@ -37,13 +39,16 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <!-- 거리 말풍선 -->
-        <FrameLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/distanceBubble"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/tvDistance"
@@ -58,7 +63,14 @@
                 android:layout_gravity="center_horizontal"
                 android:paddingStart="6dp"
                 android:paddingEnd="6dp"/>
-        </FrameLayout>
+            <!-- 화살표 -->
+            <ImageView
+                android:id="@+id/triangle"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/bg_triangle"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/distanceRangeSlider"
@@ -81,7 +93,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="10dp">
 
         <!-- 가격 필터 제목 -->
         <TextView
@@ -94,21 +107,38 @@
             android:textColor="@color/black"
             android:layout_marginTop="16dp"/>
 
-        <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
-        <TextView
-            android:id="@+id/tvPriceRange"
+        <LinearLayout
+            android:id="@+id/priceBubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_speech_bubble"
-            android:gravity="center"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:textColor="#707070"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="5,000원 ~ 8,000원" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center">
+
+            <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
+            <TextView
+                android:id="@+id/tvPriceRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_speech_bubble"
+                android:gravity="center"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:textColor="#707070"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="5,000원 ~ 8,000원" />
+
+            <!-- 화살표 -->
+            <ImageView
+                android:id="@+id/triangle2"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/bg_triangle"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/priceRangeSlider"
@@ -135,7 +165,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/open_section"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -144,7 +175,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="10dp"/>
+            android:paddingTop="20dp"/>
 
         <RadioGroup
             android:id="@+id/operatingHoursGroup"
@@ -184,7 +215,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/review_section"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -193,7 +225,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="10dp"/>
+            android:paddingTop="20dp"/>
 
         <RadioGroup
             android:id="@+id/radioGroupReview"
@@ -234,7 +266,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/rating_section"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -243,7 +276,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="10dp"/>
+            android:paddingTop="20dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -388,7 +421,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        android:paddingTop="16dp">
+        android:paddingTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
