@@ -28,13 +28,8 @@ import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import android.view.MotionEvent
 import android.widget.FrameLayout
-import android.widget.GridLayout.LayoutParams
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet.Motion
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class FilterDialogFragment(
