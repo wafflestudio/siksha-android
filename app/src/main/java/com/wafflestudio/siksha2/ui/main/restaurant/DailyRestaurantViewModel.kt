@@ -208,14 +208,14 @@ class DailyRestaurantViewModel @Inject constructor(
                             else -> it.weekdays
                         }
                     }
-                    if (operatingHour.isNullOrEmpty()) {
-                        true
-                    } else {
-                        operatingHour.any { interval ->
-                            val (start, end) = interval.split("-").map { LocalTime.parse(it) }
-                            time in start..end
-                        }
-                    }
+                    !_menuFilterCondition.value.isOpen ||
+                        (
+                            !operatingHour.isNullOrEmpty() &&
+                                operatingHour.any { interval ->
+                                    val (start, end) = interval.split("-").map { LocalTime.parse(it) }
+                                    time in start..end
+                                }
+                            )
                 }
             }
             .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
