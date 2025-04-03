@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.GridLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -179,6 +180,8 @@ class FilterDialogFragment(
         val categoryList = listOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페")
         binding.gridCategory.removeAllViews()
 
+        val nanumSquareBold = ResourcesCompat.getFont(requireContext(), R.font.nanum_square_bold)
+
         categoryList.forEachIndexed { index, category ->
             val chip = Chip(requireContext()).apply {
                 text = category
@@ -186,6 +189,8 @@ class FilterDialogFragment(
                 isClickable = true
                 isFocusable = true
                 checkedIcon = null
+
+                typeface = nanumSquareBold
 
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = dpToPx(56) // 56dp

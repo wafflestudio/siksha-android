@@ -187,7 +187,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@drawable/toggle_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="16dp">
 
             <RadioButton
                 android:id="@+id/optionAll"
@@ -239,7 +239,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/toggle_background"> <!-- background 추가 -->
 
             <RadioButton
@@ -291,7 +291,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14.5dp">
+            android:layout_marginTop="16dp">
 
             <RadioGroup
                 android:id="@+id/radioGroupRating"
@@ -444,7 +444,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingBottom="8dp"
+            android:paddingBottom="20dp"
             android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <GridLayout
@@ -477,6 +477,7 @@
             android:layout_marginEnd="7dp"
             android:gravity="center"
             android:text="초기화"
+            android:textSize="16sp"
             android:fontFamily="@font/nanum_square_bold"
             android:textColor="@color/white"
             android:background="@color/gray_500"
@@ -494,8 +495,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center"
             android:text="적용"
+            android:textSize="16sp"
             android:fontFamily="@font/nanum_square_bold"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:background="@color/orange_main"
             app:layout_constraintDimensionRatio="9:2"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
