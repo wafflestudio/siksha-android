@@ -56,6 +56,18 @@ class FilterDialogFragment(
         return dialog
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.post {
+            val currentHeight = bottomSheet.height
+            bottomSheet.layoutParams.height = currentHeight
+            bottomSheet.requestLayout()
+        }
+    }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DialogFilterBinding.inflate(inflater, container, false)
         return binding.root

@@ -5,22 +5,49 @@
     android:id="@+id/dialog_filter_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/transparent"
-    android:paddingHorizontal="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/transparent">
 
-    <!-- 필터 제목 -->
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- 드래그 핸들 및 고정된 상단 영역 -->
+    <LinearLayout
+        android:id="@+id/dragHandleArea"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="필터"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="10dp"/>
+        android:orientation="vertical"
+        android:background="@android:color/transparent"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp"
+        android:gravity="center">
 
-    <!-- 거리 필터 -->
+        <TextView
+            android:id="@+id/filterTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="필터"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="6dp"
+            android:paddingBottom="10dp" />
+    </LinearLayout>
+
+    <!-- 스크롤 가능한 필터 항목 영역 -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollableContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/filterContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
+
+        <!-- 거리 필터 -->
     <LinearLayout
         android:id="@+id/distanceSection"
         android:layout_width="match_parent"
@@ -405,48 +432,47 @@
             android:layout_height="wrap_content"
             android:columnCount="5">
         </GridLayout>
-
+    </LinearLayout>
 
 
     </LinearLayout>
+</androidx.core.widget.NestedScrollView>
 
-    <!-- 버튼 영역 -->
+    <!-- 고정된 버튼 영역 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:paddingHorizontal="16dp">
 
         <TextView
             android:id="@+id/btnReset"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clickable="true"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@color/gray_500"
+            android:gravity="center"
+            android:paddingVertical="12dp"
+            android:text="초기화"
+            android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnApply"
-            android:layout_marginEnd="7dp"
-            android:gravity="center"
-            android:text="초기화"
-            android:textColor="@color/white"
-            android:background="@color/gray_500"
-            app:layout_constraintDimensionRatio="9:2"/>
+            app:layout_constraintWidth_percent="0.5" />
 
         <TextView
             android:id="@+id/btnApply"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clickable="true"
+            android:layout_height="wrap_content"
+            android:background="@color/orange_main"
+            android:gravity="center"
+            android:paddingVertical="12dp"
+            android:text="적용"
+            android:textColor="@color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnReset"
             app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"
-            android:text="적용"
-            android:textColor="@color/black"
-            android:background="@color/orange_main"
-            app:layout_constraintDimensionRatio="9:2"/>
+            app:layout_constraintWidth_percent="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+</LinearLayout>
