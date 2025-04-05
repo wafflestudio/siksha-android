@@ -157,7 +157,7 @@ dependencies {
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")
 
-    // miscq
+    // misc
     implementation("com.github.woxthebox:draglistview:1.7.2")
     implementation("com.kakao.sdk:v2-user:2.4.1")
     implementation("com.kakao.sdk:v2-share:2.11.2")
