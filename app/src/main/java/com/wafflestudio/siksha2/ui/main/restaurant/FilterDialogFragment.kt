@@ -65,24 +65,33 @@ class FilterDialogFragment(
         bottomSheet?.let {
             val behavior = BottomSheetBehavior.from(it)
 
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
-            behavior.isDraggable = false
-            behavior.isFitToContents = false
-            behavior.skipCollapsed = true
+            if (mode == FilterMode.FULL) {
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.isDraggable = false
+                behavior.isFitToContents = false
+                behavior.skipCollapsed = true
 
-            val screenHeight = Resources.getSystem().displayMetrics.heightPixels
-            val offsetRatio = 0.105f
-            val offsetPx = (screenHeight * offsetRatio).toInt()
+                val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+                val offsetRatio = 0.105f
+                val offsetPx = (screenHeight * offsetRatio).toInt()
 
-            behavior.expandedOffset = offsetPx
+                behavior.expandedOffset = offsetPx
 
-            val layoutParams = it.layoutParams
-            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-            it.layoutParams = layoutParams
+                val layoutParams = it.layoutParams
+                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                it.layoutParams = layoutParams
+            } else {
+                behavior.isFitToContents = true
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.isDraggable = true
+            }
         }
+
 
     }
 
+:wq
+:wq
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
