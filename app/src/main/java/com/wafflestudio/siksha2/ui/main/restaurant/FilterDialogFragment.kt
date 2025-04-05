@@ -23,6 +23,9 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import android.view.MotionEvent
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -84,6 +87,24 @@ class FilterDialogFragment(
         setupCategorySelection()
         setupButtons()
         setupVisibility()
+        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.let {
+            val behavior = BottomSheetBehavior.from(it)
+            val scrollView = binding.scrollableContent
+            val dragHandle = binding.dragHandleArea
+
+            scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                behavior.isDraggable = scrollY == 0
+            }
+
+            dragHandle.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_DOWN) {
+                    behavior.isDraggable = true
+                }
+                false // 이벤트는 그대로 전달 (터치 이벤트 소비 안 함)
+            }
+        }
+
     }
 
     private fun setupObservers() {
