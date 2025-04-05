@@ -267,9 +267,7 @@ class DailyRestaurantViewModel @Inject constructor(
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
                             _menuFilterCondition.value.categories.let { selectedCategories ->
-                                true
-                                //selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
-                                //Todo
+                                selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
                             }
                         }
                     )
