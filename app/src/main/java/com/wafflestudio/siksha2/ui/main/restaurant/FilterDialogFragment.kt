@@ -81,7 +81,6 @@ class FilterDialogFragment(
                 if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
                     selectedDistance = filterCondition.distance
                     binding.distanceRangeSlider.values = listOf(selectedDistance)
-                    updateDistanceText(selectedDistance.toInt())
                 }
                 if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
                     selectedMinPrice = filterCondition.minPrice
@@ -110,12 +109,18 @@ class FilterDialogFragment(
         }
     }
 
+    // 수정 필요
     private fun setupSeekBarListeners() {
+        val customFont = ResourcesCompat.getFont(requireContext(), R.font.nanum_square_bold)
+
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
             binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
                 val value = slider.values[0]
                 selectedDistance = value
-                updateDistanceText(value.toInt())
+            }
+
+            binding.distanceRangeSlider.setLabelFormatter { value ->
+                formatDistanceLabel(value.toInt())
             }
         }
 
@@ -129,12 +134,16 @@ class FilterDialogFragment(
         }
     }
 
-    override fun getTheme(): Int {
-        return R.style.RoundedBottomSheetDialogTheme
+    private fun formatDistanceLabel(distance: Int): String {
+        return if (distance >= 1000) {
+            "1km 이상"
+        } else {
+            "${distance}m 이내"
+        }
     }
 
-    private fun updateDistanceText(distance: Int) {
-        binding.tvDistance.text = if (distance >= 1000) "1km 이상" else "${distance}m 이내"
+    override fun getTheme(): Int {
+        return R.style.RoundedBottomSheetDialogTheme
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {

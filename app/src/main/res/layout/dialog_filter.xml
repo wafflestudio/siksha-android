@@ -41,38 +41,8 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginTop="16dp"
+            android:paddingBottom="30dp"
             android:fontFamily="@font/nanum_square_extra_bold"/>
-
-        <!-- 거리 말풍선 -->
-        <LinearLayout
-            android:id="@+id/distanceBubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:layout_gravity="center">
-
-            <TextView
-                android:id="@+id/tvDistance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_speech_bubble"
-                tools:text="400m 이내"
-                android:textSize="13sp"
-                android:textColor="#707070"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"
-                android:fontFamily="@font/nanum_square_bold"/>
-            <!-- 화살표 -->
-            <ImageView
-                android:id="@+id/triangle"
-                android:layout_width="8dp"
-                android:layout_height="5dp"
-                android:src="@drawable/bg_triangle"
-                android:layout_gravity="center" />
-        </LinearLayout>
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/distanceRangeSlider"
@@ -86,7 +56,8 @@
             app:trackHeight="4dp"
             android:valueFrom="0.0"
             android:valueTo="1000.0"
-            app:labelBehavior="gone"/>
+            app:labelBehavior="floating"
+            android:theme="@style/SliderMaterialTheme"/>
     </LinearLayout>
 
     <!-- 가격 필터 -->
@@ -127,8 +98,10 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/bg_speech_bubble"
                 android:gravity="center"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:textColor="#707070"
                 android:textSize="13sp"
                 tools:text="5,000원 ~ 8,000원"
