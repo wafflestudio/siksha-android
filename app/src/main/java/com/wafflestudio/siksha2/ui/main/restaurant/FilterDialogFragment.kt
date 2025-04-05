@@ -90,10 +90,6 @@ class FilterDialogFragment(
 
     }
 
-:wq
-:wq
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DialogFilterBinding.inflate(inflater, container, false)
         return binding.root
