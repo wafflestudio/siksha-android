@@ -51,7 +51,6 @@ class FilterDialogFragment(
             val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             bottomSheet?.let {
                 val layoutParams = it.layoutParams
-                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT // 높이 크게 설정
                 it.layoutParams = layoutParams
             }
         }
@@ -63,12 +62,27 @@ class FilterDialogFragment(
         super.onStart()
 
         val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        bottomSheet?.post {
-            val currentHeight = bottomSheet.height
-            bottomSheet.layoutParams.height = currentHeight
-            bottomSheet.requestLayout()
+        bottomSheet?.let {
+            val behavior = BottomSheetBehavior.from(it)
+
+            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            behavior.isDraggable = false
+            behavior.isFitToContents = false
+            behavior.skipCollapsed = true
+
+            val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+            val offsetRatio = 0.105f
+            val offsetPx = (screenHeight * offsetRatio).toInt()
+
+            behavior.expandedOffset = offsetPx
+
+            val layoutParams = it.layoutParams
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+            it.layoutParams = layoutParams
         }
+
     }
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -101,7 +115,7 @@ class FilterDialogFragment(
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     behavior.isDraggable = true
                 }
-                false // 이벤트는 그대로 전달 (터치 이벤트 소비 안 함)
+                false
             }
         }
 
