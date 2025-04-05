@@ -18,6 +18,11 @@
         android:paddingTop="8dp"
         android:paddingBottom="4dp"
         android:gravity="center">
+        
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_sheet_handle"/>
 
         <TextView
             android:id="@+id/filterTitle"
@@ -33,7 +38,7 @@
     </LinearLayout>
 
     <!-- 스크롤 가능한 필터 항목 영역 -->
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:id="@+id/scrollableContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -48,395 +53,393 @@
             android:paddingHorizontal="16dp">
 
         <!-- 거리 필터 -->
-    <LinearLayout
-        android:id="@+id/distanceSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <!-- 거리 필터 제목 -->
-        <TextView
-            android:id="@+id/tvDistanceLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="거리"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginTop="16dp"/>
-
-        <!-- 거리 말풍선 -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
-
-            <TextView
-                android:id="@+id/tvDistance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_speech_bubble"
-                tools:text="400m 이내"
-                android:textSize="12sp"
-                android:textColor="#707070"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"/>
-        </FrameLayout>
-
-        <com.google.android.material.slider.RangeSlider
-            android:id="@+id/distanceRangeSlider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:thumbRadius="9dp"
-            app:thumbColor="@color/orange_main"
-            app:haloColor="@android:color/transparent"
-            app:trackColorActive="@color/orange_main"
-            app:trackColorInactive="@color/gray_200"
-            app:trackHeight="4dp"
-            android:valueFrom="0.0"
-            android:valueTo="1000.0"
-            app:labelBehavior="gone"/>
-    </LinearLayout>
-
-    <!-- 가격 필터 -->
-    <LinearLayout
-        android:id="@+id/price_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <!-- 가격 필터 제목 -->
-        <TextView
-            android:id="@+id/tvPriceLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="가격"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginTop="16dp"/>
-
-        <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
-        <TextView
-            android:id="@+id/tvPriceRange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_speech_bubble"
-            android:gravity="center"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:textColor="#707070"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="5,000원 ~ 8,000원" />
-
-        <com.google.android.material.slider.RangeSlider
-            android:id="@+id/priceRangeSlider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:thumbRadius="9dp"
-            app:thumbColor="@color/orange_main"
-            app:haloColor="@android:color/transparent"
-            app:trackColorActive="@color/orange_main"
-            app:trackColorInactive="@color/gray_200"
-            app:trackHeight="4dp"
-            android:valueFrom="3000.0"
-            android:valueTo="10000.0"
-            android:stepSize="500.0"
-            app:tickVisible="false"
-            app:values="@array/initial_slider_values"
-            app:labelBehavior="gone"/>
-    </LinearLayout>
-
-
-        <!-- 영업 시간 선택 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/open_section"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="영업시간"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:paddingTop="10dp"/>
-
-        <RadioGroup
-            android:id="@+id/operatingHoursGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/toggle_background"
-            android:layout_marginTop="8dp">
-
-            <RadioButton
-                android:id="@+id/optionAll"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:text="전체"
-                android:textColor="@color/black"
-                android:button="@null"
-                android:gravity="center"
-                android:background="@drawable/option_background" />
-
-            <RadioButton
-                android:id="@+id/optionOperating"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:text="영업 중"
-                android:textColor="@color/black"
-                android:button="@null"
-                android:gravity="center"
-                android:background="@drawable/option_background" />
-        </RadioGroup>
-    </LinearLayout>
-
-    <!-- 리뷰 필터 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/review_section"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="리뷰"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:paddingTop="10dp"/>
-
-        <RadioGroup
-            android:id="@+id/radioGroupReview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/toggle_background"> <!-- background 추가 -->
-
-            <RadioButton
-                android:id="@+id/radioAllReviews"
-                android:text="전체"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:button="@null"
-                android:gravity="center"
-                android:background="@drawable/option_background" /> <!-- 배경 추가 -->
-
-            <RadioButton
-                android:id="@+id/radioWithReviews"
-                android:text="리뷰 있음"
-                android:layout_width="0dp"
-                android:layout_height="34dp"
-                android:layout_weight="1"
-                android:button="@null"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:background="@drawable/option_background" /> <!-- 배경 추가 -->
-        </RadioGroup>
-
-    </LinearLayout>
-
-    <!-- 평점 필터 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/rating_section"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="최소 평점"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:paddingTop="10dp"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14.5dp">
-
-            <RadioGroup
-                android:id="@+id/radioGroupRating"
+            <LinearLayout
+                android:id="@+id/distanceSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:background="@drawable/toggle_background"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:orientation="vertical"
+                android:visibility="visible">
 
-                <RadioButton
-                    android:id="@+id/radioRatingAll"
-                    android:layout_width="0dp"
-                    android:layout_height="34dp"
-                    android:layout_weight="1"
-                    android:button="@null"
+                <!-- 거리 필터 제목 -->
+                <TextView
+                    android:id="@+id/tvDistanceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="거리"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="16dp"/>
+
+                <!-- 거리 말풍선 -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp">
+
+                    <TextView
+                        android:id="@+id/tvDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_speech_bubble"
+                        tools:text="400m 이내"
+                        android:textSize="12sp"
+                        android:textColor="#707070"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingStart="6dp"
+                        android:paddingEnd="6dp"/>
+                </FrameLayout>
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/distanceRangeSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:thumbRadius="9dp"
+                    app:thumbColor="@color/orange_main"
+                    app:haloColor="@android:color/transparent"
+                    app:trackColorActive="@color/orange_main"
+                    app:trackColorInactive="@color/gray_200"
+                    app:trackHeight="4dp"
+                    android:valueFrom="0.0"
+                    android:valueTo="1000.0"
+                    app:labelBehavior="gone"/>
+            </LinearLayout>
+
+            <!-- 가격 필터 -->
+            <LinearLayout
+                android:id="@+id/price_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- 가격 필터 제목 -->
+                <TextView
+                    android:id="@+id/tvPriceLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가격"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="16dp"/>
+
+                <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
+                <TextView
+                    android:id="@+id/tvPriceRange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_speech_bubble"
                     android:gravity="center"
-                    android:background="@drawable/option_background"/>
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:textColor="#707070"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:text="5,000원 ~ 8,000원" />
 
-                <RadioButton
-                    android:id="@+id/radioRating35"
-                    android:layout_width="0dp"
-                    android:layout_height="34dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:background="@drawable/option_background"/>
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/priceRangeSlider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:thumbRadius="9dp"
+                    app:thumbColor="@color/orange_main"
+                    app:haloColor="@android:color/transparent"
+                    app:trackColorActive="@color/orange_main"
+                    app:trackColorInactive="@color/gray_200"
+                    app:trackHeight="4dp"
+                    android:valueFrom="3000.0"
+                    android:valueTo="10000.0"
+                    android:stepSize="500.0"
+                    app:tickVisible="false"
+                    app:values="@array/initial_slider_values"
+                    app:labelBehavior="gone"/>
+            </LinearLayout>
 
-                <RadioButton
-                    android:id="@+id/radioRating40"
-                    android:layout_width="0dp"
-                    android:layout_height="34dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:background="@drawable/option_background"/>
 
-                <RadioButton
-                    android:id="@+id/radioRating45"
-                    android:layout_width="0dp"
-                    android:layout_height="34dp"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:background="@drawable/option_background"/>
-
-            </RadioGroup>
-
+                <!-- 영업 시간 선택 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:orientation="vertical"
+                android:id="@+id/open_section"
+                android:visibility="visible">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="모두"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="영업시간"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:gravity="center" />
+                    android:paddingTop="10dp"/>
+
+                <RadioGroup
+                    android:id="@+id/operatingHoursGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/toggle_background"
+                    android:layout_marginTop="8dp">
+
+                    <RadioButton
+                        android:id="@+id/optionAll"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="1"
+                        android:text="전체"
+                        android:textColor="@color/black"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/option_background" />
+
+                    <RadioButton
+                        android:id="@+id/optionOperating"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="1"
+                        android:text="영업 중"
+                        android:textColor="@color/black"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/option_background" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <!-- 리뷰 필터 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/review_section"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="리뷰"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:paddingTop="10dp"/>
+
+                <RadioGroup
+                    android:id="@+id/radioGroupReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/toggle_background"> <!-- background 추가 -->
+
+                    <RadioButton
+                        android:id="@+id/radioAllReviews"
+                        android:text="전체"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:background="@drawable/option_background" /> <!-- 배경 추가 -->
+
+                    <RadioButton
+                        android:id="@+id/radioWithReviews"
+                        android:text="리뷰 있음"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:textColor="@color/black"
+                        android:gravity="center"
+                        android:background="@drawable/option_background" /> <!-- 배경 추가 -->
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <!-- 평점 필터 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/rating_section"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="최소 평점"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:paddingTop="10dp"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center">
+                    android:layout_marginTop="14.5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <RadioGroup
+                        android:id="@+id/radioGroupRating"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="3.5"
-                        android:textColor="@color/black"
-                        app:drawableEndCompat="@drawable/ic_full_star_filter"
-                        android:drawablePadding="4dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/toggle_background"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <RadioButton
+                            android:id="@+id/radioRatingAll"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:background="@drawable/option_background"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center">
+                        <RadioButton
+                            android:id="@+id/radioRating35"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:background="@drawable/option_background"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <RadioButton
+                            android:id="@+id/radioRating40"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:background="@drawable/option_background"/>
+
+                        <RadioButton
+                            android:id="@+id/radioRating45"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:background="@drawable/option_background"/>
+
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="4.0"
-                        android:textColor="@color/black"
-                        app:drawableEndCompat="@drawable/ic_full_star_filter"
-                        android:drawablePadding="4dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="모두"
+                            android:textColor="@color/black"
+                            android:gravity="center" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4.5"
-                        android:textColor="@color/black"
-                        app:drawableEndCompat="@drawable/ic_full_star_filter"
-                        android:drawablePadding="4dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3.5"
+                                android:textColor="@color/black"
+                                app:drawableEndCompat="@drawable/ic_full_star_filter"
+                                android:drawablePadding="4dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4.0"
+                                android:textColor="@color/black"
+                                app:drawableEndCompat="@drawable/ic_full_star_filter"
+                                android:drawablePadding="4dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4.5"
+                                android:textColor="@color/black"
+                                app:drawableEndCompat="@drawable/ic_full_star_filter"
+                                android:drawablePadding="4dp"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- 카테고리 필터 -->
+            <LinearLayout
+                android:id="@+id/category_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:paddingTop="16dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="카테고리"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:paddingBottom="8dp"/>
 
-    </LinearLayout>
-
-    <!-- 카테고리 필터 -->
-    <LinearLayout
-        android:id="@+id/category_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:paddingTop="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="카테고리"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:paddingBottom="8dp"/>
-
-        <GridLayout
-            android:id="@+id/gridCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="5">
-        </GridLayout>
-    </LinearLayout>
-
-
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+                <GridLayout
+                    android:id="@+id/gridCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="5">
+                </GridLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <!-- 고정된 버튼 영역 -->
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -26,7 +26,6 @@ import timber.log.Timber
 import android.view.MotionEvent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-
 class FilterDialogFragment(
     private val mode: FilterMode
 ) : BottomSheetDialogFragment() {
@@ -86,8 +85,6 @@ class FilterDialogFragment(
                 behavior.isDraggable = true
             }
         }
-
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -98,13 +95,6 @@ class FilterDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupObservers()
-        setupSeekBarListeners()
-        setupRatingSelection()
-        setupOperatingSelection()
-        setupReviewSelection()
-        setupCategorySelection()
-        setupButtons()
         setupVisibility()
         val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         bottomSheet?.let {
@@ -124,6 +114,13 @@ class FilterDialogFragment(
             }
         }
 
+        setupObservers()
+        setupSeekBarListeners()
+        setupRatingSelection()
+        setupOperatingSelection()
+        setupReviewSelection()
+        setupCategorySelection()
+        setupButtons()
     }
 
     private fun setupObservers() {
