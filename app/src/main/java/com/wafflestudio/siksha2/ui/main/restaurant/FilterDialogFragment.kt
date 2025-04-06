@@ -119,6 +119,10 @@ class FilterDialogFragment(
         updateDistanceText(selectedCondition.distance.toInt())
         updateDistanceBubblePosition(binding.distanceRangeSlider)
 
+        binding.distanceRangeSlider.post {
+            updateDistanceBubblePosition(binding.distanceRangeSlider)
+        }
+
         binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
             val value = slider.values[0]
             selectedCondition = selectedCondition.copy(distance = value)
