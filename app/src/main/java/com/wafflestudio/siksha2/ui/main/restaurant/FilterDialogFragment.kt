@@ -24,6 +24,11 @@ import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import android.view.MotionEvent
+import android.widget.FrameLayout
+import android.widget.GridLayout.LayoutParams
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Motion
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class FilterDialogFragment(
@@ -47,44 +52,16 @@ class FilterDialogFragment(
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         dialog.setOnShowListener {
-            val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.let {
+            val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val behavior = BottomSheetBehavior.from(bottomSheet)
+
+            bottomSheet.let {
                 val layoutParams = it.layoutParams
                 it.layoutParams = layoutParams
             }
         }
 
         return dialog
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        bottomSheet?.let {
-            val behavior = BottomSheetBehavior.from(it)
-
-            if (mode == FilterMode.FULL) {
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                behavior.isDraggable = false
-                behavior.isFitToContents = false
-                behavior.skipCollapsed = true
-
-                val screenHeight = Resources.getSystem().displayMetrics.heightPixels
-                val offsetRatio = 0.105f
-                val offsetPx = (screenHeight * offsetRatio).toInt()
-
-                behavior.expandedOffset = offsetPx
-
-                val layoutParams = it.layoutParams
-                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                it.layoutParams = layoutParams
-            } else {
-                behavior.isFitToContents = true
-                behavior.state = BottomSheetBehavior.STATE_EXPANDED
-                behavior.isDraggable = true
-            }
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -95,25 +72,12 @@ class FilterDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupScrollViewParams()
+        val bottomSheet = view.parent as View
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
         setupVisibility()
-        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-        bottomSheet?.let {
-            val behavior = BottomSheetBehavior.from(it)
-            val scrollView = binding.scrollableContent
-            val dragHandle = binding.dragHandleArea
-
-            scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-                behavior.isDraggable = scrollY == 0
-            }
-
-            dragHandle.setOnTouchListener { _, event ->
-                if (event.action == MotionEvent.ACTION_DOWN) {
-                    behavior.isDraggable = true
-                }
-                false
-            }
-        }
-
         setupObservers()
         setupSeekBarListeners()
         setupRatingSelection()
@@ -121,6 +85,21 @@ class FilterDialogFragment(
         setupReviewSelection()
         setupCategorySelection()
         setupButtons()
+    }
+
+    private fun setupScrollViewParams() {
+        if (mode == FilterMode.FULL) {
+            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                0,
+                1f
+            )
+        }
+        else binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            0f
+        )
     }
 
     private fun setupObservers() {
