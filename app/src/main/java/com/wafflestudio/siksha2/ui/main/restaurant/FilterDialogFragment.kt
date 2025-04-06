@@ -290,7 +290,9 @@ class FilterDialogFragment(
     }
 
     private fun updateDistanceText(distance: Int) {
-        binding.tvDistance.text = if (distance >= defaultCondition.distance.toInt()) "1km 이상" else "${distance}m 이내"
+        binding.distanceRangeSlider.setLabelFormatter{ value ->
+            if (distance >= defaultCondition.distance.toInt()) "1km 이상" else "${distance}m 이내"
+        }
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
