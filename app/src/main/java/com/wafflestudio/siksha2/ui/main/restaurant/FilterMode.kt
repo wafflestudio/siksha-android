@@ -20,6 +20,18 @@ data class MenuFilterCondition(
     val maxPrice: Float,
     val isOpen: Boolean,
     val hasReview: Boolean,
-    val minRating: Float?,
-    val categories: List<String>?
-)
+    val minRating: Float,
+    val categories: Set<String>
+) {
+    companion object {
+        val DEFAULT = MenuFilterCondition(
+            distance = 1000f,
+            minPrice = 3000f,
+            maxPrice = 10000f,
+            isOpen = false,
+            hasReview = false,
+            minRating = 0f,
+            categories = emptySet()
+        )
+    }
+}

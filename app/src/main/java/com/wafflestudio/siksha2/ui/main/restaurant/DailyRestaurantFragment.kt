@@ -64,6 +64,7 @@ class DailyRestaurantFragment : Fragment() {
 
     // 즐겨찾기 식당 탭과 일반 식당 탭이 다른 프래그먼트로 분리하기엔 중복이 많아서 플래그로 넘겨받고 관리.
     private var isFavorite: Boolean = false
+    private val default = MenuFilterCondition.DEFAULT
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -246,14 +247,7 @@ class DailyRestaurantFragment : Fragment() {
         }
         binding.menuGroupList.itemAnimator = null
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            vm.getFilteredMenuGroups(isFavorite)
-                .collect {
-                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
-                    binding.emptyText.setVisibleOrGone(it.isEmpty())
-                    menuGroupAdapter.submitList(it)
-                }
-        }
+        getFilteredMenuGroups()
 
         binding.layoutSelectCalendar.setOnClickListener {
             vm.toggleCalendarVisibility()
@@ -355,31 +349,35 @@ class DailyRestaurantFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { condition ->
                 binding.filterDistance.setFilter(
-                    if (condition.distance >= 1000) "거리" else "${condition.distance.toInt()}m 이내",
-                    condition.distance >= 1000f
+                    if (condition.distance >= default.distance) "거리" else "${condition.distance.toInt()}m 이내",
+                    condition.distance >= default.distance
                 )
 
                 binding.filterPrice.setFilter(
-                    if (condition.minPrice > 3000f || condition.maxPrice < 10000f) {
-                        val minPriceText = if (condition.minPrice <= 3000) "3,000원 이하" else "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원"
-                        val maxPriceText = if (condition.maxPrice >= 10000) "10,000원 이상" else "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원"
+                    if (condition.minPrice > default.minPrice || condition.maxPrice < default.maxPrice) {
+                        val minPriceText = if (condition.minPrice <= default.minPrice) "3,000원 이하" else "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원"
+                        val maxPriceText = if (condition.maxPrice >= default.maxPrice) "10,000원 이상" else "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원"
                         "$minPriceText ~ $maxPriceText"
                     } else {
                         "가격"
                     },
-                    condition.maxPrice == 10000f && condition.minPrice == 3000f
+                    condition.maxPrice == default.maxPrice && condition.minPrice == default.minPrice
                 )
 
                 binding.filterOpen.showCheck(condition.isOpen)
                 binding.filterReview.showCheck(condition.hasReview)
 
                 binding.filterRating.setFilter(
-                    condition.minRating?.let { rating -> "평점 $rating 이상" } ?: "최소 평점",
-                    condition.minRating == null
+                    if (condition.minRating != default.minRating) {
+                        condition.minRating.let { rating -> "평점 $rating 이상" }
+                    } else {
+                        "최소 평점"
+                    },
+                    condition.minRating == default.minRating
                 )
                 binding.filterCategory.setFilter(
-                    condition.categories?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
-                    condition.categories?.isEmpty() ?: true
+                    condition.categories.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: "카테고리",
+                    condition.categories.isEmpty()
                 )
             }
         }
@@ -390,6 +388,10 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
+
+        parentFragmentManager.setFragmentResultListener("FilterDialog", this) { _, _ ->
+            getFilteredMenuGroups()
+        }
 
         binding.menuFilter.setOnClickListener {
             val filterDialog = FilterDialogFragment(FilterMode.FULL)
@@ -408,10 +410,12 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.filterOpen.setOnClickListener {
             vm.toggleOpenFilter()
+            getFilteredMenuGroups()
         }
 
         binding.filterReview.setOnClickListener {
             vm.toggleReviewFilter()
+            getFilteredMenuGroups()
         }
 
         binding.filterRating.setOnClickListener {
@@ -447,6 +451,17 @@ class DailyRestaurantFragment : Fragment() {
             }
         } else {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
+        }
+    }
+
+    private fun getFilteredMenuGroups() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.getFilteredMenuGroups(isFavorite)
+                .collect {
+                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    binding.emptyText.setVisibleOrGone(it.isEmpty())
+                    menuGroupAdapter.submitList(it)
+                }
         }
     }
 

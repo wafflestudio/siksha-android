@@ -54,10 +54,12 @@
             app:trackColorActive="@color/orange_main"
             app:trackColorInactive="@color/gray_200"
             app:trackHeight="4dp"
-            android:valueFrom="0.0"
+            android:valueFrom="200.0"
             android:valueTo="1000.0"
             app:labelBehavior="floating"
-            android:theme="@style/SliderMaterialTheme"/>
+            android:theme="@style/SliderMaterialTheme"
+            android:stepSize = "50.0"
+            app:tickVisible="false"/>
     </LinearLayout>
 
     <!-- 가격 필터 -->
