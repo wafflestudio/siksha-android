@@ -80,9 +80,11 @@ class FilterDialogFragment(
     }
 
     private fun setupObservers() {
-        vm.menuFilterCondition.collect { newCondition ->
-            selectedCondition = newCondition
-            updateCondition()
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.menuFilterCondition.collect { newCondition ->
+                selectedCondition = newCondition
+                updateCondition()
+            }
         }
     }
 

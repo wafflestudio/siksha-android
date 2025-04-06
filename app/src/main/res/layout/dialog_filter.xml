@@ -33,7 +33,7 @@
 
         <!-- 거리 필터 제목 -->
         <TextView
-            android:id="@+id/tvDistanceLabel"
+            android:id="@+id/tvDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="거리"
