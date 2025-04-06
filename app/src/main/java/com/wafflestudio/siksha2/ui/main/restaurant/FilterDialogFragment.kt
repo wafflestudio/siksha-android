@@ -290,7 +290,7 @@ class FilterDialogFragment(
     }
 
     private fun updateDistanceText(distance: Int) {
-        binding.distanceRangeSlider.setLabelFormatter{ value ->
+        binding.distanceRangeSlider.setLabelFormatter { value ->
             if (distance >= defaultCondition.distance.toInt()) "1km 이상" else "${distance}m 이내"
         }
     }
