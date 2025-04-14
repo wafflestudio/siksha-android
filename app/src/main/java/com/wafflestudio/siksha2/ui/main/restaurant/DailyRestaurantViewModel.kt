@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -52,18 +51,10 @@ class DailyRestaurantViewModel @Inject constructor(
     private val _currentLocation = MutableLiveData<Location?>(null)
     val currentLocation: LiveData<Location?> = _currentLocation
 
-    private val defaultCondition = MenuFilterCondition(
-        distance = 1000f,
-        minPrice = 3000f,
-        maxPrice = 10000f,
-        isOpen = false,
-        hasReview = false,
-        minRating = null,
-        categories = null
-    )
     private val _menuFilterCondition = MutableStateFlow(sikshaPrefObjects.menuFilterCondition.getValue())
     val menuFilterCondition: StateFlow<MenuFilterCondition> = _menuFilterCondition
         .stateIn(viewModelScope, SharingStarted.Eagerly, sikshaPrefObjects.menuFilterCondition.getValue())
+    private val default = MenuFilterCondition.DEFAULT
 
     // TODO: Network Error (Timeout, 연걸 없음) 시 Toast?
     // 현재 앱 시작시에 Network 연결 없을 때 노티하는 중
@@ -139,7 +130,6 @@ class DailyRestaurantViewModel @Inject constructor(
 
     fun updateLocation(location: Location?) {
         _currentLocation.value = location
-        Timber.d("(${_currentLocation.value?.latitude}, ${_currentLocation.value?.longitude})")
     }
 
     private fun getDistance(menuGroup: MenuGroup): Float? {
@@ -201,9 +191,6 @@ class DailyRestaurantViewModel @Inject constructor(
                     }
                 }
             }
-            .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
-                menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
-            }
             .combine(allRestaurant) { menuGroups, allRes ->
                 val dateTime = LocalDateTime.now()
                 val date = dateTime.toLocalDate()
@@ -221,14 +208,14 @@ class DailyRestaurantViewModel @Inject constructor(
                             else -> it.weekdays
                         }
                     }
-                    if (operatingHour.isNullOrEmpty()) {
-                        true
-                    } else {
-                        operatingHour.any { interval ->
-                            val (start, end) = interval.split("-").map { LocalTime.parse(it) }
-                            time in start..end
-                        }
-                    }
+                    !_menuFilterCondition.value.isOpen ||
+                        (
+                            !operatingHour.isNullOrEmpty() &&
+                                operatingHour.any { interval ->
+                                    val (start, end) = interval.split("-").map { LocalTime.parse(it) }
+                                    time in start..end
+                                }
+                            )
                 }
             }
             .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
@@ -243,12 +230,11 @@ class DailyRestaurantViewModel @Inject constructor(
             }
             // 사용자 필터
             .map { menuGroupList ->
-                _menuFilterCondition.value.distance.let { distance ->
-                    menuGroupList.filter { item ->
+                menuGroupList.filter { item ->
+                    _menuFilterCondition.value.distance == default.distance ||
                         getDistance(item)?.let {
-                            it <= distance
+                            it <= _menuFilterCondition.value.distance
                         } ?: true
-                    }
                 }
             }
             .map { menuGroupList ->
@@ -258,19 +244,17 @@ class DailyRestaurantViewModel @Inject constructor(
                             menu.price?.let { menuPrice ->
                                 val minPrice = _menuFilterCondition.value.minPrice
                                 val maxPrice = _menuFilterCondition.value.maxPrice
-                                ((menuPrice >= minPrice) || (minPrice == 3000f)) &&
-                                    ((menuPrice <= maxPrice) || (minPrice == 10000f))
+                                ((menuPrice >= minPrice) || (minPrice == default.minPrice)) &&
+                                    ((menuPrice <= maxPrice) || (maxPrice == default.maxPrice))
                             } ?: true
                         }.filter { menu ->
                             when (menu.score) {
                                 null -> {
-                                    _menuFilterCondition.value.hasReview
+                                    !_menuFilterCondition.value.hasReview &&
+                                        _menuFilterCondition.value.minRating == default.minRating
                                 }
                                 else -> {
-                                    _menuFilterCondition.value.hasReview &&
-                                        _menuFilterCondition.value.minRating?.let {
-                                            menu.score >= it
-                                        } ?: true
+                                    _menuFilterCondition.value.minRating <= menu.score
                                 }
                             }
                         }
@@ -282,13 +266,16 @@ class DailyRestaurantViewModel @Inject constructor(
                 menuGroupList.map { restaurant ->
                     val newRestaurant = restaurant.copy(
                         menus = restaurant.menus.filter { menu ->
-                            _menuFilterCondition.value.categories?.let { selectedCategories ->
+                            _menuFilterCondition.value.categories.let { selectedCategories ->
                                 selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
-                            } ?: true
+                            }
                         }
                     )
                     newRestaurant
                 }
+            }
+            .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
+                menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
             }
     }
 
