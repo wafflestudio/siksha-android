@@ -6,6 +6,8 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.GridLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
@@ -21,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
+import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
@@ -109,10 +113,22 @@ class FilterDialogFragment(
     }
 
     private fun setupDistanceSelection() {
+        val initialValue = listOf(selectedCondition.distance)
+        binding.distanceRangeSlider.setValues(initialValue)
+        updateDistanceText(selectedCondition.distance.toInt())
+        updateDistanceBubblePosition(binding.distanceRangeSlider)
+
+        binding.distanceRangeSlider.post {
+            updateDistanceBubblePosition(binding.distanceRangeSlider)
+        }
+
         binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
             val value = slider.values[0]
             selectedCondition = selectedCondition.copy(distance = value)
             updateDistanceText(selectedCondition.distance.toInt())
+            Handler(Looper.getMainLooper()).post {
+                updateDistanceBubblePosition(slider)
+            }
         }
     }
 
@@ -159,6 +175,8 @@ class FilterDialogFragment(
     private fun setupCategorySelection() {
         binding.gridCategory.removeAllViews()
 
+        val nanumSquareBold = ResourcesCompat.getFont(requireContext(), R.font.nanum_square_bold)
+
         categorySet.forEachIndexed { index, category ->
             val chip = Chip(requireContext()).apply {
                 text = category
@@ -166,6 +184,8 @@ class FilterDialogFragment(
                 isClickable = true
                 isFocusable = true
                 checkedIcon = null
+
+                typeface = nanumSquareBold
 
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = dpToPx(56) // 56dp
@@ -285,7 +305,23 @@ class FilterDialogFragment(
     }
 
     private fun updateDistanceText(distance: Int) {
-        binding.tvDistance.text = if (distance >= defaultCondition.distance.toInt()) "1km 이상" else "${distance}m 이내"
+        binding.tvDistanceRange.text = if (distance >= defaultCondition.distance.toInt()) {
+            "1km 이상"
+        } else {
+            "${distance}m 이내"
+        }
+    }
+
+    private fun updateDistanceBubblePosition(rangeSlider: RangeSlider) {
+        val valueRangeSize = rangeSlider.valueTo - rangeSlider.valueFrom
+        val valuePercent = (rangeSlider.values[0] - rangeSlider.valueFrom) / valueRangeSize
+        val valueXDistance = valuePercent * rangeSlider.trackWidth
+        val offset = rangeSlider.x + rangeSlider.trackSidePadding - (binding.distanceBubble.width / 2f)
+
+        val minX = rangeSlider.x + rangeSlider.trackSidePadding + 10f
+        val maxX = minX + rangeSlider.trackWidth - binding.distanceBubble.width + 10f
+
+        binding.distanceBubble.x = valueXDistance.coerceIn(minX, maxX) + offset
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {

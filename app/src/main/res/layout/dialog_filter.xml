@@ -15,10 +15,12 @@
         android:layout_height="wrap_content"
         android:text="필터"
         android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/nanum_square_extra_bold"/>
 
     <!-- 거리 필터 -->
     <LinearLayout
@@ -26,7 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <!-- 거리 필터 제목 -->
         <TextView
@@ -37,28 +40,44 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:paddingBottom="30dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
-        <!-- 거리 말풍선 -->
-        <FrameLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/distanceBubble"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center">
 
+            <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
             <TextView
-                android:id="@+id/tvDistance"
+                android:id="@+id/tvDistanceRange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_speech_bubble"
-                tools:text="400m 이내"
-                android:textSize="12sp"
-                android:textColor="#707070"
-                android:textStyle="bold"
-                android:gravity="center"
                 android:layout_gravity="center_horizontal"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"/>
-        </FrameLayout>
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_speech_bubble"
+                android:gravity="center"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textColor="#707070"
+                android:textSize="13sp"
+                tools:text="1km 이상"
+                android:fontFamily="@font/nanum_square_bold"/>
+
+            <!-- 화살표 -->
+            <ImageView
+                android:id="@+id/triangle1"
+                android:layout_width="8dp"
+                android:layout_height="5dp"
+                android:src="@drawable/bg_triangle"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/distanceRangeSlider"
@@ -72,9 +91,9 @@
             app:trackHeight="4dp"
             android:valueFrom="200.0"
             android:valueTo="1000.0"
+            app:labelBehavior="gone"
             android:stepSize = "50.0"
-            app:tickVisible="false"
-            app:labelBehavior="gone"/>
+            app:tickVisible="false"/>
     </LinearLayout>
 
     <!-- 가격 필터 -->
@@ -83,7 +102,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="10dp">
 
         <!-- 가격 필터 제목 -->
         <TextView
@@ -94,23 +114,43 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
-        <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
-        <TextView
-            android:id="@+id/tvPriceRange"
+        <LinearLayout
+            android:id="@+id/priceBubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_speech_bubble"
-            android:gravity="center"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:textColor="#707070"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            tools:text="5,000원 ~ 8,000원" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center">
+
+            <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
+            <TextView
+                android:id="@+id/tvPriceRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_speech_bubble"
+                android:gravity="center"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textColor="#707070"
+                android:textSize="13sp"
+                tools:text="5,000원 ~ 8,000원"
+                android:fontFamily="@font/nanum_square_bold"/>
+
+            <!-- 화살표 -->
+            <ImageView
+                android:id="@+id/triangle2"
+                android:layout_width="8dp"
+                android:layout_height="5dp"
+                android:src="@drawable/bg_triangle"
+                android:layout_gravity="center" />
+        </LinearLayout>
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/priceRangeSlider"
@@ -137,7 +177,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/open_section"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -146,7 +187,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="10dp"/>
+            android:paddingTop="20dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <RadioGroup
             android:id="@+id/operatingHoursGroup"
@@ -154,7 +196,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@drawable/toggle_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="16dp">
 
             <RadioButton
                 android:id="@+id/optionAll"
@@ -165,7 +207,8 @@
                 android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
-                android:background="@drawable/option_background" />
+                android:background="@drawable/option_background"
+                android:fontFamily="@font/nanum_square_bold"/>
 
             <RadioButton
                 android:id="@+id/optionOperating"
@@ -176,7 +219,8 @@
                 android:textColor="@color/black"
                 android:button="@null"
                 android:gravity="center"
-                android:background="@drawable/option_background" />
+                android:background="@drawable/option_background"
+                android:fontFamily="@font/nanum_square_bold"/>
         </RadioGroup>
     </LinearLayout>
 
@@ -186,7 +230,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/review_section"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -195,19 +240,21 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="10dp"/>
+            android:paddingTop="20dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <RadioGroup
             android:id="@+id/radioGroupReview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/toggle_background"> <!-- background 추가 -->
 
             <RadioButton
                 android:id="@+id/radioAllReviews"
                 android:text="전체"
+                android:fontFamily="@font/nanum_square_bold"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
@@ -219,6 +266,7 @@
             <RadioButton
                 android:id="@+id/radioWithReviews"
                 android:text="리뷰 있음"
+                android:fontFamily="@font/nanum_square_bold"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
                 android:layout_weight="1"
@@ -236,7 +284,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/rating_section"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -245,12 +294,13 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingTop="10dp"/>
+            android:paddingTop="20dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14.5dp">
+            android:layout_marginTop="16dp">
 
             <RadioGroup
                 android:id="@+id/radioGroupRating"
@@ -313,7 +363,8 @@
                     android:layout_weight="1"
                     android:text="모두"
                     android:textColor="@color/black"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:fontFamily="@font/nanum_square_bold"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
@@ -325,6 +376,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3.5"
+                        android:fontFamily="@font/nanum_square_bold"
                         android:textColor="@color/black"
                         app:drawableEndCompat="@drawable/ic_full_star_filter"
                         android:drawablePadding="4dp"
@@ -345,6 +397,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.0"
+                        android:fontFamily="@font/nanum_square_bold"
                         android:textColor="@color/black"
                         app:drawableEndCompat="@drawable/ic_full_star_filter"
                         android:drawablePadding="4dp"
@@ -365,6 +418,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4.5"
+                        android:fontFamily="@font/nanum_square_bold"
                         android:textColor="@color/black"
                         app:drawableEndCompat="@drawable/ic_full_star_filter"
                         android:drawablePadding="4dp"
@@ -390,7 +444,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        android:paddingTop="16dp">
+        android:paddingTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -399,7 +453,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:paddingBottom="8dp"/>
+            android:paddingBottom="20dp"
+            android:fontFamily="@font/nanum_square_extra_bold"/>
 
         <GridLayout
             android:id="@+id/gridCategory"
@@ -431,6 +486,8 @@
             android:layout_marginEnd="7dp"
             android:gravity="center"
             android:text="초기화"
+            android:textSize="16sp"
+            android:fontFamily="@font/nanum_square_bold"
             android:textColor="@color/white"
             android:background="@color/gray_500"
             app:layout_constraintDimensionRatio="9:2"/>
@@ -447,7 +504,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center"
             android:text="적용"
-            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:fontFamily="@font/nanum_square_bold"
+            android:textColor="@color/white"
             android:background="@color/orange_main"
             app:layout_constraintDimensionRatio="9:2"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
