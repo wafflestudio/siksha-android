@@ -93,12 +93,13 @@ class FilterDialogFragment(
                 0,
                 1f
             )
+        } else {
+            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0f
+            )
         }
-        else binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            0f
-        )
     }
 
     override fun getTheme(): Int {
