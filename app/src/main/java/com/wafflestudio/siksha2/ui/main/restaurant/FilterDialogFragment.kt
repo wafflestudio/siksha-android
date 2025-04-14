@@ -28,6 +28,9 @@ import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -46,10 +49,11 @@ class FilterDialogFragment(
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
         dialog.setOnShowListener {
-            val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.let {
+            val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
+            val behavior = BottomSheetBehavior.from(bottomSheet)
+
+            bottomSheet.let {
                 val layoutParams = it.layoutParams
-                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT // 높이 크게 설정
                 it.layoutParams = layoutParams
             }
         }
@@ -65,6 +69,12 @@ class FilterDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupScrollViewParams()
+        val bottomSheet = view.parent as View
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        setupVisibility()
         setupObservers()
 
         setupDistanceSelection()
@@ -73,9 +83,23 @@ class FilterDialogFragment(
         setupOperatingSelection()
         setupReviewSelection()
         setupCategorySelection()
-
         setupButtons()
-        setupVisibility()
+    }
+
+    private fun setupScrollViewParams() {
+        if (mode == FilterMode.FULL) {
+            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                0,
+                1f
+            )
+        } else {
+            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                0f
+            )
+        }
     }
 
     override fun getTheme(): Int {
