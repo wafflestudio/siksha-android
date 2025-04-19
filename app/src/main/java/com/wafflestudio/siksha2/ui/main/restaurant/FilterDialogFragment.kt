@@ -337,15 +337,21 @@ class FilterDialogFragment(
     }
 
     private fun updateDistanceBubblePosition(rangeSlider: RangeSlider) {
-        val valueRangeSize = rangeSlider.valueTo - rangeSlider.valueFrom
-        val valuePercent = (rangeSlider.values[0] - rangeSlider.valueFrom) / valueRangeSize
+        val valuePercent = (rangeSlider.values[0] - rangeSlider.valueFrom) / (rangeSlider.valueTo - rangeSlider.valueFrom)
         val valueXDistance = valuePercent * rangeSlider.trackWidth
-        val offset = rangeSlider.x + rangeSlider.trackSidePadding - (binding.distanceBubble.width / 2f)
 
-        val minX = rangeSlider.x + rangeSlider.trackSidePadding + 10f
-        val maxX = minX + rangeSlider.trackWidth - binding.distanceBubble.width + 10f
+        val bubbleWidth = binding.distanceBubble.width
+        val triangleWidth = binding.distanceTriangle.width
 
-        binding.distanceBubble.x = valueXDistance.coerceIn(minX, maxX) + offset
+        // 말풍선 중앙값
+        val basicBubbleX = rangeSlider.left + rangeSlider.trackSidePadding + valueXDistance - (bubbleWidth / 2f)
+        // 말풍선은 화면 양끝으로 제한
+        val bubbleX = basicBubbleX.coerceIn(rangeSlider.left.toFloat(), rangeSlider.right.toFloat() - bubbleWidth)
+        // 삼각형 기본값 / 삼각형은 ConstranintLayout 시작점을 기준으로 위치를 계산함 (왠진 모르겠)
+        val triangleCenterOffset = (bubbleWidth - triangleWidth) / 2f
+
+        binding.distanceBubble.x = bubbleX
+        binding.distanceTriangle.x = triangleCenterOffset + (basicBubbleX - bubbleX) // 기본값 + max, min 넘어갔을 때 처리
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
