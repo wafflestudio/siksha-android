@@ -281,7 +281,7 @@ class FilterDialogFragment(
     }
 
     private fun setupButtons() {
-        binding.closeButton.setOnClickListener{
+        binding.closeButton.setOnClickListener {
             dismiss()
         }
 
