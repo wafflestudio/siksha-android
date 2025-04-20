@@ -119,6 +119,9 @@ class FilterDialogFragment(
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
             binding.distanceRangeSlider.values = listOf(selectedCondition.distance)
             updateDistanceText(selectedCondition.distance.toInt())
+            binding.distanceRangeSlider.post {
+                updateDistanceBubblePosition(binding.distanceRangeSlider)
+            }
         }
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
             binding.priceRangeSlider.values = listOf(selectedCondition.minPrice, selectedCondition.maxPrice)
@@ -137,34 +140,20 @@ class FilterDialogFragment(
     }
 
     private fun setupDistanceSelection() {
-        val initialValue = listOf(selectedCondition.distance)
-        binding.distanceRangeSlider.setValues(initialValue)
-        updateDistanceText(selectedCondition.distance.toInt())
-        updateDistanceBubblePosition(binding.distanceRangeSlider)
-
-        binding.distanceRangeSlider.post {
-            updateDistanceBubblePosition(binding.distanceRangeSlider)
-        }
-
         binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
             val value = slider.values[0]
             selectedCondition = selectedCondition.copy(distance = value)
             updateDistanceText(selectedCondition.distance.toInt())
-            Handler(Looper.getMainLooper()).post {
-                updateDistanceBubblePosition(slider)
-            }
+            updateDistanceBubblePosition(slider)
         }
     }
 
     private fun setupPriceSelection() {
-        binding.priceRangeSlider.setMinSeparationValue(500f)
+        binding.priceRangeSlider.setMinSeparationValue(500.0f)
         binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
-            val values = slider.values
-            selectedCondition = selectedCondition.copy(
-                minPrice = values[0],
-                maxPrice = values[1]
-            )
-            updatePriceRangeText(selectedCondition.minPrice.toInt(), selectedCondition.maxPrice.toInt())
+            val (minPrice, maxPrice) = slider.values
+            selectedCondition = selectedCondition.copy(minPrice = minPrice, maxPrice = maxPrice)
+            updatePriceRangeText(minPrice.toInt(), maxPrice.toInt())
         }
     }
 
@@ -355,8 +344,8 @@ class FilterDialogFragment(
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
-        val minPriceText = if (minPrice <= defaultCondition.minPrice.toInt()) "3,000원 이하" else "${minPrice}원"
-        val maxPriceText = if (maxPrice >= defaultCondition.maxPrice.toInt()) "10,000원 이상" else "${maxPrice}원"
+        val minPriceText = if (minPrice == defaultCondition.minPrice.toInt()) "0원" else "${minPrice}원"
+        val maxPriceText = if (maxPrice == defaultCondition.maxPrice.toInt()) "10,000원 이상" else "${maxPrice}원"
         binding.tvPriceRange.text = "$minPriceText ~ $maxPriceText"
     }
 
