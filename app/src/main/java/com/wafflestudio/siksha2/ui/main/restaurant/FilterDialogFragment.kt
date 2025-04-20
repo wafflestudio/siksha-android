@@ -281,6 +281,10 @@ class FilterDialogFragment(
     }
 
     private fun setupButtons() {
+        binding.closeButton.setOnClickListener{
+            dismiss()
+        }
+
         binding.btnReset.setOnClickListener {
             resetFiltersByMode()
         }
@@ -297,6 +301,7 @@ class FilterDialogFragment(
     private fun setupVisibility() {
         when (mode) {
             FilterMode.FULL -> {
+                binding.dragHandleArea.visibility = View.VISIBLE
                 binding.distanceSection.visibility = View.VISIBLE
                 binding.priceSection.visibility = View.VISIBLE
                 binding.openSection.visibility = View.VISIBLE
