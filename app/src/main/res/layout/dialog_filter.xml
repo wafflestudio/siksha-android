@@ -13,8 +13,8 @@
         android:src="@drawable/ic_close"
         android:elevation="10dp"
         android:layout_gravity="end"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"/>
 
     <LinearLayout
         android:id="@+id/dialog_filter_layout"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/transparent"
-            android:paddingTop="8dp"
+            android:paddingTop="15dp"
             android:paddingBottom="4dp"
             android:gravity="center"
             android:visibility="gone">
@@ -45,11 +45,11 @@
                 android:layout_height="wrap_content"
                 android:text="필터"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
                 android:paddingBottom="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/nanum_square_extra_bold"/>
         </LinearLayout>
 
@@ -91,6 +91,7 @@
                         android:id="@+id/distance_bubble"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:layout_gravity="center_horizontal">
 
                         <!-- 회색 배경 -->
@@ -176,6 +177,7 @@
                         android:id="@+id/price_bubble"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_horizontal">
 
                         <TextView
@@ -528,15 +530,25 @@
                     </GridLayout>
                 </LinearLayout>
 
-
+                <LinearLayout
+                    android:id="@+id/empty_space"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+                </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
         <!-- 버튼 영역 -->
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/button_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingVertical="16dp"
+            android:elevation="8dp"
+            android:background="@color/white"
+            android:translationZ="4dp"
             android:paddingHorizontal="16dp">
 
             <TextView

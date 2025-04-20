@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import androidx.core.graphics.drawable.toDrawable
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -78,6 +79,7 @@ class FilterDialogFragment(
         setupReviewSelection()
         setupCategorySelection()
         setupButtons()
+        setupButtonShadow()
     }
 
     private fun setupScrollViewParams() {
@@ -314,6 +316,11 @@ class FilterDialogFragment(
             FilterMode.RATING -> binding.ratingSection.visibility = View.VISIBLE
             FilterMode.CATEGORY -> binding.categorySection.visibility = View.VISIBLE
         }
+    }
+
+    private fun setupButtonShadow() {
+        val color = if (mode == FilterMode.FULL) Color.WHITE else Color.TRANSPARENT
+        binding.buttonSection.background = color.toDrawable()
     }
 
     private fun updateDistanceText(distance: Int) {
