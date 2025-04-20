@@ -48,8 +48,7 @@ class FilterDialogFragment(
 
         dialog.setOnShowListener {
             val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-            val behavior = BottomSheetBehavior.from(bottomSheet)
-
+            dialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
             bottomSheet.let {
                 val layoutParams = it.layoutParams
                 it.layoutParams = layoutParams
@@ -68,9 +67,6 @@ class FilterDialogFragment(
         super.onViewCreated(view, savedInstanceState)
 
         setupScrollViewParams()
-        val bottomSheet = view.parent as View
-        val behavior = BottomSheetBehavior.from(bottomSheet)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         setupVisibility()
         setupObservers()
