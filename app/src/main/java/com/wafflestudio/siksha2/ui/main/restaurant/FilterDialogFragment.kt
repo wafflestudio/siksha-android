@@ -6,8 +6,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
