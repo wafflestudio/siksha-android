@@ -91,7 +91,6 @@
                         android:id="@+id/distance_bubble"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_gravity="center_horizontal">
 
                         <!-- 회색 배경 -->
@@ -177,7 +176,6 @@
                         android:id="@+id/price_bubble"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_gravity="center_horizontal">
 
                         <TextView
@@ -238,7 +236,6 @@
                         app:labelBehavior="gone"/>
                 </LinearLayout>
 
-
                 <!-- 영업 시간 선택 -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -249,6 +246,7 @@
                     android:paddingBottom="20dp">
 
                     <TextView
+                        android:id="@+id/tv_operating_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="영업시간"
@@ -262,7 +260,6 @@
                         android:id="@+id/operatingHoursGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:background="@drawable/toggle_background"
                         android:orientation="horizontal">
 
@@ -302,6 +299,7 @@
                     android:paddingBottom="20dp">
 
                     <TextView
+                        android:id="@+id/tv_review_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="리뷰"
@@ -316,7 +314,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="8dp"
                         android:background="@drawable/toggle_background"> <!-- background 추가 -->
 
                         <RadioButton
@@ -356,6 +353,7 @@
                     android:paddingBottom="20dp">
 
                     <TextView
+                        android:id="@+id/tv_rating_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="최소 평점"
@@ -368,7 +366,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14.5dp">
+                        >
 
                         <RadioGroup
                             android:id="@+id/radioGroupRating"
@@ -496,10 +494,7 @@
                                     app:layout_constraintEnd_toEndOf="parent"/>
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
                         </LinearLayout>
-
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
@@ -513,13 +508,13 @@
                     android:paddingTop="20dp">
 
                     <TextView
+                        android:id="@+id/tv_category_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="카테고리"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:paddingBottom="8dp"
                         android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <GridLayout
@@ -564,6 +559,7 @@
                 android:layout_marginEnd="7dp"
                 android:gravity="center"
                 android:text="초기화"
+                android:textSize="16sp"
                 android:fontFamily="@font/nanum_square_bold"
                 android:textColor="@color/white"
                 android:background="@color/gray_500"
@@ -581,8 +577,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:gravity="center"
                 android:text="적용"
+                android:textSize="16sp"
                 android:fontFamily="@font/nanum_square_bold"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:background="@color/orange_main"
                 app:layout_constraintDimensionRatio="9:2"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

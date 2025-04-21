@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.GridLayout
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -44,7 +45,6 @@ class FilterDialogFragment(
         val dialog = Dialog(requireContext(), R.style.FilterBottomDialog)
 
         dialog.window?.apply {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             setGravity(Gravity.BOTTOM)
             setBackgroundDrawableResource(android.R.color.transparent)
         }
@@ -54,7 +54,18 @@ class FilterDialogFragment(
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        // Dialog 높이 결정
+        val height = if (mode == FilterMode.FULL) {
+            Resources.getSystem().displayMetrics.heightPixels - dpToPx(56)
+        } else {
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            height
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -76,6 +87,7 @@ class FilterDialogFragment(
         setupCategorySelection()
         setupButtons()
         setupButtonShadow()
+        setupLayoutMargin()
     }
 
     private fun setupObservers() {
@@ -177,9 +189,9 @@ class FilterDialogFragment(
                     rowSpec = GridLayout.spec(if (index < 5) 0 else 1)
                     setMargins(
                         if (index % 5 != 0) dpToPx(4) else 0,
-                        if (index >= 5) dpToPx(4) else 0,
+                        0,
                         if (index % 5 != 4) dpToPx(4) else 0,
-                        if (index < 5) dpToPx(4) else 0
+                        0
                     )
                 }
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -295,6 +307,31 @@ class FilterDialogFragment(
     private fun setupButtonShadow() {
         val color = if (mode == FilterMode.FULL) Color.WHITE else Color.TRANSPARENT
         binding.buttonSection.background = color.toDrawable()
+    }
+
+    val Int.dp: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+    private fun setupLayoutMargin() {
+        val betweenMargin = if (mode == FilterMode.FULL) dpToPx(16) else dpToPx(32)
+        val downMargin = if (mode == FilterMode.FULL) dpToPx(40) else dpToPx(16)
+
+        binding.emptySpace.layoutParams = binding.emptySpace.layoutParams.apply { height = downMargin }
+
+        val betweenMarginViews = listOf(
+            binding.tvDistanceLabel,
+            binding.tvPriceLabel,
+            binding.tvOperatingLabel,
+            binding.tvReviewLabel,
+            binding.tvRatingLabel,
+            binding.tvCategoryLabel
+        )
+
+        betweenMarginViews.forEach { view ->
+            (view.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                bottomMargin = betweenMargin
+            }
+        }
     }
 
     private fun updateDistanceText(distance: Int) {
