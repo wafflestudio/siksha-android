@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,21 +20,17 @@ import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import androidx.core.graphics.drawable.toDrawable
+import androidx.fragment.app.DialogFragment
 
 class FilterDialogFragment(
     private val mode: FilterMode
-) : BottomSheetDialogFragment() {
+) : DialogFragment() {
     private var _binding: DialogFilterBinding? = null
     private val binding get() = _binding!!
 
@@ -44,19 +41,20 @@ class FilterDialogFragment(
     private val categorySet = listOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페")
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        val dialog = Dialog(requireContext(), R.style.FilterBottomDialog)
 
-        dialog.setOnShowListener {
-            val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-            dialog.behavior.setState(BottomSheetBehavior.STATE_EXPANDED)
-            bottomSheet.let {
-                val layoutParams = it.layoutParams
-                it.layoutParams = layoutParams
-            }
+        dialog.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawableResource(android.R.color.transparent)
         }
 
         return dialog
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -66,8 +64,6 @@ class FilterDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupScrollViewParams()
 
         setupVisibility()
         setupObservers()
@@ -82,26 +78,6 @@ class FilterDialogFragment(
         setupButtonShadow()
     }
 
-    private fun setupScrollViewParams() {
-        if (mode == FilterMode.FULL) {
-            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                0,
-                1f
-            )
-        } else {
-            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0f
-            )
-        }
-    }
-
-    override fun getTheme(): Int {
-        return R.style.RoundedBottomSheetDialogTheme
-    }
-
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { newCondition ->
@@ -114,10 +90,8 @@ class FilterDialogFragment(
     private fun updateCondition() {
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
             binding.distanceRangeSlider.values = listOf(selectedCondition.distance)
+            binding.distanceRangeSlider.post { updateDistanceBubblePosition(binding.distanceRangeSlider) }
             updateDistanceText(selectedCondition.distance.toInt())
-            binding.distanceRangeSlider.post {
-                updateDistanceBubblePosition(binding.distanceRangeSlider)
-            }
         }
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
             binding.priceRangeSlider.values = listOf(selectedCondition.minPrice, selectedCondition.maxPrice)
