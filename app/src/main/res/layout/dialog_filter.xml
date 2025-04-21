@@ -33,6 +33,8 @@
             android:paddingTop="15dp"
             android:paddingBottom="4dp"
             android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
             android:visibility="gone">
 
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView

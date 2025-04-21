@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.content.res.Resources
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
@@ -88,6 +90,7 @@ class FilterDialogFragment(
         setupButtons()
         setupButtonShadow()
         setupLayoutMargin()
+        setupDragToDismiss()
     }
 
     private fun setupObservers() {
@@ -309,9 +312,6 @@ class FilterDialogFragment(
         binding.buttonSection.background = color.toDrawable()
     }
 
-    val Int.dp: Int
-        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
-
     private fun setupLayoutMargin() {
         val betweenMargin = if (mode == FilterMode.FULL) dpToPx(16) else dpToPx(32)
         val downMargin = if (mode == FilterMode.FULL) dpToPx(40) else dpToPx(16)
@@ -331,6 +331,28 @@ class FilterDialogFragment(
             (view.layoutParams as ViewGroup.MarginLayoutParams).apply {
                 bottomMargin = betweenMargin
             }
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupDragToDismiss() {
+        var initialY = 0f
+        val dragThreshold = dpToPx(100)
+
+        binding.dragHandleArea.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    initialY = event.rawY
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaY = event.rawY - initialY
+                    if (deltaY > dragThreshold) {
+                        dismiss()
+                        return@setOnTouchListener true
+                    }
+                }
+            }
+            false
         }
     }
 
