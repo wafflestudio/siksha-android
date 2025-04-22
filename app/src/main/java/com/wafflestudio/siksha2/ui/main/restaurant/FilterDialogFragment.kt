@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.GridLayout
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -120,7 +119,7 @@ class FilterDialogFragment(
         }
         if (mode == FilterMode.FULL) {
             binding.operatingHoursGroup.check(if (selectedCondition.isOpen) R.id.optionOperating else R.id.optionAll)
-            binding.radioGroupReview.check(if (selectedCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
+            binding.radioGroupReview.check(if (selectedCondition.hasReview) R.id.radio_with_reviews else R.id.radio_all_reviews)
         }
     }
 
@@ -145,10 +144,10 @@ class FilterDialogFragment(
     private fun setupRatingSelection() {
         binding.radioGroupRating.setOnCheckedChangeListener { _, checkedId ->
             val rating = when (checkedId) {
-                R.id.radioRatingAll -> 0f
-                R.id.radioRating35 -> 3.5f
-                R.id.radioRating40 -> 4.0f
-                R.id.radioRating45 -> 4.5f
+                R.id.radio_rating_all -> 0f
+                R.id.radio_rating_35 -> 3.5f
+                R.id.radio_rating_40 -> 4.0f
+                R.id.radio_rating_45 -> 4.5f
                 else -> 0f
             }
 
@@ -165,7 +164,7 @@ class FilterDialogFragment(
 
     private fun setupReviewSelection() {
         binding.radioGroupReview.setOnCheckedChangeListener { _, checkedId ->
-            val hasReview = checkedId == R.id.radioWithReviews
+            val hasReview = checkedId == R.id.radio_with_reviews
             selectedCondition = selectedCondition.copy(hasReview = hasReview)
         }
     }
@@ -390,10 +389,10 @@ class FilterDialogFragment(
 
     private fun updateRatingSelection(rating: Float) {
         when (rating) {
-            0f -> binding.radioGroupRating.check(R.id.radioRatingAll)
-            3.5f -> binding.radioGroupRating.check(R.id.radioRating35)
-            4.0f -> binding.radioGroupRating.check(R.id.radioRating40)
-            4.5f -> binding.radioGroupRating.check(R.id.radioRating45)
+            0f -> binding.radioGroupRating.check(R.id.radio_rating_all)
+            3.5f -> binding.radioGroupRating.check(R.id.radio_rating_35)
+            4.0f -> binding.radioGroupRating.check(R.id.radio_rating_40)
+            4.5f -> binding.radioGroupRating.check(R.id.radio_rating_45)
         }
     }
 
