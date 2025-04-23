@@ -41,6 +41,7 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
     private val vm: DailyRestaurantViewModel by activityViewModels()
+
     @Inject
     lateinit var featureChecker: FeatureChecker
 

@@ -232,57 +232,60 @@ class DailyRestaurantViewModel @Inject constructor(
                 result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
                 result
             }
-        return if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) menuBase
-            // 사용자 필터
-            .map { menuGroupList ->
-                menuGroupList.filter { item ->
-                    _menuFilterCondition.value.distance == default.distance ||
-                        getDistance(item)?.let {
-                            it <= _menuFilterCondition.value.distance
-                        } ?: true
-                }
-            }
-            .map { menuGroupList ->
-                menuGroupList.map { restaurant ->
-                    val newRestaurant = restaurant.copy(
-                        menus = restaurant.menus.filter { menu ->
-                            menu.price?.let { menuPrice ->
-                                val minPrice = _menuFilterCondition.value.minPrice
-                                val maxPrice = _menuFilterCondition.value.maxPrice
-                                ((menuPrice >= minPrice) || (minPrice == default.minPrice)) &&
-                                    ((menuPrice <= maxPrice) || (maxPrice == default.maxPrice))
+        return if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
+            menuBase
+                // 사용자 필터
+                .map { menuGroupList ->
+                    menuGroupList.filter { item ->
+                        _menuFilterCondition.value.distance == default.distance ||
+                            getDistance(item)?.let {
+                                it <= _menuFilterCondition.value.distance
                             } ?: true
-                        }.filter { menu ->
-                            when (menu.score) {
-                                null -> {
-                                    !_menuFilterCondition.value.hasReview &&
-                                        _menuFilterCondition.value.minRating == default.minRating
-                                }
-                                else -> {
-                                    _menuFilterCondition.value.minRating <= menu.score
+                    }
+                }
+                .map { menuGroupList ->
+                    menuGroupList.map { restaurant ->
+                        val newRestaurant = restaurant.copy(
+                            menus = restaurant.menus.filter { menu ->
+                                menu.price?.let { menuPrice ->
+                                    val minPrice = _menuFilterCondition.value.minPrice
+                                    val maxPrice = _menuFilterCondition.value.maxPrice
+                                    ((menuPrice >= minPrice) || (minPrice == default.minPrice)) &&
+                                        ((menuPrice <= maxPrice) || (maxPrice == default.maxPrice))
+                                } ?: true
+                            }.filter { menu ->
+                                when (menu.score) {
+                                    null -> {
+                                        !_menuFilterCondition.value.hasReview &&
+                                            _menuFilterCondition.value.minRating == default.minRating
+                                    }
+                                    else -> {
+                                        _menuFilterCondition.value.minRating <= menu.score
+                                    }
                                 }
                             }
-                        }
-                    )
-                    newRestaurant
+                        )
+                        newRestaurant
+                    }
                 }
-            }
-            .map { menuGroupList ->
-                menuGroupList.map { restaurant ->
-                    val newRestaurant = restaurant.copy(
-                        menus = restaurant.menus.filter { menu ->
-                            _menuFilterCondition.value.categories.let { selectedCategories ->
-                                selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
+                .map { menuGroupList ->
+                    menuGroupList.map { restaurant ->
+                        val newRestaurant = restaurant.copy(
+                            menus = restaurant.menus.filter { menu ->
+                                _menuFilterCondition.value.categories.let { selectedCategories ->
+                                    selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
+                                }
                             }
-                        }
-                    )
-                    newRestaurant
+                        )
+                        newRestaurant
+                    }
                 }
-            }
-            .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
-                menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
-            }
-        else menuBase
+                .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
+                    menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
+                }
+        } else {
+            menuBase
+        }
     }
 
     suspend fun getRestaurantInfo(id: Long): RestaurantInfo? {
