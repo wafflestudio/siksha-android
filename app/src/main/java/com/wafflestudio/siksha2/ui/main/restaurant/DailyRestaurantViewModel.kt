@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
@@ -69,6 +70,9 @@ class DailyRestaurantViewModel @Inject constructor(
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
     private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
+
+    @Inject
+    lateinit var featureChecker: FeatureChecker
 
     init {
         startRefreshingMenus()
@@ -176,7 +180,7 @@ class DailyRestaurantViewModel @Inject constructor(
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
-        return _dateFilter.asFlow()
+        val menuBase = _dateFilter.asFlow()
             .flatMapLatest {
                 menuRepository.getDailyMenuFlow(it)
             }
@@ -228,6 +232,7 @@ class DailyRestaurantViewModel @Inject constructor(
                 result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
                 result
             }
+        return if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) menuBase
             // 사용자 필터
             .map { menuGroupList ->
                 menuGroupList.filter { item ->
@@ -277,6 +282,7 @@ class DailyRestaurantViewModel @Inject constructor(
             .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
                 menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
             }
+        else menuBase
     }
 
     suspend fun getRestaurantInfo(id: Long): RestaurantInfo? {

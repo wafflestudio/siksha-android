@@ -23,6 +23,7 @@ class FeatureChecker @Inject constructor() {
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
             override fun onUpdate(configUpdate: ConfigUpdate) {
+                Timber.d("FeatureChecker Update Success")
                 // Log.d(TAG, "Updated keys: " + configUpdate.updatedKeys);
 
 //                if (configUpdate.updatedKeys.contains("welcome_message")) {
@@ -33,6 +34,7 @@ class FeatureChecker @Inject constructor() {
             }
 
             override fun onError(error: FirebaseRemoteConfigException) {
+                Timber.d("FeatureChecker Error")
                 // Log.w(TAG, "Config update error with code: " + error.code, error)
             }
         })

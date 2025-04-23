@@ -167,7 +167,6 @@ class SplashActivity : AppCompatActivity() {
                 connection.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
             )
     }
-
     private suspend fun checkLoginStatus(): Boolean {
         return userStatusManager.refreshUserToken()
     }
