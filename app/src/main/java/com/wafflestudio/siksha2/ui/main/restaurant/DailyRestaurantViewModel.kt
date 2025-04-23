@@ -74,6 +74,9 @@ class DailyRestaurantViewModel @Inject constructor(
     @Inject
     lateinit var featureChecker: FeatureChecker
 
+    private val _showFestival = MutableLiveData(false)
+    val showFestival: LiveData<Boolean> = _showFestival
+
     init {
         startRefreshingMenus()
     }
@@ -134,6 +137,10 @@ class DailyRestaurantViewModel @Inject constructor(
 
     fun updateLocation(location: Location?) {
         _currentLocation.value = location
+    }
+
+    fun toggleFestival() {
+        _showFestival.value = !showFestival.value!!
     }
 
     private fun getDistance(menuGroup: MenuGroup): Float? {
@@ -232,8 +239,13 @@ class DailyRestaurantViewModel @Inject constructor(
                 result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
                 result
             }
-        return if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
-            menuBase
+        val menuFestivalApplied = menuBase.map {
+            it.filter { item ->
+                item.nameKr!!.startsWith("[축제]") == showFestival.value
+            }
+        }
+        val menuFilterApplied = if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
+            menuFestivalApplied
                 // 사용자 필터
                 .map { menuGroupList ->
                     menuGroupList.filter { item ->
@@ -284,8 +296,9 @@ class DailyRestaurantViewModel @Inject constructor(
                     menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
                 }
         } else {
-            menuBase
+            menuFestivalApplied
         }
+        return menuFilterApplied
     }
 
     suspend fun getRestaurantInfo(id: Long): RestaurantInfo? {

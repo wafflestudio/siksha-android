@@ -32,6 +32,7 @@ import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Locale
@@ -363,6 +364,13 @@ class DailyRestaurantFragment : Fragment() {
         } else {
             binding.filterLayout.visibility = View.GONE
         }
+
+        if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
+            binding.festivalToggle.visibility = View.VISIBLE
+            setUpFestival()
+        } else {
+            binding.festivalToggle.visibility = View.GONE
+        }
     }
 
     private fun setUpFilterOptions() {
@@ -460,6 +468,18 @@ class DailyRestaurantFragment : Fragment() {
             }
         } else {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
+        }
+    }
+
+    private fun setUpFestival() {
+        binding.festivalToggle.setOnClickListener {
+            vm.toggleFestival()
+            getFilteredMenuGroups()
+        }
+        vm.showFestival.observe(viewLifecycleOwner) {
+            binding.festivalToggle.isSelected = it
+            getFilteredMenuGroups()
+            Timber.d("toggled")
         }
     }
 
