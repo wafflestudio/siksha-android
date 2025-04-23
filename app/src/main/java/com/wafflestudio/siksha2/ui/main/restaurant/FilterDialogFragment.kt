@@ -1,15 +1,16 @@
 package com.wafflestudio.siksha2.ui.main.restaurant
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Outline
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
@@ -21,20 +22,17 @@ import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import androidx.core.graphics.drawable.toDrawable
+import androidx.fragment.app.DialogFragment
 
 class FilterDialogFragment(
     private val mode: FilterMode
-) : BottomSheetDialogFragment() {
+) : DialogFragment() {
     private var _binding: DialogFilterBinding? = null
     private val binding get() = _binding!!
 
@@ -45,20 +43,30 @@ class FilterDialogFragment(
     private val categorySet = listOf("전체", "한식", "중식", "분식", "일식", "양식", "아시안", "뷔페")
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        val dialog = Dialog(requireContext(), R.style.FilterBottomDialog)
 
-        dialog.setOnShowListener {
-            val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet) as FrameLayout
-            val behavior = BottomSheetBehavior.from(bottomSheet)
-
-            bottomSheet.let {
-                val layoutParams = it.layoutParams
-                it.layoutParams = layoutParams
-            }
+        dialog.window?.apply {
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawableResource(android.R.color.transparent)
         }
 
         return dialog
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        // Dialog 높이 결정
+        val height = if (mode == FilterMode.FULL) {
+            Resources.getSystem().displayMetrics.heightPixels - dpToPx(56)
+        } else {
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        }
+
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            height
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -68,11 +76,6 @@ class FilterDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupScrollViewParams()
-        val bottomSheet = view.parent as View
-        val behavior = BottomSheetBehavior.from(bottomSheet)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         setupVisibility()
         setupObservers()
@@ -84,26 +87,9 @@ class FilterDialogFragment(
         setupReviewSelection()
         setupCategorySelection()
         setupButtons()
-    }
-
-    private fun setupScrollViewParams() {
-        if (mode == FilterMode.FULL) {
-            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                0,
-                1f
-            )
-        } else {
-            binding.scrollableContent.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0f
-            )
-        }
-    }
-
-    override fun getTheme(): Int {
-        return R.style.RoundedBottomSheetDialogTheme
+        setupButtonShadow()
+        setupLayoutMargin()
+        setupDragToDismiss()
     }
 
     private fun setupObservers() {
@@ -118,6 +104,7 @@ class FilterDialogFragment(
     private fun updateCondition() {
         if (mode == FilterMode.DISTANCE || mode == FilterMode.FULL) {
             binding.distanceRangeSlider.values = listOf(selectedCondition.distance)
+            binding.distanceRangeSlider.post { updateDistanceBubblePosition(binding.distanceRangeSlider) }
             updateDistanceText(selectedCondition.distance.toInt())
         }
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
@@ -132,49 +119,35 @@ class FilterDialogFragment(
         }
         if (mode == FilterMode.FULL) {
             binding.operatingHoursGroup.check(if (selectedCondition.isOpen) R.id.optionOperating else R.id.optionAll)
-            binding.radioGroupReview.check(if (selectedCondition.hasReview) R.id.radioWithReviews else R.id.radioAllReviews)
+            binding.radioGroupReview.check(if (selectedCondition.hasReview) R.id.radio_with_reviews else R.id.radio_all_reviews)
         }
     }
 
     private fun setupDistanceSelection() {
-        val initialValue = listOf(selectedCondition.distance)
-        binding.distanceRangeSlider.setValues(initialValue)
-        updateDistanceText(selectedCondition.distance.toInt())
-        updateDistanceBubblePosition(binding.distanceRangeSlider)
-
-        binding.distanceRangeSlider.post {
-            updateDistanceBubblePosition(binding.distanceRangeSlider)
-        }
-
         binding.distanceRangeSlider.addOnChangeListener { slider, _, _ ->
             val value = slider.values[0]
             selectedCondition = selectedCondition.copy(distance = value)
             updateDistanceText(selectedCondition.distance.toInt())
-            Handler(Looper.getMainLooper()).post {
-                updateDistanceBubblePosition(slider)
-            }
+            updateDistanceBubblePosition(slider)
         }
     }
 
     private fun setupPriceSelection() {
-        binding.priceRangeSlider.setMinSeparationValue(500f)
+        binding.priceRangeSlider.setMinSeparationValue(500.0f)
         binding.priceRangeSlider.addOnChangeListener { slider, _, _ ->
-            val values = slider.values
-            selectedCondition = selectedCondition.copy(
-                minPrice = values[0],
-                maxPrice = values[1]
-            )
-            updatePriceRangeText(selectedCondition.minPrice.toInt(), selectedCondition.maxPrice.toInt())
+            val (minPrice, maxPrice) = slider.values
+            selectedCondition = selectedCondition.copy(minPrice = minPrice, maxPrice = maxPrice)
+            updatePriceRangeText(minPrice.toInt(), maxPrice.toInt())
         }
     }
 
     private fun setupRatingSelection() {
         binding.radioGroupRating.setOnCheckedChangeListener { _, checkedId ->
             val rating = when (checkedId) {
-                R.id.radioRatingAll -> 0f
-                R.id.radioRating35 -> 3.5f
-                R.id.radioRating40 -> 4.0f
-                R.id.radioRating45 -> 4.5f
+                R.id.radio_rating_all -> 0f
+                R.id.radio_rating_35 -> 3.5f
+                R.id.radio_rating_40 -> 4.0f
+                R.id.radio_rating_45 -> 4.5f
                 else -> 0f
             }
 
@@ -191,7 +164,7 @@ class FilterDialogFragment(
 
     private fun setupReviewSelection() {
         binding.radioGroupReview.setOnCheckedChangeListener { _, checkedId ->
-            val hasReview = checkedId == R.id.radioWithReviews
+            val hasReview = checkedId == R.id.radio_with_reviews
             selectedCondition = selectedCondition.copy(hasReview = hasReview)
         }
     }
@@ -218,9 +191,9 @@ class FilterDialogFragment(
                     rowSpec = GridLayout.spec(if (index < 5) 0 else 1)
                     setMargins(
                         if (index % 5 != 0) dpToPx(4) else 0,
-                        if (index >= 5) dpToPx(4) else 0,
+                        0,
                         if (index % 5 != 4) dpToPx(4) else 0,
-                        if (index < 5) dpToPx(4) else 0
+                        0
                     )
                 }
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
@@ -298,6 +271,10 @@ class FilterDialogFragment(
     }
 
     private fun setupButtons() {
+        binding.closeButton.setOnClickListener {
+            dismiss()
+        }
+
         binding.btnReset.setOnClickListener {
             resetFiltersByMode()
         }
@@ -314,6 +291,7 @@ class FilterDialogFragment(
     private fun setupVisibility() {
         when (mode) {
             FilterMode.FULL -> {
+                binding.dragHandleArea.visibility = View.VISIBLE
                 binding.distanceSection.visibility = View.VISIBLE
                 binding.priceSection.visibility = View.VISIBLE
                 binding.openSection.visibility = View.VISIBLE
@@ -328,6 +306,55 @@ class FilterDialogFragment(
         }
     }
 
+    private fun setupButtonShadow() {
+        val color = if (mode == FilterMode.FULL) Color.WHITE else Color.TRANSPARENT
+        binding.buttonSection.background = color.toDrawable()
+    }
+
+    private fun setupLayoutMargin() {
+        val betweenMargin = if (mode == FilterMode.FULL) dpToPx(16) else dpToPx(32)
+        val downMargin = if (mode == FilterMode.FULL) dpToPx(40) else dpToPx(16)
+
+        binding.emptySpace.layoutParams = binding.emptySpace.layoutParams.apply { height = downMargin }
+
+        val betweenMarginViews = listOf(
+            binding.tvDistanceLabel,
+            binding.tvPriceLabel,
+            binding.tvOperatingLabel,
+            binding.tvReviewLabel,
+            binding.tvRatingLabel,
+            binding.tvCategoryLabel
+        )
+
+        betweenMarginViews.forEach { view ->
+            (view.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                bottomMargin = betweenMargin
+            }
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupDragToDismiss() {
+        var initialY = 0f
+        val dragThreshold = dpToPx(100)
+
+        binding.dragHandleArea.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    initialY = event.rawY
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val deltaY = event.rawY - initialY
+                    if (deltaY > dragThreshold) {
+                        dismiss()
+                        return@setOnTouchListener true
+                    }
+                }
+            }
+            false
+        }
+    }
+
     private fun updateDistanceText(distance: Int) {
         binding.tvDistanceRange.text = if (distance >= defaultCondition.distance.toInt()) {
             "1km 이상"
@@ -337,29 +364,35 @@ class FilterDialogFragment(
     }
 
     private fun updateDistanceBubblePosition(rangeSlider: RangeSlider) {
-        val valueRangeSize = rangeSlider.valueTo - rangeSlider.valueFrom
-        val valuePercent = (rangeSlider.values[0] - rangeSlider.valueFrom) / valueRangeSize
+        val valuePercent = (rangeSlider.values[0] - rangeSlider.valueFrom) / (rangeSlider.valueTo - rangeSlider.valueFrom)
         val valueXDistance = valuePercent * rangeSlider.trackWidth
-        val offset = rangeSlider.x + rangeSlider.trackSidePadding - (binding.distanceBubble.width / 2f)
 
-        val minX = rangeSlider.x + rangeSlider.trackSidePadding + 10f
-        val maxX = minX + rangeSlider.trackWidth - binding.distanceBubble.width + 10f
+        val bubbleWidth = binding.distanceBubble.width
+        val triangleWidth = binding.distanceTriangle.width
 
-        binding.distanceBubble.x = valueXDistance.coerceIn(minX, maxX) + offset
+        // 말풍선 중앙값
+        val basicBubbleX = rangeSlider.left + rangeSlider.trackSidePadding + valueXDistance - (bubbleWidth / 2f)
+        // 말풍선은 화면 양끝으로 제한
+        val bubbleX = basicBubbleX.coerceIn(rangeSlider.left.toFloat(), rangeSlider.right.toFloat() - bubbleWidth)
+        // 삼각형 기본값 / 삼각형은 ConstranintLayout 시작점을 기준으로 위치를 계산함 (왠진 모르겠)
+        val triangleCenterOffset = (bubbleWidth - triangleWidth) / 2f
+
+        binding.distanceBubble.x = bubbleX
+        binding.distanceTriangle.x = triangleCenterOffset + (basicBubbleX - bubbleX) // 기본값 + max, min 넘어갔을 때 처리
     }
 
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
-        val minPriceText = if (minPrice <= defaultCondition.minPrice.toInt()) "3,000원 이하" else "${minPrice}원"
-        val maxPriceText = if (maxPrice >= defaultCondition.maxPrice.toInt()) "10,000원 이상" else "${maxPrice}원"
+        val minPriceText = if (minPrice == defaultCondition.minPrice.toInt()) "0원" else "${minPrice}원"
+        val maxPriceText = if (maxPrice == defaultCondition.maxPrice.toInt()) "10,000원 이상" else "${maxPrice}원"
         binding.tvPriceRange.text = "$minPriceText ~ $maxPriceText"
     }
 
     private fun updateRatingSelection(rating: Float) {
         when (rating) {
-            0f -> binding.radioGroupRating.check(R.id.radioRatingAll)
-            3.5f -> binding.radioGroupRating.check(R.id.radioRating35)
-            4.0f -> binding.radioGroupRating.check(R.id.radioRating40)
-            4.5f -> binding.radioGroupRating.check(R.id.radioRating45)
+            0f -> binding.radioGroupRating.check(R.id.radio_rating_all)
+            3.5f -> binding.radioGroupRating.check(R.id.radio_rating_35)
+            4.0f -> binding.radioGroupRating.check(R.id.radio_rating_40)
+            4.5f -> binding.radioGroupRating.check(R.id.radio_rating_45)
         }
     }
 

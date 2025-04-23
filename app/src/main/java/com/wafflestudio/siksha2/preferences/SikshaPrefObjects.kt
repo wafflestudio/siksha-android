@@ -67,7 +67,7 @@ class SikshaPrefObjects @Inject constructor(
             "menuFilterCondition",
             MenuFilterCondition(
                 distance = 1000f,
-                minPrice = 3000f,
+                minPrice = 2500f,
                 maxPrice = 10000f,
                 isOpen = false,
                 hasReview = false,

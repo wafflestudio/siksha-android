@@ -355,8 +355,8 @@ class DailyRestaurantFragment : Fragment() {
 
                 binding.filterPrice.setFilter(
                     if (condition.minPrice > default.minPrice || condition.maxPrice < default.maxPrice) {
-                        val minPriceText = if (condition.minPrice <= default.minPrice) "3,000원 이하" else "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원"
-                        val maxPriceText = if (condition.maxPrice >= default.maxPrice) "10,000원 이상" else "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원"
+                        val minPriceText = if (condition.minPrice == default.minPrice) "0원" else "${String.format(Locale.getDefault(), "%,d", condition.minPrice.toInt())}원"
+                        val maxPriceText = if (condition.maxPrice == default.maxPrice) "10,000원 이상" else "${String.format(Locale.getDefault(), "%,d", condition.maxPrice.toInt())}원"
                         "$minPriceText ~ $maxPriceText"
                     } else {
                         "가격"
