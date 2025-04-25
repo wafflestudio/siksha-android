@@ -10,11 +10,10 @@
         android:id="@+id/close_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_close"
+        android:src="@drawable/ic_close_filter"
         android:elevation="10dp"
         android:layout_gravity="end"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginEnd="16dp" />
 
     <LinearLayout
         android:id="@+id/dialog_filter_layout"
@@ -50,9 +49,8 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
-                android:paddingBottom="10dp"
                 android:layout_marginTop="15dp"
-                android:fontFamily="@font/nanum_square_extra_bold"/>
+                android:fontFamily="@font/nanum_square_bold"/>
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -81,12 +79,13 @@
                     <TextView
                         android:id="@+id/tv_distance_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:text="거리"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
                         android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -166,12 +165,13 @@
                     <TextView
                         android:id="@+id/tv_price_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:text="가격"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
                         android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -250,12 +250,13 @@
                     <TextView
                         android:id="@+id/tv_operating_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:text="영업시간"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:paddingTop="20dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
                         android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <RadioGroup
@@ -303,12 +304,13 @@
                     <TextView
                         android:id="@+id/tv_review_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:text="리뷰"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:paddingTop="20dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
                         android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <RadioGroup
@@ -352,17 +354,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    android:paddingBottom="20dp">
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:id="@+id/tv_rating_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:text="최소 평점"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:paddingTop="20dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
                         android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -507,16 +510,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    android:paddingTop="20dp">
+                    >
 
                     <TextView
                         android:id="@+id/tv_category_label"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="32dp"
                         android:text="카테고리"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
                         android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <GridLayout
@@ -542,7 +547,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingVertical="16dp"
+            android:paddingTop="19dp"
+            android:paddingBottom="35dp"
             android:elevation="8dp"
             android:background="@color/white"
             android:translationZ="4dp"

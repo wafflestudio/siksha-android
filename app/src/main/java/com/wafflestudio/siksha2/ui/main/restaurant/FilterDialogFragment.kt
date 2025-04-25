@@ -29,6 +29,7 @@ import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
+import java.util.Locale
 
 class FilterDialogFragment(
     private val mode: FilterMode
@@ -297,7 +298,7 @@ class FilterDialogFragment(
                 binding.openSection.visibility = View.VISIBLE
                 binding.reviewSection.visibility = View.VISIBLE
                 binding.ratingSection.visibility = View.VISIBLE
-                binding.categorySection.visibility = View.VISIBLE
+                // binding.categorySection.visibility = View.VISIBLE
             }
             FilterMode.DISTANCE -> binding.distanceSection.visibility = View.VISIBLE
             FilterMode.PRICE -> binding.priceSection.visibility = View.VISIBLE
@@ -314,8 +315,11 @@ class FilterDialogFragment(
     private fun setupLayoutMargin() {
         val betweenMargin = if (mode == FilterMode.FULL) dpToPx(16) else dpToPx(32)
         val downMargin = if (mode == FilterMode.FULL) dpToPx(40) else dpToPx(16)
+        val closeButtonMargin = if (mode == FilterMode.FULL) dpToPx(26) else dpToPx(16)
 
         binding.emptySpace.layoutParams = binding.emptySpace.layoutParams.apply { height = downMargin }
+        binding.closeButton.layoutParams =
+            (binding.closeButton.layoutParams as ViewGroup.MarginLayoutParams).apply { topMargin = closeButtonMargin }
 
         val betweenMarginViews = listOf(
             binding.tvDistanceLabel,
@@ -381,9 +385,12 @@ class FilterDialogFragment(
         binding.distanceTriangle.x = triangleCenterOffset + (basicBubbleX - bubbleX) // 기본값 + max, min 넘어갔을 때 처리
     }
 
+    private fun updatePriceBubblePosition(rangeSlider: RangeSlider) {
+    }
+
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
-        val minPriceText = if (minPrice == defaultCondition.minPrice.toInt()) "0원" else "${minPrice}원"
-        val maxPriceText = if (maxPrice == defaultCondition.maxPrice.toInt()) "10,000원 이상" else "${maxPrice}원"
+        val minPriceText = if (minPrice == defaultCondition.minPrice.toInt()) "0원" else "${String.format(Locale.getDefault(), "%,d", minPrice)}원"
+        val maxPriceText = if (maxPrice == defaultCondition.maxPrice.toInt()) "10,000원 이상" else "${String.format(Locale.getDefault(), "%,d", maxPrice)}원"
         binding.tvPriceRange.text = "$minPriceText ~ $maxPriceText"
     }
 

@@ -244,6 +244,7 @@
                         android:id = "@+id/filter_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         app:showArrow="true"
                         app:filterText="카테고리" />
 
