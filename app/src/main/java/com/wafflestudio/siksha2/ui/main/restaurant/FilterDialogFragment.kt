@@ -110,7 +110,7 @@ class FilterDialogFragment(
         }
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
             binding.priceRangeSlider.values = listOf(selectedCondition.minPrice, selectedCondition.maxPrice)
-            binding.priceRangeSlider.post { updatePriceBubblePosition(binding.priceRangeSlider)}
+            binding.priceRangeSlider.post { updatePriceBubblePosition(binding.priceRangeSlider) }
             updatePriceRangeText(selectedCondition.minPrice.toInt(), selectedCondition.maxPrice.toInt())
         }
         if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
@@ -380,7 +380,7 @@ class FilterDialogFragment(
     }
 
     private fun updatePriceBubblePosition(rangeSlider: RangeSlider) {
-        updateBubblePosition(rangeSlider, (rangeSlider.values[0] +  rangeSlider.values[1]) / 2f, binding.priceBubble, binding.priceTriangle)
+        updateBubblePosition(rangeSlider, (rangeSlider.values[0] + rangeSlider.values[1]) / 2f, binding.priceBubble, binding.priceTriangle)
     }
 
     private fun updateBubblePosition(
@@ -405,7 +405,6 @@ class FilterDialogFragment(
         bubbleView.x = bubbleX
         triangleView.x = triangleCenterOffset + (basicBubbleX - bubbleX)
     }
-
 
     private fun updateRatingSelection(rating: Float) {
         when (rating) {
