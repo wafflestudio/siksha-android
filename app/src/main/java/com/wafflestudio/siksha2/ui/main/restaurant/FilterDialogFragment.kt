@@ -110,6 +110,7 @@ class FilterDialogFragment(
         }
         if (mode == FilterMode.PRICE || mode == FilterMode.FULL) {
             binding.priceRangeSlider.values = listOf(selectedCondition.minPrice, selectedCondition.maxPrice)
+            binding.priceRangeSlider.post { updatePriceBubblePosition(binding.priceRangeSlider)}
             updatePriceRangeText(selectedCondition.minPrice.toInt(), selectedCondition.maxPrice.toInt())
         }
         if (mode == FilterMode.RATING || mode == FilterMode.FULL) {
@@ -139,6 +140,7 @@ class FilterDialogFragment(
             val (minPrice, maxPrice) = slider.values
             selectedCondition = selectedCondition.copy(minPrice = minPrice, maxPrice = maxPrice)
             updatePriceRangeText(minPrice.toInt(), maxPrice.toInt())
+            updatePriceBubblePosition(slider)
         }
     }
 
@@ -367,32 +369,43 @@ class FilterDialogFragment(
         }
     }
 
-    private fun updateDistanceBubblePosition(rangeSlider: RangeSlider) {
-        val valuePercent = (rangeSlider.values[0] - rangeSlider.valueFrom) / (rangeSlider.valueTo - rangeSlider.valueFrom)
-        val valueXDistance = valuePercent * rangeSlider.trackWidth
-
-        val bubbleWidth = binding.distanceBubble.width
-        val triangleWidth = binding.distanceTriangle.width
-
-        // 말풍선 중앙값
-        val basicBubbleX = rangeSlider.left + rangeSlider.trackSidePadding + valueXDistance - (bubbleWidth / 2f)
-        // 말풍선은 화면 양끝으로 제한
-        val bubbleX = basicBubbleX.coerceIn(rangeSlider.left.toFloat(), rangeSlider.right.toFloat() - bubbleWidth)
-        // 삼각형 기본값 / 삼각형은 ConstranintLayout 시작점을 기준으로 위치를 계산함 (왠진 모르겠)
-        val triangleCenterOffset = (bubbleWidth - triangleWidth) / 2f
-
-        binding.distanceBubble.x = bubbleX
-        binding.distanceTriangle.x = triangleCenterOffset + (basicBubbleX - bubbleX) // 기본값 + max, min 넘어갔을 때 처리
-    }
-
-    private fun updatePriceBubblePosition(rangeSlider: RangeSlider) {
-    }
-
     private fun updatePriceRangeText(minPrice: Int, maxPrice: Int) {
         val minPriceText = if (minPrice == defaultCondition.minPrice.toInt()) "0원" else "${String.format(Locale.getDefault(), "%,d", minPrice)}원"
         val maxPriceText = if (maxPrice == defaultCondition.maxPrice.toInt()) "10,000원 이상" else "${String.format(Locale.getDefault(), "%,d", maxPrice)}원"
         binding.tvPriceRange.text = "$minPriceText ~ $maxPriceText"
     }
+
+    private fun updateDistanceBubblePosition(rangeSlider: RangeSlider) {
+        updateBubblePosition(rangeSlider, rangeSlider.values[0], binding.distanceBubble, binding.distanceTriangle)
+    }
+
+    private fun updatePriceBubblePosition(rangeSlider: RangeSlider) {
+        updateBubblePosition(rangeSlider, (rangeSlider.values[0] +  rangeSlider.values[1]) / 2f, binding.priceBubble, binding.priceTriangle)
+    }
+
+    private fun updateBubblePosition(
+        rangeSlider: RangeSlider,
+        centerValue: Float,
+        bubbleView: View,
+        triangleView: View
+    ) {
+        val valuePercent = (centerValue - rangeSlider.valueFrom) / (rangeSlider.valueTo - rangeSlider.valueFrom)
+        val valueXDistance = valuePercent * rangeSlider.trackWidth
+
+        val bubbleWidth = bubbleView.width
+        val triangleWidth = triangleView.width
+
+        // 말풍선 중앙값
+        val basicBubbleX = rangeSlider.left + rangeSlider.trackSidePadding + valueXDistance - (bubbleWidth / 2f)
+        // 말풍선은 화면 양끝으로 제한
+        val bubbleX = basicBubbleX.coerceIn(rangeSlider.left.toFloat(), rangeSlider.right.toFloat() - bubbleWidth)
+        // 삼각형 기본값
+        val triangleCenterOffset = (bubbleWidth - triangleWidth) / 2f
+
+        bubbleView.x = bubbleX
+        triangleView.x = triangleCenterOffset + (basicBubbleX - bubbleX)
+    }
+
 
     private fun updateRatingSelection(rating: Float) {
         when (rating) {
