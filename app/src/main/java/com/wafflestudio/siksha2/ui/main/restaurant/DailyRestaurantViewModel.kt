@@ -74,8 +74,8 @@ class DailyRestaurantViewModel @Inject constructor(
     @Inject
     lateinit var featureChecker: FeatureChecker
 
-    private val _showFestival = MutableLiveData(false)
-    val showFestival: LiveData<Boolean> = _showFestival
+    private val _showFestival = MutableStateFlow(false)
+    val showFestival: StateFlow<Boolean> = _showFestival
 
     init {
         startRefreshingMenus()
@@ -140,7 +140,7 @@ class DailyRestaurantViewModel @Inject constructor(
     }
 
     fun toggleFestival() {
-        _showFestival.value = !showFestival.value!!
+        _showFestival.value = !showFestival.value
     }
 
     private fun getDistance(menuGroup: MenuGroup): Float? {

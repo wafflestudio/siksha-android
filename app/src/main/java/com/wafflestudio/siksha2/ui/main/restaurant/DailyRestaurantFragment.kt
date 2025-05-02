@@ -21,9 +21,11 @@ import com.google.android.gms.location.LocationServices
 import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
+import com.wafflestudio.siksha2.components.festival.FestivalToggleRoute
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoBottomSheet
 import com.wafflestudio.siksha2.utils.KakaoLinkHelper
@@ -32,7 +34,6 @@ import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Locale
@@ -472,14 +473,16 @@ class DailyRestaurantFragment : Fragment() {
     }
 
     private fun setUpFestival() {
-        binding.festivalToggle.setOnClickListener {
-            vm.toggleFestival()
-            getFilteredMenuGroups()
-        }
-        vm.showFestival.observe(viewLifecycleOwner) {
-            binding.festivalToggle.isSelected = it
-            getFilteredMenuGroups()
-            Timber.d("toggled")
+        binding.festivalToggle.setContent {
+            SikshaTheme {
+                FestivalToggleRoute(
+                    onClick = {
+                        vm.toggleFestival()
+                        getFilteredMenuGroups()
+                    },
+                    vm = vm
+                )
+            }
         }
     }
 
