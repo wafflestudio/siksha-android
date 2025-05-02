@@ -56,8 +56,6 @@
             android:exported="true"
             android:theme="@style/Theme.Siksha.Splash">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -69,8 +67,30 @@
                 <data android:scheme="@string/kakao_scheme"
                     android:host="@string/kakaolink_host" />
             </intent-filter>
-
         </activity>
+
+        <activity-alias
+            android:name="com.wafflestudio.siksha2.ui.SikshaNormal"
+            android:icon="@mipmap/ic_launcher"
+            android:exported="true"
+            android:targetActivity=".ui.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:name="com.wafflestudio.siksha2.ui.SikshaFestival"
+            android:icon="@mipmap/ic_festival"
+            android:exported="true"
+            android:targetActivity=".ui.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true"

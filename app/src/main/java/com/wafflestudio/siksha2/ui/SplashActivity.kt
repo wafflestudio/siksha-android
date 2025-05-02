@@ -1,9 +1,12 @@
 package com.wafflestudio.siksha2.ui
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -64,6 +67,7 @@ class SplashActivity : AppCompatActivity() {
             }
 
             featureChecker.fetchFeaturesConfig()
+            changeAppIcon()
 
             if (checkLoginStatus().not()) {
                 binding.googleLoginButton.setVisibleOrGone(true)
@@ -167,7 +171,40 @@ class SplashActivity : AppCompatActivity() {
                 connection.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
             )
     }
+
     private suspend fun checkLoginStatus(): Boolean {
         return userStatusManager.refreshUserToken()
+    }
+
+    private fun changeAppIcon() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val mainComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SplashActivity")
+            val normalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaNormal")
+            val festivalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaFestival")
+            packageManager.setComponentEnabledSetting(
+                normalIconComponent,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+            packageManager.setComponentEnabledSetting(
+                festivalIconComponent,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+
+            if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
+                packageManager.setComponentEnabledSetting(
+                    festivalIconComponent,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            } else {
+                packageManager.setComponentEnabledSetting(
+                    normalIconComponent,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
+        }
     }
 }
