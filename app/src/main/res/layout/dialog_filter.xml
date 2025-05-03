@@ -432,7 +432,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:text="모두"
+                                android:text="전체"
                                 android:textColor="@color/black"
                                 android:gravity="center"
                                 android:fontFamily="@font/nanum_square_bold"/>
