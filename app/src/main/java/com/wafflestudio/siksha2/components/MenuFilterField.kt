@@ -1,12 +1,12 @@
 package com.wafflestudio.siksha2.components
 
 import android.content.Context
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemMenuFilterFieldBinding
 
@@ -61,11 +61,13 @@ class MenuFilterField : LinearLayout {
         if (isNull) {
             binding.filterBackground.background =
                 ContextCompat.getDrawable(context, R.drawable.frame_menu_filter_field)
-            binding.filter.setTypeface(null, Typeface.NORMAL)
+            binding.filter.typeface =
+                ResourcesCompat.getFont(context, R.font.nanum_square_regular)
         } else {
             binding.filterBackground.background =
                 ContextCompat.getDrawable(context, R.drawable.frame_menu_filter_field_active)
-            binding.filter.setTypeface(null, Typeface.BOLD)
+            binding.filter.typeface =
+                ResourcesCompat.getFont(context, R.font.nanum_square_bold)
         }
     }
 }
