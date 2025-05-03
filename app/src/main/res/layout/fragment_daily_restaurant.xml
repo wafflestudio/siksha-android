@@ -269,9 +269,8 @@
                 android:id="@+id/empty_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="48dp"
                 android:fontFamily="@font/nanum_square_light"
-                android:gravity="center_horizontal|top"
+                android:gravity="center"
                 android:text="@string/daily_restaurant_no_menus"
                 android:textColor="@color/gray_700"
                 android:visibility="gone" />
