@@ -198,4 +198,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
 
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    // Mixpanel (Analysis)
+    implementation("com.mixpanel.android:mixpanel-android:7.+")
 }
