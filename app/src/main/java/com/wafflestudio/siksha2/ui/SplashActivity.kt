@@ -66,8 +66,6 @@ class SplashActivity : AppCompatActivity() {
                 return@launch
             }
 
-            changeAppIcon()
-
             if (checkLoginStatus().not()) {
                 binding.googleLoginButton.setVisibleOrGone(true)
                 binding.kakaoLoginButton.setVisibleOrGone(true)
@@ -82,6 +80,8 @@ class SplashActivity : AppCompatActivity() {
         }
 
         featureChecker.fetchFeaturesConfig()
+        changeAppIcon()
+
         setUpGoogleLogin()
         setUpKakaoLogin()
 

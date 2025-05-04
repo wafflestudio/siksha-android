@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.collectAsState
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,7 +22,7 @@ import com.google.android.gms.location.LocationServices
 import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
-import com.wafflestudio.siksha2.components.festival.FestivalToggleRoute
+import com.wafflestudio.siksha2.components.festival.FestivalToggle
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.network.result.NetworkResult
@@ -475,12 +476,12 @@ class DailyRestaurantFragment : Fragment() {
     private fun setUpFestival() {
         binding.festivalToggle.setContent {
             SikshaTheme {
-                FestivalToggleRoute(
+                FestivalToggle(
+                    checked = vm.showFestival.collectAsState(),
                     onClick = {
                         vm.toggleFestival()
                         getFilteredMenuGroups()
-                    },
-                    vm = vm
+                    }
                 )
             }
         }
