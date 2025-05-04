@@ -1,9 +1,12 @@
 package com.wafflestudio.siksha2.ui
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -18,6 +21,7 @@ import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
+import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ActivitySplashBinding
 import com.wafflestudio.siksha2.network.OAuthProvider
@@ -43,6 +47,9 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var googleSignInLauncher: ActivityResultLauncher<Unit>
 
     private lateinit var kakaoSignInLauncher: () -> Unit
+
+    @Inject
+    lateinit var featureChecker: FeatureChecker
 
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +78,9 @@ class SplashActivity : AppCompatActivity() {
             startActivity(Intent(this@SplashActivity, RootActivity::class.java))
             finish()
         }
+
+        featureChecker.fetchFeaturesConfig()
+        changeAppIcon()
 
         setUpGoogleLogin()
         setUpKakaoLogin()
@@ -164,5 +174,37 @@ class SplashActivity : AppCompatActivity() {
 
     private suspend fun checkLoginStatus(): Boolean {
         return userStatusManager.refreshUserToken()
+    }
+
+    private fun changeAppIcon() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val mainComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SplashActivity")
+            val normalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaNormal")
+            val festivalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaFestival")
+            packageManager.setComponentEnabledSetting(
+                normalIconComponent,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+            packageManager.setComponentEnabledSetting(
+                festivalIconComponent,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+            )
+
+            if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
+                packageManager.setComponentEnabledSetting(
+                    festivalIconComponent,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            } else {
+                packageManager.setComponentEnabledSetting(
+                    normalIconComponent,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
+        }
     }
 }

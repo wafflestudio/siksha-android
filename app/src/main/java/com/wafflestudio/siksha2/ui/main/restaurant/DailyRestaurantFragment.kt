@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.runtime.collectAsState
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,11 +19,14 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
+import com.wafflestudio.siksha2.components.festival.FestivalToggle
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.main.MainFragmentDirections
 import com.wafflestudio.siksha2.ui.restaurantInfo.RestaurantInfoBottomSheet
 import com.wafflestudio.siksha2.utils.KakaoLinkHelper
@@ -34,20 +38,19 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.math.abs
 
 @AndroidEntryPoint
 class DailyRestaurantFragment : Fragment() {
     private val vm: DailyRestaurantViewModel by activityViewModels()
 
+    @Inject
+    lateinit var featureChecker: FeatureChecker
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-
-//    private val locationLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//        result ->
-//
-//    }
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -177,7 +180,7 @@ class DailyRestaurantFragment : Fragment() {
             onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
                 viewLifecycleOwner.lifecycleScope.launch {
                     when (val response = vm.toggleMenuLike(menuId, isCurrentlyLiked)) {
-                        is NetworkResult.Success -> { }
+                        is NetworkResult.Success -> {}
                         is NetworkResult.Failure -> showToast(response.message)
                         is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
                         else -> showToast(getString(R.string.common_unknown_error))
@@ -346,6 +349,33 @@ class DailyRestaurantFragment : Fragment() {
             binding.dateBefore.setVisibleOrGone(!visibility)
         }
 
+        binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
+        binding.lunchLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
+        binding.dinnerLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
+
+        binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
+        binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
+
+        parentFragmentManager.setFragmentResultListener("FilterDialog", this) { _, _ ->
+            getFilteredMenuGroups()
+        }
+
+        if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
+            binding.filterLayout.visibility = View.VISIBLE
+            setUpFilterOptions()
+        } else {
+            binding.filterLayout.visibility = View.GONE
+        }
+
+        if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
+            binding.festivalToggle.visibility = View.VISIBLE
+            setUpFestival()
+        } else {
+            binding.festivalToggle.visibility = View.GONE
+        }
+    }
+
+    private fun setUpFilterOptions() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { condition ->
                 binding.filterDistance.setFilter(
@@ -380,17 +410,6 @@ class DailyRestaurantFragment : Fragment() {
                     condition.categories.isEmpty()
                 )
             }
-        }
-
-        binding.breakfastLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.BR) }
-        binding.lunchLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.LU) }
-        binding.dinnerLayout.setOnClickListener { vm.setMealsOfDayFilter(MealsOfDay.DN) }
-
-        binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
-        binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
-
-        parentFragmentManager.setFragmentResultListener("FilterDialog", this) { _, _ ->
-            getFilteredMenuGroups()
         }
 
         binding.menuFilter.setOnClickListener {
@@ -451,6 +470,20 @@ class DailyRestaurantFragment : Fragment() {
             }
         } else {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
+        }
+    }
+
+    private fun setUpFestival() {
+        binding.festivalToggle.setContent {
+            SikshaTheme {
+                FestivalToggle(
+                    checked = vm.showFestival.collectAsState(),
+                    onClick = {
+                        vm.toggleFestival()
+                        getFilteredMenuGroups()
+                    }
+                )
+            }
         }
     }
 

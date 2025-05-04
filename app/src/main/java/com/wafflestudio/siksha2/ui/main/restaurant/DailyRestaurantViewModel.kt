@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
@@ -70,6 +71,12 @@ class DailyRestaurantViewModel @Inject constructor(
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
     private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
 
+    @Inject
+    lateinit var featureChecker: FeatureChecker
+
+    private val _showFestival = MutableStateFlow(false)
+    val showFestival: StateFlow<Boolean> = _showFestival
+
     init {
         startRefreshingMenus()
     }
@@ -132,6 +139,10 @@ class DailyRestaurantViewModel @Inject constructor(
         _currentLocation.value = location
     }
 
+    fun toggleFestival() {
+        _showFestival.value = !showFestival.value
+    }
+
     private fun getDistance(menuGroup: MenuGroup): Float? {
         val result = FloatArray(1)
         val location = _currentLocation.value
@@ -176,7 +187,7 @@ class DailyRestaurantViewModel @Inject constructor(
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
-        return _dateFilter.asFlow()
+        val menuBase = _dateFilter.asFlow()
             .flatMapLatest {
                 menuRepository.getDailyMenuFlow(it)
             }
@@ -228,55 +239,66 @@ class DailyRestaurantViewModel @Inject constructor(
                 result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
                 result
             }
-            // 사용자 필터
-            .map { menuGroupList ->
-                menuGroupList.filter { item ->
-                    _menuFilterCondition.value.distance == default.distance ||
-                        getDistance(item)?.let {
-                            it <= _menuFilterCondition.value.distance
-                        } ?: true
-                }
+        val menuFestivalApplied = menuBase.map {
+            it.filter { item ->
+                item.nameKr!!.startsWith("[축제]") == showFestival.value
             }
-            .map { menuGroupList ->
-                menuGroupList.map { restaurant ->
-                    val newRestaurant = restaurant.copy(
-                        menus = restaurant.menus.filter { menu ->
-                            menu.price?.let { menuPrice ->
-                                val minPrice = _menuFilterCondition.value.minPrice
-                                val maxPrice = _menuFilterCondition.value.maxPrice
-                                ((menuPrice >= minPrice) || (minPrice == default.minPrice)) &&
-                                    ((menuPrice <= maxPrice) || (maxPrice == default.maxPrice))
+        }
+        val menuFilterApplied = if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
+            menuFestivalApplied
+                // 사용자 필터
+                .map { menuGroupList ->
+                    menuGroupList.filter { item ->
+                        _menuFilterCondition.value.distance == default.distance ||
+                            getDistance(item)?.let {
+                                it <= _menuFilterCondition.value.distance
                             } ?: true
-                        }.filter { menu ->
-                            when (menu.score) {
-                                null -> {
-                                    !_menuFilterCondition.value.hasReview &&
-                                        _menuFilterCondition.value.minRating == default.minRating
-                                }
-                                else -> {
-                                    _menuFilterCondition.value.minRating <= menu.score
+                    }
+                }
+                .map { menuGroupList ->
+                    menuGroupList.map { restaurant ->
+                        val newRestaurant = restaurant.copy(
+                            menus = restaurant.menus.filter { menu ->
+                                menu.price?.let { menuPrice ->
+                                    val minPrice = _menuFilterCondition.value.minPrice
+                                    val maxPrice = _menuFilterCondition.value.maxPrice
+                                    ((menuPrice >= minPrice) || (minPrice == default.minPrice)) &&
+                                        ((menuPrice <= maxPrice) || (maxPrice == default.maxPrice))
+                                } ?: true
+                            }.filter { menu ->
+                                when (menu.score) {
+                                    null -> {
+                                        !_menuFilterCondition.value.hasReview &&
+                                            _menuFilterCondition.value.minRating == default.minRating
+                                    }
+                                    else -> {
+                                        _menuFilterCondition.value.minRating <= menu.score
+                                    }
                                 }
                             }
-                        }
-                    )
-                    newRestaurant
+                        )
+                        newRestaurant
+                    }
                 }
-            }
-            .map { menuGroupList ->
-                menuGroupList.map { restaurant ->
-                    val newRestaurant = restaurant.copy(
-                        menus = restaurant.menus.filter { menu ->
-                            _menuFilterCondition.value.categories.let { selectedCategories ->
-                                selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
+                .map { menuGroupList ->
+                    menuGroupList.map { restaurant ->
+                        val newRestaurant = restaurant.copy(
+                            menus = restaurant.menus.filter { menu ->
+                                _menuFilterCondition.value.categories.let { selectedCategories ->
+                                    selectedCategories.isEmpty() || selectedCategories.contains(menu.category)
+                                }
                             }
-                        }
-                    )
-                    newRestaurant
+                        )
+                        newRestaurant
+                    }
                 }
-            }
-            .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
-                menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
-            }
+                .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
+                    menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
+                }
+        } else {
+            menuFestivalApplied
+        }
+        return menuFilterApplied
     }
 
     suspend fun getRestaurantInfo(id: Long): RestaurantInfo? {

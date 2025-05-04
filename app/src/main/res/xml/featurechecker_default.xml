@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaults>
+    <entry>
+        <key>FestivalFeatureEnabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>androidCommunityFeatureEnabled</key>
+        <value>false</value>
+    </entry>
+</defaults>
