@@ -66,7 +66,6 @@ class SplashActivity : AppCompatActivity() {
                 return@launch
             }
 
-            featureChecker.fetchFeaturesConfig()
             changeAppIcon()
 
             if (checkLoginStatus().not()) {
@@ -82,6 +81,7 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
 
+        featureChecker.fetchFeaturesConfig()
         setUpGoogleLogin()
         setUpKakaoLogin()
 
