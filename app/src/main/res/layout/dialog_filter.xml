@@ -1,218 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/dialog_filter_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/transparent">
+    android:background="@drawable/frame_rounded_top">
 
-    <!-- 드래그 핸들 및 고정된 상단 영역 -->
-    <LinearLayout
-        android:id="@+id/dragHandleArea"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/close_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@android:color/transparent"
-        android:paddingTop="8dp"
-        android:paddingBottom="4dp"
-        android:gravity="center">
+        android:src="@drawable/ic_close_filter"
+        android:elevation="10dp"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp" />
 
-        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bottom_sheet_handle"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="필터"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="10dp"
-            android:layout_marginTop="30dp"
-            android:fontFamily="@font/nanum_square_extra_bold"/>
-    </LinearLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollableContent"
+    <LinearLayout
+        android:id="@+id/dialog_filter_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/transparent">
 
+        <!-- 드래그 핸들 및 고정된 상단 영역 -->
         <LinearLayout
-            android:id="@+id/filterContent"
+            android:id="@+id/drag_handle_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="16dp">
+            android:background="@android:color/transparent"
+            android:paddingTop="15dp"
+            android:paddingBottom="4dp"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone">
 
-            <!-- 거리 필터 -->
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bottom_sheet_handle"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="필터"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/nanum_square_bold"/>
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollable_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
             <LinearLayout
-                android:id="@+id/distanceSection"
+                android:id="@+id/filter_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:paddingHorizontal="16dp">
 
-                <!-- 거리 필터 제목 -->
-                <TextView
-                    android:id="@+id/tvDistanceLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="거리"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"/>
-
+                <!-- 거리 필터 -->
                 <LinearLayout
-                    android:id="@+id/distanceBubble"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/tvDistanceRange"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_speech_bubble"
-                        tools:text="400m 이내"
-                        android:textSize="13sp"
-                        android:textColor="#707070"
-                        android:gravity="center"
-                        android:layout_gravity="center_horizontal"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="6dp"
-                        android:fontFamily="@font/nanum_square_bold"/>
-                    <!-- 화살표 -->
-                    <ImageView
-                        android:id="@+id/triangle"
-                        android:layout_width="8dp"
-                        android:layout_height="5dp"
-                        android:src="@drawable/bg_triangle"
-                        android:layout_gravity="center" />
-                </LinearLayout>
-
-                <com.google.android.material.slider.RangeSlider
-                    android:id="@+id/distanceRangeSlider"
+                    android:id="@+id/distance_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:valueFrom="200.0"
-                    android:valueTo="1000.0"
-                    app:haloColor="@android:color/transparent"
-                    app:labelBehavior="gone"
-                    app:thumbColor="@color/orange_main"
-                    app:thumbRadius="9dp"
-                    app:trackColorActive="@color/orange_main"
-                    app:trackColorInactive="@color/gray_200"
-                    app:trackHeight="4dp" />
-            </LinearLayout>
-
-            <!-- 가격 필터 -->
-            <LinearLayout
-                android:id="@+id/price_section"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingBottom="10dp">
-
-                <!-- 가격 필터 제목 -->
-                <TextView
-                    android:id="@+id/tvPriceLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="가격"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"/>
-
-                <LinearLayout
-                    android:id="@+id/priceBubble"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center">
+                    android:visibility="gone">
 
-                    <!-- 중앙 말풍선 (두 SeekBar 중간에 위치) -->
+                    <!-- 거리 필터 제목 -->
                     <TextView
-                        android:id="@+id/tvPriceRange"
+                        android:id="@+id/tv_distance_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="거리"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nanum_square_extra_bold"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/distance_bubble"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_speech_bubble"
-                        android:gravity="center"
-                        android:paddingStart="6dp"
-                        android:paddingEnd="6dp"
-                        android:textColor="#707070"
-                        android:textSize="13sp"
-                        tools:text="5,000원 ~ 8,000원"
-                        android:fontFamily="@font/nanum_square_bold"/>
+                        android:layout_gravity="center_horizontal">
 
-                    <!-- 화살표 -->
-                    <ImageView
-                        android:id="@+id/triangle2"
-                        android:layout_width="8dp"
-                        android:layout_height="5dp"
-                        android:src="@drawable/bg_triangle"
-                        android:layout_gravity="center" />
+                        <!-- 회색 배경 -->
+                        <TextView
+                            android:id="@+id/distance_background"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:paddingVertical="5dp"
+                            android:background="@drawable/bg_speech_bubble"
+                            android:text=" "
+                            app:layout_constraintBottom_toTopOf="@id/distance_triangle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- 삼각형 -->
+                        <ImageView
+                            android:id="@+id/distance_triangle"
+                            android:layout_width="8dp"
+                            android:layout_height="5dp"
+                            android:src="@drawable/bg_triangle"
+                            app:layout_constraintTop_toBottomOf="@id/distance_background"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <!-- 텍스트 (중앙에 겹쳐지는 부분) -->
+                        <TextView
+                            android:id="@+id/tv_distance_range"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="400m 이내"
+                            android:textSize="13sp"
+                            android:textColor="#707070"
+                            android:paddingHorizontal="10dp"
+                            android:fontFamily="@font/nanum_square_bold"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/distance_triangle"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.slider.RangeSlider
+                        android:id="@+id/distance_range_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:valueFrom="200.0"
+                        android:valueTo="1000.0"
+                        app:haloColor="@android:color/transparent"
+                        app:labelBehavior="gone"
+                        app:thumbColor="@color/orange_main"
+                        app:thumbRadius="9dp"
+                        android:stepSize = "50.0"
+                        app:thumbElevation="0dp"
+                        app:tickVisible="false"
+                        app:trackColorActive="@color/orange_main"
+                        app:trackColorInactive="@color/gray_200"
+                        app:trackHeight="4dp"
+                        />
                 </LinearLayout>
 
-                <com.google.android.material.slider.RangeSlider
-                    android:id="@+id/priceRangeSlider"
+                <!-- 가격 필터 -->
+                <LinearLayout
+                    android:id="@+id/price_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:thumbRadius="9dp"
-                    app:thumbColor="@color/orange_main"
-                    app:haloColor="@android:color/transparent"
-                    app:trackColorActive="@color/orange_main"
-                    app:trackColorInactive="@color/gray_200"
-                    app:trackHeight="4dp"
-                    android:valueFrom="3000.0"
-                    android:valueTo="10000.0"
-                    android:stepSize="500.0"
-                    app:tickVisible="false"
-                    app:values="@array/initial_slider_values"
-                    app:labelBehavior="gone"/>
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingBottom="10dp">
 
+                    <!-- 가격 필터 제목 -->
+                    <TextView
+                        android:id="@+id/tv_price_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="가격"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nanum_square_extra_bold"/>
 
-            <!-- 영업 시간 선택 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/open_section"
-                android:visibility="gone"
-                android:paddingBottom="20dp">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/price_bubble"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/price_background"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:paddingVertical="5dp"
+                            android:background="@drawable/bg_speech_bubble"
+                            android:text=" "
+                            app:layout_constraintBottom_toTopOf="@id/price_triangle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- 삼각형 -->
+                        <ImageView
+                            android:id="@+id/price_triangle"
+                            android:layout_width="8dp"
+                            android:layout_height="5dp"
+                            android:src="@drawable/bg_triangle"
+                            app:layout_constraintTop_toBottomOf="@id/price_background"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <!-- 텍스트 (중앙에 겹쳐지는 부분) -->
+                        <TextView
+                            android:id="@+id/tv_price_range"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5,000원 ~ 8,000원"
+                            android:textSize="13sp"
+                            android:textColor="#707070"
+                            android:paddingHorizontal="10dp"
+                            android:fontFamily="@font/nanum_square_bold"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@id/price_triangle"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.google.android.material.slider.RangeSlider
+                        android:id="@+id/price_range_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:thumbRadius="9dp"
+                        app:thumbColor="@color/orange_main"
+                        app:haloColor="@android:color/transparent"
+                        app:trackColorActive="@color/orange_main"
+                        app:trackColorInactive="@color/gray_200"
+                        app:trackHeight="4dp"
+                        app:thumbElevation="0dp"
+                        android:valueFrom="2500.0"
+                        android:valueTo="10000.0"
+                        android:stepSize="500.0"
+                        app:tickVisible="false"
+                        app:values="@array/initial_slider_values"
+                        app:labelBehavior="gone"/>
+                </LinearLayout>
+
+                <!-- 영업 시간 선택 -->
+                <LinearLayout
+                    android:id="@+id/open_section"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="영업시간"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:paddingTop="20dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"/>
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_operating_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="영업시간"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <RadioGroup
                         android:id="@+id/operatingHoursGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:background="@drawable/toggle_background"
                         android:orientation="horizontal">
 
@@ -240,290 +290,307 @@
                             android:background="@drawable/option_background"
                             android:fontFamily="@font/nanum_square_bold"/>
                     </RadioGroup>
-            </LinearLayout>
+                </LinearLayout>
 
-            <!-- 리뷰 필터 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/review_section"
-                android:visibility="gone"
-                android:paddingBottom="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="리뷰"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:paddingTop="20dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"/>
-
-                <RadioGroup
-                    android:id="@+id/radioGroupReview"
+                <!-- 리뷰 필터 -->
+                <LinearLayout
+                    android:id="@+id/review_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/toggle_background"> <!-- background 추가 -->
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingBottom="20dp">
 
-                    <RadioButton
-                        android:id="@+id/radioAllReviews"
-                        android:text="전체"
-                        android:fontFamily="@font/nanum_square_bold"
-                        android:layout_width="0dp"
-                        android:layout_height="34dp"
-                        android:layout_weight="1"
+                    <TextView
+                        android:id="@+id/tv_review_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="리뷰"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:button="@null"
-                        android:gravity="center"
-                        android:background="@drawable/option_background" />
-
-                    <RadioButton
-                        android:id="@+id/radioWithReviews"
-                        android:text="리뷰 있음"
-                        android:fontFamily="@font/nanum_square_bold"
-                        android:layout_width="0dp"
-                        android:layout_height="34dp"
-                        android:layout_weight="1"
-                        android:button="@null"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:background="@drawable/option_background" />
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <!-- 평점 필터 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/rating_section"
-                android:visibility="gone"
-                android:paddingBottom="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="최소 평점"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:paddingTop="20dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"/>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14.5dp">
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nanum_square_extra_bold"/>
 
                     <RadioGroup
-                        android:id="@+id/radioGroupRating"
+                        android:id="@+id/radio_group_review"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:background="@drawable/toggle_background"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
+                        android:background="@drawable/toggle_background"> <!-- background 추가 -->
 
                         <RadioButton
-                            android:id="@+id/radioRatingAll"
+                            android:id="@+id/radio_all_reviews"
+                            android:text="전체"
+                            android:fontFamily="@font/nanum_square_bold"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:textColor="@color/black"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:background="@drawable/option_background" />
+
+                        <RadioButton
+                            android:id="@+id/radio_with_reviews"
+                            android:text="리뷰 있음"
+                            android:fontFamily="@font/nanum_square_bold"
                             android:layout_width="0dp"
                             android:layout_height="34dp"
                             android:layout_weight="1"
                             android:button="@null"
-                            android:gravity="center"
-                            android:background="@drawable/option_background"/>
-
-                        <RadioButton
-                            android:id="@+id/radioRating35"
-                            android:layout_width="0dp"
-                            android:layout_height="34dp"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:background="@drawable/option_background"/>
-
-                        <RadioButton
-                            android:id="@+id/radioRating40"
-                            android:layout_width="0dp"
-                            android:layout_height="34dp"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:background="@drawable/option_background"/>
-
-                        <RadioButton
-                            android:id="@+id/radioRating45"
-                            android:layout_width="0dp"
-                            android:layout_height="34dp"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:background="@drawable/option_background"/>
-
-                    </RadioGroup>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="모두"
                             android:textColor="@color/black"
                             android:gravity="center"
-                            android:fontFamily="@font/nanum_square_bold"/>
+                            android:background="@drawable/option_background" />
+                    </RadioGroup>
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center">
+                </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="3.5"
-                                android:fontFamily="@font/nanum_square_bold"
-                                android:textColor="@color/black"
-                                app:drawableEndCompat="@drawable/ic_full_star_filter"
-                                android:drawablePadding="4dp"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"/>
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="4.0"
-                                android:fontFamily="@font/nanum_square_bold"
-                                android:textColor="@color/black"
-                                app:drawableEndCompat="@drawable/ic_full_star_filter"
-                                android:drawablePadding="4dp"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"/>
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="4.5"
-                                android:fontFamily="@font/nanum_square_bold"
-                                android:textColor="@color/black"
-                                app:drawableEndCompat="@drawable/ic_full_star_filter"
-                                android:drawablePadding="4dp"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"/>
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-
-            <!-- 카테고리 필터 -->
-            <LinearLayout
-                android:id="@+id/category_section"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingTop="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="카테고리"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:paddingBottom="8dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"/>
-
-                <GridLayout
-                    android:id="@+id/gridCategory"
+                <!-- 평점 필터 -->
+                <LinearLayout
+                    android:id="@+id/rating_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="5">
-                </GridLayout>
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/tv_rating_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="최소 평점"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nanum_square_extra_bold"/>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <RadioGroup
+                            android:id="@+id/radio_group_rating"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/toggle_background"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <RadioButton
+                                android:id="@+id/radio_rating_all"
+                                android:layout_width="0dp"
+                                android:layout_height="34dp"
+                                android:layout_weight="1"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:background="@drawable/option_background"/>
+
+                            <RadioButton
+                                android:id="@+id/radio_rating_35"
+                                android:layout_width="0dp"
+                                android:layout_height="34dp"
+                                android:layout_weight="1"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:background="@drawable/option_background"/>
+
+                            <RadioButton
+                                android:id="@+id/radio_rating_40"
+                                android:layout_width="0dp"
+                                android:layout_height="34dp"
+                                android:layout_weight="1"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:background="@drawable/option_background"/>
+
+                            <RadioButton
+                                android:id="@+id/radio_rating_45"
+                                android:layout_width="0dp"
+                                android:layout_height="34dp"
+                                android:layout_weight="1"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:background="@drawable/option_background"/>
+
+                        </RadioGroup>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:baselineAligned="false"
+                            android:orientation="horizontal"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="전체"
+                                android:textColor="@color/black"
+                                android:gravity="center"
+                                android:fontFamily="@font/nanum_square_bold"/>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="3.5"
+                                    android:fontFamily="@font/nanum_square_bold"
+                                    android:textColor="@color/black"
+                                    app:drawableEndCompat="@drawable/ic_full_star_filter"
+                                    android:drawablePadding="4dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="4.0"
+                                    android:fontFamily="@font/nanum_square_bold"
+                                    android:textColor="@color/black"
+                                    app:drawableEndCompat="@drawable/ic_full_star_filter"
+                                    android:drawablePadding="4dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="4.5"
+                                    android:fontFamily="@font/nanum_square_bold"
+                                    android:textColor="@color/black"
+                                    app:drawableEndCompat="@drawable/ic_full_star_filter"
+                                    android:drawablePadding="4dp"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <!-- 카테고리 필터 -->
+                <LinearLayout
+                    android:id="@+id/category_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_category_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="카테고리"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nanum_square_extra_bold"/>
+
+                    <GridLayout
+                        android:id="@+id/grid_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="5">
+                    </GridLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/empty_space"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+                </LinearLayout>
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
+        <!-- 버튼 영역 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/button_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="19dp"
+            android:paddingBottom="35dp"
+            android:elevation="8dp"
+            android:background="@color/white"
+            android:translationZ="4dp"
+            android:paddingHorizontal="16dp">
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/btn_reset"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_apply"
+                android:layout_marginEnd="7dp"
+                android:gravity="center"
+                android:text="초기화"
+                android:textSize="16sp"
+                android:fontFamily="@font/nanum_square_bold"
+                android:textColor="@color/white"
+                android:background="@color/gray_500"
+                app:layout_constraintDimensionRatio="9:2"/>
 
-    <!-- 버튼 영역 -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp">
+            <TextView
+                android:id="@+id/btn_apply"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clickable="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_reset"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center"
+                android:text="적용"
+                android:textSize="16sp"
+                android:fontFamily="@font/nanum_square_bold"
+                android:textColor="@color/white"
+                android:background="@color/orange_main"
+                app:layout_constraintDimensionRatio="9:2"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</FrameLayout>
 
-        <TextView
-            android:id="@+id/btnReset"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnApply"
-            android:layout_marginEnd="7dp"
-            android:gravity="center"
-            android:text="초기화"
-            android:fontFamily="@font/nanum_square_bold"
-            android:textColor="@color/white"
-            android:background="@color/gray_500"
-            app:layout_constraintDimensionRatio="9:2"/>
-
-        <TextView
-            android:id="@+id/btnApply"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnReset"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"
-            android:text="적용"
-            android:fontFamily="@font/nanum_square_bold"
-            android:textColor="@color/black"
-            android:background="@color/orange_main"
-            app:layout_constraintDimensionRatio="9:2"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</LinearLayout>

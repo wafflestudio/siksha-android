@@ -21,16 +21,6 @@
         <item name="android:background">@android:color/white</item>
     </style>
 
-
-    <style name="RoundedBottomSheet" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/frame_rounded_top</item>
-        <item name="android:layout_marginTop">56dp</item>
-    </style>
-
-    <style name="RoundedBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/RoundedBottomSheet</item>
-    </style>
-
     <!-- Slider Material Theme -->
     <style name="SliderMaterialTheme" parent="Theme.MaterialComponents.Light">
         <item name="sliderStyle">@style/CustomSliderStyle</item>
@@ -59,5 +49,14 @@
         <item name="android:textColor">#707070</item>
     </style>
 
+    <style name="FilterBottomDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/BottomDialogAnimation</item>
+    </style>
 
+    <style name="BottomDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_bottom_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom_dialog_out</item>
+    </style>
 </resources>

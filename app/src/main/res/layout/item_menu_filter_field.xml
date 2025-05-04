@@ -26,7 +26,7 @@
         <TextView
             android:id="@+id/filter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="18dp"
             android:text="가격"
             android:layout_marginHorizontal="4dp"
             android:fontFamily="@font/nanum_square_regular"
