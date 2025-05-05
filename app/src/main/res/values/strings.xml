@@ -44,6 +44,11 @@
     <string name="leave_review_success">평가가 등록되었습니다.</string>
     <string name="menu_detail_toolbar">리뷰</string>
     <string name="menu_detail_no_review">아직 해당 메뉴의 리뷰가 없습니다.\n리뷰를 남겨보세요</string>
+    <string name="review_like_prefix">좋아요 </string>
+    <string name="review_like_suffix">개</string>
+    <string name="review_count_prefix">총 </string>
+    <string name="review_count_suffix_orange">명</string>
+    <string name="review_count_suffix_black">이 평가했어요!</string>
     <string name="menu_detail_review_people_total">총</string>
     <string name="menu_detail_review_people_has_reviewed">개의 평가가 있어요!</string>
     <string name="menu_detail_photo_review_gather">사진 리뷰 모아보기</string>

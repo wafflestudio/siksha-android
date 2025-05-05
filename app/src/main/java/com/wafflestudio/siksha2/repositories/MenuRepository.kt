@@ -87,6 +87,12 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
+    fun menuReviewPagingSource(menuId: Long): MenuReviewPagingSource =
+        MenuReviewPagingSource(sikshaApi, menuId)
+
+    fun menuReviewWithImagePagingSource(menuId: Long): MenuReviewWithImagePagingSource =
+        MenuReviewWithImagePagingSource(sikshaApi, menuId)
+
     suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): NetworkResult<LeaveReviewResult> {
         return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
     }

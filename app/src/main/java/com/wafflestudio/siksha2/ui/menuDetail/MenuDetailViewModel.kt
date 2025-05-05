@@ -5,8 +5,13 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.wafflestudio.siksha2.compose.ui.menudetail.LeaveReviewState
+import com.wafflestudio.siksha2.compose.ui.menudetail.MenuLoadingState
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
@@ -15,7 +20,13 @@ import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -39,6 +50,10 @@ class MenuDetailViewModel @Inject constructor(
     val networkResultState: LiveData<State>
         get() = _networkResultState
 
+    private val _networkResultMenuLoadingState = MutableLiveData<MenuLoadingState>()
+    val networkResultMenuLoadingState: LiveData<MenuLoadingState>
+        get() = _networkResultMenuLoadingState
+
     private val _reviewDistribution = MutableLiveData<List<Long>>()
     val reviewDistribution: LiveData<List<Long>>
         get() = _reviewDistribution
@@ -58,6 +73,32 @@ class MenuDetailViewModel @Inject constructor(
     private val _leaveReviewState = MutableLiveData<ReviewState>(ReviewState.WAITING)
     val leaveReviewState: LiveData<ReviewState>
         get() = _leaveReviewState
+
+    private val _leaveReviewState2 = MutableLiveData<LeaveReviewState>(LeaveReviewState.WAITING)
+    val leaveReviewState2: LiveData<LeaveReviewState>
+        get() = _leaveReviewState2
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviews: StateFlow<PagingData<Review>> =
+        _menu.asFlow().filterNotNull().flatMapLatest { menu ->
+            Pager(
+                config = MenuReviewPagingSource.Config,
+                pagingSourceFactory = {
+                    menuRepository.menuReviewPagingSource(menu.id)
+                }
+            ).flow.cachedIn(viewModelScope)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = PagingData.empty())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviewsWithImage: StateFlow<PagingData<Review>> =
+        _menu.asFlow().filterNotNull().flatMapLatest { menu ->
+            Pager(
+                config = MenuReviewWithImagePagingSource.Config,
+                pagingSourceFactory = {
+                    menuRepository.menuReviewWithImagePagingSource(menu.id)
+                }
+            ).flow.cachedIn(viewModelScope)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = PagingData.empty())
 
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
