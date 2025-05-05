@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.network
 
+import com.wafflestudio.siksha2.network.dto.FestivalDates
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.network.dto.*
 import com.wafflestudio.siksha2.network.result.NetworkResult
@@ -17,6 +18,12 @@ interface SikshaApi {
 
     @GET("/menus/{menu_id}")
     suspend fun fetchMenuById(@Path(value = "menu_id") menuId: Long): NetworkResult<Menu>
+
+    @GET("/menus/festival/dates")
+    suspend fun fetchFestivalDates(): NetworkResult<FestivalDates>
+
+    @GET("/menus/festival")
+    suspend fun isFestivalDate(@Path(value = "input_date") inputDate: String): NetworkResult<FestivalDateCheckResponse>
 
     @GET("/reviews/")
     suspend fun fetchReviews(
