@@ -39,7 +39,7 @@ fun FestivalToggle(
     val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
-            .padding(end = 18.dp)
+            .padding(top = 20.dp, end = 14.dp)
             .width(50.dp)
             .height(24.dp)
             .clickable(
