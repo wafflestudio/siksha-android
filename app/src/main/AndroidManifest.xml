@@ -73,6 +73,7 @@
             android:name="com.wafflestudio.siksha2.ui.SikshaNormal"
             android:icon="@mipmap/ic_launcher"
             android:exported="true"
+            android:enabled="true"
             android:targetActivity=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -84,6 +85,7 @@
             android:name="com.wafflestudio.siksha2.ui.SikshaFestival"
             android:icon="@mipmap/ic_festival"
             android:exported="true"
+            android:enabled="false"
             android:targetActivity=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
