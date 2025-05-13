@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.BottomsheetRestaurantInfoBinding
 import com.wafflestudio.siksha2.models.RestaurantInfo
+import com.wafflestudio.siksha2.ui.restaurantInfo.model.parseOperatingTime
 import com.wafflestudio.siksha2.ui.restaurantInfo.model.toRestaurantOperatingTimes
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -87,6 +88,29 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
 
     private fun initData() {
         binding.restaurantOperatingTimes = restaurantInfo.etc?.operatingHours?.toRestaurantOperatingTimes() // TODO: RestaurantInfo단부터 DTO 대신 UiState 만들어 사용하기
+        if (restaurantInfo.nameKr?.startsWith("[축제]") == true) {
+            val operatingTimes = restaurantInfo.etc?.operatingHours?.weekdays
+            if (restaurantInfo.nameKr?.endsWith("(푸드트럭)") == true) {
+                binding.restaurantOperatingTimes?.weekdays?.apply {
+                    breakfast = null
+                    lunch = parseOperatingTime(operatingTimes?.get(0) ?: "00:00-00:00")
+                    dinner = null
+                }
+                binding.clOperatingTimeWeekdays.tvLunchTitle.text = ""
+            } else {
+                binding.clOperatingTimeWeekdays.apply {
+                    tvBreakfastTitle.text = "5/13, 5/14"
+                    tvBreakfastTime.text = operatingTimes?.get(0) ?: ""
+                    tvLunchTitle.text = "5/15"
+                    tvLunchTime.text = operatingTimes?.get(1) ?: ""
+                }
+                binding.restaurantOperatingTimes?.weekdays?.apply {
+                    breakfast = parseOperatingTime(operatingTimes?.get(0) ?: "00:00-00:00")
+                    lunch = parseOperatingTime(operatingTimes?.get(1) ?: "00:00-00:00")
+                    dinner = null
+                }
+            }
+        }
     }
 
     private fun initClickListener() {

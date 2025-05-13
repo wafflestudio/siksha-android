@@ -9,9 +9,9 @@ data class RestaurantOperatingTimes(
 )
 
 data class DailyOperatingTimes(
-    val breakfast: OperatingTime?,
-    val lunch: OperatingTime?,
-    val dinner: OperatingTime?
+    var breakfast: OperatingTime?,
+    var lunch: OperatingTime?,
+    var dinner: OperatingTime?
 ) {
     companion object {
         const val BREAKFAST_TIME_AS_MINUTE = 510
@@ -67,7 +67,7 @@ private fun parseDailyOperatingTimes(dailyOperatingTimesString: List<String>): D
     }
 }
 
-private fun parseOperatingTime(operatingTimeString: String): OperatingTime =
+fun parseOperatingTime(operatingTimeString: String): OperatingTime =
     operatingTimeString
         .split("-")
         .map(::parseMinute)

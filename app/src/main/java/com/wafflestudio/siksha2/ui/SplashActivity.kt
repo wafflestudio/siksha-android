@@ -178,30 +178,36 @@ class SplashActivity : AppCompatActivity() {
 
     private fun changeAppIcon() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val mainComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SplashActivity")
+            // val mainComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SplashActivity")
             val normalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaNormal")
             val festivalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaFestival")
-            packageManager.setComponentEnabledSetting(
-                normalIconComponent,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP
-            )
-            packageManager.setComponentEnabledSetting(
-                festivalIconComponent,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP
-            )
 
-            if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
+            if (featureChecker.isFeatureEnabled("festivalFeatureEnabled") &&
+                packageManager.getComponentEnabledSetting(festivalIconComponent) != PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            ) {
+                showToast("축제 아이콘 적용을 위해 앱을 재시작합니다.")
                 packageManager.setComponentEnabledSetting(
                     festivalIconComponent,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                     PackageManager.DONT_KILL_APP
                 )
-            } else {
+                packageManager.setComponentEnabledSetting(
+                    normalIconComponent,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            } else if (!featureChecker.isFeatureEnabled("festivalFeatureEnabled") &&
+                packageManager.getComponentEnabledSetting(normalIconComponent) != PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            ) {
+                showToast("아이콘 변경을 위해 앱을 재시작합니다.")
                 packageManager.setComponentEnabledSetting(
                     normalIconComponent,
                     PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+                packageManager.setComponentEnabledSetting(
+                    festivalIconComponent,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP
                 )
             }

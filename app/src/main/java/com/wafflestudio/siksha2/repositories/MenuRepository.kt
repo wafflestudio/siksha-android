@@ -65,6 +65,14 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchMenuById(menuId)
     }
 
+    suspend fun getFestivalDates(): NetworkResult<List<String>> {
+        return sikshaApi.fetchFestivalDates().map { it.festivalDates }
+    }
+
+    suspend fun isFestivalDate(targetDate: String): NetworkResult<Boolean> {
+        return sikshaApi.isFestivalDate(targetDate).map { it.isFestival }
+    }
+
     fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
             config = MenuReviewPagingSource.Config,

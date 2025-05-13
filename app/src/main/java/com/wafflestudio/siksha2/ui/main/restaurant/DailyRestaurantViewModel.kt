@@ -74,11 +74,14 @@ class DailyRestaurantViewModel @Inject constructor(
     @Inject
     lateinit var featureChecker: FeatureChecker
 
+    private val _festivalDates = MutableStateFlow<List<String>>(listOf())
+    val festivalDates: StateFlow<List<String>> = _festivalDates
     private val _showFestival = MutableStateFlow(false)
     val showFestival: StateFlow<Boolean> = _showFestival
 
     init {
         startRefreshingMenus()
+        getFestivalDates()
     }
 
     private fun startRefreshingMenus() {
@@ -92,6 +95,15 @@ class DailyRestaurantViewModel @Inject constructor(
                         _networkError.value = true
                     }
                 }
+        }
+    }
+
+    private fun getFestivalDates() {
+        viewModelScope.launch {
+            when (val result = menuRepository.getFestivalDates()) {
+                is NetworkResult.Success -> _festivalDates.value = result.body
+                else -> _festivalDates.value = listOf()
+            }
         }
     }
 
@@ -141,6 +153,10 @@ class DailyRestaurantViewModel @Inject constructor(
 
     fun toggleFestival() {
         _showFestival.value = !showFestival.value
+    }
+
+    fun resetFestival() {
+        _showFestival.value = false
     }
 
     private fun getDistance(menuGroup: MenuGroup): Float? {

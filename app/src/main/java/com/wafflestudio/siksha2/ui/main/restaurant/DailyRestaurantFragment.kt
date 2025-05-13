@@ -368,7 +368,14 @@ class DailyRestaurantFragment : Fragment() {
         }
 
         if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
-            binding.festivalToggle.visibility = View.VISIBLE
+            vm.dateFilter.observe(viewLifecycleOwner) { targetDate ->
+                if (vm.festivalDates.value.any { festivalDate -> targetDate == LocalDate.parse(festivalDate) }) {
+                    binding.festivalToggle.visibility = View.VISIBLE
+                } else {
+                    binding.festivalToggle.visibility = View.GONE
+                    vm.resetFestival()
+                }
+            }
             setUpFestival()
         } else {
             binding.festivalToggle.visibility = View.GONE
