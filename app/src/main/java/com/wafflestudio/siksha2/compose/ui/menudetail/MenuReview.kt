@@ -66,9 +66,9 @@ fun MenuReview(
                         fontSize = dpToSp(12.dp),
                         fontWeight = FontWeight.Bold
                     )
-                    MenuRatingStars(
-                        rating = review.score.toFloat()
-                    )
+//                    MenuRatingStars(
+//                        rating = review.score.toFloat()
+//                    )
                 }
             }
             Text(
