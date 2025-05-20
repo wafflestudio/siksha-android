@@ -2,27 +2,83 @@ package com.wafflestudio.siksha2.ui
 
 import androidx.compose.ui.graphics.Color
 
-object SikshaColors {
-    val OrangeMain = Color(0xFFFF952B)
+sealed class SikshaColors(
+    val Gray50: Color,
+    val Gray100: Color,
+    val Gray200: Color,
+    val Gray300: Color,
+    val Gray400: Color,
+    val Gray500: Color,
+    val Gray600: Color,
+    val Gray700: Color,
+    val Gray800: Color,
+    val Gray900: Color,
+    val Orange100: Color,
+    val Orange200: Color,
+    val Orange300: Color,
+    val Orange400: Color,
+    val Orange500: Color,
+    val Orange600: Color,
+    val Orange700: Color,
+    val Orange800: Color,
+    val Orange900: Color,
+    val OrangeTint: Color,
+    val BaseWhite: Color,
+    val BaseBlack: Color,
+    val BackgroundMain: Color,
+    val AccentLike: Color
+) {
+    object Day : SikshaColors(
+        Gray50 = Color(0xFFF8F8F8),
+        Gray100 = Color(0xFFF2F3F4),
+        Gray200 = Color(0xFFE5E6E9),
+        Gray300 = Color(0xFFD8DADE),
+        Gray400 = Color(0xFFCBCDD3),
+        Gray500 = Color(0xFFBEC1C8),
+        Gray600 = Color(0xFF989AA0),
+        Gray700 = Color(0xFF727478),
+        Gray800 = Color(0xFF4C4D50),
+        Gray900 = Color(0xFF262728),
+        Orange100 = Color(0xFFFFEAD3),
+        Orange200 = Color(0xFFFFD5A7),
+        Orange300 = Color(0xFFFFBF7A),
+        Orange400 = Color(0xFFFFAA4E),
+        Orange500 = Color(0xFFFF9522),
+        Orange600 = Color(0xFFD27000),
+        Orange700 = Color(0xFFA54C00),
+        Orange800 = Color(0xFF7C2900),
+        Orange900 = Color(0xFF570000),
+        OrangeTint = Color(0x40FF9522),
+        BaseWhite = Color(0xFFFFFFFF),
+        BaseBlack = Color(0xFF000000),
+        BackgroundMain = Color(0xFFF8F8F8),
+        AccentLike = Color(0xFFF86627)
+    )
 
-    val White900 = Color(0xFFFFFFFF)
-    val White900Alpha80 = Color(0x80FFFFFF)
-
-    val Black900 = Color(0xFF000000)
-
-    val Gray800 = Color(0xFF393939)
-    val Gray700 = Color(0xFF575757)
-    val Gray600 = Color(0xFF797979)
-    val Gray500 = Color(0xFF919191)
-    val Gray400 = Color(0xFFB7B7B7)
-    val Gray350 = Color(0xFFD9D9D9)
-    val Gray100 = Color(0xFFF8F8F8)
-
-    val Pink500 = Color(0xFFFD7878)
-
-    val KakaoYellow = Color(0xFFFAE44D)
-    val KakaoYellowDim = Color(0xFFDFCC48)
-    val KakaoBrown = Color(0xFF3E2723)
-
-    val Red = Color(0xFFE54459)
+    object Night : SikshaColors(
+        Gray50 = Color(0xFF1E1E1E),
+        Gray100 = Color(0xFF202020),
+        Gray200 = Color(0xFF232323),
+        Gray300 = Color(0xFF282828),
+        Gray400 = Color(0xFF2D2D2D),
+        Gray500 = Color(0xFF404040),
+        Gray600 = Color(0xFF919191),
+        Gray700 = Color(0xFFB7B7B7),
+        Gray800 = Color(0xFFCBCBCC),
+        Gray900 = Color(0xFFE5E6E9),
+        Orange100 = Color(0xFFF0DCC6),
+        Orange200 = Color(0xFFF2CA9E),
+        Orange300 = Color(0xFFF1B573),
+        Orange400 = Color(0xFFF1A14A),
+        Orange500 = Color(0xFFF28C1D),
+        Orange600 = Color(0xFFC76A00),
+        Orange700 = Color(0xFF984600),
+        Orange800 = Color(0xFF6B2400),
+        Orange900 = Color(0xFF410000),
+        OrangeTint = Color(0x40F28C1D),
+        BaseWhite = Color(0xFF232323),
+        BaseBlack = Color(0xFFFFFFFF),
+        BackgroundMain = Color(0xFF121212),
+        AccentLike = Color(0x40FF9522)
+    )
 }

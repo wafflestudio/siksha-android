@@ -89,7 +89,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_500"
+            android:background="@color/gray_300"
             android:layout_marginHorizontal="8dp" />
 
         <com.wafflestudio.siksha2.components.SettingItemRow
@@ -101,7 +101,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_500"
+            android:background="@color/gray_300"
             android:layout_marginHorizontal="8dp" />
 
         <com.wafflestudio.siksha2.components.SettingItemRow
@@ -115,7 +115,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray_500"
+            android:background="@color/gray_300"
             android:layout_marginHorizontal="8dp" />
 
         <com.wafflestudio.siksha2.components.SettingItemRow

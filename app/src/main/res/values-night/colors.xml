@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+    <color name="black">#FFFFFFFF</color>
+    <color name="white">#FF232323</color>
+    <color name="background_main">#FF121212</color>
+
+    <color name="gray_50">#FF1E1E1E</color>
+    <color name="gray_100">#FF202020</color>
+    <color name="gray_200">#FF232323</color>
+    <color name="gray_300">#FF282828</color>
+    <color name="gray_400">#FF2D2D2D</color>
+    <color name="gray_500">#FF404040</color>
+    <color name="gray_600">#FF919191</color>
+    <color name="gray_700">#FFB7B7B7</color>
+    <color name="gray_800">#FFCBCBCC</color>
+    <color name="gray_900">#FFE5E6E9</color>
+
+    <color name="orange_100">#FFF0DCC6</color>
+    <color name="orange_200">#FFF2CA9E</color>
+    <color name="orange_300">#FFF1B573</color>
+    <color name="orange_400">#FFF1A14A</color>
+    <color name="orange_500">#FFF28C1D</color>
+    <color name="orange_600">#FFC76A00</color>
+    <color name="orange_700">#FF984600</color>
+    <color name="orange_800">#FF6B2400</color>
+    <color name="orange_900">#FF410000</color>
+    <color name="orange_tint">#40F28C1D</color>
+
+    <color name="accent_like">#40FF9522</color>
+
+
+    <!-- 나중에 정리해야 함 -->
+    <color name="orange_main">#FF9522</color>
+    <color name="pink_500">#FFFD7878</color>
+
+    <color name="kakao_yellow">#FFFAE44D</color>
+    <color name="kakao_yellow_dim">#DFCC48</color>
+    <color name="kakao_brown">#FF3E2723</color>
+
+    <color name="gray_border">#FFF0F0F0</color>
+    <color name="google_gray">#80000000</color>
+
+    <color name="black_50percent">#80000000</color>
+    <color name="black_30percent">#4C000000</color>
+
+    <color name="chip_selected_bg">#FFE8CE</color>
+    <color name="chip_default_bg">#FFFFFF</color>
+    <color name="chip_stroke">#FFE8CE</color>
+    <color name="chip_text_color">#000000</color>
+
+    <color name="filter_bubble_border">#E5E6E9</color>
+    <color name="filter_bubble_active_bg">#FFEAD3</color>
+</resources>

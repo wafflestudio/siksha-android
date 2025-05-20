@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="CircleShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="TransparentBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/TransparentBottomSheet</item>
+    </style>
+
+    <style name="TransparentBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <!-- Slider Material Theme -->
+    <style name="SliderMaterialTheme" parent="Theme.MaterialComponents.Light">
+        <item name="sliderStyle">@style/CustomSliderStyle</item>
+    </style>
+
+    <style name="CustomSliderStyle" parent="Widget.MaterialComponents.Slider">
+        <item name="labelStyle">@style/CustomLabelStyle</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Slider</item>
+    </style>
+
+    <style name="CustomLabelStyle" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundTint">#F0F0F0</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#707070</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:minHeight">23dp</item>
+        <item name="android:fontFamily">@font/nanum_square_bold</item>
+        <item name="shapeAppearanceOverlay">@style/CustomTooltipShape</item>
+    </style>
+
+    <style name="CustomTooltipShape">
+        <item name="cornerSize">3dp</item>
+    </style>
+
+    <style name="ThemeOverlay.Slider" parent="">
+        <item name="android:textColor">#707070</item>
+    </style>
+
+    <style name="FilterBottomDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/BottomDialogAnimation</item>
+    </style>
+
+    <style name="BottomDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_bottom_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom_dialog_out</item>
+    </style>
+</resources>
