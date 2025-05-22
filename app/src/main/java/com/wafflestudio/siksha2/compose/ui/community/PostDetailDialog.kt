@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 
 @Composable
 fun PostDetailDialog(
@@ -31,7 +31,7 @@ fun PostDetailDialog(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .background(color = SikshaColors.White900, shape = RoundedCornerShape(26.dp))
+                .background(color = SikshaTheme.colors.White, shape = RoundedCornerShape(26.dp))
         ) {
             if (isMine) {
                 Box(

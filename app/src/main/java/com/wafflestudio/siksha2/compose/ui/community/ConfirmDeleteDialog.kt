@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 
 @Composable
@@ -42,7 +41,7 @@ fun ConfirmDeleteDialog(
             modifier = modifier
                 .padding(horizontal = 30.dp)
                 .background(
-                    color = SikshaColors.White900,
+                    color = SikshaTheme.colors.White,
                     shape = RoundedCornerShape(26.dp)
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -77,7 +76,7 @@ fun ConfirmDeleteDialog(
                 ) {
                     Text(
                         text = "취소",
-                        color = SikshaColors.OrangeMain,
+                        color = SikshaTheme.colors.Orange500,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )

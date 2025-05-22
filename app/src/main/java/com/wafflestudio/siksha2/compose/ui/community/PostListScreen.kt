@@ -40,7 +40,6 @@ import com.wafflestudio.siksha2.components.compose.PostListItem
 import com.wafflestudio.siksha2.ui.NewPostIcon
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
@@ -99,7 +98,7 @@ fun PostListScreen(
 
     Column(
         modifier = modifier
-            .background(SikshaColors.White900)
+            .background(SikshaTheme.colors.White)
     ) {
         LazyRow(
             modifier = Modifier.padding(vertical = 18.dp),
@@ -208,7 +207,7 @@ fun PostsEmptyPlaceHolder(
     ) {
         Text(
             text = stringResource(R.string.community_board_empty),
-            color = SikshaColors.Gray600,
+            color = SikshaTheme.colors.Gray600,
             style = SikshaTypography.subtitle1,
             modifier = Modifier.align(Alignment.Center)
         )
@@ -243,7 +242,7 @@ fun PostsErrorPlaceHolder(
         ) {
             Text(
                 text = stringResource(R.string.community_board_error),
-                color = SikshaColors.Gray600,
+                color = SikshaTheme.colors.Gray600,
                 style = SikshaTypography.subtitle1
             )
             Button(
@@ -259,7 +258,7 @@ fun PostsErrorPlaceHolder(
     }
 }
 
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(device = "spec:width=360dp,height=640dp,dpi=480")
 @Composable
 fun PostListScreenPreview() {
     SikshaTheme {

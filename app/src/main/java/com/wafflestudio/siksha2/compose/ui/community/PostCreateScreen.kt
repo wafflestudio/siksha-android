@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -60,7 +61,6 @@ import com.wafflestudio.siksha2.ui.CancelIcon
 import com.wafflestudio.siksha2.ui.CheckSimpleIcon
 import com.wafflestudio.siksha2.ui.DeletePostImageIcon
 import com.wafflestudio.siksha2.ui.ExpandOptionsIcon
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostCreateEvent
@@ -182,7 +182,7 @@ fun PostCreateScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SikshaColors.White900)
+            .background(SikshaTheme.colors.White)
     ) {
         TopBar(
             title = stringResource(R.string.community_create_screen_title),
@@ -225,7 +225,7 @@ fun PostCreateScreen(
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.community_create_title_placeholder),
-                                    color = SikshaColors.Gray400,
+                                    color = SikshaTheme.colors.Gray400,
                                     fontWeight = FontWeight.Bold
                                 )
                             }
@@ -238,7 +238,7 @@ fun PostCreateScreen(
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.community_create_content_placeholder),
-                                    color = SikshaColors.Gray400
+                                    color = SikshaTheme.colors.Gray400
                                 )
                             },
                             modifier = Modifier.weight(weight = 1.0f, fill = isKeyboardOpen)
@@ -257,7 +257,7 @@ fun PostCreateScreen(
                                 modifier = Modifier.align(Alignment.Start)
                             )
                             Spacer(modifier = Modifier.height(12.dp))
-                            Divider(color = SikshaColors.Gray100, thickness = 1.dp)
+                            Divider(color = SikshaTheme.colors.Gray100, thickness = 1.dp)
                             Spacer(modifier = Modifier.height(13.dp))
                             PostImages(
                                 imageUriList = imageUriList,
@@ -299,7 +299,8 @@ fun PostCreateScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = SikshaColors.White900Alpha80)
+                        .background(color = SikshaTheme.colors.White)
+                        .alpha(0.8f)
                         .clickable(
                             interactionSource = blockClickWhileLoadingInteractionSource,
                             indication = null
@@ -322,7 +323,7 @@ fun CurrentBoard(
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = SikshaColors.Gray350,
+                color = SikshaTheme.colors.Gray400,
                 shape = RoundedCornerShape(6.dp)
             )
             .clickable {
@@ -336,11 +337,11 @@ fun CurrentBoard(
         ) {
             Text(
                 text = board.name,
-                color = SikshaColors.Gray700
+                color = SikshaTheme.colors.Gray700
             )
             Spacer(modifier = Modifier.width(8.dp))
             ExpandOptionsIcon(
-                color = SikshaColors.Gray500
+                color = SikshaTheme.colors.Gray500
             )
         }
     }
@@ -353,7 +354,7 @@ fun BoardSelectorCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val textColor = if (isSelected) SikshaColors.OrangeMain else SikshaColors.Gray700
+    val textColor = if (isSelected) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray700
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -389,10 +390,10 @@ fun BoardSelector(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(color = SikshaColors.White900)
+            .background(color = SikshaTheme.colors.White)
             .border(
                 width = 1.dp,
-                color = SikshaColors.Gray350,
+                color = SikshaTheme.colors.Gray400,
                 shape = RoundedCornerShape(8.dp)
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -407,7 +408,7 @@ fun BoardSelector(
             if (idx != boards.size - 1) {
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
-                    color = SikshaColors.Gray350
+                    color = SikshaTheme.colors.Gray400
                 )
             }
         }
@@ -432,7 +433,7 @@ fun TitleEditText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = SikshaColors.Gray100,
+                        color = SikshaTheme.colors.Gray100,
                         shape = RoundedCornerShape(6.dp)
                     )
                     .padding(
@@ -498,7 +499,7 @@ fun AnonymousCheckbox(
             text = stringResource(R.string.community_create_anonymous),
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
-            color = if (isAnonymous) SikshaColors.OrangeMain else SikshaColors.Gray400
+            color = if (isAnonymous) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray400
         )
     }
 }
@@ -526,7 +527,7 @@ fun KeyboardToolbar(
             style = SikshaTypography.h1,
             fontSize = 19.sp,
             fontWeight = FontWeight.Bold,
-            color = SikshaColors.OrangeMain,
+            color = SikshaTheme.colors.Orange500,
             modifier = Modifier.clickable { onCloseKeyboard() }
         )
     }
@@ -600,7 +601,7 @@ fun UploadButton(
             .fillMaxWidth()
             .height(56.dp)
             .background(
-                color = if (isUploadActivated) SikshaColors.OrangeMain else SikshaColors.Gray500,
+                color = if (isUploadActivated) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray500,
                 shape = RoundedCornerShape(8.dp)
             )
             .then(
@@ -617,7 +618,7 @@ fun UploadButton(
         Text(
             text = "올리기",
             modifier = Modifier.align(Alignment.Center),
-            color = SikshaColors.White900,
+            color = SikshaTheme.colors.White,
             fontWeight = FontWeight.Bold
         )
     }
@@ -711,7 +712,7 @@ fun DeactivatedUploadButtonPreview() {
     }
 }
 
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(device = "spec:width=360dp,height=640dp,dpi=480")
 @Composable
 fun PostCreateScreenPreview() {
     SikshaTheme {
@@ -745,7 +746,7 @@ fun PostCreateScreenPreview() {
     }
 }
 
-@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
+@Preview(device = "spec:width=360dp,height=640dp,dpi=480")
 @Composable
 fun PostCreateScreenPreview2() {
     SikshaTheme {

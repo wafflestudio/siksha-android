@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import kotlin.math.roundToInt
 
 @Composable
@@ -89,7 +89,7 @@ fun FestivalToggle(
             modifier = Modifier.align(Alignment.CenterStart)
                 .offset { IntOffset(textState.roundToInt(), 0) },
             text = "축제",
-            color = SikshaColors.White900,
+            color = SikshaTheme.colors.White,
             fontSize = 11.sp,
             fontWeight = FontWeight.Bold
         )

@@ -24,7 +24,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 
 @Composable
 fun CommentEditText(
@@ -67,7 +67,7 @@ fun CommentEditText(
             Row(
                 modifier = Modifier
                     .background(
-                        color = SikshaColors.Gray100,
+                        color = SikshaTheme.colors.Gray100,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .height(IntrinsicSize.Min),
@@ -86,7 +86,7 @@ fun CommentEditText(
                         hint?.let {
                             Text(
                                 text = hint,
-                                style = textStyle.copy(color = SikshaColors.Gray400)
+                                style = textStyle.copy(color = SikshaTheme.colors.Gray400)
                             )
                         }
                     }

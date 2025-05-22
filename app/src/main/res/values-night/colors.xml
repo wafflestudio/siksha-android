@@ -31,6 +31,12 @@
 
 
     <!-- 나중에 정리해야 함 -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorGray">#FF888888</color>
+    <color name="white_dim">#EAEAEA</color>
+
     <color name="orange_main">#FF9522</color>
     <color name="pink_500">#FFFD7878</color>
 

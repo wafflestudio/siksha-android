@@ -16,7 +16,7 @@ import com.wafflestudio.siksha2.R
 @Composable
 fun CommentIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Gray600)
 ) {
     Image(
         modifier = modifier.size(12.dp),
@@ -30,7 +30,7 @@ fun CommentIcon(
 fun ThumbIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.OrangeMain)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Orange500)
 ) {
     Image(
         modifier = modifier.size(12.dp),
@@ -43,7 +43,7 @@ fun ThumbIcon(
 @Composable
 fun EtcIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Gray600)
 ) {
     Image(
         modifier = modifier.size(12.dp),
@@ -56,7 +56,7 @@ fun EtcIcon(
 @Composable
 fun NavigateUpIcon(
     modifier: Modifier = Modifier,
-    color: Color = SikshaColors.White900
+    color: Color = SikshaTheme.colors.White
 ) {
     Box(
         modifier = modifier.size(30.dp),
@@ -73,7 +73,7 @@ fun NavigateUpIcon(
 @Composable
 fun ExpandOptionsIcon(
     modifier: Modifier = Modifier,
-    color: Color = SikshaColors.White900
+    color: Color = SikshaTheme.colors.White
 ) {
     Image(
         modifier = modifier
@@ -88,7 +88,7 @@ fun ExpandOptionsIcon(
 @Composable
 fun CancelIcon(
     modifier: Modifier = Modifier,
-    color: Color = SikshaColors.White900
+    color: Color = SikshaTheme.colors.White
 ) {
     Box(
         modifier = modifier.size(30.dp),
@@ -139,7 +139,7 @@ fun NewPostIcon(
 @Composable
 fun CheckSimpleIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.OrangeMain)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Orange500)
 ) {
     Image(
         modifier = modifier.size(9.dp),
@@ -152,7 +152,7 @@ fun CheckSimpleIcon(
 @Composable
 fun SpeechBubbleIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Gray600)
 ) {
     Image(
         modifier = modifier,

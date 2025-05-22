@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
@@ -78,7 +77,7 @@ fun PostListItem(
                     .size(61.dp),
                 contentDescription = "",
                 loading = {
-                    Box(modifier = Modifier.background(SikshaColors.Gray350))
+                    Box(modifier = Modifier.background(SikshaTheme.colors.Gray400))
                 },
                 contentScale = ContentScale.Crop
             )
