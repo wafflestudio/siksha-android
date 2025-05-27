@@ -445,9 +445,9 @@ class FilterDialogFragment(
 
     private fun setSelectedCategoryChip(chip: Chip) {
         chip.apply {
-            setChipBackgroundColorResource(R.color.chip_selected_bg)
+            setChipBackgroundColorResource(R.color.orange_tint)
             chipStrokeWidth = dpToPx(1).toFloat()
-            setChipStrokeColorResource(R.color.orange_main)
+            setChipStrokeColorResource(R.color.orange_500)
         }
     }
 

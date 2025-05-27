@@ -29,7 +29,8 @@ class SikshaColors(
     White: Color,
     Black: Color,
     BackgroundMain: Color,
-    AccentLike: Color
+    AccentLike: Color,
+    private val isDarkTheme: Boolean = false
 ) {
     var Gray50 by mutableStateOf(Gray50)
         private set
@@ -79,6 +80,41 @@ class SikshaColors(
         private set
     var AccentLike by mutableStateOf(AccentLike)
         private set
+
+    val BackgroundPrimary: Color
+        get() = if (isDarkTheme) BackgroundMain else White
+    val BackgroundSecondary: Color
+        get() = if (isDarkTheme) Gray200 else White
+    val BackgroundDark: Color
+        get() = if (isDarkTheme) White else Black
+    val BackgroundGNB: Color
+        get() = if (isDarkTheme) BackgroundMain else Orange500
+    val BackgroundToast: Color
+        get() = if (isDarkTheme) Gray400 else Gray700
+    val BorderPrimary: Color
+        get() = if (isDarkTheme) Gray400 else Gray200
+    val BorderSecondary: Color
+        get() = if (isDarkTheme) Gray500 else Gray200
+    val TextButton: Color
+        get() = if (isDarkTheme) Black else White
+    val TextAccent: Color
+        get() = if (isDarkTheme) Black else Orange500
+    val TextGNB: Color
+        get() = if (isDarkTheme) Gray900 else White
+    val TextDim: Color
+        get() = if (isDarkTheme) Black else White
+    val IconCloseBg: Color
+        get() = if (isDarkTheme) Gray500 else Gray400
+    val IconWhiteIcon: Color
+        get() = if (isDarkTheme) Black else White
+    val IconLike: Color
+        get() = if (isDarkTheme) Gray500 else Gray200
+    val ElementChip: Color
+        get() = if (isDarkTheme) Gray50 else Gray100
+    val ElementTooltip: Color
+        get() = if (isDarkTheme) Gray400 else Gray100
+    val ElementControl: Color
+        get() = if (isDarkTheme) Gray500 else Gray200
 
     fun copy(
         Gray50: Color = this.Gray50,
@@ -187,7 +223,8 @@ class SikshaColors(
             White = Color(0xFF232323),
             Black = Color(0xFFFFFFFF),
             BackgroundMain = Color(0xFF121212),
-            AccentLike = Color(0x40FF9522)
+            AccentLike = Color(0x40FF9522),
+            isDarkTheme = true
         )
     }
 }

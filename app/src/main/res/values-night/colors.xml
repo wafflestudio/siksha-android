@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General -->
     <color name="transparent">#00000000</color>
     <color name="black">#FFFFFFFF</color>
     <color name="white">#FF232323</color>
     <color name="background_main">#FF121212</color>
 
+    <!-- Foundation Colors -->
     <color name="gray_50">#FF1E1E1E</color>
     <color name="gray_100">#FF202020</color>
     <color name="gray_200">#FF232323</color>
@@ -29,6 +31,28 @@
 
     <color name="accent_like">#40FF9522</color>
 
+    <!-- Sementic Colors -->
+    <color name="background_primary">@color/background_main</color>
+    <color name="background_secondary">@color/gray_200</color>
+    <color name="background_dark">@color/white</color>
+    <color name="background_GNB">@color/background_main</color>
+    <color name="background_Toast">@color/gray_400</color>
+
+    <color name="border_primary">@color/gray_400</color>
+    <color name="border_secondary">@color/gray_500</color>
+
+    <color name="text_button">@color/black</color>
+    <color name="text_accent">@color/black</color>
+    <color name="text_GNB">@color/gray_900</color>
+    <color name="text_dim">@color/black</color>
+
+    <color name="icon_close_bg">@color/gray_500</color>
+    <color name="icon_white_icon">@color/black</color>
+    <color name="icon_like">@color/gray_500</color>
+
+    <color name="element_chip">@color/gray_50</color>
+    <color name="element_tooltip">@color/gray_400</color>
+    <color name="element_control">@color/gray_500</color>
 
     <!-- 나중에 정리해야 함 -->
     <color name="colorPrimary">#6200EE</color>
@@ -50,7 +74,6 @@
     <color name="black_50percent">#80000000</color>
     <color name="black_30percent">#4C000000</color>
 
-    <color name="chip_selected_bg">#FFE8CE</color>
     <color name="chip_default_bg">#FFFFFF</color>
     <color name="chip_stroke">#FFE8CE</color>
     <color name="chip_text_color">#000000</color>
