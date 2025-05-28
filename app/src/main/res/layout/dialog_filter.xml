@@ -141,12 +141,12 @@
                         android:valueTo="1000.0"
                         app:haloColor="@android:color/transparent"
                         app:labelBehavior="gone"
-                        app:thumbColor="@color/orange_main"
+                        app:thumbColor="@color/orange_500"
                         app:thumbRadius="9dp"
                         android:stepSize = "50.0"
                         app:thumbElevation="0dp"
                         app:tickVisible="false"
-                        app:trackColorActive="@color/orange_main"
+                        app:trackColorActive="@color/orange_500"
                         app:trackColorInactive="@color/gray_200"
                         app:trackHeight="4dp"
                         />
@@ -224,9 +224,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:thumbRadius="9dp"
-                        app:thumbColor="@color/orange_main"
+                        app:thumbColor="@color/orange_500"
                         app:haloColor="@android:color/transparent"
-                        app:trackColorActive="@color/orange_main"
+                        app:trackColorActive="@color/orange_500"
                         app:trackColorInactive="@color/gray_200"
                         app:trackHeight="4dp"
                         app:thumbElevation="0dp"
@@ -588,7 +588,7 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/nanum_square_bold"
                 android:textColor="@color/white"
-                android:background="@color/orange_main"
+                android:background="@color/orange_500"
                 app:layout_constraintDimensionRatio="9:2"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

@@ -140,7 +140,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemText="1:1 문의하기"
-            app:textColor = "@color/orange_main"
+            app:textColor = "@color/orange_500"
             />
 
     </LinearLayout>

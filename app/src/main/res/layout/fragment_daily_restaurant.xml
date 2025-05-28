@@ -65,7 +65,7 @@
                         android:padding="10dp"
                         android:text="..."
                         android:textAlignment="center"
-                        android:textColor="@color/orange_main"
+                        android:textColor="@color/orange_500"
                         android:textSize="15dp"
                         tools:text="2021-03-28 (일)" />
 
@@ -323,7 +323,8 @@
             android:id="@+id/blank"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/black_50percent"
+            android:background="@color/black"
+            android:alpha="0.5"
             app:layout_constraintTop_toBottomOf="@id/calendar_select_view"
             app:layout_constraintBottom_toBottomOf="parent"/>
 

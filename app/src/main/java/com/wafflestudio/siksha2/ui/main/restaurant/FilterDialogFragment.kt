@@ -201,7 +201,7 @@ class FilterDialogFragment(
                 }
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 setPadding(10, 10, 10, 10)
-                setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
+                setTextColor(ContextCompat.getColorStateList(context, R.color.black))
                 shapeAppearanceModel = shapeAppearanceModel.toBuilder()
                     .setAllCornerSizes(dpToPx(30).toFloat())
                     .build()
@@ -453,7 +453,7 @@ class FilterDialogFragment(
 
     private fun setUnselectedCategoryChip(chip: Chip) {
         chip.apply {
-            setChipBackgroundColorResource(R.color.chip_default_bg)
+            setChipBackgroundColorResource(R.color.background_secondary)
             chipStrokeWidth = dpToPx(1).toFloat()
             chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#DFDFDF"))
         }

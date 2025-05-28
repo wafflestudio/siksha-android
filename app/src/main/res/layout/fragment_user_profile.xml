@@ -14,7 +14,7 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/orange_main" >
+        android:background="@color/orange_500" >
 
         <ImageView
             android:id="@+id/back_button"
@@ -140,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="취소"
-            android:textColor="@color/orange_main"
+            android:textColor="@color/orange_500"
             android:textSize="16sp"
             android:paddingStart="16dp"
             android:paddingEnd="8dp"
@@ -155,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="OK"
-            android:textColor="@color/orange_main"
+            android:textColor="@color/orange_500"
             android:textSize="16sp"
             android:paddingStart="8dp"
             android:paddingEnd="16dp"

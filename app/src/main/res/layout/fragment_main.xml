@@ -22,7 +22,7 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/orange_main"
+        android:background="@color/orange_500"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView

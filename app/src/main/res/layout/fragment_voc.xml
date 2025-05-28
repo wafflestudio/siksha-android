@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/orange_main" >
+        android:background="@color/orange_500" >
 
         <ImageView
             android:id="@+id/close_button"
