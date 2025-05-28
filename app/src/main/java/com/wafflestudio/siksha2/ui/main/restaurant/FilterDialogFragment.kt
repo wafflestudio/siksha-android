@@ -27,7 +27,6 @@ import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import java.util.Locale
 
@@ -88,7 +87,6 @@ class FilterDialogFragment(
         setupReviewSelection()
         setupCategorySelection()
         setupButtons()
-        setupButtonShadow()
         setupLayoutMargin()
         setupDragToDismiss()
     }
@@ -307,11 +305,6 @@ class FilterDialogFragment(
             FilterMode.RATING -> binding.ratingSection.visibility = View.VISIBLE
             FilterMode.CATEGORY -> binding.categorySection.visibility = View.VISIBLE
         }
-    }
-
-    private fun setupButtonShadow() {
-        val color = if (mode == FilterMode.FULL) Color.WHITE else Color.TRANSPARENT
-        binding.buttonSection.background = color.toDrawable()
     }
 
     private fun setupLayoutMargin() {

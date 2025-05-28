@@ -34,11 +34,12 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/element_control"
                 android:background="@drawable/bottom_sheet_handle"/>
 
             <TextView
@@ -73,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <!-- 거리 필터 제목 -->
                     <TextView
@@ -124,7 +125,7 @@
                             android:layout_height="wrap_content"
                             android:text="400m 이내"
                             android:textSize="13sp"
-                            android:textColor="#707070"
+                            android:textColor="@color/gray_700"
                             android:paddingHorizontal="10dp"
                             android:fontFamily="@font/nanum_square_bold"
                             app:layout_constraintTop_toTopOf="parent"
@@ -158,7 +159,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:paddingBottom="10dp">
 
                     <!-- 가격 필터 제목 -->
@@ -209,7 +210,7 @@
                             android:layout_height="wrap_content"
                             android:text="5,000원 ~ 8,000원"
                             android:textSize="13sp"
-                            android:textColor="#707070"
+                            android:textColor="@color/gray_700"
                             android:paddingHorizontal="10dp"
                             android:fontFamily="@font/nanum_square_bold"
                             app:layout_constraintTop_toTopOf="parent"
@@ -244,7 +245,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:paddingBottom="20dp">
 
                     <TextView
@@ -298,7 +299,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:paddingBottom="20dp">
 
                     <TextView
@@ -353,7 +354,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:paddingBottom="8dp">
 
                     <TextView
@@ -509,7 +510,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     >
 
                     <TextView
@@ -550,7 +551,7 @@
             android:paddingTop="19dp"
             android:paddingBottom="35dp"
             android:elevation="8dp"
-            android:background="@color/white"
+            android:background="@color/background_secondary"
             android:translationZ="4dp"
             android:paddingHorizontal="16dp">
 
@@ -569,7 +570,7 @@
                 android:text="초기화"
                 android:textSize="16sp"
                 android:fontFamily="@font/nanum_square_bold"
-                android:textColor="@color/white"
+                android:textColor="@color/text_button"
                 android:background="@color/gray_500"
                 app:layout_constraintDimensionRatio="9:2"/>
 
@@ -587,7 +588,7 @@
                 android:text="적용"
                 android:textSize="16sp"
                 android:fontFamily="@font/nanum_square_bold"
-                android:textColor="@color/white"
+                android:textColor="@color/text_button"
                 android:background="@color/orange_500"
                 app:layout_constraintDimensionRatio="9:2"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
