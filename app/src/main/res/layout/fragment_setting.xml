@@ -36,7 +36,7 @@
             android:textStyle="bold"
             android:textSize="15dp"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/gray_900"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             tools:text="닉네임"/>
@@ -89,7 +89,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray_300"
+            android:background="@color/border_primary"
             android:layout_marginHorizontal="8dp" />
 
         <com.wafflestudio.siksha2.components.SettingItemRow
@@ -101,7 +101,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray_300"
+            android:background="@color/border_primary"
             android:layout_marginHorizontal="8dp" />
 
         <com.wafflestudio.siksha2.components.SettingItemRow
@@ -115,7 +115,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray_300"
+            android:background="@color/border_primary"
             android:layout_marginHorizontal="8dp" />
 
         <com.wafflestudio.siksha2.components.SettingItemRow
