@@ -36,7 +36,7 @@ fun CommentEditText(
     trailingIcon: @Composable () -> Unit = {},
     enabled: Boolean = true,
     readOnly: Boolean = false,
-    textStyle: TextStyle = TextStyle.Default,
+    textStyle: TextStyle = TextStyle.Default.copy(SikshaTheme.colors.Gray900),
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,

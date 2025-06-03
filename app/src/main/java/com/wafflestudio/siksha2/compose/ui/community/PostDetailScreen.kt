@@ -281,7 +281,7 @@ fun PostDetailScreenSuccess(
     )
 
     Column(
-        modifier = modifier.background(colors.White)
+        modifier = modifier.background(colors.BackgroundPrimary)
     ) {
         Column(
             modifier = Modifier.weight(1f)
@@ -485,13 +485,15 @@ fun PostBody(
             text = post.title,
             modifier = Modifier.padding(horizontal = 20.dp),
             style = SikshaTypography.subtitle2,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
+            color = colors.Black
         )
         Spacer(modifier = Modifier.height(13.dp))
         Text(
             text = post.content,
             modifier = Modifier.padding(horizontal = 20.dp),
-            style = SikshaTypography.body2
+            style = SikshaTypography.body2,
+            color = colors.Gray900
         )
         Spacer(modifier = Modifier.height(20.dp))
         post.etc?.images?.let { images ->
@@ -578,7 +580,7 @@ fun PostLikeButton(
             text = stringResource(R.string.community_post_like),
             fontWeight = FontWeight.Bold,
             fontSize = 10.sp,
-            color = if (isLiked) colors.White else SikshaTheme.colors.Orange500
+            color = if (isLiked) colors.White else colors.Orange500
         )
     }
 }
@@ -657,7 +659,8 @@ fun CommentItem(
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = comment.content,
-                style = SikshaTypography.body2
+                style = SikshaTypography.body2,
+                color = colors.Gray900
             )
             Spacer(modifier = Modifier.height(10.dp))
             EtcIcon(
@@ -767,7 +770,7 @@ fun CommentInputRow(
                     text = stringResource(R.string.community_comment_anonymous),
                     fontWeight = FontWeight.Bold,
                     fontSize = 10.sp,
-                    color = if (isAnonymous) MaterialTheme.colors.primary else SikshaTheme.colors.Gray400
+                    color = if (isAnonymous) colors.Orange500 else colors.Gray400
                 )
             }
         },
@@ -785,7 +788,7 @@ fun CommentInputRow(
                             onCommentInputChanged("")
                         }
                         .background(
-                            color = MaterialTheme.colors.primary,
+                            color = colors.Orange500,
                             shape = RoundedCornerShape(6.dp)
                         )
                         .padding(horizontal = 11.dp, vertical = 6.dp)
@@ -795,7 +798,7 @@ fun CommentInputRow(
                         style = SikshaTypography.body2.copy(
                             fontSize = 12.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = colors.White
+                            color = colors.BackgroundSecondary
                         )
                     )
                 }

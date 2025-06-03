@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,12 +26,12 @@ fun TopBar(
         modifier = modifier
             .height(56.dp)
             .fillMaxWidth()
-            .background(MaterialTheme.colors.primary)
+            .background(SikshaTheme.colors.BackgroundGNB)
     ) {
         Text(
             text = title,
             modifier = Modifier.align(Alignment.Center),
-            color = SikshaTheme.colors.White,
+            color = SikshaTheme.colors.TextGNB,
             fontWeight = FontWeight.ExtraBold,
             style = SikshaTypography.subtitle1
         )

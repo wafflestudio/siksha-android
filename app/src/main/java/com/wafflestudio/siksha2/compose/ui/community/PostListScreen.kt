@@ -96,7 +96,7 @@ fun PostListScreen(
 
     Column(
         modifier = modifier
-            .background(SikshaTheme.colors.White)
+            .background(SikshaTheme.colors.BackgroundPrimary)
     ) {
         LazyRow(
             modifier = Modifier.padding(vertical = 18.dp),

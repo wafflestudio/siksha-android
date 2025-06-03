@@ -56,7 +56,7 @@ fun EtcIcon(
 @Composable
 fun NavigateUpIcon(
     modifier: Modifier = Modifier,
-    color: Color = SikshaTheme.colors.White
+    color: Color = SikshaTheme.colors.IconWhiteIcon
 ) {
     Box(
         modifier = modifier.size(30.dp),

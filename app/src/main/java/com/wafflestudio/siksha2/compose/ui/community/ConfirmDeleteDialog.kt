@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,7 +62,7 @@ fun ConfirmDeleteDialog(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = Color(0xFFE0E0E0))
+            Divider(color = SikshaTheme.colors.BorderPrimary)
             Row(
                 modifier = Modifier.height(50.dp)
             ) {
@@ -82,7 +81,7 @@ fun ConfirmDeleteDialog(
                     )
                 }
                 Divider(
-                    color = Color(0xFFE0E0E0),
+                    color = SikshaTheme.colors.BorderPrimary,
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(1.dp)
@@ -96,7 +95,7 @@ fun ConfirmDeleteDialog(
                 ) {
                     Text(
                         text = "삭제",
-                        color = Color.Gray,
+                        color = SikshaTheme.colors.Gray700,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
