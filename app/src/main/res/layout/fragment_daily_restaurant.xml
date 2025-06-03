@@ -16,16 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="56dp" />
+        android:orientation="vertical"
+        android:background="@color/background_main">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="53dp"
-            android:background="@color/white"
+            android:background="@color/background_secondary"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -85,7 +82,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/background_main">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -190,7 +188,6 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         <LinearLayout

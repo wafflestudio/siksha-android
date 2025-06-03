@@ -5,18 +5,9 @@
     android:id="@+id/fragment_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_50"
+    android:background="@color/transparent"
     android:orientation="vertical"
     tools:context=".ui.main.MainFragment">
-
-    <!--ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:elevation="4dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/frame_top_bar"
-        app:layout_constraintTop_toTopOf="parent" -->
 
     <View
         android:id="@+id/top_bar"
@@ -40,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/tab_layout"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/top_bar" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"

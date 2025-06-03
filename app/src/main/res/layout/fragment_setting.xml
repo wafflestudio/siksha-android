@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="69dp"
+    android:paddingTop="13dp"
     tools:background="@color/white"
     tools:context=".ui.main.setting.SettingFragment">
 
