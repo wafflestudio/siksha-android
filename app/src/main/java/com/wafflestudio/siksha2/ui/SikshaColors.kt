@@ -30,7 +30,7 @@ class SikshaColors(
     Black: Color,
     BackgroundMain: Color,
     AccentLike: Color,
-    private val isDarkTheme: Boolean = false
+    isDarkTheme: Boolean = false
 ) {
     var Gray50 by mutableStateOf(Gray50)
         private set
@@ -79,6 +79,8 @@ class SikshaColors(
     var BackgroundMain by mutableStateOf(BackgroundMain)
         private set
     var AccentLike by mutableStateOf(AccentLike)
+        private set
+    var isDarkTheme by mutableStateOf(isDarkTheme)
         private set
 
     val BackgroundPrimary: Color
@@ -170,6 +172,7 @@ class SikshaColors(
         Black = other.Black
         BackgroundMain = other.BackgroundMain
         AccentLike = other.AccentLike
+        isDarkTheme = other.isDarkTheme
     }
 
     companion object {

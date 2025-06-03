@@ -49,13 +49,15 @@ fun PostListItem(
                 fontWeight = FontWeight.Bold,
                 style = SikshaTypography.body2,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = SikshaTheme.colors.Black
             )
             Text(
                 text = content,
                 style = SikshaTypography.body2,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = SikshaTheme.colors.Gray900
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)

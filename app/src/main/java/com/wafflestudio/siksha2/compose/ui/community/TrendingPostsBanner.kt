@@ -72,7 +72,7 @@ private fun TrendingPostsBannerSuccess(
             .height(35.dp)
             .fillMaxWidth()
             .background(
-                color = SikshaTheme.colors.Orange500.copy(alpha = 0.2f),
+                color = SikshaTheme.colors.OrangeTint,
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable {
@@ -96,7 +96,8 @@ private fun TrendingPostsBannerSuccess(
                     style = SikshaTypography.body2,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    color = SikshaTheme.colors.Black
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 LikeIconWithCount(
@@ -119,7 +120,7 @@ private fun TrendingPostsBannerLoading(
             .height(35.dp)
             .fillMaxSize()
             .background(
-                color = SikshaTheme.colors.Orange500.copy(alpha = 0.2f),
+                color = SikshaTheme.colors.OrangeTint,
                 shape = RoundedCornerShape(12.dp)
             )
     ) {
