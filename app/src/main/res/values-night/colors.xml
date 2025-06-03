@@ -29,7 +29,7 @@
     <color name="orange_900">#FF410000</color>
     <color name="orange_tint">#40F28C1D</color>
 
-    <color name="accent_like">#40FF9522</color>
+    <color name="accent_like">#FFF86627</color>
 
     <!-- Sementic Colors -->
     <color name="background_primary">@color/background_main</color>

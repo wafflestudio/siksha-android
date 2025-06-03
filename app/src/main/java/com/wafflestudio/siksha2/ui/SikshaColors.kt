@@ -223,7 +223,7 @@ class SikshaColors(
             White = Color(0xFF232323),
             Black = Color(0xFFFFFFFF),
             BackgroundMain = Color(0xFF121212),
-            AccentLike = Color(0x40FF9522),
+            AccentLike = Color(0xFFF86627),
             isDarkTheme = true
         )
     }

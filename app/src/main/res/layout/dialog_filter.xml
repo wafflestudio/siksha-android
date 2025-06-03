@@ -34,7 +34,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView
                 android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <!-- 거리 필터 제목 -->
                     <TextView
@@ -159,7 +159,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:paddingBottom="10dp">
 
                     <!-- 가격 필터 제목 -->
@@ -245,7 +245,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:paddingBottom="20dp">
 
                     <TextView
@@ -299,7 +299,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:paddingBottom="20dp">
 
                     <TextView
@@ -354,7 +354,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:paddingBottom="8dp">
 
                     <TextView
@@ -510,7 +510,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     >
 
                     <TextView
