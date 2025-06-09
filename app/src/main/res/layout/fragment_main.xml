@@ -33,39 +33,30 @@
         app:layout_constraintBottom_toTopOf="@id/tab_layout"
         app:layout_constraintTop_toBottomOf="@id/top_bar" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="83dp"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:elevation="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:tabGravity="fill"
-        app:tabIconTint="#00ffffff"
-        app:tabIconTintMode="add"
-        app:tabMode="fixed"
-        app:tabPaddingEnd="44dp"
-        app:tabPaddingStart="44dp"
-        app:tabPaddingTop="5dp"
-        tools:layout_editor_absoluteX="0dp">
+        android:paddingHorizontal="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_tab_favorite"
-            android:text="즐겨찾기"/>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
+            android:background="@color/transparent"
+            app:tabMaxWidth="0dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabPaddingTop="5dp"
+            app:tabPaddingBottom="32dp"
+            app:tabIndicatorHeight="0dp"
+            app:tabRippleColor="@color/transparent"
+            tools:layout_editor_absoluteX="0dp"/>
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_tab_main"
-            android:text="식단"/>
+    </LinearLayout>
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:icon="@drawable/ic_tab_setting" />
 
-    </com.google.android.material.tabs.TabLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
