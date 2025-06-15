@@ -30,10 +30,11 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/tab_layout"
+        app:layout_constraintBottom_toTopOf="@id/tab_outer_layout"
         app:layout_constraintTop_toBottomOf="@id/top_bar" />
 
     <LinearLayout
+        android:id="@+id/tab_outer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
