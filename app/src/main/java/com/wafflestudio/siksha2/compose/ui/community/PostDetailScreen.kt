@@ -422,7 +422,6 @@ private suspend fun LazyListState.animateScrollToLastItem() {
     animateScrollToItem(targetIndex)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostHeader(
     post: Post,
@@ -456,7 +455,7 @@ fun PostHeader(
             )
             Text(
                 text = post.updatedAt.toParsedTimeString(),
-                color = colors.Gray400,
+                color = colors.Gray600,
                 fontSize = 10.sp,
                 style = SikshaTypography.body2
             )
@@ -651,7 +650,7 @@ fun CommentItem(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = comment.updatedAt.toParsedTimeString(),
-                    color = colors.Gray400,
+                    color = colors.Gray600,
                     fontSize = 10.sp,
                     style = SikshaTypography.body2
                 )

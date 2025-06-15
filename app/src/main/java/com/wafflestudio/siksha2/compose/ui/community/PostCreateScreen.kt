@@ -182,7 +182,7 @@ fun PostCreateScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SikshaTheme.colors.White)
+            .background(SikshaTheme.colors.BackgroundGNB)
     ) {
         TopBar(
             title = stringResource(R.string.community_create_screen_title),
@@ -225,8 +225,9 @@ fun PostCreateScreen(
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.community_create_title_placeholder),
-                                    color = SikshaTheme.colors.Gray400,
-                                    fontWeight = FontWeight.Bold
+                                    color = SikshaTheme.colors.Gray500,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp
                                 )
                             }
                         )
@@ -238,7 +239,8 @@ fun PostCreateScreen(
                             placeholder = {
                                 Text(
                                     text = stringResource(R.string.community_create_content_placeholder),
-                                    color = SikshaTheme.colors.Gray400
+                                    color = SikshaTheme.colors.Gray300,
+                                    fontSize = 14.sp
                                 )
                             },
                             modifier = Modifier.weight(weight = 1.0f, fill = isKeyboardOpen)
@@ -337,7 +339,8 @@ fun CurrentBoard(
         ) {
             Text(
                 text = board.name,
-                color = SikshaTheme.colors.Gray700
+                color = SikshaTheme.colors.Gray700,
+                fontSize = 13.sp
             )
             Spacer(modifier = Modifier.width(8.dp))
             ExpandOptionsIcon(
@@ -367,7 +370,8 @@ fun BoardSelectorCard(
         ) {
             Text(
                 text = board.name,
-                color = textColor
+                color = textColor,
+                fontSize = 13.sp
             )
             Spacer(modifier = Modifier.width(10.dp))
             if (isSelected) {
@@ -390,10 +394,10 @@ fun BoardSelector(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(color = SikshaTheme.colors.White)
+            .background(color = SikshaTheme.colors.BackgroundSecondary)
             .border(
                 width = 1.dp,
-                color = SikshaTheme.colors.Gray400,
+                color = SikshaTheme.colors.Gray200,
                 shape = RoundedCornerShape(8.dp)
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -427,13 +431,13 @@ fun TitleEditText(
         onValueChange = onValueChange,
         modifier = modifier,
         singleLine = true,
-        textStyle = SikshaTypography.subtitle1,
+        textStyle = SikshaTypography.subtitle1.copy(color = SikshaTheme.colors.Black, fontSize = 14.sp),
         decorationBox = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = SikshaTheme.colors.Gray100,
+                        color = SikshaTheme.colors.Gray50,
                         shape = RoundedCornerShape(6.dp)
                     )
                     .padding(
@@ -463,7 +467,7 @@ fun ContentEditText(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
-        textStyle = SikshaTypography.body1,
+        textStyle = SikshaTypography.body1.copy(color = SikshaTheme.colors.Black, fontSize = 14.sp),
         decorationBox = {
             Box(
                 modifier = Modifier
@@ -601,7 +605,7 @@ fun UploadButton(
             .fillMaxWidth()
             .height(56.dp)
             .background(
-                color = if (isUploadActivated) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray500,
+                color = if (isUploadActivated) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray600,
                 shape = RoundedCornerShape(8.dp)
             )
             .then(
@@ -618,8 +622,9 @@ fun UploadButton(
         Text(
             text = "올리기",
             modifier = Modifier.align(Alignment.Center),
-            color = SikshaTheme.colors.White,
-            fontWeight = FontWeight.Bold
+            color = SikshaTheme.colors.TextButton,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 18.sp
         )
     }
 }
