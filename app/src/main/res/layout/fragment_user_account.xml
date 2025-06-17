@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_50"
+    android:background="@color/background_primary"
     android:orientation="vertical"
     tools:context=".ui.main.setting.account.UserAccountFragment">
 
@@ -14,7 +14,7 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/orange_500" >
+        android:background="@color/background_GNB" >
 
         <ImageView
             android:id="@+id/back_button"
@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/nanum_square_bold"
             android:text="@string/setting_setting_account"
-            android:textColor="@color/white"
+            android:textColor="@color/text_GNB"
             android:textAlignment="center"
             android:textSize="20dp" />
 
@@ -66,7 +66,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray_300"
+            android:background="@color/border_primary"
             android:layout_marginHorizontal="8dp" />
 
         <com.wafflestudio.siksha2.components.SettingItemRow
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:itemText="회원 탈퇴"
-            app:textColor = "@color/google_gray"/>
+            app:textColor="@color/accent_like"/>
 
     </LinearLayout>
 

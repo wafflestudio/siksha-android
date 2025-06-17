@@ -73,7 +73,7 @@ class SettingItemRow : LinearLayout {
                 setNewIcon(getBoolean(R.styleable.SettingItem_showNewIcon, false))
                 setShowCheckbox(getBoolean(R.styleable.SettingItem_showCheckbox, false))
                 binding.settingRowText.text = getString(R.styleable.SettingItem_itemText)
-                binding.settingRowText.setTextColor(ContextCompat.getColor(context, R.color.black))
+                binding.settingRowText.setTextColor(context.obtainStyledAttributes(attr, R.styleable.SettingItem).getColor(R.styleable.SettingItem_textColor, ContextCompat.getColor(context, R.color.black)))
             } finally {
                 recycle()
             }
