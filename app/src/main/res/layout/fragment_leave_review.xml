@@ -264,7 +264,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/leave_review_add_photo"
                         android:fontFamily="@font/nanum_square_extra_bold"
-                        android:textColor="@color/white"
+                        android:textColor="@color/text_button"
                         android:textSize="14dp"
                         android:layout_marginStart="8dp"/>
 
@@ -281,7 +281,7 @@
                     android:letterSpacing="0.2"
                     android:paddingVertical="20dp"
                     android:text="@string/leave_review_button"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_button"
                     android:textSize="20dp"
                     android:layout_marginBottom="32dp"
                     android:layout_marginHorizontal="16dp"
