@@ -51,7 +51,8 @@ fun ConfirmDeleteDialog(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = SikshaTheme.colors.Black
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
@@ -59,7 +60,8 @@ fun ConfirmDeleteDialog(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = SikshaTheme.colors.Black
             )
             Spacer(modifier = Modifier.height(16.dp))
             Divider(color = SikshaTheme.colors.BorderPrimary)
