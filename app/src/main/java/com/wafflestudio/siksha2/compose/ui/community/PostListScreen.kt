@@ -216,6 +216,7 @@ fun PostsLoadingPlaceHolder(
         modifier = modifier
     ) {
         CircularProgressIndicator(
+            color = SikshaTheme.colors.Orange500,
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -240,12 +241,14 @@ fun PostsErrorPlaceHolder(
                 style = SikshaTypography.subtitle1
             )
             Button(
+                modifier = Modifier.background(SikshaTheme.colors.Orange500),
                 onClick = {
                     onClickRetry()
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.community_retry_button)
+                    text = stringResource(R.string.community_retry_button),
+                    color = SikshaTheme.colors.TextButton
                 )
             }
         }

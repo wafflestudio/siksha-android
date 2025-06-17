@@ -34,6 +34,7 @@ fun PostListItem(
 ) {
     Row(
         modifier = modifier
+            .background(SikshaTheme.colors.BackgroundPrimary)
             .clickable {
                 onClick()
             }
