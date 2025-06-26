@@ -1,8 +1,10 @@
 package com.wafflestudio.siksha2.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -129,11 +131,19 @@ fun AddPostImageIcon(
 fun NewPostIcon(
     modifier: Modifier = Modifier
 ) {
-    Image(
-        modifier = modifier.size(50.dp),
-        painter = painterResource(R.drawable.ic_new_post),
-        contentDescription = "글쓰기"
-    )
+    Box(
+        modifier = modifier.size(50.dp)
+            .background(
+                color = SikshaTheme.colors.Orange500,
+                shape = RoundedCornerShape(25.dp)
+            )
+    ) {
+        Image(
+            modifier = Modifier.align(Alignment.Center),
+            painter = painterResource(R.drawable.ic_new_post),
+            contentDescription = "글쓰기"
+        )
+    }
 }
 
 @Composable

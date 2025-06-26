@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.ui.SikshaTheme
@@ -37,7 +38,8 @@ fun Chip(
                 onClick()
             },
         color = if (selected) SikshaTheme.colors.TextButton else SikshaTheme.colors.Gray500,
-        style = SikshaTypography.body1
+        style = SikshaTypography.body1,
+        fontWeight = FontWeight.Bold
     )
 }
 

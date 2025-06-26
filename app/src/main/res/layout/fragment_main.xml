@@ -45,13 +45,13 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="83dp"
+            android:layout_height="56dp"
             android:background="@color/transparent"
             app:tabMaxWidth="0dp"
             app:tabGravity="fill"
             app:tabMode="fixed"
             app:tabPaddingTop="5dp"
-            app:tabPaddingBottom="32dp"
+            app:tabPaddingBottom="5dp"
             app:tabIndicatorHeight="0dp"
             app:tabRippleColor="@color/transparent"
             tools:layout_editor_absoluteX="0dp"/>
