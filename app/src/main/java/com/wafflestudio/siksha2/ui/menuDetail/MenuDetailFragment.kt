@@ -86,7 +86,7 @@ class MenuDetailFragment : Fragment() {
 
             // Handle like count
             menu.likeCount?.let { count ->
-                binding.menuLikeCount.text = menu.likeCount?.let { "좋아요 $it 개" } ?: "-"
+                binding.menuLikeCount.text = menu.likeCount?.let { "찜 $it 개" } ?: "-"
             }
         }
 

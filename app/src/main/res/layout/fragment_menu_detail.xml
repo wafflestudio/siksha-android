@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/background_primary"
     android:orientation="vertical"
     tools:context=".ui.menuDetail.MenuDetailFragment">
 
@@ -16,7 +16,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/orange_500"
+        android:background="@color/background_GNB"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -36,8 +36,8 @@
             android:fontFamily="@font/nanum_square_bold"
             android:paddingVertical="12dp"
             android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textColor="@color/text_GNB"
+            android:textSize="18sp"
             android:textAlignment="center"
             tools:text=" 셀프코너 :잡곡밥 + 계란물만둣국 + 뭐시기 뭐시기 뭐시기 뭐시기"
             android:maxLines="1"
@@ -71,10 +71,10 @@
 
             <ImageView
                 android:id="@+id/menu_like_button"
-                android:layout_width="21dp"
-                android:layout_height="21dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_heart"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toEndOf="@id/menu_stars"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,8 +82,8 @@
                 android:id="@+id/menu_like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_regular"
-                android:textSize="14dp"
+                android:fontFamily="@font/nanum_square_bold"
+                android:textSize="13sp"
                 android:textColor="@color/black"
                 tools:text="좋아요 -개"
                 android:ellipsize="end"
@@ -92,7 +92,7 @@
                 android:layout_marginHorizontal="10dp" />
 
             <View
-                android:background="@color/orange_500"
+                android:background="@color/border_primary"
                 android:layout_height="1dp"
                 android:layout_width="343dp"
                 android:layout_marginTop="18dp"
@@ -339,13 +339,13 @@
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="8dp"
                 android:text="@string/menu_detail_leave_review_button"
-                android:textColor="@color/white"
+                android:textColor="@color/text_button"
                 android:textSize="14dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
-                android:background="@color/gray_300"
+                android:background="@color/gray_100"
                 android:layout_marginTop="16dp" />
 
             <LinearLayout
@@ -435,7 +435,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/menu_detail_review_gather"
                     android:fontFamily="@font/nanum_square_regular"
-                    android:textSize="14dp"
+                    android:textSize="18sp"
                     android:textColor="@color/black"
                     android:layout_marginStart="16dp"/>
 
@@ -474,7 +474,7 @@
                 android:layout_weight="1"
                 android:clipToPadding="true"
                 android:paddingBottom="20dp"
-                android:background="@color/white"
+                android:background="@color/background_primary"
                 tools:listitem="@layout/item_review" />
 
         </LinearLayout>
