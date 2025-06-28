@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.R
-import kotlin.math.abs
+import timber.log.Timber
 import kotlin.math.roundToInt
 
 @Composable
@@ -51,6 +51,7 @@ fun MenuRatingStars(
     initialRating: Float,
     modifier: Modifier = Modifier,
     changeEnabled: Boolean = false,
+    onRatingChange: (Float) -> Unit = {},
     width: Dp = 100.dp,
     height: Dp = 18.dp
 ) {
@@ -62,12 +63,16 @@ fun MenuRatingStars(
             .then(
                 if (changeEnabled) {
                     Modifier.pointerInput(Unit) {
-                        detectHorizontalDragGestures { change, dragAmount ->
-                            if (abs(dragAmount) < 25f) return@detectHorizontalDragGestures
+                        detectHorizontalDragGestures { change, _ ->
                             val (index, _) = bounds.entries.find { (_, rect) ->
                                 rect.contains(Offset(change.position.x, 0f))
                             } ?: return@detectHorizontalDragGestures
-                            rating = index.toFloat()
+                            val newRating = index.toFloat()
+                            Timber.d("newRating:{$newRating}")
+                            if (rating != newRating) {
+                                rating = newRating
+                                onRatingChange(newRating)
+                            }
                         }
                     }
                 } else {
@@ -81,15 +86,7 @@ fun MenuRatingStars(
                 flag = i * 2 - (rating * 2).roundToInt(),
                 modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
                     bounds[i] = layoutCoordinates.boundsInParent()
-                }.then(
-                    if (changeEnabled) {
-                        Modifier.pointerInput(Unit) {
-                            rating = i.toFloat()
-                        }
-                    } else {
-                        Modifier
-                    }
-                )
+                }
             )
         }
     }
