@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemSettingRowBinding
-import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class SettingItemRow : LinearLayout {
@@ -58,9 +57,6 @@ class SettingItemRow : LinearLayout {
     private fun init(attr: AttributeSet?) {
         gravity = Gravity.CENTER_VERTICAL
         orientation = HORIZONTAL
-        val dp18 = context.dp(18)
-        val dp24 = context.dp(24)
-        setPadding(dp24, dp18, dp24, dp18)
 
         context.theme.obtainStyledAttributes(
             attr,
