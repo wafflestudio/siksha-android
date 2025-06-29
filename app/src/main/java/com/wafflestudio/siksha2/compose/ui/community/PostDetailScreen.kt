@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -563,8 +564,12 @@ fun PostLikeButton(
                 shape = RoundedCornerShape(6.dp)
             )
             .clip(RoundedCornerShape(6.dp))
-            .background(
-                color = if (isLiked) colors.Orange500 else colors.White
+            .then(
+                if (isLiked) {
+                    Modifier.background(colors.Orange500)
+                } else {
+                    Modifier
+                }
             )
             .clickable { onClick() }
             .padding(horizontal = 9.dp, vertical = 6.dp),
@@ -572,14 +577,14 @@ fun PostLikeButton(
     ) {
         ThumbIcon(
             modifier = Modifier.size(11.dp),
-            colorFilter = ColorFilter.tint(if (isLiked) colors.White else SikshaTheme.colors.Orange500)
+            colorFilter = ColorFilter.tint(if (isLiked) colors.IconWhiteIcon else colors.Orange500)
         )
         Spacer(modifier = Modifier.width(5.dp))
         Text(
             text = stringResource(R.string.community_post_like),
             fontWeight = FontWeight.Bold,
             fontSize = 10.sp,
-            color = if (isLiked) colors.White else colors.Orange500
+            color = if (isLiked) colors.TextButton else colors.Orange500
         )
     }
 }
@@ -745,6 +750,7 @@ fun CommentInputRow(
             .heightIn(max = 100.dp)
             .fillMaxWidth(),
         hint = stringResource(R.string.community_comment_hint),
+        textStyle = TextStyle.Default.copy(color = colors.Black, fontSize = 13.sp),
         leadingIcon = {
             Row(
                 modifier = Modifier
@@ -768,8 +774,8 @@ fun CommentInputRow(
                 Text(
                     text = stringResource(R.string.community_comment_anonymous),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 10.sp,
-                    color = if (isAnonymous) colors.Orange500 else colors.Gray400
+                    fontSize = 12.sp,
+                    color = if (isAnonymous) colors.Orange500 else colors.Gray600
                 )
             }
         },
@@ -790,12 +796,12 @@ fun CommentInputRow(
                             color = colors.Orange500,
                             shape = RoundedCornerShape(6.dp)
                         )
-                        .padding(horizontal = 11.dp, vertical = 6.dp)
+                        .padding(horizontal = 10.dp, vertical = 6.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.community_comment_send_button),
                         style = SikshaTypography.body2.copy(
-                            fontSize = 12.sp,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = colors.BackgroundSecondary
                         )
