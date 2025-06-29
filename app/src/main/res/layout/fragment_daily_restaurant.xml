@@ -30,43 +30,28 @@
                 android:id="@+id/date_before"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_orange_left_arrow"
+                android:src="@drawable/ic_day_left_arrow"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="10dp"/>
 
             <LinearLayout
+                android:id="@+id/layout_select_calendar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 >
-
-                <LinearLayout
-                    android:id="@+id/layout_select_calendar"
+                <TextView
+                    android:id="@+id/date_current"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_calendar" />
-
-                    <TextView
-                        android:id="@+id/date_current"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanum_square_extra_bold"
-                        android:padding="10dp"
-                        android:text="..."
-                        android:textAlignment="center"
-                        android:textColor="@color/orange_500"
-                        android:textSize="15dp"
-                        tools:text="2021-03-28 (일)" />
-
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_extra_bold"
+                    android:padding="10dp"
+                    android:text="..."
+                    android:textAlignment="center"
+                    android:textColor="@color/text_accent"
+                    android:textSize="15sp"
+                    tools:text="2021-03-28 (일)" />
 
             </LinearLayout>
 
@@ -74,7 +59,7 @@
                 android:id="@+id/date_after"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_orange_right_arrow"
+                android:src="@drawable/ic_day_right_arrow"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="10dp"/>
 
@@ -314,13 +299,13 @@
             android:orientation="vertical"
             android:gravity="center_horizontal"
             android:elevation="4dp"
-            android:layout_marginTop="109dp" />
+            android:layout_marginTop="53dp" />
 
         <View
             android:id="@+id/blank"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/black"
+            android:background="#000000"
             android:alpha="0.5"
             app:layout_constraintTop_toBottomOf="@id/calendar_select_view"
             app:layout_constraintBottom_toBottomOf="parent"/>
