@@ -23,6 +23,7 @@ import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.components.festival.FestivalToggle
+import com.wafflestudio.siksha2.compose.ui.dailyrestaurant.MenuGroupList
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.network.result.NetworkResult
@@ -285,13 +286,13 @@ class DailyRestaurantFragment : Fragment() {
                     binding.lunchText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_500
+                            R.color.gray_600
                         )
                     )
                     binding.dinnerText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_500
+                            R.color.gray_600
                         )
                     )
                 }
@@ -300,7 +301,7 @@ class DailyRestaurantFragment : Fragment() {
                     binding.breakfastText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_500
+                            R.color.gray_600
                         )
                     )
                     binding.lunchText.setTextColor(
@@ -312,7 +313,7 @@ class DailyRestaurantFragment : Fragment() {
                     binding.dinnerText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_500
+                            R.color.gray_600
                         )
                     )
                 }
@@ -321,13 +322,13 @@ class DailyRestaurantFragment : Fragment() {
                     binding.breakfastText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_500
+                            R.color.gray_600
                         )
                     )
                     binding.lunchText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_500
+                            R.color.gray_600
                         )
                     )
                     binding.dinnerText.setTextColor(
@@ -498,7 +499,22 @@ class DailyRestaurantFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
-                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    // binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    binding.menuGroupListCompose.setContent {
+                        SikshaTheme {
+                            MenuGroupList(
+                                menuGroupList = it,
+                                restaurantsList = vm.allRestaurant.collectAsState(listOf()).value,
+                                mealsOfDay = vm.mealsOfDayFilter.value ?: MealsOfDay.LU,
+                                dayOfWeek = LocalDate.now().dayOfWeek,
+                                onRestaurantInfoClicked = {},
+                                onToggleLikeMenu = {},
+                                onRestaurantShareClicked = {},
+                                onClickMenu = {},
+                                onToggleFavoriteRestaurant = {}
+                            )
+                        }
+                    }
                     binding.emptyText.setVisibleOrGone(it.isEmpty())
                     menuGroupAdapter.submitList(it)
                 }
