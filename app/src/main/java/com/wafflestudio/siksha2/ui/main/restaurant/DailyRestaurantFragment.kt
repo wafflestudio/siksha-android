@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.ui.main.restaurant
 
 import android.Manifest
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
@@ -52,7 +53,28 @@ class DailyRestaurantFragment : Fragment() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+    private object PermissionPrefs {
+        private const val PREF_NAME = "permissions"
+        private const val KEY_LOCATION_ASKED = "asked_location_permission"
+
+        fun hasAsked(context: Context): Boolean {
+            return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                .getBoolean(KEY_LOCATION_ASKED, false)
+        }
+
+        fun setAsked(context: Context) {
+            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean(KEY_LOCATION_ASKED, true)
+                .apply()
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        PermissionPrefs.setAsked(requireContext())
+
         if (isGranted) {
             // TODO: placeholder 삭제
             showToast("위치 권한이 허용되었습니다.")
@@ -465,15 +487,15 @@ class DailyRestaurantFragment : Fragment() {
             }
         }
 
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
+        if (
+            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
         ) {
-            requestPermission {
-                // TODO: placeholder 삭제
-                showToast("위치 권한이 허용되었습니다.")
+            if (!PermissionPrefs.hasAsked(requireContext())) {
+                requestPermission {
+                    // TODO: placeholder 삭제
+                    showToast("위치 권한이 허용되었습니다.")
+                }
             }
         } else {
             fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
@@ -508,7 +530,9 @@ class DailyRestaurantFragment : Fragment() {
     private fun requestPermission(onGranted: () -> Unit) {
         // TODO: SDK 버전에 따른 처리 필요한지 확인
         val permission = Manifest.permission.ACCESS_FINE_LOCATION
-        if (ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
+        val context = requireContext()
+
+        if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
             onGranted()
         } else {
             requestPermissionLauncher.launch(permission)
