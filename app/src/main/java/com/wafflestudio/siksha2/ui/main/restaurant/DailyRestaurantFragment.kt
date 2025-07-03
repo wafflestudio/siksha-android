@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.collectAsState
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -52,7 +51,9 @@ class DailyRestaurantFragment : Fragment() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
         if (isGranted) {
             // TODO: placeholder 삭제
             showToast("위치 권한이 허용되었습니다.")
@@ -427,6 +428,21 @@ class DailyRestaurantFragment : Fragment() {
         binding.filterDistance.setOnClickListener {
             val filterDialog = FilterDialogFragment(FilterMode.DISTANCE)
             filterDialog.show(parentFragmentManager, "FilterDialog")
+
+            val permission = Manifest.permission.ACCESS_FINE_LOCATION
+            val context = requireContext()
+
+            if (
+                ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermission {
+                    val filterDialog = FilterDialogFragment(FilterMode.DISTANCE)
+                    filterDialog.show(parentFragmentManager, "FilterDialog")
+                }
+            } else {
+                val filterDialog = FilterDialogFragment(FilterMode.DISTANCE)
+                filterDialog.show(parentFragmentManager, "FilterDialog")
+            }
         }
 
         binding.filterPrice.setOnClickListener {
@@ -464,20 +480,6 @@ class DailyRestaurantFragment : Fragment() {
                 vm.updateLocation(location)
             }
         }
-
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermission {
-                // TODO: placeholder 삭제
-                showToast("위치 권한이 허용되었습니다.")
-            }
-        } else {
-            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, requireActivity().mainLooper)
-        }
     }
 
     private fun setUpFestival() {
@@ -508,10 +510,15 @@ class DailyRestaurantFragment : Fragment() {
     private fun requestPermission(onGranted: () -> Unit) {
         // TODO: SDK 버전에 따른 처리 필요한지 확인
         val permission = Manifest.permission.ACCESS_FINE_LOCATION
-        if (ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
-            onGranted()
-        } else {
-            requestPermissionLauncher.launch(permission)
+        val context = requireContext()
+
+        when {
+            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED -> {
+                onGranted()
+            }
+            else -> {
+                requestPermissionLauncher.launch(permission)
+            }
         }
     }
 
