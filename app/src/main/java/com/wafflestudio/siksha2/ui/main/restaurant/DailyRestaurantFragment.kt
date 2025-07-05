@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -63,7 +62,6 @@ class DailyRestaurantFragment : Fragment() {
     }
 
     private lateinit var binding: FragmentDailyRestaurantBinding
-    private lateinit var menuGroupAdapter: MenuGroupAdapter
     private lateinit var gestureDetector: GestureDetector
 
     // 즐겨찾기 식당 탭과 일반 식당 탭이 다른 프래그먼트로 분리하기엔 중복이 많아서 플래그로 넘겨받고 관리.
@@ -165,59 +163,6 @@ class DailyRestaurantFragment : Fragment() {
             }
         )
 
-        menuGroupAdapter = MenuGroupAdapter(
-            onMenuGroupInfoClickListener = {
-                lifecycleScope.launch {
-                    vm.getRestaurantInfo(it)?.let {
-                        // TODO: BottomSheetController 따로 만들어 Inject 받아쓰기
-                        val bottomSheet = RestaurantInfoBottomSheet.newInstance(it)
-                        bottomSheet.showNow(parentFragmentManager, "restaurant_info_${it.id}")
-                    }
-                }
-            },
-            onMenuGroupToggleFavoriteClickListener = {
-                vm.toggleRestaurantFavorite(it)
-            },
-            onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    when (val response = vm.toggleMenuLike(menuId, isCurrentlyLiked)) {
-                        is NetworkResult.Success -> {}
-                        is NetworkResult.Failure -> showToast(response.message)
-                        is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
-                        else -> showToast(getString(R.string.common_unknown_error))
-                    }
-                }
-            },
-            onMenuItemClickListener = {
-                val action =
-                    MainFragmentDirections.actionMainFragmentToMenuDetailFragment(
-                        it,
-                        vm.dateFilter.value == LocalDate.now()
-                    )
-                findNavController().navigate(action)
-            },
-            onMenuGroupShareClickListener = { menuGroupId ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    val menuGroup = vm.getMenuGroupById(menuGroupId)
-                    val shareDate = vm.dateFilter.value ?: LocalDate.now()
-
-                    if (menuGroup != null) {
-                        val menuData = menuGroup.menus.take(5).map {
-                            (it.nameKr ?: "메뉴 이름 없음") to (it.price?.toString() ?: "가격 없음")
-                        }
-                        KakaoLinkHelper.shareMenuWithTemplate(
-                            requireContext(),
-                            menuData,
-                            menuGroup.nameKr ?: "식당 이름 없음",
-                            shareDate
-                        )
-                    } else {
-                        showToast("해당 메뉴 그룹을 찾을 수 없습니다.")
-                    }
-                }
-            }
-        )
-
         binding.calendarSelectView.updateDate(LocalDate.now())
         binding.calendarSelectView.setDateChangeListener(
             object : CalendarSelectView.OnDateChangeListener {
@@ -227,16 +172,6 @@ class DailyRestaurantFragment : Fragment() {
                 }
             }
         )
-
-        binding.menuGroupList.also {
-            it.adapter = menuGroupAdapter
-            it.layoutManager = LinearLayoutManager(context)
-        }
-
-        binding.menuGroupList.setOnTouchListener { _, ev ->
-            gestureDetector.onTouchEvent(ev)
-            false
-        }
 
         binding.emptyText.setOnTouchListener { _, ev ->
             gestureDetector.onTouchEvent(ev)
@@ -249,7 +184,6 @@ class DailyRestaurantFragment : Fragment() {
                 binding.content.setVisibleOrGone(it)
             }
         }
-        binding.menuGroupList.itemAnimator = null
 
         getFilteredMenuGroups()
 
@@ -499,7 +433,7 @@ class DailyRestaurantFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
-                    // binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    binding.menuGroupListCompose.setVisibleOrGone(it.isNotEmpty())
                     binding.menuGroupListCompose.setContent {
                         SikshaTheme {
                             MenuGroupList(
@@ -507,16 +441,60 @@ class DailyRestaurantFragment : Fragment() {
                                 restaurantsList = vm.allRestaurant.collectAsState(listOf()).value,
                                 mealsOfDay = vm.mealsOfDayFilter.value ?: MealsOfDay.LU,
                                 dayOfWeek = LocalDate.now().dayOfWeek,
-                                onRestaurantInfoClicked = {},
-                                onToggleLikeMenu = {},
-                                onRestaurantShareClicked = {},
-                                onClickMenu = {},
-                                onToggleFavoriteRestaurant = {}
+                                onRestaurantInfoClicked = {
+                                    lifecycleScope.launch {
+                                        vm.getRestaurantInfo(it)?.let {
+                                            val bottomSheet = RestaurantInfoBottomSheet.newInstance(it)
+                                            bottomSheet.showNow(parentFragmentManager, "restaurant_info_${it.id}")
+                                        }
+                                    }
+                                },
+                                onToggleLikeMenu = { menuId, isCurrentlyLiked ->
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        when (val response = vm.toggleMenuLike(menuId, isCurrentlyLiked)) {
+                                            is NetworkResult.Success -> {}
+                                            is NetworkResult.Failure -> showToast(response.message)
+                                            is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                                            else -> showToast(getString(R.string.common_unknown_error))
+                                        }
+                                    }
+                                },
+                                onRestaurantShareClicked = {
+                                        menuGroupId ->
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        val menuGroup = vm.getMenuGroupById(menuGroupId)
+                                        val shareDate = vm.dateFilter.value ?: LocalDate.now()
+
+                                        if (menuGroup != null) {
+                                            val menuData = menuGroup.menus.take(5).map {
+                                                (it.nameKr ?: "메뉴 이름 없음") to (it.price?.toString() ?: "가격 없음")
+                                            }
+                                            KakaoLinkHelper.shareMenuWithTemplate(
+                                                requireContext(),
+                                                menuData,
+                                                menuGroup.nameKr ?: "식당 이름 없음",
+                                                shareDate
+                                            )
+                                        } else {
+                                            showToast("해당 메뉴 그룹을 찾을 수 없습니다.")
+                                        }
+                                    }
+                                },
+                                onClickMenu = {
+                                    val action =
+                                        MainFragmentDirections.actionMainFragmentToMenuDetailFragment(
+                                            it,
+                                            vm.dateFilter.value == LocalDate.now()
+                                        )
+                                    findNavController().navigate(action)
+                                },
+                                onToggleFavoriteRestaurant = {
+                                    vm.toggleRestaurantFavorite(it)
+                                }
                             )
                         }
                     }
                     binding.emptyText.setVisibleOrGone(it.isEmpty())
-                    menuGroupAdapter.submitList(it)
                 }
         }
     }

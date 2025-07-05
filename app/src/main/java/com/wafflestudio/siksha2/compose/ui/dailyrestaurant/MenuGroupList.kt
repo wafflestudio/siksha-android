@@ -48,7 +48,7 @@ fun MenuGroupList(
     onToggleFavoriteRestaurant: (Long) -> Unit,
     onRestaurantShareClicked: (Long) -> Unit,
     onClickMenu: (Long) -> Unit,
-    onToggleLikeMenu: (Long) -> Unit,
+    onToggleLikeMenu: (Long, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -96,7 +96,7 @@ fun RestaurantMenu(
     onToggleFavoriteRestaurant: () -> Unit,
     onRestaurantShareClicked: () -> Unit,
     onClickMenu: (Long) -> Unit,
-    onToggleLikeMenu: (Long) -> Unit,
+    onToggleLikeMenu: (Long, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -177,7 +177,7 @@ fun RestaurantMenu(
                 MenuRow(
                     menu = menu,
                     onClickMenu = { onClickMenu(menu.id) },
-                    onToggleLikeMenu = { onToggleLikeMenu(menu.id) }
+                    onToggleLikeMenu = { menu.isLiked?.let { onToggleLikeMenu(menu.id, it) } }
                 )
             }
         }
@@ -338,6 +338,6 @@ fun MenuGroupListPreview() {
         onRestaurantInfoClicked = {},
         onToggleFavoriteRestaurant = {},
         onClickMenu = {},
-        onToggleLikeMenu = {}
+        onToggleLikeMenu = { _, _ -> }
     )
 }
