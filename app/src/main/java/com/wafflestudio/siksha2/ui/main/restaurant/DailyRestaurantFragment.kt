@@ -440,7 +440,7 @@ class DailyRestaurantFragment : Fragment() {
                                 menuGroupList = it,
                                 restaurantsList = vm.allRestaurant.collectAsState(listOf()).value,
                                 mealsOfDay = vm.mealsOfDayFilter.value ?: MealsOfDay.LU,
-                                dayOfWeek = LocalDate.now().dayOfWeek,
+                                dayOfWeek = (vm.dateFilter.value ?: LocalDate.now()).dayOfWeek,
                                 onRestaurantInfoClicked = {
                                     lifecycleScope.launch {
                                         vm.getRestaurantInfo(it)?.let {

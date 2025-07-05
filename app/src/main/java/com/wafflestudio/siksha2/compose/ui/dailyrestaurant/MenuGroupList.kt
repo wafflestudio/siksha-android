@@ -38,6 +38,7 @@ import com.wafflestudio.siksha2.ui.restaurantInfo.model.toRestaurantOperatingTim
 import com.wafflestudio.siksha2.utils.toPrettyString
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.util.Locale
 
 @Composable
 fun MenuGroupList(
@@ -239,7 +240,9 @@ fun MenuRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
             modifier = Modifier.weight(1f)
@@ -254,7 +257,6 @@ fun MenuRow(
         ) {
             if (menu.etc?.contains("No meat") == true) {
                 Image(
-                    modifier = Modifier.padding(top = 1.dp, end = (-8).dp),
                     painter = painterResource(R.drawable.ic_no_fork),
                     contentDescription = "No meat"
                 )
@@ -265,7 +267,7 @@ fun MenuRow(
                 fontSize = 14.sp
             )
             Text(
-                text = menu.score?.toString() ?: "0.0",
+                text = menu.score?.let { String.format(Locale.getDefault(), "%.1f", it) } ?: "0.0",
                 color = SikshaTheme.colors.Black,
                 fontSize = 14.sp
             )
