@@ -2,6 +2,7 @@
     <string name="splash_login_kakao_button">카카오로 로그인하기</string>
     <string name="splash_login_google_button">구글로 로그인하기</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_info">정보가 없습니다</string>
     <string name="restaurant_info_location_label">식당 위치</string>
     <string name="restaurant_info_operation_time_label">영업 시간</string>
     <string name="menu_group_empty">해당 시간대의 메뉴가 없습니다.</string>

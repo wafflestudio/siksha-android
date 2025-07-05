@@ -13,6 +13,7 @@ data class DailyOperatingTimes(
     var lunch: OperatingTime?,
     var dinner: OperatingTime?
 ) {
+    fun isEmpty(): Boolean = breakfast == null && lunch == null && dinner == null
     companion object {
         const val BREAKFAST_TIME_AS_MINUTE = 510
         const val LUNCH_TIME_AS_MINUTE = 750
