@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -147,17 +148,17 @@ fun RestaurantMenu(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Price",
+                    text = stringResource(R.string.menu_group_price),
                     fontSize = 12.sp,
                     color = SikshaTheme.colors.Orange500
                 )
                 Text(
-                    text = "Rate",
+                    text = stringResource(R.string.menu_group_rate),
                     fontSize = 12.sp,
                     color = SikshaTheme.colors.Orange500
                 )
                 Text(
-                    text = "Like",
+                    text = stringResource(R.string.menu_group_like),
                     fontSize = 12.sp,
                     color = SikshaTheme.colors.Orange500
                 )
