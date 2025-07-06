@@ -22,7 +22,6 @@ import com.google.android.gms.tasks.Task
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.FeatureChecker
-import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ActivitySplashBinding
 import com.wafflestudio.siksha2.network.OAuthProvider
@@ -51,8 +50,6 @@ class SplashActivity : AppCompatActivity() {
 
     @Inject
     lateinit var featureChecker: FeatureChecker
-
-    // private lateinit var mixpanelManager: MixpanelManager
 
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,8 +81,6 @@ class SplashActivity : AppCompatActivity() {
 
         featureChecker.fetchFeaturesConfig()
         changeAppIcon()
-
-        val mp = MixpanelAPI.getInstance(this, getString(R.string.mixpanel_token), false)
 
         setUpGoogleLogin()
         setUpKakaoLogin()

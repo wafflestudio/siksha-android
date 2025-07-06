@@ -14,6 +14,7 @@ import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.MenuRepository
+import com.wafflestudio.siksha2.repositories.MixpanelManager
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -39,6 +41,9 @@ class DailyRestaurantViewModel @Inject constructor(
     private val restaurantRepository: RestaurantRepository,
     private val sikshaPrefObjects: SikshaPrefObjects
 ) : ViewModel() {
+
+    @Inject
+    lateinit var mixpanelManager: MixpanelManager
 
     private val _dateFilter = MutableLiveData(LocalDate.now())
     val dateFilter: LiveData<LocalDate> = _dateFilter
@@ -176,6 +181,7 @@ class DailyRestaurantViewModel @Inject constructor(
             isOpen = !currentCondition.isOpen
         )
         setMenuFilterCondition(newCondition)
+        trackInstantToggle("is_open_now", !currentCondition.isOpen)
     }
 
     fun toggleReviewFilter() {
@@ -184,6 +190,23 @@ class DailyRestaurantViewModel @Inject constructor(
             hasReview = !currentCondition.hasReview
         )
         setMenuFilterCondition(newCondition)
+        trackInstantToggle("has_reviews", !currentCondition.hasReview)
+    }
+
+    private fun trackInstantToggle(filterType: String, value: Boolean) {
+        val pageName = if (favoriteRestaurantExists.value == true) {
+            "favorites_list_page"
+        } else {
+            "store_list_page"
+        }
+
+        val props = JSONObject().apply {
+            put("filter_type", filterType)
+            put("filter_value", value)
+            put("page_name", pageName)
+        }
+
+        mixpanelManager.track("instant_filter_toggled", props)
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {

@@ -87,11 +87,14 @@ android {
 
     buildTypes {
         release {
+            // 일단 같은 token으로 유지중
+            buildConfigField("String", "MIXPANEL_TOKEN", "\"78a77d031309f778ce12a9529043d219\"")
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
         debug {
+            buildConfigField("String", "MIXPANEL_TOKEN", "\"78a77d031309f778ce12a9529043d219\"")
             isDefault = true
             isMinifyEnabled = false
         }
@@ -200,5 +203,5 @@ dependencies {
     implementation("com.google.android.flexbox:flexbox:3.0.0")
 
     // Mixpanel (Analysis)
-    implementation("com.mixpanel.android:mixpanel-android:7.+")
+    implementation("com.mixpanel.android:mixpanel-android:8.2.0")
 }
