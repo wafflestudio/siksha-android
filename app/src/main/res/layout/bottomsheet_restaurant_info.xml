@@ -82,42 +82,26 @@
             app:layout_constraintTop_toTopOf="@id/location_icon"
             app:layout_constraintBottom_toBottomOf="@id/location_icon"/>
 
-        <ImageView
-            android:id="@+id/iv_location_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/ic_location"
-            app:layout_constraintEnd_toStartOf="@id/tv_location_content"
-            app:layout_constraintTop_toBottomOf="@id/v_title_divider" />
-
-        <TextView
-            android:id="@+id/tv_location_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="16dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/nanum_square_regular"
-            android:maxLines="1"
-            android:textColor="@color/gray_700"
-            android:textSize="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v_title_divider"
-            tools:text="75-1동 전망대 3층, 4층" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mv_map"
+        <FrameLayout
+            android:id="@+id/map_frame"
             android:layout_width="0dp"
             android:layout_height="250dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/frame_mapview"
+            android:clipToOutline="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/location_icon"
-            map:liteMode="true"
-            map:mapType="normal" />
+            app:layout_constraintTop_toBottomOf="@id/location_icon" >
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mv_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                map:liteMode="true"
+                map:mapType="normal" />
+
+        </FrameLayout>
 
         <View
             android:id="@+id/v_blank"
@@ -127,7 +111,7 @@
             android:background="@color/gray_300"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mv_map" />
+            app:layout_constraintTop_toBottomOf="@id/map_frame" />
 
         <ImageView
             android:id="@+id/schedule_icon"

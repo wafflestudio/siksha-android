@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha2.ui.restaurantInfo
 
 import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,11 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.TextView
 import androidx.core.os.BundleCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -97,36 +101,11 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
     private fun initView() {
         with(binding) {
             tvTitle.text = restaurantInfo.nameKr
-            tvLocationContent.text = restaurantInfo.address?.replace("서울 관악구 관악로 1", "") ?: ""
         }
     }
 
     private fun initData() {
         binding.restaurantOperatingTimes = restaurantInfo.etc?.operatingHours?.toRestaurantOperatingTimes() // TODO: RestaurantInfo단부터 DTO 대신 UiState 만들어 사용하기
-
-//        if (restaurantInfo.nameKr?.startsWith("[축제]") == true) {
-//            val operatingTimes = restaurantInfo.etc?.operatingHours?.weekdays
-//            if (restaurantInfo.nameKr?.endsWith("(푸드트럭)") == true) {
-//                binding.restaurantOperatingTimes?.weekdays?.apply {
-//                    breakfast = null
-//                    lunch = parseOperatingTime(operatingTimes?.get(0) ?: "00:00-00:00")
-//                    dinner = null
-//                }
-//                binding.clOperatingTimeWeekdays.tvLunchTitle.text = ""
-//            } else {
-//                binding.clOperatingTimeWeekdays.apply {
-//                    tvBreakfastTitle.text = "5/13, 5/14"
-//                    tvBreakfastTime.text = operatingTimes?.get(0) ?: ""
-//                    tvLunchTitle.text = "5/15"
-//                    tvLunchTime.text = operatingTimes?.get(1) ?: ""
-//                }
-//                binding.restaurantOperatingTimes?.weekdays?.apply {
-//                    breakfast = parseOperatingTime(operatingTimes?.get(0) ?: "00:00-00:00")
-//                    lunch = parseOperatingTime(operatingTimes?.get(1) ?: "00:00-00:00")
-//                    dinner = null
-//                }
-//            }
-//        }
     }
 
     private fun initClickListener() {
@@ -134,12 +113,28 @@ class RestaurantInfoBottomSheet : BottomSheetDialogFragment(), OnMapReadyCallbac
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        // Add a marker in Sydney and move the camera
         MapsInitializer.initialize(requireContext())
         val position = LatLng(restaurantInfo.latitude ?: 0.0, restaurantInfo.longitude ?: 0.0)
+
+        val markerRoot = LayoutInflater.from(context).inflate(R.layout.layout_map_marker, null)
+        val markerText = markerRoot.findViewById<TextView>(R.id.text)
+        markerText.text = restaurantInfo.address?.replace("서울 관악구 관악로 1", "") ?: "정보 없음"
+        markerRoot.measure(
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        markerRoot.layout(0, 0, markerRoot.measuredWidth, markerRoot.measuredHeight)
+        val bitmap = Bitmap.createBitmap(markerRoot.measuredWidth, markerRoot.measuredHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        markerRoot.draw(canvas)
+
         with(googleMap) {
             moveCamera(CameraUpdateFactory.newLatLngZoom(position, 14.5f))
-            addMarker(MarkerOptions().position(position))
+            addMarker(
+                MarkerOptions()
+                    .position(position)
+                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+            )
             mapType = GoogleMap.MAP_TYPE_NORMAL
         }
     }
