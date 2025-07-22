@@ -42,6 +42,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -323,9 +324,8 @@ fun CurrentBoard(
         modifier = modifier
             .padding(top = 15.dp)
             .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = SikshaTheme.colors.Gray400,
+            .background(
+                color = SikshaTheme.colors.BackgroundSecondary,
                 shape = RoundedCornerShape(6.dp)
             )
             .clickable {
@@ -344,7 +344,7 @@ fun CurrentBoard(
             )
             Spacer(modifier = Modifier.width(8.dp))
             ExpandOptionsIcon(
-                color = SikshaTheme.colors.Gray500
+                color = SikshaTheme.colors.Gray600
             )
         }
     }
@@ -373,7 +373,7 @@ fun BoardSelectorCard(
                 color = textColor,
                 fontSize = 13.sp
             )
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(4.dp))
             if (isSelected) {
                 CheckSimpleIcon()
             } else {
@@ -468,6 +468,7 @@ fun ContentEditText(
         onValueChange = onValueChange,
         modifier = modifier,
         textStyle = SikshaTypography.body1.copy(color = SikshaTheme.colors.Black, fontSize = 14.sp),
+        cursorBrush = SolidColor(SikshaTheme.colors.Orange500),
         decorationBox = {
             Box(
                 modifier = Modifier
@@ -502,8 +503,8 @@ fun AnonymousCheckbox(
         Text(
             text = stringResource(R.string.community_create_anonymous),
             fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            color = if (isAnonymous) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray400
+            fontSize = 12.sp,
+            color = if (isAnonymous) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray600
         )
     }
 }

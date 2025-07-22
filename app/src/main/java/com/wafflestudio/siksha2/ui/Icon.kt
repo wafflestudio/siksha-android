@@ -152,7 +152,7 @@ fun CheckSimpleIcon(
     colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Orange500)
 ) {
     Image(
-        modifier = modifier.size(9.dp),
+        modifier = modifier.size(16.dp),
         painter = painterResource(R.drawable.ic_check_simple),
         colorFilter = colorFilter,
         contentDescription = "선택됨"
