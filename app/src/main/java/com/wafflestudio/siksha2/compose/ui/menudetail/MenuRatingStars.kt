@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,10 @@ fun MenuRatingStars(
 ) {
     val bounds = remember { mutableMapOf<Int, Rect>() }
     var rating by remember { mutableFloatStateOf(initialRating) }
+
+    LaunchedEffect(initialRating) {
+        rating = initialRating
+    }
 
     Row(
         modifier = modifier.width(width).height(height)
