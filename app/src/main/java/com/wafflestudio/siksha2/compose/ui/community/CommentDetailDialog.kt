@@ -55,7 +55,7 @@ fun CommentDetailDialog(
                 }
                 Divider(
                     modifier = Modifier.padding(horizontal = 11.dp),
-                    color = Color(0xFFE0E0E0),
+                    color = SikshaTheme.colors.BorderPrimary,
                     thickness = 1.dp
                 )
             }
@@ -79,7 +79,7 @@ fun CommentDetailDialog(
                 }
                 Divider(
                     modifier = Modifier.padding(horizontal = 11.dp),
-                    color = Color(0xFFE0E0E0),
+                    color = SikshaTheme.colors.BorderPrimary,
                     thickness = 1.dp
                 )
             }
