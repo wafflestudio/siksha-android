@@ -37,7 +37,7 @@ fun Chip(
             ) {
                 onClick()
             },
-        color = if (selected) SikshaTheme.colors.TextButton else SikshaTheme.colors.Gray500,
+        color = if (selected) SikshaTheme.colors.TextButton else SikshaTheme.colors.Gray600,
         style = SikshaTypography.body1,
         fontWeight = FontWeight.Bold
     )
