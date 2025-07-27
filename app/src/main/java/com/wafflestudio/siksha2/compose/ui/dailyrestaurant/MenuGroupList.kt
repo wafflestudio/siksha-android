@@ -219,7 +219,7 @@ fun RestaurantInfoRow(
             Image(
                 modifier = Modifier.size(20.dp)
                     .clickable { onToggleFavoriteRestaurant() },
-                painter = if (isFavorite) painterResource(R.drawable.ic_full_star) else painterResource(R.drawable.ic_empty_star),
+                painter = if (isFavorite) painterResource(R.drawable.ic_favorite_full) else painterResource(R.drawable.ic_favorite_empty),
                 contentDescription = "식당 즐겨찾기"
             )
             Image(
