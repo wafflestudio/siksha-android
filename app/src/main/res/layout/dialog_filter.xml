@@ -148,7 +148,7 @@
                         app:thumbElevation="0dp"
                         app:tickVisible="false"
                         app:trackColorActive="@color/orange_500"
-                        app:trackColorInactive="@color/gray_200"
+                        app:trackColorInactive="@color/element_control"
                         app:trackHeight="4dp"
                         />
                 </LinearLayout>
@@ -228,7 +228,7 @@
                         app:thumbColor="@color/orange_500"
                         app:haloColor="@android:color/transparent"
                         app:trackColorActive="@color/orange_500"
-                        app:trackColorInactive="@color/gray_200"
+                        app:trackColorInactive="@color/element_control"
                         app:trackHeight="4dp"
                         app:thumbElevation="0dp"
                         android:valueFrom="2500.0"
