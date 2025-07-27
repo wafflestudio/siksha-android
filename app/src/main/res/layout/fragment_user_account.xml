@@ -61,6 +61,10 @@
             android:id="@+id/logout_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="9dp"
             app:itemText="로그아웃" />
 
         <View
@@ -73,6 +77,10 @@
             android:id="@+id/withdrawal_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="9dp"
             app:itemText="회원 탈퇴"
             app:textColor="@color/accent_like"/>
 
