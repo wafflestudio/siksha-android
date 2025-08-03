@@ -183,7 +183,7 @@ fun PostCreateScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(SikshaTheme.colors.BackgroundGNB)
+            .background(SikshaTheme.colors.BackgroundPrimary)
     ) {
         TopBar(
             title = stringResource(R.string.community_create_screen_title),
@@ -328,6 +328,11 @@ fun CurrentBoard(
                 color = SikshaTheme.colors.BackgroundSecondary,
                 shape = RoundedCornerShape(6.dp)
             )
+            .border(
+                color = SikshaTheme.colors.Gray200,
+                width = 1.dp,
+                shape = RoundedCornerShape(6.dp)
+            )
             .clickable {
                 onClick()
             }
@@ -412,7 +417,7 @@ fun BoardSelector(
             if (idx != boards.size - 1) {
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
-                    color = SikshaTheme.colors.Gray400
+                    color = SikshaTheme.colors.BorderPrimary
                 )
             }
         }
