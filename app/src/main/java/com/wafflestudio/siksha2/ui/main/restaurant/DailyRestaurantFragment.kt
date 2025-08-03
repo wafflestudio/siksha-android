@@ -357,10 +357,6 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
-        parentFragmentManager.setFragmentResultListener("FilterDialog", this) { _, _ ->
-            getFilteredMenuGroups()
-        }
-
         if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
             binding.filterLayout.visibility = View.VISIBLE
             setUpFilterOptions()
@@ -452,12 +448,10 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.filterOpen.setOnClickListener {
             vm.toggleOpenFilter()
-            getFilteredMenuGroups()
         }
 
         binding.filterReview.setOnClickListener {
             vm.toggleReviewFilter()
-            getFilteredMenuGroups()
         }
 
         binding.filterRating.setOnClickListener {
@@ -489,7 +483,6 @@ class DailyRestaurantFragment : Fragment() {
                     checked = vm.showFestival.collectAsState(),
                     onClick = {
                         vm.toggleFestival()
-                        getFilteredMenuGroups()
                     }
                 )
             }
