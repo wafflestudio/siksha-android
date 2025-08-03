@@ -12,7 +12,7 @@ object KakaoLinkHelper {
         restaurantName: String,
         shareDate: LocalDate
     ) {
-        val templateId: Long = 113344
+        val templateId: Long = 121216
         val templateArgs = mutableMapOf<String, String>()
 
         val today = LocalDate.now()

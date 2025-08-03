@@ -203,21 +203,59 @@ class DailyRestaurantViewModel @Inject constructor(
     }
 
     fun getFilteredMenuGroups(showOnlyFavorite: Boolean): Flow<List<MenuGroup>> {
-        val menuBase = _dateFilter.asFlow()
+        // 기본 메뉴 로직
+        return _dateFilter.asFlow()
             .flatMapLatest {
                 menuRepository.getDailyMenuFlow(it)
             }
-            .combine(_mealsOfDayFilter.asFlow()) { dailyMenuGroups, mealsOfDay ->
-                if (dailyMenuGroups == null) {
+            .combine(_mealsOfDayFilter.asFlow()) { menuGroups, mealsOfDay ->
+                if (menuGroups == null) {
                     emptyList()
                 } else {
                     when (mealsOfDay!!) {
-                        MealsOfDay.BR -> dailyMenuGroups.data.breakfast
-                        MealsOfDay.LU -> dailyMenuGroups.data.lunch
-                        MealsOfDay.DN -> dailyMenuGroups.data.dinner
+                        MealsOfDay.BR -> menuGroups.data.breakfast
+                        MealsOfDay.LU -> menuGroups.data.lunch
+                        MealsOfDay.DN -> menuGroups.data.dinner
                     }
                 }
+            }.map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
+            // 축제 적용
+            .combine(showFestival) { menuGroups, showFestivalFlag ->
+                menuGroups.filter { menuGroup ->
+                    menuGroup.nameKr!!.startsWith("[축제]") == showFestivalFlag
+                }
             }
+            // 필터 적용
+            .combine(menuFilterCondition) { menuGroups, filterConditions -> Pair(menuGroups, filterConditions) }
+            .combine(allRestaurant) { (menuGroups, filterCondition), allRes ->
+                val dateTime = LocalDateTime.now()
+                val date = dateTime.toLocalDate()
+                val time = dateTime.toLocalTime()
+
+                menuGroups.map { menuGroup ->
+                    menuGroup.copy(
+                        isFavorite = allRes.find { menuGroup.id == it.id }?.isFavorite ?: false
+                    )
+                }.filter { menuGroup ->
+                    val restaurantInfo = allRes.find { menuGroup.id == it.id }
+                    val operatingHour = restaurantInfo?.etc?.operatingHours?.let {
+                        when (date.dayOfWeek) {
+                            DayOfWeek.SATURDAY -> it.saturday
+                            DayOfWeek.SUNDAY -> it.holiday
+                            else -> it.weekdays
+                        }
+                    }
+                    !_menuFilterCondition.value.isOpen ||
+                        (
+                            !operatingHour.isNullOrEmpty() &&
+                                operatingHour.any { interval ->
+                                    val (start, end) = interval.split("-").map { LocalTime.parse(it) }
+                                    time in start..end
+                                }
+                            )
+                }
+            }
+            // 영업중 필터
             .combine(allRestaurant) { menuGroups, allRes ->
                 val dateTime = LocalDateTime.now()
                 val date = dateTime.toLocalDate()
@@ -244,35 +282,13 @@ class DailyRestaurantViewModel @Inject constructor(
                                 }
                             )
                 }
-            }
-            .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
-            .combine(if (showOnlyFavorite) favoriteRestaurantOrder else restaurantOrder) { menuGroups, (order) ->
-                val result = mutableListOf<MenuGroup>()
-                val sortedMenuGroups = menuGroups.sortedByDescending { it.id }
-                order.forEach {
-                    sortedMenuGroups.find { item -> item.id == it }?.also { result.add(it) }
-                }
-                result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
-                result
-            }
-        val menuFestivalApplied = menuBase.map {
-            it.filter { item ->
-                item.nameKr!!.startsWith("[축제]") == showFestival.value
-            }
-        }
-        val menuFilterApplied = if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
-            menuFestivalApplied
-                // 사용자 필터
-                .map { menuGroupList ->
-                    menuGroupList.filter { item ->
+                    .filter { item ->
                         _menuFilterCondition.value.distance == default.distance ||
                             getDistance(item)?.let {
                                 it <= _menuFilterCondition.value.distance
                             } ?: true
                     }
-                }
-                .map { menuGroupList ->
-                    menuGroupList.map { restaurant ->
+                    .map { restaurant ->
                         val newRestaurant = restaurant.copy(
                             menus = restaurant.menus.filter { menu ->
                                 menu.price?.let { menuPrice ->
@@ -295,9 +311,7 @@ class DailyRestaurantViewModel @Inject constructor(
                         )
                         newRestaurant
                     }
-                }
-                .map { menuGroupList ->
-                    menuGroupList.map { restaurant ->
+                    .map { restaurant ->
                         val newRestaurant = restaurant.copy(
                             menus = restaurant.menus.filter { menu ->
                                 _menuFilterCondition.value.categories.let { selectedCategories ->
@@ -307,14 +321,20 @@ class DailyRestaurantViewModel @Inject constructor(
                         )
                         newRestaurant
                     }
+            }
+            // 식당 순서, 표시 여부 조정
+            .combine(if (showOnlyFavorite) favoriteRestaurantOrder else restaurantOrder) { menuGroups, (order) ->
+                val result = mutableListOf<MenuGroup>()
+                val sortedMenuGroups = menuGroups.sortedByDescending { it.id }
+                order.forEach {
+                    sortedMenuGroups.find { item -> item.id == it }?.also { result.add(it) }
                 }
-                .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
-                    menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
-                }
-        } else {
-            menuFestivalApplied
-        }
-        return menuFilterApplied
+                result.addAll(sortedMenuGroups.filterNot { item -> item.id in order })
+                result
+            }
+            .combine(showEmptyRestaurant) { menuGroups, showEmpty ->
+                menuGroups.filter { it.menus.isNotEmpty() || showEmpty }
+            }
     }
 
     suspend fun getRestaurantInfo(id: Long): RestaurantInfo? {
