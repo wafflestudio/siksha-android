@@ -1,16 +1,20 @@
 package com.wafflestudio.siksha2.compose.ui.dailyrestaurant
 
+import android.view.LayoutInflater
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,16 +23,28 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.databinding.LayoutFilterBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
@@ -39,6 +55,7 @@ import com.wafflestudio.siksha2.utils.toPrettyString
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.Locale
+import kotlin.math.roundToInt
 
 @Composable
 fun MenuGroupList(
@@ -51,41 +68,93 @@ fun MenuGroupList(
     onRestaurantShareClicked: (Long) -> Unit,
     onClickMenu: (Long) -> Unit,
     onToggleLikeMenu: (Long, Boolean) -> Unit,
+    setUpFilter: (LayoutFilterBinding) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
-            .background(SikshaTheme.colors.BackgroundMain)
-            .padding(start = 8.dp, end = 8.dp, bottom = 17.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp)
-    ) {
-        items(menuGroupList) { menuGroup ->
-            if (menuGroup != null) {
-                val restaurant = restaurantsList.find { it.id == menuGroup.id }
-                val operatingHours = restaurant?.etc?.operatingHours?.toRestaurantOperatingTimes()
-                val dailyOperatingTime = when (dayOfWeek) {
-                    DayOfWeek.SATURDAY -> operatingHours?.saturday
-                    DayOfWeek.SUNDAY -> operatingHours?.holiday
-                    else -> operatingHours?.weekdays
-                }
-                val operatingTime = when (mealsOfDay) {
-                    MealsOfDay.BR -> dailyOperatingTime?.breakfast
-                    MealsOfDay.LU -> dailyOperatingTime?.lunch
-                    MealsOfDay.DN -> dailyOperatingTime?.dinner
-                }
+    val toolbarHeight = 60.dp
+    val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.toPx() }
+    val toolbarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
 
-                RestaurantMenu(
-                    menuGroup = menuGroup,
-                    operatingTime = operatingTime?.toString() ?: "정보 없음",
-                    mealsOfDay = mealsOfDay,
-                    onRestaurantInfoClicked = { onRestaurantInfoClicked(menuGroup.id) },
-                    onToggleFavoriteRestaurant = { onToggleFavoriteRestaurant(menuGroup.id) },
-                    onRestaurantShareClicked = { onRestaurantShareClicked(menuGroup.id) },
-                    onClickMenu = onClickMenu,
-                    onToggleLikeMenu = onToggleLikeMenu
-                )
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val delta = available.y
+                val newOffset = (toolbarOffsetHeightPx.floatValue + delta)
+                    .coerceIn(-toolbarHeightPx, 0f)
+                toolbarOffsetHeightPx.floatValue = newOffset
+                return Offset.Zero
             }
         }
+    }
+
+    LaunchedEffect(menuGroupList.size) {
+        if (menuGroupList.isEmpty()) {
+            toolbarOffsetHeightPx.floatValue = 0f
+        }
+    }
+
+    Box(
+        modifier = modifier.fillMaxSize()
+            .background(SikshaTheme.colors.BackgroundMain)
+            .nestedScroll(nestedScrollConnection)
+    ) {
+        if (menuGroupList.isNotEmpty()) {
+            LazyColumn(
+                contentPadding = PaddingValues(top = toolbarHeight),
+                modifier = Modifier.fillMaxSize()
+                    .padding(start = 8.dp, end = 8.dp, bottom = 17.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp)
+            ) {
+                items(menuGroupList) { menuGroup ->
+                    if (menuGroup != null) {
+                        val restaurant = restaurantsList.find { it.id == menuGroup.id }
+                        val operatingHours = restaurant?.etc?.operatingHours?.toRestaurantOperatingTimes()
+                        val dailyOperatingTime = when (dayOfWeek) {
+                            DayOfWeek.SATURDAY -> operatingHours?.saturday
+                            DayOfWeek.SUNDAY -> operatingHours?.holiday
+                            else -> operatingHours?.weekdays
+                        }
+                        val operatingTime = when (mealsOfDay) {
+                            MealsOfDay.BR -> dailyOperatingTime?.breakfast
+                            MealsOfDay.LU -> dailyOperatingTime?.lunch
+                            MealsOfDay.DN -> dailyOperatingTime?.dinner
+                        }
+
+                        RestaurantMenu(
+                            menuGroup = menuGroup,
+                            operatingTime = operatingTime?.toString() ?: "정보 없음",
+                            mealsOfDay = mealsOfDay,
+                            onRestaurantInfoClicked = { onRestaurantInfoClicked(menuGroup.id) },
+                            onToggleFavoriteRestaurant = { onToggleFavoriteRestaurant(menuGroup.id) },
+                            onRestaurantShareClicked = { onRestaurantShareClicked(menuGroup.id) },
+                            onClickMenu = onClickMenu,
+                            onToggleLikeMenu = onToggleLikeMenu
+                        )
+                    }
+                }
+            }
+        } else {
+            Text(
+                text = stringResource(R.string.daily_restaurant_no_menus),
+                color = SikshaTheme.colors.Gray700,
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxSize()
+                    .padding(top = toolbarHeight)
+            )
+        }
+
+        AndroidView(
+            factory = { context ->
+                val binding = LayoutFilterBinding.inflate(LayoutInflater.from(context), null, false)
+                setUpFilter(binding)
+                binding.root
+            },
+            modifier = Modifier
+                .height(toolbarHeight)
+                .align(Alignment.TopCenter)
+                .offset { IntOffset(x = 0, y = toolbarOffsetHeightPx.floatValue.roundToInt()) }
+        )
     }
 }
 

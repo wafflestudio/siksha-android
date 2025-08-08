@@ -23,6 +23,7 @@ import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.components.festival.FestivalToggle
 import com.wafflestudio.siksha2.compose.ui.dailyrestaurant.MenuGroupList
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
+import com.wafflestudio.siksha2.databinding.LayoutFilterBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.SikshaTheme
@@ -174,11 +175,6 @@ class DailyRestaurantFragment : Fragment() {
             }
         )
 
-        binding.emptyText.setOnTouchListener { _, ev ->
-            gestureDetector.onTouchEvent(ev)
-            true
-        }
-
         vm.favoriteRestaurantExists.observe(viewLifecycleOwner) {
             if (isFavorite) {
                 binding.emptyFavorite.root.setVisibleOrGone(it.not())
@@ -292,13 +288,6 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
-        if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
-            binding.filterLayout.visibility = View.VISIBLE
-            setUpFilterOptions()
-        } else {
-            binding.filterLayout.visibility = View.GONE
-        }
-
         if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
             vm.dateFilter.observe(viewLifecycleOwner) { targetDate ->
                 if (vm.festivalDates.value.any { festivalDate -> targetDate == LocalDate.parse(festivalDate) }) {
@@ -314,7 +303,7 @@ class DailyRestaurantFragment : Fragment() {
         }
     }
 
-    private fun setUpFilterOptions() {
+    private fun setUpFilterOptions(binding: LayoutFilterBinding) {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { condition ->
                 binding.filterDistance.setFilter(
@@ -428,8 +417,8 @@ class DailyRestaurantFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
-                    binding.menuGroupListCompose.setVisibleOrGone(it.isNotEmpty())
-                    binding.menuGroupListCompose.setContent {
+                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    binding.menuGroupList.setContent {
                         SikshaTheme {
                             MenuGroupList(
                                 menuGroupList = it,
@@ -485,11 +474,11 @@ class DailyRestaurantFragment : Fragment() {
                                 },
                                 onToggleFavoriteRestaurant = {
                                     vm.toggleRestaurantFavorite(it)
-                                }
+                                },
+                                setUpFilter = { setUpFilterOptions(it) }
                             )
                         }
                     }
-                    binding.emptyText.setVisibleOrGone(it.isEmpty())
                 }
         }
     }
