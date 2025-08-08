@@ -24,6 +24,9 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,12 +52,39 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.ui.main.restaurant.DailyRestaurantViewModel
 import com.wafflestudio.siksha2.ui.restaurantInfo.model.toRestaurantOperatingTimes
 import com.wafflestudio.siksha2.utils.toPrettyString
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.Locale
 import kotlin.math.roundToInt
+
+@Composable
+fun DailyRestaurantRoute(
+    vm: DailyRestaurantViewModel,
+    isFavorite: Boolean,
+    onRestaurantInfoClicked: (Long) -> Unit,
+    onToggleFavoriteRestaurant: (Long) -> Unit,
+    onRestaurantShareClicked: (Long) -> Unit,
+    onClickMenu: (Long) -> Unit,
+    onToggleLikeMenu: (Long, Boolean) -> Unit,
+    setUpFilter: (LayoutFilterBinding) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val menuGroupList by vm.getFilteredMenuGroups(isFavorite).collectAsState(initial = emptyList())
+    val restaurantsList by vm.allRestaurant.collectAsState(initial = emptyList())
+    val mealsOfDay by vm.mealsOfDayFilter.observeAsState()
+    val dateFilter by vm.dateFilter.observeAsState()
+
+    MenuGroupList(
+        menuGroupList = menuGroupList,
+        restaurantsList = restaurantsList,
+        mealsOfDay = mealsOfDay ?: MealsOfDay.LU,
+        dayOfWeek = (dateFilter ?: LocalDate.now()).dayOfWeek,
+        onRestaurantInfoClicked, onToggleFavoriteRestaurant, onRestaurantShareClicked, onClickMenu, onToggleLikeMenu, setUpFilter, modifier
+    )
+}
 
 @Composable
 fun MenuGroupList(
