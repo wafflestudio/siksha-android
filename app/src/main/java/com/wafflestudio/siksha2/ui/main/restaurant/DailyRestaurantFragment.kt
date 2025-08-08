@@ -417,7 +417,6 @@ class DailyRestaurantFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.getFilteredMenuGroups(isFavorite)
                 .collect {
-                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
                     binding.menuGroupList.setContent {
                         SikshaTheme {
                             MenuGroupList(
