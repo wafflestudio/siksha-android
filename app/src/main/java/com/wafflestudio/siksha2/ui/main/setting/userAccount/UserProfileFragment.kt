@@ -27,7 +27,7 @@ import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class UserProfileFragment : Fragment() {
+class UserProfileFragment : Fragment(), ImageBottomDialog.Listener {
     private lateinit var binding: FragmentUserProfileBinding
     private val settingViewModel: SettingViewModel by activityViewModels()
 
@@ -129,10 +129,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun showImagePickerBottomDialog() {
-        val bottomSheetFragment = ImageBottomDialog(
-            onGallerySelected = { changeToGalleryImage() },
-            onDefaultImageSelected = { changeToDefaultImage() }
-        )
+        val bottomSheetFragment = ImageBottomDialog()
         bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
     }
 
@@ -161,12 +158,12 @@ class UserProfileFragment : Fragment() {
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
-    private fun changeToGalleryImage() {
+    override fun onGallerySelected() {
         pickImage.launch("image/*")
         imageChanged = true
     }
 
-    private fun changeToDefaultImage() {
+    override fun onDefaultImageSelected() {
         settingViewModel.updateImageUri(null)
         imageView.apply {
             setImageResource(R.drawable.ic_rice_bowl)
