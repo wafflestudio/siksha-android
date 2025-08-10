@@ -13,14 +13,16 @@ import javax.inject.Singleton
 class MixpanelManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private val token: String =
+    private val token: String by lazy {
         when (BuildConfig.BUILD_TYPE) {
             "release" -> context.getString(R.string.mixpanel_token_release)
             else -> context.getString(R.string.mixpanel_token_debug)
         }
+    }
 
-    private val mp: MixpanelAPI =
+    private val mp: MixpanelAPI by lazy {
         MixpanelAPI.getInstance(context, token, false)
+    }
 
     fun track(eventName: String, props: JSONObject? = null) {
         if (props != null) {
