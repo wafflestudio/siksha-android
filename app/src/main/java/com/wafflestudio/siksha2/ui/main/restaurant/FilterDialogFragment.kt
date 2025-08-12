@@ -29,11 +29,19 @@ import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
+import com.wafflestudio.siksha2.repositories.MixpanelManager
+import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
 import java.util.Locale
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterDialogFragment(
     private val mode: FilterMode
 ) : DialogFragment() {
+    @Inject
+    lateinit var mixpanelManager: MixpanelManager
+
     private var _binding: DialogFilterBinding? = null
     private val binding get() = _binding!!
 
@@ -77,6 +85,8 @@ class FilterDialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        trackFilterModalOpened()
 
         setupVisibility()
         setupObservers()
@@ -481,6 +491,7 @@ class FilterDialogFragment(
         }
 
         updateCondition()
+        trackFilterReset()
     }
 
     private fun applyFiltersByMode() {
@@ -495,6 +506,68 @@ class FilterDialogFragment(
         }
 
         vm.setMenuFilterCondition(applyCondition)
+        trackFilterApplied()
+    }
+    private fun getEntryPoint(): String = when (mode) {
+        FilterMode.FULL -> "main_filter"
+        FilterMode.DISTANCE -> "distance_filter"
+        FilterMode.PRICE -> "price_filter"
+        FilterMode.RATING -> "rating_filter"
+        FilterMode.CATEGORY -> "category_filter"
+    }
+
+    private fun getPageName(): String {
+        return if (vm.favoriteRestaurantExists.value == true) {
+            "favorites_list_page"
+        } else {
+            "store_list_page"
+        }
+    }
+
+    private fun trackFilterModalOpened() {
+        val props = JSONObject().apply {
+            put("entry_point", getEntryPoint())
+            put("page_name", getPageName())
+        }
+
+        mixpanelManager.track("filter_modal_opened", props)
+    }
+
+    private fun trackFilterApplied() {
+        val appliedOptions = JSONObject().apply {
+            if (mode == FilterMode.FULL || mode == FilterMode.PRICE) {
+                put("price_min", selectedCondition.minPrice.toInt())
+                put("price_max", selectedCondition.maxPrice.toInt())
+            }
+            if (mode == FilterMode.FULL || mode == FilterMode.RATING) {
+                put("min_rating", selectedCondition.minRating)
+            }
+            if (mode == FilterMode.FULL || mode == FilterMode.DISTANCE) {
+                put("max_distance_km", selectedCondition.distance / 1000f)
+            }
+            if (mode == FilterMode.FULL) {
+                put("is_open_now", selectedCondition.isOpen)
+                put("has_reviews", selectedCondition.hasReview)
+            }
+        }
+
+        val props = JSONObject().apply {
+            put("entry_point", getEntryPoint())
+            put("applied_filter_options", appliedOptions)
+            put("number_of_applied_filters", appliedOptions.length())
+            put("page_name", getPageName())
+        }
+
+        mixpanelManager.track("filter_modal_applied", props)
+    }
+
+    private fun trackFilterReset() {
+        val props = JSONObject().apply {
+            put("entry_point", getEntryPoint())
+            put("page_name", getPageName())
+        }
+
+        mixpanelManager.track("filter_reset", props)
     }
 
     override fun onDestroyView() {
