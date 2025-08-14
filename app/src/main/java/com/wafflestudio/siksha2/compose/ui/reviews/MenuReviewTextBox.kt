@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,7 +26,7 @@ fun MenuReviewTextBox(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.background(SikshaTheme.colors.White)
+        modifier = modifier
     ) {
         Image(
             painter = painterResource(R.drawable.review_speech_bubble_tail),
@@ -54,7 +55,8 @@ fun MenuReviewTextBox(
                 text = reviewText,
                 color = SikshaTheme.colors.Black,
                 fontSize = 13.sp,
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.TopStart),
+                textAlign = TextAlign.Start
             )
         }
     }
