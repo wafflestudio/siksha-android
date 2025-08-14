@@ -62,7 +62,7 @@ class ScalableImageView @JvmOverloads constructor(
      */
     fun setModel(image: String) {
         val placeHolderDrawable = CircularProgressDrawable(context).apply {
-            setColorSchemeColors(context.getColor(R.color.orange_main))
+            setColorSchemeColors(context.getColor(R.color.orange_500))
             strokeWidth = 10f
             centerRadius = 40f
             start()

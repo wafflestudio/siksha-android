@@ -18,14 +18,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 
 @Composable
@@ -42,7 +40,7 @@ fun ConfirmDeleteDialog(
             modifier = modifier
                 .padding(horizontal = 30.dp)
                 .background(
-                    color = SikshaColors.White900,
+                    color = SikshaTheme.colors.White,
                     shape = RoundedCornerShape(26.dp)
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -53,7 +51,8 @@ fun ConfirmDeleteDialog(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = SikshaTheme.colors.Black
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
@@ -61,10 +60,11 @@ fun ConfirmDeleteDialog(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = SikshaTheme.colors.Black
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Divider(color = Color(0xFFE0E0E0))
+            Divider(color = SikshaTheme.colors.BorderPrimary)
             Row(
                 modifier = Modifier.height(50.dp)
             ) {
@@ -77,13 +77,13 @@ fun ConfirmDeleteDialog(
                 ) {
                     Text(
                         text = "취소",
-                        color = SikshaColors.OrangeMain,
+                        color = SikshaTheme.colors.Orange500,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
                 Divider(
-                    color = Color(0xFFE0E0E0),
+                    color = SikshaTheme.colors.BorderPrimary,
                     modifier = Modifier
                         .fillMaxHeight()
                         .width(1.dp)
@@ -97,7 +97,7 @@ fun ConfirmDeleteDialog(
                 ) {
                     Text(
                         text = "삭제",
-                        color = Color.Gray,
+                        color = SikshaTheme.colors.Gray700,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )

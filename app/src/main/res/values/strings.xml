@@ -2,6 +2,7 @@
     <string name="splash_login_kakao_button">카카오로 로그인하기</string>
     <string name="splash_login_google_button">구글로 로그인하기</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_info">정보가 없습니다</string>
     <string name="restaurant_info_location_label">식당 위치</string>
     <string name="restaurant_info_operation_time_label">영업 시간</string>
     <string name="menu_group_empty">해당 시간대의 메뉴가 없습니다.</string>
@@ -34,7 +35,7 @@
     <string name="menu_detail_review_label">메뉴평가</string>
     <string name="leave_review_title">나의 평가 남기기</string>
     <string name="leave_review_description">식단 한 줄 평을 함께 남겨보세요!</string>
-    <string name="leave_review_button">평가 등록</string>
+    <string name="leave_review_button">올리기</string>
     <string name="leave_review_star_description">별점을 선택해주세요.</string>
     <string name="leave_review_how_about_with_bottom">은 어땠나요?</string>
     <string name="leave_review_how_about_wo_bottom">는 어땠나요?</string>
@@ -45,7 +46,8 @@
     <string name="menu_detail_toolbar">리뷰</string>
     <string name="menu_detail_no_review">아직 해당 메뉴의 리뷰가 없습니다.\n리뷰를 남겨보세요</string>
     <string name="menu_detail_review_people_total">총</string>
-    <string name="menu_detail_review_people_has_reviewed">개의 평가가 있어요!</string>
+    <string name="menu_detail_review_people_count">명</string>
+    <string name="menu_detail_review_people_has_reviewed">이 평가했어요!</string>
     <string name="menu_detail_photo_review_gather">사진 리뷰 모아보기</string>
     <string name="menu_detail_review_gather">리뷰</string>
     <string name="menu_detail_plus">+</string>
