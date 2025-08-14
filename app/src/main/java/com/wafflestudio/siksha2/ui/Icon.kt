@@ -1,8 +1,10 @@
 package com.wafflestudio.siksha2.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,7 +18,7 @@ import com.wafflestudio.siksha2.R
 @Composable
 fun CommentIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Gray600)
 ) {
     Image(
         modifier = modifier.size(12.dp),
@@ -30,7 +32,7 @@ fun CommentIcon(
 fun ThumbIcon(
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.OrangeMain)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Orange500)
 ) {
     Image(
         modifier = modifier.size(12.dp),
@@ -43,7 +45,7 @@ fun ThumbIcon(
 @Composable
 fun EtcIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Gray600)
 ) {
     Image(
         modifier = modifier.size(12.dp),
@@ -56,7 +58,7 @@ fun EtcIcon(
 @Composable
 fun NavigateUpIcon(
     modifier: Modifier = Modifier,
-    color: Color = SikshaColors.White900
+    color: Color = SikshaTheme.colors.IconWhiteIcon
 ) {
     Box(
         modifier = modifier.size(30.dp),
@@ -73,7 +75,7 @@ fun NavigateUpIcon(
 @Composable
 fun ExpandOptionsIcon(
     modifier: Modifier = Modifier,
-    color: Color = SikshaColors.White900
+    color: Color = SikshaTheme.colors.White
 ) {
     Image(
         modifier = modifier
@@ -88,7 +90,7 @@ fun ExpandOptionsIcon(
 @Composable
 fun CancelIcon(
     modifier: Modifier = Modifier,
-    color: Color = SikshaColors.White900
+    color: Color = SikshaTheme.colors.IconWhiteIcon
 ) {
     Box(
         modifier = modifier.size(30.dp),
@@ -129,20 +131,28 @@ fun AddPostImageIcon(
 fun NewPostIcon(
     modifier: Modifier = Modifier
 ) {
-    Image(
-        modifier = modifier.size(50.dp),
-        painter = painterResource(R.drawable.ic_new_post),
-        contentDescription = "글쓰기"
-    )
+    Box(
+        modifier = modifier.size(50.dp)
+            .background(
+                color = SikshaTheme.colors.Orange500,
+                shape = RoundedCornerShape(25.dp)
+            )
+    ) {
+        Image(
+            modifier = Modifier.align(Alignment.Center),
+            painter = painterResource(R.drawable.ic_new_post),
+            contentDescription = "글쓰기"
+        )
+    }
 }
 
 @Composable
 fun CheckSimpleIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.OrangeMain)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Orange500)
 ) {
     Image(
-        modifier = modifier.size(9.dp),
+        modifier = modifier.size(16.dp),
         painter = painterResource(R.drawable.ic_check_simple),
         colorFilter = colorFilter,
         contentDescription = "선택됨"
@@ -152,7 +162,7 @@ fun CheckSimpleIcon(
 @Composable
 fun SpeechBubbleIcon(
     modifier: Modifier = Modifier,
-    colorFilter: ColorFilter? = ColorFilter.tint(SikshaColors.Gray600)
+    colorFilter: ColorFilter? = ColorFilter.tint(SikshaTheme.colors.Gray600)
 ) {
     Image(
         modifier = modifier,

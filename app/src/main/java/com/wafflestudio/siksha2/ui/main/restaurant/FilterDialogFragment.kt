@@ -27,7 +27,6 @@ import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import com.wafflestudio.siksha2.repositories.MixpanelManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -112,7 +111,6 @@ class FilterDialogFragment() : DialogFragment() {
         setupReviewSelection()
         setupCategorySelection()
         setupButtons()
-        setupButtonShadow()
         setupLayoutMargin()
         setupDragToDismiss()
     }
@@ -225,7 +223,7 @@ class FilterDialogFragment() : DialogFragment() {
                 }
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 setPadding(10, 10, 10, 10)
-                setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
+                setTextColor(ContextCompat.getColorStateList(context, R.color.black))
                 shapeAppearanceModel = shapeAppearanceModel.toBuilder()
                     .setAllCornerSizes(dpToPx(30).toFloat())
                     .build()
@@ -331,11 +329,6 @@ class FilterDialogFragment() : DialogFragment() {
             FilterMode.RATING -> binding.ratingSection.visibility = View.VISIBLE
             FilterMode.CATEGORY -> binding.categorySection.visibility = View.VISIBLE
         }
-    }
-
-    private fun setupButtonShadow() {
-        val color = if (mode == FilterMode.FULL) Color.WHITE else Color.TRANSPARENT
-        binding.buttonSection.background = color.toDrawable()
     }
 
     private fun setupLayoutMargin() {
@@ -469,15 +462,15 @@ class FilterDialogFragment() : DialogFragment() {
 
     private fun setSelectedCategoryChip(chip: Chip) {
         chip.apply {
-            setChipBackgroundColorResource(R.color.chip_selected_bg)
+            setChipBackgroundColorResource(R.color.orange_tint)
             chipStrokeWidth = dpToPx(1).toFloat()
-            setChipStrokeColorResource(R.color.orange_main)
+            setChipStrokeColorResource(R.color.orange_500)
         }
     }
 
     private fun setUnselectedCategoryChip(chip: Chip) {
         chip.apply {
-            setChipBackgroundColorResource(R.color.chip_default_bg)
+            setChipBackgroundColorResource(R.color.background_secondary)
             chipStrokeWidth = dpToPx(1).toFloat()
             chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#DFDFDF"))
         }

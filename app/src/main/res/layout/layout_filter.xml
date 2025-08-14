@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingTop="9dp"
+    android:paddingBottom="17dp"
+    android:gravity="center_vertical"
+    android:background="@color/background_main">
+
+    <ImageView
+        android:id="@+id/menu_filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/ic_menu_filter"
+        app:tint="@color/gray_600">
+    </ImageView>
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:requiresFadingEdge="horizontal"
+        android:fadingEdgeLength="50dp"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="8dp"
+            android:orientation="horizontal"
+            >
+
+            <com.wafflestudio.siksha2.components.MenuFilterField
+                android:id = "@+id/filter_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:showArrow="true"
+                app:filterText="거리" />
+
+            <com.wafflestudio.siksha2.components.MenuFilterField
+                android:id = "@+id/filter_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:showArrow="true"
+                app:filterText="가격" />
+
+            <com.wafflestudio.siksha2.components.MenuFilterField
+                android:id = "@+id/filter_open"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:filterText="영업 중" />
+
+            <com.wafflestudio.siksha2.components.MenuFilterField
+                android:id = "@+id/filter_review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:filterText="리뷰" />
+
+            <com.wafflestudio.siksha2.components.MenuFilterField
+                android:id = "@+id/filter_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:showArrow="true"
+                app:filterText="최소 평점" />
+
+            <com.wafflestudio.siksha2.components.MenuFilterField
+                android:id = "@+id/filter_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:showArrow="true"
+                app:filterText="카테고리" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</LinearLayout>

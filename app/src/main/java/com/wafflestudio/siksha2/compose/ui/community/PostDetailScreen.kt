@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -66,7 +67,7 @@ import com.wafflestudio.siksha2.models.Comment
 import com.wafflestudio.siksha2.models.Post
 import com.wafflestudio.siksha2.ui.EtcIcon
 import com.wafflestudio.siksha2.ui.NavigateUpIcon
-import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme.colors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.ThumbIcon
@@ -148,7 +149,7 @@ fun PostDetailScreenFailed(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.background(SikshaColors.White900)
+        modifier = modifier.background(colors.White)
     ) {
         TopBar(
             title = "",
@@ -166,7 +167,7 @@ fun PostDetailScreenFailed(
         ) {
             Text(
                 text = errorMessage,
-                color = SikshaColors.Gray400,
+                color = colors.Gray400,
                 fontSize = 12.sp,
                 style = MaterialTheme.typography.body2
             )
@@ -180,7 +181,7 @@ fun PostDetailScreenLoading(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.background(SikshaColors.White900)
+        modifier = modifier.background(colors.White)
     ) {
         TopBar(
             title = "",
@@ -281,7 +282,7 @@ fun PostDetailScreenSuccess(
     )
 
     Column(
-        modifier = modifier.background(SikshaColors.White900)
+        modifier = modifier.background(colors.BackgroundPrimary)
     ) {
         Column(
             modifier = Modifier.weight(1f)
@@ -422,7 +423,6 @@ private suspend fun LazyListState.animateScrollToLastItem() {
     animateScrollToItem(targetIndex)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostHeader(
     post: Post,
@@ -447,7 +447,7 @@ fun PostHeader(
         ) {
             Text(
                 text = post.nickname,
-                color = SikshaColors.Black900,
+                color = colors.Black,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 style = SikshaTypography.body2,
@@ -456,7 +456,7 @@ fun PostHeader(
             )
             Text(
                 text = post.updatedAt.toParsedTimeString(),
-                color = SikshaColors.Gray400,
+                color = colors.Gray600,
                 fontSize = 10.sp,
                 style = SikshaTypography.body2
             )
@@ -485,13 +485,15 @@ fun PostBody(
             text = post.title,
             modifier = Modifier.padding(horizontal = 20.dp),
             style = SikshaTypography.subtitle2,
-            fontWeight = FontWeight.ExtraBold
+            fontWeight = FontWeight.ExtraBold,
+            color = colors.Black
         )
         Spacer(modifier = Modifier.height(13.dp))
         Text(
             text = post.content,
             modifier = Modifier.padding(horizontal = 20.dp),
-            style = SikshaTypography.body2
+            style = SikshaTypography.body2,
+            color = colors.Gray900
         )
         Spacer(modifier = Modifier.height(20.dp))
         post.etc?.images?.let { images ->
@@ -558,12 +560,16 @@ fun PostLikeButton(
         modifier = modifier
             .border(
                 width = 1.dp,
-                color = SikshaColors.OrangeMain,
+                color = colors.Orange500,
                 shape = RoundedCornerShape(6.dp)
             )
             .clip(RoundedCornerShape(6.dp))
-            .background(
-                color = if (isLiked) SikshaColors.OrangeMain else SikshaColors.White900
+            .then(
+                if (isLiked) {
+                    Modifier.background(colors.Orange500)
+                } else {
+                    Modifier
+                }
             )
             .clickable { onClick() }
             .padding(horizontal = 9.dp, vertical = 6.dp),
@@ -571,14 +577,14 @@ fun PostLikeButton(
     ) {
         ThumbIcon(
             modifier = Modifier.size(11.dp),
-            colorFilter = ColorFilter.tint(if (isLiked) SikshaColors.White900 else SikshaColors.OrangeMain)
+            colorFilter = ColorFilter.tint(if (isLiked) colors.IconWhiteIcon else colors.Orange500)
         )
         Spacer(modifier = Modifier.width(5.dp))
         Text(
             text = stringResource(R.string.community_post_like),
             fontWeight = FontWeight.Bold,
             fontSize = 10.sp,
-            color = if (isLiked) SikshaColors.White900 else SikshaColors.OrangeMain
+            color = if (isLiked) colors.TextButton else colors.Orange500
         )
     }
 }
@@ -596,7 +602,7 @@ fun UnavailableCommentItem(
     ) {
         Text(
             text = stringResource(R.string.community_comment_unavailable),
-            color = SikshaColors.Gray400,
+            color = colors.Gray400,
             fontSize = 12.sp,
             style = MaterialTheme.typography.body2
         )
@@ -641,7 +647,7 @@ fun CommentItem(
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = comment.nickname,
-                    color = SikshaColors.Black900,
+                    color = colors.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 11.sp,
                     style = SikshaTypography.body2
@@ -649,7 +655,7 @@ fun CommentItem(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = comment.updatedAt.toParsedTimeString(),
-                    color = SikshaColors.Gray400,
+                    color = colors.Gray600,
                     fontSize = 10.sp,
                     style = SikshaTypography.body2
                 )
@@ -657,7 +663,8 @@ fun CommentItem(
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = comment.content,
-                style = SikshaTypography.body2
+                style = SikshaTypography.body2,
+                color = colors.Gray900
             )
             Spacer(modifier = Modifier.height(10.dp))
             EtcIcon(
@@ -707,7 +714,7 @@ fun CommentLikeButton(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(6.dp))
-            .background(color = SikshaColors.Gray100)
+            .background(color = colors.Gray100)
             .clickable { onClick() }
             .size(width = 35.dp, height = 53.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -721,7 +728,7 @@ fun CommentLikeButton(
         Text(
             text = likeCount.toString(),
             fontSize = 10.sp,
-            color = SikshaColors.OrangeMain,
+            color = colors.Orange500,
             style = SikshaTypography.body2
         )
     }
@@ -743,6 +750,7 @@ fun CommentInputRow(
             .heightIn(max = 100.dp)
             .fillMaxWidth(),
         hint = stringResource(R.string.community_comment_hint),
+        textStyle = TextStyle.Default.copy(color = colors.Black, fontSize = 13.sp),
         leadingIcon = {
             Row(
                 modifier = Modifier
@@ -766,8 +774,8 @@ fun CommentInputRow(
                 Text(
                     text = stringResource(R.string.community_comment_anonymous),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 10.sp,
-                    color = if (isAnonymous) MaterialTheme.colors.primary else SikshaColors.Gray400
+                    fontSize = 12.sp,
+                    color = if (isAnonymous) colors.Orange500 else colors.Gray600
                 )
             }
         },
@@ -785,17 +793,17 @@ fun CommentInputRow(
                             onCommentInputChanged("")
                         }
                         .background(
-                            color = MaterialTheme.colors.primary,
+                            color = colors.Orange500,
                             shape = RoundedCornerShape(6.dp)
                         )
-                        .padding(horizontal = 11.dp, vertical = 6.dp)
+                        .padding(horizontal = 10.dp, vertical = 6.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.community_comment_send_button),
                         style = SikshaTypography.body2.copy(
-                            fontSize = 12.sp,
+                            fontSize = 13.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = SikshaColors.White900
+                            color = colors.BackgroundSecondary
                         )
                     )
                 }
