@@ -121,7 +121,7 @@ fun AddPostImageIcon(
     modifier: Modifier = Modifier
 ) {
     Image(
-        modifier = modifier.size(106.dp),
+        modifier = modifier,
         painter = painterResource(R.drawable.ic_add_post_image),
         contentDescription = "add image"
     )
