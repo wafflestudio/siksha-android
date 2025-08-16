@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.compose.ui.reviews
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,8 @@ fun MenuReviewItem(
     likeCount: Int,
     modifier: Modifier = Modifier,
     onToggleLike: () -> Unit = {},
-    keywords: List<String> = listOf()
+    keywords: List<String> = listOf(),
+    imageUris: List<Uri> = listOf()
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -56,6 +58,13 @@ fun MenuReviewItem(
             Spacer(Modifier.height(8.dp))
             MenuReviewKeywordChips(
                 keywords,
+                modifier = Modifier.padding(start = 30.dp)
+            )
+        }
+        if (imageUris.isNotEmpty()) {
+            Spacer(Modifier.height(8.dp))
+            MenuReviewImages(
+                imageUris,
                 modifier = Modifier.padding(start = 30.dp)
             )
         }
