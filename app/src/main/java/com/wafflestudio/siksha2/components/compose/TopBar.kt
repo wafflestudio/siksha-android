@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +13,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wafflestudio.siksha2.ui.NavigateUpIcon
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
@@ -28,12 +26,12 @@ fun TopBar(
         modifier = modifier
             .height(56.dp)
             .fillMaxWidth()
-            .background(MaterialTheme.colors.primary)
+            .background(SikshaTheme.colors.BackgroundGNB)
     ) {
         Text(
             text = title,
             modifier = Modifier.align(Alignment.Center),
-            color = SikshaColors.White900,
+            color = SikshaTheme.colors.TextGNB,
             fontWeight = FontWeight.ExtraBold,
             style = SikshaTypography.subtitle1
         )

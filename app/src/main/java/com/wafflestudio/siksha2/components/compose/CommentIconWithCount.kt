@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wafflestudio.siksha2.ui.CommentIcon
-import com.wafflestudio.siksha2.ui.SikshaColors
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
 // TODO: 더 좋은 이름 찾기
@@ -27,7 +27,7 @@ fun CommentIconWithCount(
         Text(
             text = commentCount.toString(),
             fontSize = 10.sp,
-            color = SikshaColors.Gray600,
+            color = SikshaTheme.colors.Gray700,
             style = SikshaTypography.body2
         )
     }

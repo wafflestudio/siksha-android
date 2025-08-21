@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingEnd="12dp"
     tools:parentTag="android.widget.LinearLayout">
 
     <TextView
@@ -12,11 +14,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:fontFamily="@font/nanum_square_bold"
+        android:fontFamily="@font/nanum_square_regular"
         android:maxLines="1"
         android:text="@string/setting_siksha_info"
         android:textColor="@color/gray_700"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
     <ImageView
         android:id="@+id/new_icon"
@@ -27,9 +29,10 @@
 
     <ImageView
         android:id="@+id/arrow_icon"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:src="@drawable/ic_right_arrow" />
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_arrow_small" />
 
     <ImageView
         android:id="@+id/checkbox"

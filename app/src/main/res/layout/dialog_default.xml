@@ -87,7 +87,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="0dp"
-            android:background="@color/light_gray_500"
+            android:background="@color/gray_300"
             app:layout_constraintStart_toEndOf="@id/tv_positive_button"
             app:layout_constraintEnd_toStartOf="@id/tv_negative_button"
             app:layout_constraintTop_toTopOf="parent"
@@ -98,7 +98,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/light_gray_500"
+        android:background="@color/gray_300"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textbox"

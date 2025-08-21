@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.main.community.PostReportEvent
 import com.wafflestudio.siksha2.ui.main.community.PostReportViewModel
 import com.wafflestudio.siksha2.components.compose.TopBar
@@ -80,7 +79,7 @@ fun PostReportScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(SikshaColors.White900)
+            .background(SikshaTheme.colors.White)
     ) {
         TopBar(
             title = "신고하기",
