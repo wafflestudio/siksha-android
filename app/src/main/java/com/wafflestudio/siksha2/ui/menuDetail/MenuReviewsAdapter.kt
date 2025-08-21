@@ -1,16 +1,18 @@
 package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.view.ViewGroup
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
 import com.wafflestudio.siksha2.databinding.ItemReviewBinding
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.utils.getInflater
-import com.wafflestudio.siksha2.utils.toKoreanDate
 import com.wafflestudio.siksha2.utils.toLocalDateTime
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
+import com.wafflestudio.siksha2.utils.toParsedTimeString
 
 class MenuReviewsAdapter constructor(
     private val showImage: Boolean = true,
@@ -20,9 +22,15 @@ class MenuReviewsAdapter constructor(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         holder.binding.apply {
-            stars.rating = item?.score?.toFloat() ?: 0.0f
+            stars.setContent {
+                MenuRatingStars(
+                    initialRating = item?.score?.toFloat() ?: 0.0f,
+                    width = 61.dp,
+                    height = 10.dp
+                )
+            }
             reviewText.text = item?.comment
-            date.text = item?.createdAt?.toLocalDateTime()?.toLocalDate()?.toKoreanDate() ?: "-"
+            date.text = item?.createdAt?.toLocalDateTime()?.toParsedTimeString() ?: "-"
             idText.text = "ID " + item?.userId.toString()
             if (showImage) {
                 item?.etc?.images?.let {

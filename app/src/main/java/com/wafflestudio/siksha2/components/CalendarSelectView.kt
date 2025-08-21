@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.*
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.R
@@ -207,15 +208,18 @@ class CalendarSelectView : LinearLayout {
                         ) {
                             setBackgroundResource(R.drawable.frame_day_select)
                             setTextColor(ContextCompat.getColor(context, R.color.white))
+                            typeface = ResourcesCompat.getFont(context, R.font.nanum_square_bold)
                         } else if (today.year == year &&
                             today.monthValue == month &&
                             today.dayOfMonth == data
                         ) {
                             setBackgroundResource(R.drawable.frame_day_today)
                             setTextColor(ContextCompat.getColor(context, R.color.gray_700))
+                            typeface = ResourcesCompat.getFont(context, R.font.nanum_square_regular)
                         } else {
                             setBackgroundColor(ContextCompat.getColor(context, R.color.transparent))
                             setTextColor(ContextCompat.getColor(context, R.color.gray_700))
+                            typeface = ResourcesCompat.getFont(context, R.font.nanum_square_regular)
                         }
                         setOnClickListener {
                             updateDate(LocalDate.of(year, month, data))

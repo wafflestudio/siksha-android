@@ -27,12 +27,15 @@ import com.google.android.material.slider.RangeSlider
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFilterBinding
 import kotlinx.coroutines.launch
-import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
+import com.wafflestudio.siksha2.repositories.MixpanelManager
+import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
 import java.util.Locale
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FilterDialogFragment() : DialogFragment() {
-
     companion object {
         private const val DEFAULT_MODE = "FULL"
 
@@ -48,6 +51,9 @@ class FilterDialogFragment() : DialogFragment() {
     private val mode: FilterMode by lazy {
         enumValueOf(requireArguments().getString(DEFAULT_MODE)!!)
     }
+  
+    @Inject
+    lateinit var mixpanelManager: MixpanelManager
 
     private var _binding: DialogFilterBinding? = null
     private val binding get() = _binding!!
@@ -93,6 +99,8 @@ class FilterDialogFragment() : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        trackFilterModalOpened()
+
         setupVisibility()
         setupObservers()
 
@@ -103,7 +111,6 @@ class FilterDialogFragment() : DialogFragment() {
         setupReviewSelection()
         setupCategorySelection()
         setupButtons()
-        setupButtonShadow()
         setupLayoutMargin()
         setupDragToDismiss()
     }
@@ -216,7 +223,7 @@ class FilterDialogFragment() : DialogFragment() {
                 }
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
                 setPadding(10, 10, 10, 10)
-                setTextColor(ContextCompat.getColorStateList(context, R.color.chip_text_color))
+                setTextColor(ContextCompat.getColorStateList(context, R.color.black))
                 shapeAppearanceModel = shapeAppearanceModel.toBuilder()
                     .setAllCornerSizes(dpToPx(30).toFloat())
                     .build()
@@ -322,11 +329,6 @@ class FilterDialogFragment() : DialogFragment() {
             FilterMode.RATING -> binding.ratingSection.visibility = View.VISIBLE
             FilterMode.CATEGORY -> binding.categorySection.visibility = View.VISIBLE
         }
-    }
-
-    private fun setupButtonShadow() {
-        val color = if (mode == FilterMode.FULL) Color.WHITE else Color.TRANSPARENT
-        binding.buttonSection.background = color.toDrawable()
     }
 
     private fun setupLayoutMargin() {
@@ -460,15 +462,15 @@ class FilterDialogFragment() : DialogFragment() {
 
     private fun setSelectedCategoryChip(chip: Chip) {
         chip.apply {
-            setChipBackgroundColorResource(R.color.chip_selected_bg)
+            setChipBackgroundColorResource(R.color.orange_tint)
             chipStrokeWidth = dpToPx(1).toFloat()
-            setChipStrokeColorResource(R.color.orange_main)
+            setChipStrokeColorResource(R.color.orange_500)
         }
     }
 
     private fun setUnselectedCategoryChip(chip: Chip) {
         chip.apply {
-            setChipBackgroundColorResource(R.color.chip_default_bg)
+            setChipBackgroundColorResource(R.color.background_secondary)
             chipStrokeWidth = dpToPx(1).toFloat()
             chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#DFDFDF"))
         }
@@ -496,6 +498,7 @@ class FilterDialogFragment() : DialogFragment() {
         }
 
         updateCondition()
+        trackFilterReset()
     }
 
     private fun applyFiltersByMode() {
@@ -510,6 +513,68 @@ class FilterDialogFragment() : DialogFragment() {
         }
 
         vm.setMenuFilterCondition(applyCondition)
+        trackFilterApplied()
+    }
+    private fun getEntryPoint(): String = when (mode) {
+        FilterMode.FULL -> "main_filter"
+        FilterMode.DISTANCE -> "distance_filter"
+        FilterMode.PRICE -> "price_filter"
+        FilterMode.RATING -> "rating_filter"
+        FilterMode.CATEGORY -> "category_filter"
+    }
+
+    private fun getPageName(): String {
+        return if (vm.favoriteRestaurantExists.value == true) {
+            "favorites_list_page"
+        } else {
+            "store_list_page"
+        }
+    }
+
+    private fun trackFilterModalOpened() {
+        val props = JSONObject().apply {
+            put("entry_point", getEntryPoint())
+            put("page_name", getPageName())
+        }
+
+        mixpanelManager.track("filter_modal_opened", props)
+    }
+
+    private fun trackFilterApplied() {
+        val appliedOptions = JSONObject().apply {
+            if (mode == FilterMode.FULL || mode == FilterMode.PRICE) {
+                put("price_min", selectedCondition.minPrice.toInt())
+                put("price_max", selectedCondition.maxPrice.toInt())
+            }
+            if (mode == FilterMode.FULL || mode == FilterMode.RATING) {
+                put("min_rating", selectedCondition.minRating)
+            }
+            if (mode == FilterMode.FULL || mode == FilterMode.DISTANCE) {
+                put("max_distance_km", selectedCondition.distance / 1000f)
+            }
+            if (mode == FilterMode.FULL) {
+                put("is_open_now", selectedCondition.isOpen)
+                put("has_reviews", selectedCondition.hasReview)
+            }
+        }
+
+        val props = JSONObject().apply {
+            put("entry_point", getEntryPoint())
+            put("applied_filter_options", appliedOptions)
+            put("number_of_applied_filters", appliedOptions.length())
+            put("page_name", getPageName())
+        }
+
+        mixpanelManager.track("filter_modal_applied", props)
+    }
+
+    private fun trackFilterReset() {
+        val props = JSONObject().apply {
+            put("entry_point", getEntryPoint())
+            put("page_name", getPageName())
+        }
+
+        mixpanelManager.track("filter_reset", props)
     }
 
     override fun onDestroyView() {

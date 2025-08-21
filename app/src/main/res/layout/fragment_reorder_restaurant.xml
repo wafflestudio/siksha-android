@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray_300"
+    android:background="@color/gray_50"
     android:orientation="vertical"
     tools:context=".ui.main.setting.reorder.ReorderRestaurantFragment">
 
@@ -14,7 +14,7 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/orange_main" >
+        android:background="@color/background_GNB" >
 
         <ImageView
             android:id="@+id/close_button"
@@ -33,9 +33,9 @@
             android:layout_weight="1"
             android:fontFamily="@font/nanum_square_bold"
             tools:text="@string/setting_reorder_restaurant_title"
-            android:textColor="@color/white"
+            android:textColor="@color/text_GNB"
             android:textAlignment="center"
-            android:textSize="20dp" />
+            android:textSize="18dp" />
 
         <!-- textview 양옆 마진 맞추기용 -->
         <ImageView
