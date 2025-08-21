@@ -74,7 +74,7 @@ class DailyRestaurantViewModel @Inject constructor(
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
-    val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
+    private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
 
     @Inject
     lateinit var featureChecker: FeatureChecker

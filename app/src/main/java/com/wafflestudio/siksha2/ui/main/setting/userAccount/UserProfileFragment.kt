@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -27,16 +26,13 @@ import com.wafflestudio.siksha2.ui.main.setting.SettingViewModel
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.properties.Delegates
 
 class UserProfileFragment : Fragment(), ImageBottomDialog.Listener {
     private lateinit var binding: FragmentUserProfileBinding
     private val settingViewModel: SettingViewModel by activityViewModels()
 
     private lateinit var imageView: ShapeableImageView
-    private var imageChanged: Boolean by Delegates.observable(false) { _, _, newValue ->
-        if (newValue) binding.completeButton.isEnabled = true
-    }
+    private var imageChanged: Boolean = false
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -85,11 +81,6 @@ class UserProfileFragment : Fragment(), ImageBottomDialog.Listener {
             } else {
                 binding.nicknameSetRow.hint = getString(R.string.nickname_hint)
             }
-        }
-
-        binding.completeButton.isEnabled = false
-        binding.nicknameSetRow.doOnTextChanged { text, _, _, _ ->
-            binding.completeButton.isEnabled = (text.toString() != settingViewModel.userData.value?.nickname) || imageChanged
         }
 
         binding.cancelButton.setOnClickListener {

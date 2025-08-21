@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
 import androidx.core.widget.addTextChangedListener
@@ -21,8 +20,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.components.OnRatingChangeListener
 import com.wafflestudio.siksha2.components.ReviewImageView
-import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
@@ -97,21 +96,16 @@ class LeaveReviewFragment : Fragment() {
             )
         }
 
-        vm.getRecommendationReview(vm.reviewRating.floatValue.toLong())
-        binding.rateText.text = vm.reviewRating.floatValue.toLong().toString()
-        binding.rating.setContent {
-            MenuRatingStars(
-                initialRating = 5f,
-                changeEnabled = true,
-                onRatingChange = { newRating ->
-                    vm.setReviewRating(newRating)
-                    binding.rateText.text = newRating.toLong().toString()
-                    vm.getRecommendationReview(newRating.toLong())
-                },
-                width = 153.dp,
-                height = 25.dp
-            )
-        }
+        vm.getRecommendationReview(binding.rating.rating.toLong())
+        binding.rateText.text = binding.rating.rating.toLong().toString()
+        binding.rating.setOnRatingChangeListener(
+            object : OnRatingChangeListener {
+                override fun onChange(rating: Float) {
+                    vm.getRecommendationReview(rating.toLong())
+                    binding.rateText.text = rating.toLong().toString()
+                }
+            }
+        )
 
         vm.imageUriList.observe(viewLifecycleOwner) { imageUriList ->
             binding.imageLayout.forEachIndexed { index, view ->
@@ -146,7 +140,7 @@ class LeaveReviewFragment : Fragment() {
             lifecycleScope.launch {
                 val response = vm.leaveReview(
                     context = requireContext(),
-                    score = vm.reviewRating.floatValue.toDouble(),
+                    score = binding.rating.rating.toDouble(),
                     comment = binding.commentEdit.text.toString().ifEmpty {
                         binding.commentEdit.hint.toString()
                     }

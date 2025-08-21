@@ -13,7 +13,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/frame_rounded_top"
         android:paddingBottom="36dp"
         tools:context=".ui.restaurantInfo.RestaurantInfoBottomSheet">
@@ -57,86 +57,82 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
-        <ImageView
-            android:id="@+id/location_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_distance"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="13dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v_title_divider"/>
-
         <TextView
             android:id="@+id/tv_location_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="15dp"
             android:ellipsize="end"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             android:text="@string/restaurant_info_location_label"
             android:textColor="@color/black"
             android:textSize="14dp"
-            app:layout_constraintStart_toEndOf="@id/location_icon"
-            app:layout_constraintTop_toTopOf="@id/location_icon"
-            app:layout_constraintBottom_toBottomOf="@id/location_icon"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_title_divider" />
 
-        <FrameLayout
-            android:id="@+id/map_frame"
+        <ImageView
+            android:id="@+id/iv_location_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_location"
+            app:layout_constraintEnd_toStartOf="@id/tv_location_content"
+            app:layout_constraintTop_toBottomOf="@id/v_title_divider" />
+
+        <TextView
+            android:id="@+id/tv_location_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nanum_square_regular"
+            android:maxLines="1"
+            android:textColor="@color/gray_700"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_title_divider"
+            tools:text="75-1동 전망대 3층, 4층" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mv_map"
             android:layout_width="0dp"
             android:layout_height="250dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/frame_mapview"
-            android:clipToOutline="true"
+            android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/location_icon" >
-
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mv_map"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                map:liteMode="true"
-                map:mapType="normal" />
-
-        </FrameLayout>
+            app:layout_constraintTop_toBottomOf="@id/tv_location_title"
+            map:liteMode="true"
+            map:mapType="normal" />
 
         <View
             android:id="@+id/v_blank"
             android:layout_width="0dp"
             android:layout_height="10dp"
             android:layout_marginTop="24dp"
-            android:background="@color/gray_300"
+            android:background="@color/light_gray_500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/map_frame" />
-
-        <ImageView
-            android:id="@+id/schedule_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_schedule"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v_blank"/>
+            app:layout_constraintTop_toBottomOf="@id/mv_map" />
 
         <TextView
             android:id="@+id/tv_operating_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
             android:ellipsize="end"
             android:fontFamily="@font/nanum_square_regular"
             android:maxLines="1"
             android:text="@string/restaurant_info_operation_time_label"
             android:textColor="@color/black"
             android:textSize="14dp"
-            app:layout_constraintStart_toEndOf="@id/schedule_icon"
-            app:layout_constraintTop_toTopOf="@id/schedule_icon"
-            app:layout_constraintBottom_toBottomOf="@id/schedule_icon"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/v_blank" />
 
         <View
             android:id="@+id/v_operating_time_divider"
@@ -147,7 +143,7 @@
             android:background="@drawable/frame_splash"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/schedule_icon" />
+            app:layout_constraintTop_toBottomOf="@id/tv_operating_time_title" />
 
         <include
             android:id="@+id/cl_operating_time_weekdays"
@@ -155,7 +151,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="12dp"
+            android:layout_marginVertical="10dp"
             app:dailyOperatingTimes="@{restaurantOperatingTimes.weekdays}"
             app:layout_constraintBottom_toTopOf="@id/v_saturday_divider"
             app:layout_constraintEnd_toEndOf="parent"
@@ -168,8 +164,9 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginHorizontal="16dp"
-            android:background="@color/gray_300"
+            android:background="@color/light_gray_500"
             android:visibility="visible"
+            app:dailyOperatingTimes="@{restaurantOperatingTimes.saturday}"
             app:layout_constraintBottom_toTopOf="@id/cl_operating_time_saturday"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +178,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="12dp"
+            android:layout_marginVertical="10dp"
             app:dailyOperatingTimes="@{restaurantOperatingTimes.saturday}"
             app:layout_constraintBottom_toTopOf="@id/v_holiday_divider"
             app:layout_constraintEnd_toEndOf="parent"
@@ -194,8 +191,9 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginHorizontal="16dp"
-            android:background="@color/gray_300"
+            android:background="@color/light_gray_500"
             android:visibility="visible"
+            app:dailyOperatingTimes="@{restaurantOperatingTimes.holiday}"
             app:layout_constraintBottom_toTopOf="@id/cl_operating_time_holiday"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -207,7 +205,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="12dp"
+            android:layout_marginVertical="10dp"
             app:dailyOperatingTimes="@{restaurantOperatingTimes.holiday}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

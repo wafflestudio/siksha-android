@@ -18,12 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.ui.SikshaColors
 
 @Composable
 fun CommentEditText(
@@ -35,7 +36,7 @@ fun CommentEditText(
     trailingIcon: @Composable () -> Unit = {},
     enabled: Boolean = true,
     readOnly: Boolean = false,
-    textStyle: TextStyle = TextStyle.Default.copy(SikshaTheme.colors.Gray900),
+    textStyle: TextStyle = TextStyle.Default,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = false,
@@ -44,7 +45,7 @@ fun CommentEditText(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    cursorBrush: Brush = SolidColor(SikshaTheme.colors.Black)
+    cursorBrush: Brush = SolidColor(Color.Black)
 ) {
     BasicTextField(
         value = value,
@@ -66,7 +67,7 @@ fun CommentEditText(
             Row(
                 modifier = Modifier
                     .background(
-                        color = SikshaTheme.colors.Gray100,
+                        color = SikshaColors.Gray100,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .height(IntrinsicSize.Min),
@@ -85,7 +86,7 @@ fun CommentEditText(
                         hint?.let {
                             Text(
                                 text = hint,
-                                style = textStyle.copy(color = SikshaTheme.colors.Gray400)
+                                style = textStyle.copy(color = SikshaColors.Gray400)
                             )
                         }
                     }

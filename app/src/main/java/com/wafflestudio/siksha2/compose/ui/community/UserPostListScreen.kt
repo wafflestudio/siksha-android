@@ -13,6 +13,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,10 +23,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.wafflestudio.siksha2.components.compose.PostListItem
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.UserPostListViewModel
 import com.wafflestudio.siksha2.ui.NavigateUpIcon
-import com.wafflestudio.siksha2.ui.SikshaTheme
 
 @Composable
 fun UserPostListRoute(
@@ -64,7 +65,7 @@ fun UserPostListScreen(
 
     Column(
         modifier = modifier
-            .background(SikshaTheme.colors.White)
+            .background(SikshaColors.White900)
     ) {
         TopBar(
             title = "내가 쓴 글",
@@ -147,7 +148,7 @@ fun UserPostsEmptyPlaceHolder(
     ) {
         Text(
             text = "아직 작성한 글이 없어요.",
-            color = SikshaTheme.colors.Gray600,
+            color = SikshaColors.Gray600,
             style = SikshaTypography.subtitle1,
             modifier = Modifier.align(Alignment.Center)
         )

@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -24,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +40,7 @@ import com.wafflestudio.siksha2.components.compose.PostListItem
 import com.wafflestudio.siksha2.ui.NewPostIcon
 import com.wafflestudio.siksha2.models.Board
 import com.wafflestudio.siksha2.models.Post
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.main.community.PostListViewModel
@@ -96,7 +99,7 @@ fun PostListScreen(
 
     Column(
         modifier = modifier
-            .background(SikshaTheme.colors.BackgroundPrimary)
+            .background(SikshaColors.White900)
     ) {
         LazyRow(
             modifier = Modifier.padding(vertical = 18.dp),
@@ -115,6 +118,10 @@ fun PostListScreen(
                 )
             }
         }
+        Divider(
+            color = Color(0xFFF0F0F0),
+            thickness = 1.dp
+        )
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -201,7 +208,7 @@ fun PostsEmptyPlaceHolder(
     ) {
         Text(
             text = stringResource(R.string.community_board_empty),
-            color = SikshaTheme.colors.Gray600,
+            color = SikshaColors.Gray600,
             style = SikshaTypography.subtitle1,
             modifier = Modifier.align(Alignment.Center)
         )
@@ -216,7 +223,6 @@ fun PostsLoadingPlaceHolder(
         modifier = modifier
     ) {
         CircularProgressIndicator(
-            color = SikshaTheme.colors.Orange500,
             modifier = Modifier.align(Alignment.Center)
         )
     }
@@ -237,25 +243,23 @@ fun PostsErrorPlaceHolder(
         ) {
             Text(
                 text = stringResource(R.string.community_board_error),
-                color = SikshaTheme.colors.Gray600,
+                color = SikshaColors.Gray600,
                 style = SikshaTypography.subtitle1
             )
             Button(
-                modifier = Modifier.background(SikshaTheme.colors.Orange500),
                 onClick = {
                     onClickRetry()
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.community_retry_button),
-                    color = SikshaTheme.colors.TextButton
+                    text = stringResource(R.string.community_retry_button)
                 )
             }
         }
     }
 }
 
-@Preview(device = "spec:width=360dp,height=640dp,dpi=480")
+@Preview(device = "spec:shape=Normal,width=360,height=640,unit=dp,dpi=480")
 @Composable
 fun PostListScreenPreview() {
     SikshaTheme {

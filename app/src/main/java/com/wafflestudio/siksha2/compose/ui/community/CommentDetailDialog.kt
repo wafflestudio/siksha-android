@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.ui.SikshaColors
 
 @Composable
 fun CommentDetailDialog(
@@ -33,7 +33,7 @@ fun CommentDetailDialog(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .background(color = SikshaTheme.colors.White, shape = RoundedCornerShape(26.dp))
+                .background(color = SikshaColors.White900, shape = RoundedCornerShape(26.dp))
         ) {
             if (isMine) {
                 Box(
@@ -55,7 +55,7 @@ fun CommentDetailDialog(
                 }
                 Divider(
                     modifier = Modifier.padding(horizontal = 11.dp),
-                    color = SikshaTheme.colors.BorderPrimary,
+                    color = Color(0xFFE0E0E0),
                     thickness = 1.dp
                 )
             }
@@ -79,7 +79,7 @@ fun CommentDetailDialog(
                 }
                 Divider(
                     modifier = Modifier.padding(horizontal = 11.dp),
-                    color = SikshaTheme.colors.BorderPrimary,
+                    color = Color(0xFFE0E0E0),
                     thickness = 1.dp
                 )
             }

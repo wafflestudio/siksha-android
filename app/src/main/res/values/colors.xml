@@ -1,70 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- General -->
-    <color name="transparent">#00000000</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="background_main">#FFF8F8F8</color>
+    <color name="transparent">#00000000</color>
 
-    <!-- Foundation Colors -->
-    <color name="gray_50">#FFF8F8F8</color>
-    <color name="gray_100">#FFF2F3F4</color>
-    <color name="gray_200">#FFE5E6E9</color>
-    <color name="gray_300">#FFD8DADE</color>
-    <color name="gray_400">#FFCBCDD3</color>
-    <color name="gray_500">#FFBEC1C8</color>
-    <color name="gray_600">#FF989AA0</color>
-    <color name="gray_700">#FF727478</color>
+    <color name="gray_900">#FF4F4F4F</color>
     <color name="gray_800">#FF4C4D50</color>
-    <color name="gray_900">#FF262728</color>
+    <color name="gray_700">#FF707070</color>
+    <color name="gray_500">#FFB9B9B9</color>
+    <color name="gray_200">#FFE5E6E9</color>
+    <color name="light_gray_500">#FFEDE9E6</color>
+    <color name="light_gray_300">#FFFAFAFA</color>
+    <color name="gray_border">#FFF0F0F0</color>
 
-    <color name="orange_100">#FFFFEAD3</color>
-    <color name="orange_200">#FFFFD5A7</color>
-    <color name="orange_300">#FFFFBF7A</color>
-    <color name="orange_400">#FFFFAA4E</color>
-    <color name="orange_500">#FFFF9522</color>
-    <color name="orange_600">#FFD27000</color>
-    <color name="orange_700">#FFA54C00</color>
-    <color name="orange_800">#FF7C2900</color>
-    <color name="orange_900">#FF570000</color>
-    <color name="orange_tint">#40FF9522</color>
+    <color name="orange_main">#FF9522</color>
+    <color name="pink_500">#FFFD7878</color>
 
-    <color name="accent_like">#FFF86627</color>
-
-    <!-- Sementic Colors -->
-    <color name="background_primary">@color/white</color>
-    <color name="background_secondary">@color/white</color>
-    <color name="background_dark">@color/black</color>
-    <color name="background_GNB">@color/orange_500</color>
-    <color name="background_Toast">@color/gray_700</color>
-
-    <color name="border_primary">@color/gray_200</color>
-    <color name="border_secondary">@color/gray_200</color>
-
-    <color name="text_button">@color/white</color>
-    <color name="text_accent">@color/orange_500</color>
-    <color name="text_GNB">@color/white</color>
-    <color name="text_dim">@color/white</color>
-
-    <color name="icon_close_bg">@color/gray_400</color>
-    <color name="icon_white_icon">@color/white</color>
-    <color name="icon_like">@color/gray_200</color>
-
-    <color name="element_chip">@color/gray_100</color>
-    <color name="element_tooltip">@color/gray_100</color>
-    <color name="element_control">@color/gray_200</color>
-
-    <!-- 로그인 관련 -->
     <color name="kakao_yellow">#FFFAE44D</color>
     <color name="kakao_yellow_dim">#DFCC48</color>
     <color name="kakao_brown">#FF3E2723</color>
+
     <color name="google_gray">#80000000</color>
 
-    <!-- Theme 기본색 -->
+    <color name="black_50percent">#80000000</color>
+    <color name="black_30percent">#4C000000</color>
+
+    <color name="white_dim">#EAEAEA</color>
+    <color name="white">#FFFFFFFF</color>
+
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorGray">#FF888888</color>
-    <color name="white_dim">#EAEAEA</color>
-    <color name="pink_500">#FFFD7878</color>
+
+    <color name="chip_selected_bg">#FFE8CE</color>
+    <color name="chip_default_bg">#FFFFFF</color>
+    <color name="chip_stroke">#FFE8CE</color>
+    <color name="chip_text_color">#000000</color>
+
+    <color name="filter_bubble_border">#E5E6E9</color>
+    <color name="filter_bubble_active_bg">#FFEAD3</color>
 </resources>

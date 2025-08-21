@@ -7,7 +7,7 @@
 
     <!-- 아래쪽 역삼각형 모양 -->
     <path
-        android:fillColor="@color/element_tooltip"
+        android:fillColor="#F0F0F0"
         android:pathData="M0,0 L4,5 L8,0 Z" />
 </vector>
 

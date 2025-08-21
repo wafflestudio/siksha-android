@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,10 +12,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
 import com.wafflestudio.siksha2.databinding.FragmentMenuDetailBinding
 import com.wafflestudio.siksha2.network.result.NetworkResult
-import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
@@ -81,15 +77,7 @@ class MenuDetailFragment : Fragment() {
             binding.menuTitle.isSelected = true
             binding.menuTitle.text = menu?.nameKr
             binding.menuRating.text = "${menu?.score?.times(10)?.let { round(it) / 10 } ?: "0.0"}"
-            binding.menuStars.setContent {
-                SikshaTheme {
-                    MenuRatingStars(
-                        initialRating = menu?.score?.toFloat() ?: 0.0f,
-                        width = 74.dp,
-                        height = 12.dp
-                    )
-                }
-            }
+            binding.menuStars.rating = menu?.score?.toFloat() ?: 0.0f
             binding.reviewCount.text = " ${menu?.reviewCount ?: 0}"
             // Handle menu likes
             menu.isLiked?.let { isLiked ->
@@ -98,7 +86,7 @@ class MenuDetailFragment : Fragment() {
 
             // Handle like count
             menu.likeCount?.let { count ->
-                binding.menuLikeCount.text = menu.likeCount?.let { "찜 $it 개" } ?: "-"
+                binding.menuLikeCount.text = menu.likeCount?.let { "좋아요 $it 개" } ?: "-"
             }
         }
 
@@ -114,13 +102,13 @@ class MenuDetailFragment : Fragment() {
             var maxCount = 1L
             distList.forEach { if (maxCount < it) maxCount = it }
             distBarList.forEachIndexed { index, bar ->
-                val params = bar.layoutParams as ConstraintLayout.LayoutParams
+                val params = bar.layoutParams
                 val ratio = distList[index].toDouble() / maxCount.toDouble()
-                if (ratio == 0.0) {
-                    params.width = requireContext().dp(NO_REVIEW_DIST_BAR_WIDTH_DP)
+                if (ratio != 0.0) {
+                    params.width =
+                        (requireContext().dp(MAX_REVIEW_DIST_BAR_WIDTH_DP) * ratio).toInt()
                 } else {
-                    params.matchConstraintPercentWidth = ratio.toFloat()
-                    params.width = 0
+                    params.width = requireContext().dp(NO_REVIEW_DIST_BAR_WIDTH_DP)
                 }
                 bar.layoutParams = params
                 bar.requestLayout()
