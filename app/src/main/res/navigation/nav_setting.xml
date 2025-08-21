@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_settingFragment_to_userSettingFragment"
             app:destination="@id/userSettingFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_favoriteMenuFragment"
+            app:destination="@id/favoriteMenuFragment" />
     </fragment>
 
     <fragment
@@ -45,4 +48,10 @@
         android:id="@+id/userSettingFragment"
         android:name="com.wafflestudio.siksha2.ui.main.setting.userAccount.UserProfileFragment"
         android:label="UserSettingFragment" />
+
+    <fragment
+        android:id="@+id/favoriteMenuFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.favoriteMenu.FavoriteMenuFragment"
+        android:label="fragment_favorite_menu"
+        tools:layout="@layout/fragment_favorite_menu" />
 </navigation>
