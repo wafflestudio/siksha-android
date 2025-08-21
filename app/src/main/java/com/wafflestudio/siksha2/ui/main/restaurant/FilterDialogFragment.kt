@@ -51,7 +51,7 @@ class FilterDialogFragment() : DialogFragment() {
     private val mode: FilterMode by lazy {
         enumValueOf(requireArguments().getString(DEFAULT_MODE)!!)
     }
-  
+
     @Inject
     lateinit var mixpanelManager: MixpanelManager
 
