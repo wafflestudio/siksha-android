@@ -35,9 +35,23 @@ import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FilterDialogFragment(
-    private val mode: FilterMode
-) : DialogFragment() {
+class FilterDialogFragment() : DialogFragment() {
+    companion object {
+        private const val DEFAULT_MODE = "FULL"
+
+        fun newInstance(type: FilterMode): FilterDialogFragment {
+            return FilterDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString(DEFAULT_MODE, type.name)
+                }
+            }
+        }
+    }
+
+    private val mode: FilterMode by lazy {
+        enumValueOf(requireArguments().getString(DEFAULT_MODE)!!)
+    }
+
     @Inject
     lateinit var mixpanelManager: MixpanelManager
 

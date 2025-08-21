@@ -341,12 +341,12 @@ class DailyRestaurantFragment : Fragment() {
         }
 
         binding.menuFilter.setOnClickListener {
-            val filterDialog = FilterDialogFragment(FilterMode.FULL)
+            val filterDialog = FilterDialogFragment.newInstance(FilterMode.FULL)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterDistance.setOnClickListener {
-            val filterDialog = FilterDialogFragment(FilterMode.DISTANCE)
+            val filterDialog = FilterDialogFragment.newInstance(FilterMode.DISTANCE)
             filterDialog.show(parentFragmentManager, "FilterDialog")
 
             val permission = Manifest.permission.ACCESS_FINE_LOCATION
@@ -356,17 +356,17 @@ class DailyRestaurantFragment : Fragment() {
                 ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestPermission {
-                    val filterDialog = FilterDialogFragment(FilterMode.DISTANCE)
+                    val filterDialog = FilterDialogFragment.newInstance(FilterMode.DISTANCE)
                     filterDialog.show(parentFragmentManager, "FilterDialog")
                 }
             } else {
-                val filterDialog = FilterDialogFragment(FilterMode.DISTANCE)
+                val filterDialog = FilterDialogFragment.newInstance(FilterMode.DISTANCE)
                 filterDialog.show(parentFragmentManager, "FilterDialog")
             }
         }
 
         binding.filterPrice.setOnClickListener {
-            val filterDialog = FilterDialogFragment(FilterMode.PRICE)
+            val filterDialog = FilterDialogFragment.newInstance(FilterMode.PRICE)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
@@ -379,12 +379,12 @@ class DailyRestaurantFragment : Fragment() {
         }
 
         binding.filterRating.setOnClickListener {
-            val filterDialog = FilterDialogFragment(FilterMode.RATING)
+            val filterDialog = FilterDialogFragment.newInstance(FilterMode.RATING)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
         binding.filterCategory.setOnClickListener {
-            val filterDialog = FilterDialogFragment(FilterMode.CATEGORY)
+            val filterDialog = FilterDialogFragment.newInstance(FilterMode.CATEGORY)
             filterDialog.show(parentFragmentManager, "FilterDialog")
         }
 
