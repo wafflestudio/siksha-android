@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginBottom="17dp"
+    android:background="@drawable/frame_corner_radius_10_border_thick"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:shrinkColumns="0"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                >
+
+                <TextView
+                    android:id="@+id/restaurant_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_square_bold"
+                    android:singleLine="false"
+                    android:paddingVertical="10dp"
+                    android:paddingStart="16dp"
+                    android:textColor="@color/orange_500"
+                    android:textSize="15dp"
+                    tools:text="학생회관 식당" />
+
+            </TableRow>
+
+        </TableLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="12dp"
+        android:background="@drawable/frame_splash"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_title" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/menu_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="10dp"
+        android:nestedScrollingEnabled="false"
+        tools:listitem="@layout/item_notify_menu" />
+
+    <TextView
+        android:id="@+id/menu_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="28dp"
+        android:fontFamily="@font/nanum_square_regular"
+        android:text="알림을 받을 메뉴가 없습니다."
+        android:textColor="@color/gray_500"
+        android:visibility="gone" />
+
+</LinearLayout>
