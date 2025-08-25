@@ -11,6 +11,8 @@ import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEachIndexed
@@ -46,11 +48,24 @@ class LeaveReviewFragment : Fragment() {
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
-            launchGalleryIntent()
+            launchPhotoPicker()
         } else {
             showToast("사진 업로드를 위해 사진 권한을 허용해 주세요.")
         }
     }
+
+    private val pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? =
+        if (Build.VERSION.SDK_INT >= 33) {
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                uri?.let {
+                    vm.addImageUri(it, onFailure = {
+                        requireContext().showToast(getString(R.string.leave_review_max_image_toast))
+                    })
+                }
+            }
+        } else {
+            null
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -167,13 +182,17 @@ class LeaveReviewFragment : Fragment() {
 
         binding.addImageButton.setOnClickListener {
             requestPermission(onGranted = {
-                launchGalleryIntent()
+                launchPhotoPicker()
             })
         }
     }
 
     private fun requestPermission(onGranted: () -> Unit) {
-        val permission = if (Build.VERSION.SDK_INT >= 33) Manifest.permission.READ_MEDIA_IMAGES else Manifest.permission.READ_EXTERNAL_STORAGE
+        if (Build.VERSION.SDK_INT >= 33) {
+            onGranted()
+            return
+        }
+        val permission = Manifest.permission.READ_EXTERNAL_STORAGE
         if (ContextCompat.checkSelfPermission(requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
             onGranted()
         } else {
@@ -181,10 +200,14 @@ class LeaveReviewFragment : Fragment() {
         }
     }
 
-    private fun launchGalleryIntent() {
-        val intent = Intent(Intent.ACTION_PICK)
-            .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-        galleryLauncher.launch(intent)
+    private fun launchPhotoPicker() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            pickMedia!!.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        } else {
+            val intent = Intent(Intent.ACTION_PICK)
+                .setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+            galleryLauncher.launch(intent)
+        }
     }
 
     companion object {
