@@ -111,6 +111,8 @@ class SikshaColors(
         get() = if (isDarkTheme) Black else White
     val IconLike: Color
         get() = if (isDarkTheme) Gray500 else Gray200
+    val IconGrayIcon: Color
+        get() = if (isDarkTheme) Gray600 else Gray500
     val ElementChip: Color
         get() = if (isDarkTheme) Gray50 else Gray100
     val ElementTooltip: Color
