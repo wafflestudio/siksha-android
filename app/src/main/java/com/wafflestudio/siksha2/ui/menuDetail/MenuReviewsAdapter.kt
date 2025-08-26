@@ -12,6 +12,7 @@ import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.toLocalDateTime
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
+import com.wafflestudio.siksha2.utils.showImageViewer
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 
 class MenuReviewsAdapter constructor(
@@ -42,11 +43,8 @@ class MenuReviewsAdapter constructor(
                             if (i < it.size) {
                                 imageViewList[i].run {
                                     setImage(it[i])
-                                    fragmentManager?.let {
-                                        setImageClickListener { url ->
-                                            val dialog = ReviewImageDialog.newInstance(url)
-                                            dialog.show(fragmentManager, "review_image_$url")
-                                        }
+                                    setOnClickListener {
+                                        it.context.showImageViewer(item.etc.images, i)
                                     }
                                     setVisibleOrGone(true)
                                 }

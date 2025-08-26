@@ -21,6 +21,7 @@ import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.showToast
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
+import com.wafflestudio.siksha2.utils.showImageViewer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -155,8 +156,7 @@ class MenuDetailFragment : Fragment() {
             for (i in 0 until 2) {
                 if (i < imageUrlList.size) {
                     imageReviewList[i].setOnClickListener {
-                        val dialog = ReviewImageDialog.newInstance(imageUrlList[i])
-                        dialog.show(childFragmentManager, "review_image_${imageUrlList[i]}")
+                        requireContext().showImageViewer(imageUrlList, i)
                     }
                 }
             }
