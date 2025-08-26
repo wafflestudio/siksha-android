@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_review_profile"
-        android:translationY="-2dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -35,7 +34,6 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="2dp"
         android:fontFamily="@font/nanum_square_bold"
         android:textColor="@color/gray_600"
@@ -68,7 +66,6 @@
         android:layout_height="wrap_content"
         android:minHeight="80dp"
         android:layout_marginStart="29dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/black"
         android:textSize="12dp"
