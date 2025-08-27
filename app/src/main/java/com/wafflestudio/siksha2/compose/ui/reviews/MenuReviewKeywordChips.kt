@@ -3,7 +3,8 @@ package com.wafflestudio.siksha2.compose.ui.reviews
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -35,13 +36,14 @@ fun MenuReviewKeywordChip(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MenuReviewKeywordChips(
     keywords: List<String>,
     modifier: Modifier = Modifier
 ) {
-    // TODO: 스크롤 혹은 줄바꿈
-    Row(
+    // 줄바꿈 처리를 위해 FlowRow 사용. 사라질 시 일반 Row로 전환하기
+    FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
