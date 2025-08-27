@@ -52,6 +52,8 @@
     <string name="menu_detail_review_gather">리뷰</string>
     <string name="menu_detail_plus">+</string>
     <string name="menu_detail_more_photo">건 더 보기</string>
+    <string name="menu_detail_review_prefix">후기</string>
+    <string name="menu_detail_review_suffix">개</string>
     <string name="review_photo_title">사진 리뷰 모아보기</string>
     <string name="review_title">리뷰</string>
     <string name="review_nothing">리뷰가 없습니다.</string>
