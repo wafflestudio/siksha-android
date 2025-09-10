@@ -64,6 +64,14 @@
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
 
+        <action
+            android:id="@+id/action_mainFragment_to_favoriteMenuFragment"
+            app:destination="@id/favoriteMenuFragment"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+
     </fragment>
 
     <fragment
@@ -242,5 +250,10 @@
             app:argType="long" />
     </fragment>
 
+    <fragment
+        android:id="@+id/favoriteMenuFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.favoriteMenu.FavoriteMenuFragment"
+        android:label="fragment_favorite_menu"
+        tools:layout="@layout/fragment_favorite_menu" />
 
 </navigation>

@@ -72,7 +72,7 @@ class SettingFragment : Fragment() {
 
         binding.myFavoriteMenuRow.setOnClickListener {
             val action =
-                SettingFragmentDirections.actionSettingFragmentToFavoriteMenuFragment()
+                MainFragmentDirections.actionMainFragmentToFavoriteMenuFragment()
             findNavController().navigate(action)
         }
 

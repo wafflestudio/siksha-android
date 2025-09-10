@@ -43,6 +43,11 @@ interface SikshaApi {
     @GET("/restaurants/")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
+    @GET("/menus/me")
+    suspend fun getFavoriteMenus(
+        @Header("authorization-token") token: String
+    ): NetworkResult<GetFavoriteMenusResponse>
+
     @POST("/reviews/")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
