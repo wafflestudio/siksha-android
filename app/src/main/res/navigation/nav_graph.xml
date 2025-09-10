@@ -254,7 +254,17 @@
         android:id="@+id/favoriteMenuFragment"
         android:name="com.wafflestudio.siksha2.ui.main.setting.favoriteMenu.FavoriteMenuFragment"
         android:label="fragment_favorite_menu"
-        tools:layout="@layout/fragment_favorite_menu" />
+        tools:layout="@layout/fragment_favorite_menu">
+    <action
+        android:id="@+id/action_favoriteMenuFragment_to_notifyMenuFragment"
+        app:destination="@id/notifyMenuFragment"
+        app:popUpTo="@id/notifyMenuFragment"
+        app:popUpToInclusive="true"
+        app:enterAnim="@anim/slide_left"
+        app:exitAnim="@anim/wait_anim"
+        app:popEnterAnim="@anim/wait_anim"
+        app:popExitAnim="@anim/slide_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/notifyMenuFragment"
@@ -271,7 +281,6 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
-
     </fragment>
 
 </navigation>

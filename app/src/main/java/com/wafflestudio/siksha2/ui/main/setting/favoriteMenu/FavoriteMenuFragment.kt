@@ -108,6 +108,12 @@ class FavoriteMenuFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        // 알림 받기 버튼
+        binding.alarmButton.setOnClickListener {
+            val action = FavoriteMenuFragmentDirections.actionFavoriteMenuFragmentToNotifyMenuFragment()
+            findNavController().navigate(action)
+        }
     }
 }
 

@@ -37,15 +37,14 @@
             android:textAlignment="center"
             android:textSize="18dp" />
 
-        <!-- textview 양옆 마진 맞추기용 -->
         <ImageView
-            android:id="@+id/back_button_invisible"
+            android:id="@+id/alarm_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
             android:paddingVertical="16dp"
-            android:src="@drawable/ic_back_arrow"
-            android:visibility="invisible" />
+            android:src="@drawable/ic_no_fork"
+            />
 
     </LinearLayout>
 
@@ -75,7 +74,5 @@
             android:layout_height="match_parent" />
 
     </FrameLayout>
-
-
 
 </LinearLayout>

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.wafflestudio.siksha2.databinding.FragmentNotifyMenuBinding
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,8 +48,11 @@ class NotifyMenuFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             vm.menus.collect { menus ->
                 adapter.submitList(menus)
-                binding.emptyText.visibility =
-                    if (menus.isEmpty()) View.VISIBLE else View.GONE
+
+                if (menus.isEmpty()) {
+                    binding.emptyText.visibility = View.VISIBLE
+                    binding.guideText.visibility = View.GONE
+                }
             }
         }
 
