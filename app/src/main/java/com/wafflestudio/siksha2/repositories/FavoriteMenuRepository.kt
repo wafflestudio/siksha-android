@@ -11,6 +11,12 @@ class FavoriteMenuRepository @Inject constructor(
     suspend fun getFavoriteMenus(token: String): NetworkResult<GetFavoriteMenusResponse> {
         return api.getFavoriteMenus(token)
     }
+
+    suspend fun enableAlarm(token: String, menuId: Long) =
+        api.postAlarmOn(menuId, token)
+
+    suspend fun disableAlarm(token: String, menuId: Long) =
+        api.postAlarmOff(menuId, token)
 }
 
 

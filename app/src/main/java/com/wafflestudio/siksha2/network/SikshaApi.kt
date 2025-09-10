@@ -48,6 +48,18 @@ interface SikshaApi {
         @Header("authorization-token") token: String
     ): NetworkResult<GetFavoriteMenusResponse>
 
+    @POST("/menus/{menu_id}/alarm/on")
+    suspend fun postAlarmOn(
+        @Path("menu_id") menuId: Long,
+        @Header("authorization-token") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @POST("/menus/{menu_id}/alarm/off")
+    suspend fun postAlarmOff(
+        @Path("menu_id") menuId: Long,
+        @Header("authorization-token") token: String
+    ): NetworkResult<AlarmResponse>
+
     @POST("/reviews/")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
