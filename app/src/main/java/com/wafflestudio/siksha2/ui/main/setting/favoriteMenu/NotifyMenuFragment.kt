@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.wafflestudio.siksha2.databinding.FragmentNotifyMenuBinding
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
@@ -17,7 +18,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotifyMenuFragment : Fragment() {
-
     private lateinit var binding: FragmentNotifyMenuBinding
     private val vm: NotifyMenuViewModel by viewModels()
     @Inject
@@ -41,17 +41,23 @@ class NotifyMenuFragment : Fragment() {
             vm.onMenuChecked(menuId, isChecked)
         }
         binding.menuGroupList.adapter = adapter
+        binding.menuGroupList.layoutManager = LinearLayoutManager(requireContext())
 
         val token = prefs.accessToken.getValue()
-        vm.loadMenus(token)
+
+        //vm.loadMenus(token)
+        vm.loadMockData()
 
         lifecycleScope.launchWhenStarted {
-            vm.menus.collect { menus ->
-                adapter.submitList(menus)
+            vm.groups.collect { groups ->
+                adapter.submitList(groups)
 
-                if (menus.isEmpty()) {
+                if (groups.isEmpty()) {
                     binding.emptyText.visibility = View.VISIBLE
                     binding.guideText.visibility = View.GONE
+                } else {
+                    binding.emptyText.visibility = View.GONE
+                    binding.guideText.visibility = View.VISIBLE
                 }
             }
         }

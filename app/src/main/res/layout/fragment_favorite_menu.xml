@@ -67,7 +67,8 @@
             android:fontFamily="@font/nanum_square_light"
             android:gravity="center"
             android:text="찜한 메뉴가 없습니다."
-            android:textColor="@color/gray_700" />
+            android:textColor="@color/gray_700"
+            android:visibility="gone"/>
 
         <View
             android:layout_width="match_parent"

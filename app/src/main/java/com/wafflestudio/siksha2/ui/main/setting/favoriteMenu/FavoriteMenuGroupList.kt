@@ -81,19 +81,33 @@ fun RestaurantMenuFavorite(
             .padding(horizontal = 14.dp, vertical = 18.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        // 상단: 식당 이름 + 버튼들
-        RestaurantInfoRow(
-            restaurantName = restaurant.name_kr,
-            isFavorite = false, // 즐겨찾기 여부는 FavoriteRestaurantDto에 따라 세팅
-            onRestaurantInfoClicked = onRestaurantInfoClicked,
-            onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
-            onRestaurantShareClicked = onRestaurantShareClicked
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+        ) {
+            RestaurantInfoRow(
+                restaurantName = restaurant.name_kr,
+                isFavorite = false,
+                onRestaurantInfoClicked = onRestaurantInfoClicked,
+                onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
+                onRestaurantShareClicked = onRestaurantShareClicked,
+                modifier = Modifier.weight(1f)
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Price", fontSize = 12.sp, color = SikshaTheme.colors.Gray600)
+                Text("Rate", fontSize = 12.sp, color = SikshaTheme.colors.Gray600)
+                Text("Like", fontSize = 12.sp, color = SikshaTheme.colors.Gray600)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(14.dp))
         Divider(color = SikshaTheme.colors.Orange500, thickness = 1.5.dp)
         Spacer(modifier = Modifier.height(14.dp))
 
-        // 메뉴 리스트
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {

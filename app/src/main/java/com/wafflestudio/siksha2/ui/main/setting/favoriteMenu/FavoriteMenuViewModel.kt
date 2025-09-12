@@ -55,36 +55,24 @@ class FavoriteMenuViewModel @Inject constructor(
     }
 
     fun loadMockData() {
-        val mockMenus = listOf(
+        // 학생회관 식당 메뉴 10개
+        val mockMenus1 = (1..10).map { i ->
             FavoriteMenuDto(
-                id = 1,
-                code = "MENU001",
-                name_kr = "김치찌개",
-                name_en = "Kimchi Stew",
-                price = 5000,
-                etc = listOf("매움", "국물요리"),
-                score = 4,
-                review_cnt = 12,
-                like_cnt = 30,
-                is_liked = true,
-                alarm = false
-            ),
-            FavoriteMenuDto(
-                id = 2,
-                code = "MENU002",
-                name_kr = "불고기덮밥",
-                name_en = "Bulgogi Rice",
-                price = 6500,
-                etc = listOf("고기", "한식"),
-                score = 5,
-                review_cnt = 20,
-                like_cnt = 50,
-                is_liked = true,
-                alarm = true
+                id = i.toLong(),
+                code = "MENU%03d".format(i),
+                name_kr = "학생회관 메뉴 $i",
+                name_en = "Student Menu $i",
+                price = 4000 + i * 300,
+                etc = listOf("한식"),
+                score = (3..5).random().toDouble(),
+                review_cnt = i * 5,
+                like_cnt = i * 10,
+                is_liked = i % 2 == 0,
+                alarm = i % 3 == 0
             )
-        )
+        }
 
-        val mockRestaurant = FavoriteRestaurantDto(
+        val mockRestaurant1 = FavoriteRestaurantDto(
             id = 100,
             code = "REST001",
             name_kr = "학생회관 식당",
@@ -92,12 +80,37 @@ class FavoriteMenuViewModel @Inject constructor(
             addr = "서울대학교 1동",
             lat = 37.459,
             lng = 126.951,
-            menus = mockMenus
+            menus = mockMenus1
         )
 
-        _restaurants.value = listOf(mockRestaurant)
+        // 두레미담 식당 메뉴 15개
+        val mockMenus2 = (11..25).map { i ->
+            FavoriteMenuDto(
+                id = i.toLong(),
+                code = "MENU%03d".format(i),
+                name_kr = "두레미담 메뉴 $i",
+                name_en = "Duremidam Menu $i",
+                price = 5000 + i * 200,
+                etc = listOf("일식"),
+                score = (3..5).random().toDouble(),
+                review_cnt = i * 4,
+                like_cnt = i * 7,
+                is_liked = i % 2 != 0,
+                alarm = i % 4 == 0
+            )
+        }
+
+        val mockRestaurant2 = FavoriteRestaurantDto(
+            id = 101,
+            code = "REST002",
+            name_kr = "두레미담 식당",
+            name_en = "Duremidam Cafeteria",
+            addr = "서울대학교 2동",
+            lat = 37.460,
+            lng = 126.952,
+            menus = mockMenus2
+        )
+
+        _restaurants.value = listOf(mockRestaurant1, mockRestaurant2)
     }
-
-
-
 }

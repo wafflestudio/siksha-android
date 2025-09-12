@@ -21,7 +21,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -63,6 +68,13 @@ class FavoriteMenuFragment : Fragment() {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.restaurants.collectLatest { restaurants ->
+                val isEmpty = restaurants.isEmpty()
+                binding.emptyText.isVisible = isEmpty
+                binding.menuGroupList.isGone = isEmpty
+            }
+        }
 
         // 뒤로가기 버튼
         binding.backButton.setOnClickListener {

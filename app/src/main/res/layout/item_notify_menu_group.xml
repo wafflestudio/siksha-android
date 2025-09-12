@@ -65,15 +65,4 @@
         android:nestedScrollingEnabled="false"
         tools:listitem="@layout/item_notify_menu" />
 
-    <TextView
-        android:id="@+id/menu_empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="28dp"
-        android:fontFamily="@font/nanum_square_regular"
-        android:text="알림을 받을 메뉴가 없습니다."
-        android:textColor="@color/gray_500"
-        android:visibility="gone" />
-
 </LinearLayout>

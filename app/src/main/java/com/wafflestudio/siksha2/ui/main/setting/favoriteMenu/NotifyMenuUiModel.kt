@@ -6,3 +6,9 @@ data class NotifyMenuUiModel(
     val alarm: Boolean,
     var isChecked: Boolean
 )
+
+data class NotifyMenuGroupUiModel(
+    val restaurantId: Long,
+    val restaurantName: String,
+    val menus: List<NotifyMenuUiModel>
+)
