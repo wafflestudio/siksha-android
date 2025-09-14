@@ -12,6 +12,7 @@ import androidx.paging.PagingData
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
@@ -105,6 +106,10 @@ class MenuDetailViewModel @Inject constructor(
 
     fun getReviews(menuId: Long): Flow<PagingData<Review>> {
         return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
+    }
+
+    fun getMyReviews(): Flow<PagingData<ReviewRestaurant>> {
+        return menuRepository.getMyPagedReviewsByMenuIdFlow()
     }
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {

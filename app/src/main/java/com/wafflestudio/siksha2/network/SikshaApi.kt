@@ -32,6 +32,29 @@ interface SikshaApi {
         @Query("per_page") perPage: Long
     ): NetworkResult<FetchReviewsResult>
 
+    @POST("/reviews/")
+    suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
+
+    @PATCH("/reviews/")
+    suspend fun updateReviews(
+        @Query("menu_id") menuId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Long
+    ): NetworkResult<FetchReviewsResult>
+
+    @DELETE("/reviews/")
+    suspend fun deleteReviews(
+        @Query("menu_id") menuId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Long
+    ): NetworkResult<FetchReviewsResult>
+
+    @GET("/reviews/me")
+    suspend fun fetchMyReviews(
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Long
+    ): NetworkResult<FetchMyReviewsResult>
+
     @GET("/reviews/filter")
     suspend fun fetchReviewsWithImage(
         @Query("menu_id") menuId: Long,
@@ -42,9 +65,6 @@ interface SikshaApi {
 
     @GET("/restaurants/")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
-
-    @POST("/reviews/")
-    suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
     @Multipart
     @POST("/reviews/images")

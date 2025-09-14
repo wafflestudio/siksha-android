@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/reviewContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="리뷰 내용"/>
+
+    <TextView
+        android:id="@+id/reviewDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="날짜"/>
+
+    <TextView
+        android:id="@+id/reviewScore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="⭐ 5.0"/>
+</LinearLayout>

@@ -11,6 +11,7 @@ data class Review(
     @Json(name = "score") val score: Double,
     @Json(name = "comment") val comment: String?,
     @Json(name = "created_at") val createdAt: String,
+    @Json(name = "updated_at") val updatedAt: String,
     @Json(name = "etc") val etc: Etc?
 )
 
