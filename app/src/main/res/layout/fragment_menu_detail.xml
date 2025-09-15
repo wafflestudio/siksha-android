@@ -37,7 +37,7 @@
             android:paddingVertical="12dp"
             android:singleLine="true"
             android:textColor="@color/text_GNB"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textAlignment="center"
             tools:text=" 셀프코너 :잡곡밥 + 계란물만둣국 + 뭐시기 뭐시기 뭐시기 뭐시기"
             android:maxLines="1"

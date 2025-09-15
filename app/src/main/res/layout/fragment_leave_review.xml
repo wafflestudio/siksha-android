@@ -36,7 +36,7 @@
             android:text="@string/leave_review_title"
             android:textColor="@color/text_GNB"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <!-- textview 양옆 마진 맞추기용 -->
         <ImageView
