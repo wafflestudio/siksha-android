@@ -40,6 +40,11 @@ interface SikshaApi {
         @Query("etc") etc: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
+    @GET("/reviews/keywords/dist")
+    suspend fun fetchKeywordDist(
+        @Query("menu_id") menuId: Long
+    ): NetworkResult<FetchKeywordDistResult>
+
     @GET("/restaurants/")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
@@ -51,9 +56,18 @@ interface SikshaApi {
     suspend fun leaveMenuReviewImages(
         @Part("menu_id") menuId: Long,
         @Part("score") score: Long,
+        @Part("taste") taste: String,
+        @Part("price") price: String,
+        @Part("food_composition") foodComposition: String,
         @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
     ): NetworkResult<LeaveReviewResult>
+
+    @POST("/reviews/{review_id}/like")
+    suspend fun reviewLike(@Path("review_id") reviewId: Long)
+
+    @DELETE("/reviews/{review_id}/like")
+    suspend fun reviewDislike(@Path("review_id") reviewId: Long)
 
     @POST("/auth/login/kakao")
     suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): NetworkResult<LoginOAuthResult>
