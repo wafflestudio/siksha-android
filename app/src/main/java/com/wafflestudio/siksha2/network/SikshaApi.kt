@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.network.dto.FestivalDates
 import com.wafflestudio.siksha2.models.Menu
+import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.*
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import okhttp3.MultipartBody
@@ -56,18 +57,18 @@ interface SikshaApi {
     suspend fun leaveMenuReviewImages(
         @Part("menu_id") menuId: Long,
         @Part("score") score: Long,
-        @Part("taste") taste: String,
-        @Part("price") price: String,
-        @Part("food_composition") foodComposition: String,
+        @Part("taste") taste: String?,
+        @Part("price") price: String?,
+        @Part("food_composition") foodComposition: String?,
         @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
     ): NetworkResult<LeaveReviewResult>
 
     @POST("/reviews/{review_id}/like")
-    suspend fun reviewLike(@Path("review_id") reviewId: Long)
+    suspend fun reviewLike(@Path("review_id") reviewId: Long): NetworkResult<Review>
 
     @DELETE("/reviews/{review_id}/like")
-    suspend fun reviewDislike(@Path("review_id") reviewId: Long)
+    suspend fun reviewUnlike(@Path("review_id") reviewId: Long): NetworkResult<Review>
 
     @POST("/auth/login/kakao")
     suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): NetworkResult<LoginOAuthResult>

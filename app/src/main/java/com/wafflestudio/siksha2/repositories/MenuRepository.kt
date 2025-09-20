@@ -8,6 +8,7 @@ import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.FetchKeywordDistResult
 import com.wafflestudio.siksha2.network.dto.FetchRecommendationReviewCommentsResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewDistributionResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
@@ -69,6 +70,10 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchFestivalDates().map { it.festivalDates }
     }
 
+    suspend fun getKeywordDist(menuId: Long): NetworkResult<FetchKeywordDistResult> {
+        return sikshaApi.fetchKeywordDist(menuId)
+    }
+
     suspend fun isFestivalDate(targetDate: String): NetworkResult<Boolean> {
         return sikshaApi.isFestivalDate(targetDate).map { it.isFestival }
     }
@@ -87,12 +92,36 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): NetworkResult<LeaveReviewResult> {
-        return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
+    suspend fun leaveMenuReview(
+        menuId: Long,
+        score: Double,
+        taste: String?,
+        price: String?,
+        foodComposition: String?,
+        comment: String?
+    ): NetworkResult<LeaveReviewResult> {
+        return sikshaApi.leaveMenuReview(
+            LeaveReviewParam(
+                menuId,
+                score,
+                taste,
+                price,
+                foodComposition,
+                comment
+            )
+        )
     }
 
-    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: MultipartBody.Part, images: List<MultipartBody.Part>): NetworkResult<LeaveReviewResult> {
-        return sikshaApi.leaveMenuReviewImages(menuId, score, comment, images)
+    suspend fun leaveMenuReviewImage(
+        menuId: Long,
+        score: Long,
+        taste: String?,
+        price: String?,
+        foodComposition: String?,
+        comment: MultipartBody.Part,
+        images: List<MultipartBody.Part>
+    ): NetworkResult<LeaveReviewResult> {
+        return sikshaApi.leaveMenuReviewImages(menuId, score, taste, price, foodComposition, comment, images)
     }
 
     suspend fun getReviewRecommendationComments(score: Long): NetworkResult<FetchRecommendationReviewCommentsResult> {
@@ -105,6 +134,14 @@ class MenuRepository @Inject constructor(
 
     suspend fun getFirstReviewPhotoByMenuId(menuId: Long): NetworkResult<FetchReviewsResult> {
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
+    }
+
+    suspend fun likeReviewById(reviewId: Long): NetworkResult<Review> {
+        return sikshaApi.reviewLike(reviewId)
+    }
+
+    suspend fun unlikeReviewById(reviewId: Long): NetworkResult<Review> {
+        return sikshaApi.reviewLike(reviewId)
     }
 
     suspend fun likeMenuById(menuId: Long): NetworkResult<Menu> {
