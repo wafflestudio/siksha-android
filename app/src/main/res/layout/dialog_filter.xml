@@ -552,7 +552,6 @@
             android:paddingBottom="35dp"
             android:elevation="8dp"
             android:background="@color/background_secondary"
-            android:translationZ="4dp"
             android:paddingHorizontal="16dp">
 
             <TextView

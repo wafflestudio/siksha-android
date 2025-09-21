@@ -472,7 +472,11 @@ fun ContentEditText(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
-        textStyle = SikshaTypography.body1.copy(color = SikshaTheme.colors.Black, fontSize = 14.sp),
+        textStyle = SikshaTypography.body1.copy(
+            color = SikshaTheme.colors.Black,
+            fontSize = 14.sp,
+            lineHeight = 21.sp
+        ),
         cursorBrush = SolidColor(SikshaTheme.colors.Orange500),
         decorationBox = {
             Box(

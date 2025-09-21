@@ -31,7 +31,7 @@
             android:paddingVertical="11dp"
             android:paddingStart="12dp"
             android:background="@drawable/frame_corner_radius_12"
-            android:elevation="1dp"
+            android:elevation="3dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

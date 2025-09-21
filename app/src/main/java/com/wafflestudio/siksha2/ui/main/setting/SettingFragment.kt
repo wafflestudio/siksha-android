@@ -1,12 +1,12 @@
 package com.wafflestudio.siksha2.ui.main.setting
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -98,7 +98,10 @@ class SettingFragment : Fragment() {
             val action = MainFragmentDirections.actionMainFragmentToVocFragment()
             findNavController().navigate(action)
         }
-        binding.vocRow.findViewById<TextView>(R.id.setting_row_text).setTypeface(null, Typeface.BOLD)
+
+        context.let {
+            binding.vocRow.findViewById<TextView>(R.id.setting_row_text).setTypeface(ResourcesCompat.getFont(it!!, R.font.nanum_square_bold))
+        }
 
         lifecycleScope.launch {
             vm.showEmptyRestaurantFlow.collect {
