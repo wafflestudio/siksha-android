@@ -193,10 +193,25 @@ class MenuDetailViewModel @Inject constructor(
             }
             val commentBody = MultipartBody.Part.createFormData("comment", comment)
             imageList?.let {
-                menuRepository.leaveMenuReviewImage(menuId, score.toLong(), commentBody, imageList)
+                menuRepository.leaveMenuReviewImage(
+                    menuId,
+                    score.toLong(),
+                    "",
+                    "",
+                    "",
+                    commentBody,
+                    imageList
+                )
             }
         } else {
-            menuRepository.leaveMenuReview(menuId, score, comment)
+            menuRepository.leaveMenuReview(
+                menuId,
+                score,
+                "",
+                "",
+                "",
+                comment
+            )
         }
         return response
     }

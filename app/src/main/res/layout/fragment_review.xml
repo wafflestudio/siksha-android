@@ -48,6 +48,13 @@
 
     </LinearLayout>
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/review_compose"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/review_list"
         android:layout_width="match_parent"

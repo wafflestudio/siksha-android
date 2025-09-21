@@ -29,9 +29,9 @@ fun MenuReviewItem(
     userName: String,
     menuRating: Float,
     timeText: String,
-    reviewText: String,
+    reviewText: String?,
     isLiked: Boolean,
-    likeCount: Int,
+    likeCount: Long,
     modifier: Modifier = Modifier,
     onToggleLike: () -> Unit = {},
     keywords: List<String> = listOf(),
@@ -46,12 +46,14 @@ fun MenuReviewItem(
             modifier = Modifier.fillMaxWidth()
                 .padding(start = 16.dp)
         ) {
-            MenuReviewTextBox(
-                reviewText = reviewText,
-                modifier = Modifier.weight(1f)
-            )
+            if (reviewText != null) {
+                MenuReviewTextBox(
+                    reviewText = reviewText,
+                    modifier = Modifier.weight(1f)
+                )
+            }
             Spacer(Modifier.width(10.dp))
-            MenuReviewLikeButton(isLiked, likeCount, modifier, onToggleLike)
+            MenuReviewLikeButton(isLiked, likeCount.toInt(), modifier, onToggleLike)
         }
 
         if (keywords.isNotEmpty()) {
