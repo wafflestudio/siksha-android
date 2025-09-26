@@ -54,6 +54,26 @@ class SettingItemRow : LinearLayout {
         invalidate()
     }
 
+    fun setShowSwitch(visible: Boolean) {
+        binding.switchCompat.setVisibleOrGone(visible)
+        requestLayout()
+        invalidate()
+    }
+
+    fun setSwitchChecked(checked: Boolean) {
+        binding.switchCompat.isChecked = checked
+    }
+
+    fun isSwitchChecked(): Boolean {
+        return binding.switchCompat.isChecked
+    }
+
+    fun setOnSwitchChangedListener(listener: (Boolean) -> Unit) {
+        binding.switchCompat.setOnCheckedChangeListener { _, isChecked ->
+            listener(isChecked)
+        }
+    }
+
     private fun init(attr: AttributeSet?) {
         gravity = Gravity.CENTER_VERTICAL
         orientation = HORIZONTAL

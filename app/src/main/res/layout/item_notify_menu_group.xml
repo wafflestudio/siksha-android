@@ -34,11 +34,11 @@
                     android:id="@+id/restaurant_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nanum_square_bold"
+                    android:fontFamily="@font/nanum_square_extra_bold"
                     android:singleLine="false"
                     android:paddingVertical="10dp"
                     android:paddingStart="16dp"
-                    android:textColor="@color/orange_500"
+                    android:textColor="@color/black"
                     android:textSize="15dp"
                     tools:text="학생회관 식당" />
 

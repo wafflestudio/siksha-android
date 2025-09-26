@@ -11,17 +11,6 @@
     android:paddingHorizontal="5dp"
     >
 
-    <CheckBox
-        android:id="@+id/menu_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/selector_checkbox"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
     <TextView
         android:id="@+id/menu_title_text"
         android:layout_width="0dp"
@@ -30,23 +19,25 @@
         android:fontFamily="@font/nanum_square_regular"
         android:textColor="@color/black"
         android:textSize="15dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/icon_no_fork"
-        app:layout_constraintStart_toEndOf="@id/menu_checkbox"
+        app:layout_constraintEnd_toStartOf="@id/menu_checkbox"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="불고기불고기불고기불고기불고기불고기불고기불고기불고기불고기" />
+        tools:text="바지락리조또 &amp; 베사멜소스 띄어쓰기 기준 밑으로 내려오기" />
 
 
-    <ImageView
-        android:id="@+id/icon_no_fork"
+    <CheckBox
+        android:id="@+id/menu_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="150dp"
-        android:background="@color/white"
-        android:contentDescription="@string/content_no_fork"
-        android:src="@drawable/ic_no_fork"
+        android:button="@drawable/selector_checkbox"
+        android:scaleX="1.3"
+        android:scaleY="1.3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/menu_title_text" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

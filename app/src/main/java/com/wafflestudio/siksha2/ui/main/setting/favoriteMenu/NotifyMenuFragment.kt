@@ -40,13 +40,11 @@ class NotifyMenuFragment : Fragment() {
         adapter = NotifyMenuAdapter { menuId, isChecked ->
             vm.onMenuChecked(menuId, isChecked)
         }
-        binding.menuGroupList.adapter = adapter
-        binding.menuGroupList.layoutManager = LinearLayoutManager(requireContext())
 
         val token = prefs.accessToken.getValue()
 
-        //vm.loadMenus(token)
-        vm.loadMockData()
+        vm.loadMenus(token)
+        //vm.loadMockData()
 
         lifecycleScope.launchWhenStarted {
             vm.groups.collect { groups ->
@@ -59,6 +57,19 @@ class NotifyMenuFragment : Fragment() {
                     binding.emptyText.visibility = View.GONE
                     binding.guideText.visibility = View.VISIBLE
                 }
+            }
+        }
+
+        // 알림 토글 버튼
+        binding.alarmToggleRow.setShowSwitch(true)
+        binding.alarmToggleRow.setSwitchChecked(true)
+        // 토글 이벤트 처리
+        binding.alarmToggleRow.setOnSwitchChangedListener { enabled ->
+            if (enabled) {
+                // 알림 ON 로직
+            } else {
+                binding.guideText.visibility = View.GONE
+                binding.menuGroupList.visibility = View.GONE
             }
         }
 

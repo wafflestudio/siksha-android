@@ -51,8 +51,8 @@ class FavoriteMenuFragment : Fragment() {
 
         val token = sikshaPrefObjects.accessToken.getValue()
 
-        //vm.loadFavoriteMenus(token)
-        vm.loadMockData()
+        vm.loadFavoriteMenus(token)
+        //vm.loadMockData()
 
         binding.menuGroupList.setContent {
             SikshaTheme {
@@ -81,7 +81,7 @@ class FavoriteMenuFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        // 알림 받기 버튼
+        // 알림 설정 이동 버튼
         binding.alarmButton.setOnClickListener {
             val action = FavoriteMenuFragmentDirections.actionFavoriteMenuFragmentToNotifyMenuFragment()
             findNavController().navigate(action)
