@@ -37,11 +37,11 @@ class NotifyMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = NotifyMenuAdapter { menuId, isChecked ->
-            vm.onMenuChecked(menuId, isChecked)
-        }
-
         val token = prefs.accessToken.getValue()
+
+        adapter = NotifyMenuAdapter { menuId, isChecked ->
+            vm.onMenuChecked(menuId, isChecked, token)
+        }
 
         vm.loadMenus(token)
         //vm.loadMockData()
@@ -49,36 +49,28 @@ class NotifyMenuFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             vm.groups.collect { groups ->
                 adapter.submitList(groups)
-
-                if (groups.isEmpty()) {
-                    binding.emptyText.visibility = View.VISIBLE
-                    binding.guideText.visibility = View.GONE
-                } else {
-                    binding.emptyText.visibility = View.GONE
-                    binding.guideText.visibility = View.VISIBLE
-                }
             }
         }
 
         // 알림 토글 버튼
         binding.alarmToggleRow.setShowSwitch(true)
         binding.alarmToggleRow.setSwitchChecked(true)
+        binding.alarmToggleRow.setArrowIcon(false)
+
         // 토글 이벤트 처리
         binding.alarmToggleRow.setOnSwitchChangedListener { enabled ->
             if (enabled) {
-                // 알림 ON 로직
+                binding.guideText.visibility = View.VISIBLE
+                binding.menuGroupList.visibility = View.VISIBLE
             } else {
                 binding.guideText.visibility = View.GONE
                 binding.menuGroupList.visibility = View.GONE
             }
         }
 
-        // 알림 받기 버튼
-        binding.btnReceiveAlarm.setOnClickListener {
-            vm.saveAlarms(token)
-            Toast.makeText(requireContext(), "메뉴 알림 설정이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-
-            val action = NotifyMenuFragmentDirections.actionNotifyMenuFragmentToFavoriteMenuFragment()
+        // 메뉴 알림 시간
+        binding.alarmTimeRow.setOnClickListener {
+            val action = NotifyMenuFragmentDirections.actionNotifyMenuFragmentToNotifyTimeFragment()
             findNavController().navigate(action)
         }
 

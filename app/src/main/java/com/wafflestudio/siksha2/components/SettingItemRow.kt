@@ -64,6 +64,12 @@ class SettingItemRow : LinearLayout {
         binding.switchCompat.isChecked = checked
     }
 
+    fun setShowCheckSimple(visible: Boolean) {
+        binding.checkSimple.setVisibleOrGone(visible)
+        requestLayout()
+        invalidate()
+    }
+
     fun isSwitchChecked(): Boolean {
         return binding.switchCompat.isChecked
     }
@@ -88,6 +94,9 @@ class SettingItemRow : LinearLayout {
                 setArrowIcon(getBoolean(R.styleable.SettingItem_showArrowIcon, true))
                 setNewIcon(getBoolean(R.styleable.SettingItem_showNewIcon, false))
                 setShowCheckbox(getBoolean(R.styleable.SettingItem_showCheckbox, false))
+                setShowSwitch(getBoolean(R.styleable.SettingItem_showSwitch, false))
+                setShowCheckSimple(getBoolean(R.styleable.SettingItem_showCheckSimple, false))
+
                 binding.settingRowText.text = getString(R.styleable.SettingItem_itemText)
                 binding.settingRowText.setTextColor(context.obtainStyledAttributes(attr, R.styleable.SettingItem).getColor(R.styleable.SettingItem_textColor, ContextCompat.getColor(context, R.color.black)))
             } finally {

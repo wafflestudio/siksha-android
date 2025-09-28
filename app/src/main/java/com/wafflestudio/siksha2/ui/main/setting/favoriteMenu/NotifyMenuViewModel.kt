@@ -62,7 +62,7 @@ class NotifyMenuViewModel @Inject constructor(
         _groups.value = mockRestaurants
     }
 
-    fun onMenuChecked(menuId: Long, isChecked: Boolean) {
+    fun onMenuChecked(menuId: Long, isChecked: Boolean, token: String) {
         _groups.value = _groups.value.map { group ->
             group.copy(
                 menus = group.menus.map { menu ->
@@ -70,20 +70,13 @@ class NotifyMenuViewModel @Inject constructor(
                 }
             )
         }
-    }
 
-    fun saveAlarms(token: String) {
+        // 서버에 즉시 반영
         viewModelScope.launch {
-            _groups.value.forEach { group ->
-                group.menus.forEach { menu ->
-                    if (menu.isChecked != menu.alarm) {
-                        if (menu.isChecked) {
-                            repository.enableAlarm(token, menu.id)
-                        } else {
-                            repository.disableAlarm(token, menu.id)
-                        }
-                    }
-                }
+            if (isChecked) {
+                repository.enableAlarm(token, menuId)
+            } else {
+                repository.disableAlarm(token, menuId)
             }
         }
     }

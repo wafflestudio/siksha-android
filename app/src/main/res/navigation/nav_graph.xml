@@ -281,6 +281,32 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+
+        <action
+            android:id="@+id/action_notifyMenuFragment_to_notifyTimeFragment"
+            app:destination="@id/notifyTimeFragment"
+            app:popUpTo="@id/notifyTimeFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/notifyTimeFragment"
+        android:name="com.wafflestudio.siksha2.ui.main.setting.favoriteMenu.NotifyTimeFragment"
+        android:label="fragment_notify_time"
+        tools:layout="@layout/fragment_notify_time">
+        <action
+            android:id="@+id/action_notifyTimeFragment_to_notifyMenuFragment"
+            app:destination="@id/notifyMenuFragment"
+            app:popUpTo="@id/notifyMenuFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_left"
+            app:exitAnim="@anim/wait_anim"
+            app:popEnterAnim="@anim/wait_anim"
+            app:popExitAnim="@anim/slide_right" />
     </fragment>
 
 </navigation>
