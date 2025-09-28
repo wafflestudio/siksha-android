@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_primary"
+    android:background="@color/white"
     android:gravity="center_horizontal">
 
     <LinearLayout
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/background_GNB" >
+        android:background="@color/orange_main" >
 
         <ImageView
             android:id="@+id/close_button"
@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/nanum_square_bold"
             android:text="@string/setting_voc_title"
-            android:textColor="@color/text_GNB"
+            android:textColor="@color/white"
             android:textAlignment="center"
             android:textSize="20dp" />
 
@@ -51,8 +51,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background_primary">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_square_bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/gray_700"
                     android:textSize="20dp"
                     android:text="@string/setting_voc_leave_message"
                     android:layout_marginStart="8dp" />
@@ -155,7 +154,7 @@
                 android:gravity="center"
                 android:paddingVertical="20dp"
                 android:text="@string/setting_voc_send_voc"
-                android:textColor="@color/text_button"
+                android:textColor="@color/white"
                 android:textSize="17dp"
                 android:layout_marginBottom="66dp"
                 android:layout_marginHorizontal="16dp"

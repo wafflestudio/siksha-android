@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -21,9 +22,7 @@ import com.wafflestudio.siksha2.FeatureChecker
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.CalendarSelectView
 import com.wafflestudio.siksha2.components.festival.FestivalToggle
-import com.wafflestudio.siksha2.compose.ui.dailyrestaurant.DailyRestaurantRoute
 import com.wafflestudio.siksha2.databinding.FragmentDailyRestaurantBinding
-import com.wafflestudio.siksha2.databinding.LayoutFilterBinding
 import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.SikshaTheme
@@ -64,6 +63,7 @@ class DailyRestaurantFragment : Fragment() {
     }
 
     private lateinit var binding: FragmentDailyRestaurantBinding
+    private lateinit var menuGroupAdapter: MenuGroupAdapter
     private lateinit var gestureDetector: GestureDetector
 
     // 즐겨찾기 식당 탭과 일반 식당 탭이 다른 프래그먼트로 분리하기엔 중복이 많아서 플래그로 넘겨받고 관리.
@@ -165,6 +165,59 @@ class DailyRestaurantFragment : Fragment() {
             }
         )
 
+        menuGroupAdapter = MenuGroupAdapter(
+            onMenuGroupInfoClickListener = {
+                lifecycleScope.launch {
+                    vm.getRestaurantInfo(it)?.let {
+                        // TODO: BottomSheetController 따로 만들어 Inject 받아쓰기
+                        val bottomSheet = RestaurantInfoBottomSheet.newInstance(it)
+                        bottomSheet.showNow(parentFragmentManager, "restaurant_info_${it.id}")
+                    }
+                }
+            },
+            onMenuGroupToggleFavoriteClickListener = {
+                vm.toggleRestaurantFavorite(it)
+            },
+            onMenuItemToggleLikeClickListener = { menuId, isCurrentlyLiked ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    when (val response = vm.toggleMenuLike(menuId, isCurrentlyLiked)) {
+                        is NetworkResult.Success -> {}
+                        is NetworkResult.Failure -> showToast(response.message)
+                        is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                        else -> showToast(getString(R.string.common_unknown_error))
+                    }
+                }
+            },
+            onMenuItemClickListener = {
+                val action =
+                    MainFragmentDirections.actionMainFragmentToMenuDetailFragment(
+                        it,
+                        vm.dateFilter.value == LocalDate.now()
+                    )
+                findNavController().navigate(action)
+            },
+            onMenuGroupShareClickListener = { menuGroupId ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    val menuGroup = vm.getMenuGroupById(menuGroupId)
+                    val shareDate = vm.dateFilter.value ?: LocalDate.now()
+
+                    if (menuGroup != null) {
+                        val menuData = menuGroup.menus.take(5).map {
+                            (it.nameKr ?: "메뉴 이름 없음") to (it.price?.toString() ?: "가격 없음")
+                        }
+                        KakaoLinkHelper.shareMenuWithTemplate(
+                            requireContext(),
+                            menuData,
+                            menuGroup.nameKr ?: "식당 이름 없음",
+                            shareDate
+                        )
+                    } else {
+                        showToast("해당 메뉴 그룹을 찾을 수 없습니다.")
+                    }
+                }
+            }
+        )
+
         binding.calendarSelectView.updateDate(LocalDate.now())
         binding.calendarSelectView.setDateChangeListener(
             object : CalendarSelectView.OnDateChangeListener {
@@ -175,12 +228,28 @@ class DailyRestaurantFragment : Fragment() {
             }
         )
 
+        binding.menuGroupList.also {
+            it.adapter = menuGroupAdapter
+            it.layoutManager = LinearLayoutManager(context)
+        }
+
+        binding.menuGroupList.setOnTouchListener { _, ev ->
+            gestureDetector.onTouchEvent(ev)
+            false
+        }
+
+        binding.emptyText.setOnTouchListener { _, ev ->
+            gestureDetector.onTouchEvent(ev)
+            true
+        }
+
         vm.favoriteRestaurantExists.observe(viewLifecycleOwner) {
             if (isFavorite) {
                 binding.emptyFavorite.root.setVisibleOrGone(it.not())
                 binding.content.setVisibleOrGone(it)
             }
         }
+        binding.menuGroupList.itemAnimator = null
 
         getFilteredMenuGroups()
 
@@ -211,19 +280,19 @@ class DailyRestaurantFragment : Fragment() {
                     binding.breakfastText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.orange_500
+                            R.color.orange_main
                         )
                     )
                     binding.lunchText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_600
+                            R.color.gray_500
                         )
                     )
                     binding.dinnerText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_600
+                            R.color.gray_500
                         )
                     )
                 }
@@ -232,19 +301,19 @@ class DailyRestaurantFragment : Fragment() {
                     binding.breakfastText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_600
+                            R.color.gray_500
                         )
                     )
                     binding.lunchText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.orange_500
+                            R.color.orange_main
                         )
                     )
                     binding.dinnerText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_600
+                            R.color.gray_500
                         )
                     )
                 }
@@ -253,19 +322,19 @@ class DailyRestaurantFragment : Fragment() {
                     binding.breakfastText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_600
+                            R.color.gray_500
                         )
                     )
                     binding.lunchText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.gray_600
+                            R.color.gray_500
                         )
                     )
                     binding.dinnerText.setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
-                            R.color.orange_500
+                            R.color.orange_main
                         )
                     )
                 }
@@ -288,6 +357,13 @@ class DailyRestaurantFragment : Fragment() {
         binding.dateBefore.setOnClickListener { vm.addDateOffset(-1L) }
         binding.dateAfter.setOnClickListener { vm.addDateOffset(1L) }
 
+        if (featureChecker.isFeatureEnabled("filterFeatureEnabled")) {
+            binding.filterLayout.visibility = View.VISIBLE
+            setUpFilterOptions()
+        } else {
+            binding.filterLayout.visibility = View.GONE
+        }
+
         if (featureChecker.isFeatureEnabled("festivalFeatureEnabled")) {
             vm.dateFilter.observe(viewLifecycleOwner) { targetDate ->
                 if (vm.festivalDates.value.any { festivalDate -> targetDate == LocalDate.parse(festivalDate) }) {
@@ -303,7 +379,7 @@ class DailyRestaurantFragment : Fragment() {
         }
     }
 
-    private fun setUpFilterOptions(binding: LayoutFilterBinding) {
+    private fun setUpFilterOptions() {
         viewLifecycleOwner.lifecycleScope.launch {
             vm.menuFilterCondition.collect { condition ->
                 binding.filterDistance.setFilter(
@@ -414,64 +490,13 @@ class DailyRestaurantFragment : Fragment() {
     }
 
     private fun getFilteredMenuGroups() {
-        binding.menuGroupList.setContent {
-            SikshaTheme {
-                DailyRestaurantRoute(
-                    vm = vm,
-                    isFavorite = isFavorite,
-                    onRestaurantInfoClicked = {
-                        lifecycleScope.launch {
-                            vm.getRestaurantInfo(it)?.let {
-                                val bottomSheet = RestaurantInfoBottomSheet.newInstance(it)
-                                bottomSheet.showNow(parentFragmentManager, "restaurant_info_${it.id}")
-                            }
-                        }
-                    },
-                    onToggleLikeMenu = { menuId, isCurrentlyLiked ->
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            when (val response = vm.toggleMenuLike(menuId, isCurrentlyLiked)) {
-                                is NetworkResult.Success -> {}
-                                is NetworkResult.Failure -> showToast(response.message)
-                                is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
-                                else -> showToast(getString(R.string.common_unknown_error))
-                            }
-                        }
-                    },
-                    onRestaurantShareClicked = {
-                            menuGroupId ->
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            val menuGroup = vm.getMenuGroupById(menuGroupId)
-                            val shareDate = vm.dateFilter.value ?: LocalDate.now()
-
-                            if (menuGroup != null) {
-                                val menuData = menuGroup.menus.take(5).map {
-                                    (it.nameKr ?: "메뉴 이름 없음") to (it.price?.toString() ?: "가격 없음")
-                                }
-                                KakaoLinkHelper.shareMenuWithTemplate(
-                                    requireContext(),
-                                    menuData,
-                                    menuGroup.nameKr ?: "식당 이름 없음",
-                                    shareDate
-                                )
-                            } else {
-                                showToast("해당 메뉴 그룹을 찾을 수 없습니다.")
-                            }
-                        }
-                    },
-                    onClickMenu = {
-                        val action =
-                            MainFragmentDirections.actionMainFragmentToMenuDetailFragment(
-                                it,
-                                vm.dateFilter.value == LocalDate.now()
-                            )
-                        findNavController().navigate(action)
-                    },
-                    onToggleFavoriteRestaurant = {
-                        vm.toggleRestaurantFavorite(it)
-                    },
-                    setUpFilter = { setUpFilterOptions(it) }
-                )
-            }
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.getFilteredMenuGroups(isFavorite)
+                .collect {
+                    binding.menuGroupList.setVisibleOrGone(it.isNotEmpty())
+                    binding.emptyText.setVisibleOrGone(it.isEmpty())
+                    menuGroupAdapter.submitList(it)
+                }
         }
     }
 

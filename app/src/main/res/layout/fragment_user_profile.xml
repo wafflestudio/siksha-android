@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_primary"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".ui.main.setting.account.UserAccountFragment">
 
@@ -14,7 +14,7 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:background="@color/background_GNB" >
+        android:background="@color/orange_main" >
 
         <ImageView
             android:id="@+id/back_button"
@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/nanum_square_bold"
             android:text="@string/setting_setting_user_setting"
-            android:textColor="@color/text_GNB"
+            android:textColor="@color/white"
             android:textAlignment="center"
             android:textSize="20dp" />
 
@@ -60,6 +60,7 @@
             android:id="@+id/imageView"
             android:layout_width="200dp"
             android:layout_height="200dp"
+            android:background="@android:color/darker_gray"
             app:shapeAppearanceOverlay="@style/CircleShape" />
 
         <!-- ImageView for camera icon -->
@@ -70,6 +71,7 @@
             android:layout_gravity="top|end"
             android:layout_margin="8dp"
             android:src="@drawable/ic_camera"
+            app:tint="@color/google_gray"
             android:background="@drawable/ic_circle_white_background"
             android:padding="8dp"
             />
@@ -81,8 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:background="@drawable/frame_setting_edittext_layout"
+        android:background="@drawable/frame_setting_layout"
         android:orientation="horizontal">
 
         <ImageView
@@ -114,7 +115,7 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
             android:paddingVertical="16dp"
-            android:src="@drawable/ic_close_small"
+            android:src="@drawable/ic_image_delete"
             />
 
     </LinearLayout>
@@ -139,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="취소"
-            android:textColor="@color/orange_500"
+            android:textColor="@color/orange_main"
             android:textSize="16sp"
             android:paddingStart="16dp"
             android:paddingEnd="8dp"
@@ -154,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="OK"
-            android:textColor="@color/orange_500"
+            android:textColor="@color/orange_main"
             android:textSize="16sp"
             android:paddingStart="8dp"
             android:paddingEnd="16dp"
@@ -174,9 +175,8 @@
         android:fontFamily="@font/nanum_square_bold"
         android:text="완료"
         android:textSize="17dp"
-        android:textColor="@color/text_button"
+        android:textColor="@color/white"
         android:gravity="center"
-        android:background="@drawable/frame_complete_button"
-        android:enabled="false"/>
+        android:background="@drawable/frame_complete_button" />
 
 </LinearLayout>

@@ -11,11 +11,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.ui.SikshaColors
 
 @Composable
 fun PostDetailDialog(
@@ -30,7 +31,7 @@ fun PostDetailDialog(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .background(color = SikshaTheme.colors.White, shape = RoundedCornerShape(26.dp))
+                .background(color = SikshaColors.White900, shape = RoundedCornerShape(26.dp))
         ) {
             if (isMine) {
                 Box(
@@ -42,7 +43,7 @@ fun PostDetailDialog(
                     Text(
                         text = "수정하기",
                         fontSize = 16.sp,
-                        color = SikshaTheme.colors.Gray700,
+                        color = Color(0xFF797979),
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(onClick = onClickEdit)
@@ -52,7 +53,7 @@ fun PostDetailDialog(
                 }
                 Divider(
                     modifier = Modifier.padding(horizontal = 11.dp),
-                    color = SikshaTheme.colors.BorderPrimary,
+                    color = Color(0xFFE0E0E0),
                     thickness = 1.dp
                 )
                 Box(
@@ -64,7 +65,7 @@ fun PostDetailDialog(
                     Text(
                         text = "삭제하기",
                         fontSize = 16.sp,
-                        color = SikshaTheme.colors.Gray700,
+                        color = Color(0xFF797979),
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(onClick = onClickDelete)
@@ -74,7 +75,7 @@ fun PostDetailDialog(
                 }
                 Divider(
                     modifier = Modifier.padding(horizontal = 11.dp),
-                    color = SikshaTheme.colors.BorderPrimary,
+                    color = Color(0xFFE0E0E0),
                     thickness = 1.dp
                 )
             }
@@ -88,7 +89,7 @@ fun PostDetailDialog(
                     Text(
                         text = "신고하기",
                         fontSize = 16.sp,
-                        color = SikshaTheme.colors.Gray700,
+                        color = Color(0xFF797979),
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable(onClick = onClickReport)
@@ -98,7 +99,7 @@ fun PostDetailDialog(
                 }
                 Divider(
                     modifier = Modifier.padding(horizontal = 11.dp),
-                    color = SikshaTheme.colors.BorderPrimary,
+                    color = Color(0xFFE0E0E0),
                     thickness = 1.dp
                 )
             }
@@ -111,7 +112,7 @@ fun PostDetailDialog(
                 Text(
                     text = "취소",
                     fontSize = 16.sp,
-                    color = SikshaTheme.colors.Orange500,
+                    color = Color(0xFFFF9522),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = onClickCancel)

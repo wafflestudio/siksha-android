@@ -32,8 +32,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:visibility="gone"
-            android:background="@color/black"
-            android:alpha="0.5">
+            android:background="@color/black_50percent">
 
             <TextView
                 android:layout_width="wrap_content"

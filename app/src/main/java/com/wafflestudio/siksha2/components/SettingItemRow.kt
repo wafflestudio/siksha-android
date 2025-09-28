@@ -5,9 +5,10 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.graphics.Color
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemSettingRowBinding
+import com.wafflestudio.siksha2.utils.dp
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class SettingItemRow : LinearLayout {
@@ -57,6 +58,9 @@ class SettingItemRow : LinearLayout {
     private fun init(attr: AttributeSet?) {
         gravity = Gravity.CENTER_VERTICAL
         orientation = HORIZONTAL
+        val dp18 = context.dp(18)
+        val dp24 = context.dp(24)
+        setPadding(dp24, dp18, dp24, dp18)
 
         context.theme.obtainStyledAttributes(
             attr,
@@ -69,7 +73,9 @@ class SettingItemRow : LinearLayout {
                 setNewIcon(getBoolean(R.styleable.SettingItem_showNewIcon, false))
                 setShowCheckbox(getBoolean(R.styleable.SettingItem_showCheckbox, false))
                 binding.settingRowText.text = getString(R.styleable.SettingItem_itemText)
-                binding.settingRowText.setTextColor(context.obtainStyledAttributes(attr, R.styleable.SettingItem).getColor(R.styleable.SettingItem_textColor, ContextCompat.getColor(context, R.color.black)))
+
+                val textColor = getColor(R.styleable.SettingItem_textColor, Color.DarkGray.hashCode())
+                binding.settingRowText.setTextColor(textColor)
             } finally {
                 recycle()
             }

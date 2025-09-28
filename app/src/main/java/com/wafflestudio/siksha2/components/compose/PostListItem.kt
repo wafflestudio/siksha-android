@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
@@ -34,7 +35,6 @@ fun PostListItem(
 ) {
     Row(
         modifier = modifier
-            .background(SikshaTheme.colors.BackgroundPrimary)
             .clickable {
                 onClick()
             }
@@ -50,15 +50,13 @@ fun PostListItem(
                 fontWeight = FontWeight.Bold,
                 style = SikshaTypography.body2,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = SikshaTheme.colors.Black
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = content,
                 style = SikshaTypography.body2,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = SikshaTheme.colors.Gray900
+                overflow = TextOverflow.Ellipsis
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -80,7 +78,7 @@ fun PostListItem(
                     .size(61.dp),
                 contentDescription = "",
                 loading = {
-                    Box(modifier = Modifier.background(SikshaTheme.colors.Gray400))
+                    Box(modifier = Modifier.background(SikshaColors.Gray350))
                 },
                 contentScale = ContentScale.Crop
             )

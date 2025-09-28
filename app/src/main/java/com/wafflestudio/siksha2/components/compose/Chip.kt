@@ -12,10 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
 
 @Composable
@@ -29,7 +28,7 @@ fun Chip(
         text = text,
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .background(if (selected) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray100)
+            .background(if (selected) SikshaColors.OrangeMain else SikshaColors.Gray100)
             .padding(horizontal = 12.dp, vertical = 9.dp)
             .clickable(
                 indication = null,
@@ -37,9 +36,8 @@ fun Chip(
             ) {
                 onClick()
             },
-        color = if (selected) SikshaTheme.colors.TextButton else SikshaTheme.colors.Gray600,
-        style = SikshaTypography.body1,
-        fontWeight = FontWeight.Bold
+        color = if (selected) SikshaColors.White900 else SikshaColors.Gray400,
+        style = SikshaTypography.body1
     )
 }
 
@@ -48,7 +46,7 @@ fun Chip(
 fun ChipPreview() {
     Row(
         modifier = Modifier
-            .background(SikshaTheme.colors.White)
+            .background(SikshaColors.White900)
             .padding(20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {

@@ -2,8 +2,6 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.content.Context
 import android.net.Uri
-import androidx.compose.runtime.FloatState
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -61,10 +59,6 @@ class MenuDetailViewModel @Inject constructor(
     val leaveReviewState: LiveData<ReviewState>
         get() = _leaveReviewState
 
-    private val _reviewRating = mutableFloatStateOf(5f)
-    val reviewRating: FloatState
-        get() = _reviewRating
-
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -121,10 +115,6 @@ class MenuDetailViewModel @Inject constructor(
                 else -> _commentHint.value = ""
             }
         }
-    }
-
-    fun setReviewRating(newRating: Float) {
-        _reviewRating.floatValue = newRating
     }
 
     fun refreshReviewDistribution(menuId: Long) {

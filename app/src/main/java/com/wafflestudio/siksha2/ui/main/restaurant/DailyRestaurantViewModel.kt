@@ -74,7 +74,7 @@ class DailyRestaurantViewModel @Inject constructor(
     private val showEmptyRestaurant = restaurantRepository.showEmptyRestaurant.asFlow()
     private val restaurantOrder = restaurantRepository.restaurantsOrder.asFlow()
     private val favoriteRestaurantOrder = restaurantRepository.favoriteRestaurantsOrder.asFlow()
-    val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
+    private val allRestaurant = restaurantRepository.getAllRestaurantsFlow()
 
     @Inject
     lateinit var featureChecker: FeatureChecker
@@ -241,7 +241,7 @@ class DailyRestaurantViewModel @Inject constructor(
                         MealsOfDay.DN -> menuGroups.data.dinner
                     }
                 }
-            }.map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
+            }
             // 축제 적용
             .combine(showFestival) { menuGroups, showFestivalFlag ->
                 menuGroups.filter { menuGroup ->
@@ -346,6 +346,7 @@ class DailyRestaurantViewModel @Inject constructor(
                     }
             }
             // 식당 순서, 표시 여부 조정
+            .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
             .combine(if (showOnlyFavorite) favoriteRestaurantOrder else restaurantOrder) { menuGroups, (order) ->
                 val result = mutableListOf<MenuGroup>()
                 val sortedMenuGroups = menuGroups.sortedByDescending { it.id }

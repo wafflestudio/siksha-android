@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.ui.SikshaColors
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.ThumbIcon
 
@@ -28,7 +28,7 @@ fun LikeIconWithCount(
         Text(
             text = likeCount.toString(),
             fontSize = 10.sp,
-            color = SikshaTheme.colors.Orange500,
+            color = SikshaColors.OrangeMain,
             style = SikshaTypography.body2
         )
     }

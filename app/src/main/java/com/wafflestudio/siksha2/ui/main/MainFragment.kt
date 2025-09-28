@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -46,20 +46,24 @@ class MainFragment : Fragment() {
             setCurrentItem(currentTabState.ordinal, false)
         }
 
-        val tabIconIds = listOf(R.drawable.ic_tab_favorite, R.drawable.ic_tab_main, R.drawable.ic_tab_community, R.drawable.ic_tab_setting)
-        tabIconIds.forEach { id ->
-            val newTab = binding.tabLayout.newTab()
-
-            binding.tabLayout.addTab(newTab)
-        }
+        binding.tabLayout.addTab(
+            binding.tabLayout.newTab()
+                .setIcon(ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_community, null)),
+            2,
+            false
+        )
 
         TabLayoutMediator(
             binding.tabLayout,
             binding.viewPager
         ) { tab: TabLayout.Tab, i: Int ->
-            val customView = LayoutInflater.from(context).inflate(R.layout.layout_tab_icon, null)
-            customView.findViewById<ImageView>(R.id.content).setImageResource(tabIconIds[i])
-            tab.customView = customView
+            tab.icon = when (i) {
+                MainTabState.FAVORITE.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_favorite, null)
+                MainTabState.MAIN.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_main, null)
+                MainTabState.COMMUNITY.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_community, null)
+                MainTabState.SETTINGS.ordinal -> ResourcesCompat.getDrawable(resources, R.drawable.ic_tab_setting, null)
+                else -> throw IllegalStateException("no such tab with index $i")
+            }
         }.attach()
     }
 
