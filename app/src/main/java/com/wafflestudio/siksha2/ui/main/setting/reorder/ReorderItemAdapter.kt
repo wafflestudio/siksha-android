@@ -3,7 +3,9 @@ package com.wafflestudio.siksha2.ui.main.setting.reorder
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.compose.ui.settings.ReorderRestaurantNameCard
 import com.wafflestudio.siksha2.databinding.ItemSettingRestaurantReorderBinding
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.getInflater
 import com.woxthebox.draglistview.DragItemAdapter
 
@@ -20,7 +22,11 @@ class ReorderItemAdapter() : DragItemAdapter<Pair<Long, String>, ReorderItemAdap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        holder.binding.restaurantName.text = mItemList[position].second
+        holder.binding.restaurantName.setContent {
+            SikshaTheme {
+                ReorderRestaurantNameCard(mItemList[position].second)
+            }
+        }
 
         val nameBg = when (position) {
             0 -> R.drawable.frame_top_left_corner_radius_12

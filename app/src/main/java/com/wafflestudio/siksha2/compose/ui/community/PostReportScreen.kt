@@ -1,5 +1,4 @@
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -79,7 +77,7 @@ fun PostReportScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(SikshaTheme.colors.White)
+            .background(SikshaTheme.colors.BackgroundPrimary)
     ) {
         TopBar(
             title = "신고하기",
@@ -104,7 +102,7 @@ fun PostReportScreen(
                 text = "어떤 이유로 신고하시나요?",
                 style = TextStyle(
                     fontSize = 20.sp,
-                    color = Color.Black
+                    color = SikshaTheme.colors.Black
                 ),
                 modifier = Modifier.padding(start = 4.dp)
             )
@@ -125,7 +123,8 @@ fun PostReportScreen(
                 text = user.nickname,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = SikshaTheme.colors.Black
             )
         }
 
@@ -137,8 +136,7 @@ fun PostReportScreen(
                 .padding(horizontal = 28.dp)
                 .height(280.dp)
                 .align(Alignment.CenterHorizontally)
-                .background(Color(0xFFF5F5F5), shape = RoundedCornerShape(8.dp))
-                .border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
+                .background(SikshaTheme.colors.Gray50, shape = RoundedCornerShape(8.dp))
         ) {
             BasicTextField(
                 value = reportContent,
@@ -147,7 +145,10 @@ fun PostReportScreen(
                         reportContent = it
                     }
                 },
-                textStyle = TextStyle(fontSize = 16.sp),
+                textStyle = TextStyle(
+                    fontSize = 16.sp,
+                    color = SikshaTheme.colors.Black
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -156,7 +157,7 @@ fun PostReportScreen(
 
             Text(
                 text = "${reportContent.length}자/200자",
-                style = TextStyle(color = Color.Gray, fontSize = 12.sp),
+                style = TextStyle(color = SikshaTheme.colors.Gray700, fontSize = 12.sp),
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(8.dp)
@@ -169,7 +170,10 @@ fun PostReportScreen(
             onClick = {
                 onClickReport(reportContent)
             },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFFF9522)),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = SikshaTheme.colors.Orange500,
+                disabledBackgroundColor = SikshaTheme.colors.Gray600
+            ),
             enabled = isContentNotEmpty,
             modifier = Modifier
                 .fillMaxWidth()
@@ -179,7 +183,7 @@ fun PostReportScreen(
         ) {
             Text(
                 text = "전송하기",
-                color = Color.White,
+                color = SikshaTheme.colors.TextButton,
                 style = TextStyle(
                     fontSize = 17.sp
                 )
