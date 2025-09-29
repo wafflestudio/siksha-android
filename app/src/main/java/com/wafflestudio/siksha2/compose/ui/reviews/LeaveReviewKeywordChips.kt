@@ -46,7 +46,7 @@ fun LeaveReviewKeywordChip(
 fun LeaveReviewKeywordChips(
     keywords: List<String>,
     selectedKeyword: String,
-    selectKeywordFromList: (Int) -> Unit,
+    selectKeywordFromList: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     FlowRow(
@@ -54,11 +54,11 @@ fun LeaveReviewKeywordChips(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        keywords.forEachIndexed { idx, keyword ->
+        keywords.forEach { keyword ->
             LeaveReviewKeywordChip(
                 keyword = keyword,
                 selected = (keyword == selectedKeyword),
-                onClickKeyword = { selectKeywordFromList(idx) }
+                onClickKeyword = { selectKeywordFromList(keyword) }
             )
         }
     }

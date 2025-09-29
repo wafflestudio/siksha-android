@@ -19,6 +19,8 @@ import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -49,6 +51,10 @@ class MenuDetailViewModel @Inject constructor(
     private val _keywordDistribution = MutableLiveData<KeywordDist>()
     val keywordDistribution: LiveData<KeywordDist>
         get() = _keywordDistribution
+
+    private val _selectedKeywordList = MutableStateFlow<List<String>>(listOf("", "", ""))
+    val selectedKeywordList: StateFlow<List<String>>
+        get() = _selectedKeywordList
 
     private val _imageUriList = MutableLiveData<List<Uri>>()
     val imageUriList: LiveData<List<Uri>>
@@ -148,6 +154,10 @@ class MenuDetailViewModel @Inject constructor(
                 else -> _keywordDistribution.value = KeywordDist(listOf(), listOf())
             }
         }
+    }
+
+    fun selectKeyword(idx: Int, keyword: String) {
+        _selectedKeywordList.value = _selectedKeywordList.value.toMutableList().also { it[idx] = keyword }
     }
 
     fun addImageUri(uri: Uri, onFailure: () -> Unit) {

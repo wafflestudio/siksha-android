@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha2.compose.ui.menudetail
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -160,7 +159,6 @@ fun MenuDetailScreen(
         }
         item {
             BriefImageReviews(
-                menu = menu,
                 imageReviews = imageReviews,
                 onNavigateToReviewPhoto = onNavigateToReviewPhoto
             )
@@ -200,7 +198,6 @@ fun MenuDetailScreen(
 
 @Composable
 fun BriefImageReviews(
-    menu: Menu?,
     imageReviews: LazyPagingItems<Review>,
     onNavigateToReviewPhoto: () -> Unit,
     modifier: Modifier = Modifier
@@ -247,7 +244,7 @@ fun BriefImageReviews(
                 else -> {
                     if (i == 3) {
                         MenuDetailImagesShowMore(
-                            imageUri = Uri.parse(it),
+                            imageUri = it.toUri(),
                             modifier = Modifier
                                 .size(120.dp)
                                 .clip(RoundedCornerShape(10.dp)),
