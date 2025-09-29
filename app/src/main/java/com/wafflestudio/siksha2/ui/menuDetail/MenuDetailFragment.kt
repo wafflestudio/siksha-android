@@ -69,6 +69,7 @@ class MenuDetailFragment : Fragment() {
         vm.refreshMenu(args.menuId)
         vm.refreshImages(args.menuId)
         vm.refreshReviewDistribution(args.menuId)
+        vm.refreshKeywordDistribution(args.menuId)
 
         vm.networkResultState.observe(viewLifecycleOwner) {
             binding.menuInfoContainer.setVisibleOrGone(it == MenuDetailViewModel.State.SUCCESS)

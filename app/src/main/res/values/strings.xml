@@ -48,7 +48,7 @@
     <string name="menu_detail_review_people_total">총</string>
     <string name="menu_detail_review_people_count">명</string>
     <string name="menu_detail_review_people_has_reviewed">이 평가했어요!</string>
-    <string name="menu_detail_photo_review_gather">사진 리뷰 모아보기</string>
+    <string name="menu_detail_photo_review_gather">사진 리뷰</string>
     <string name="menu_detail_review_gather">리뷰</string>
     <string name="menu_detail_plus">+</string>
     <string name="menu_detail_more_photo">건 더 보기</string>

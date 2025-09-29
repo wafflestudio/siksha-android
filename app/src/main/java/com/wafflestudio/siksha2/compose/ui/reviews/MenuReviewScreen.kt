@@ -2,9 +2,9 @@ package com.wafflestudio.siksha2.compose.ui.reviews
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.wafflestudio.siksha2.models.Review
@@ -16,16 +16,27 @@ fun MenuReviewRoute(
     vm: MenuDetailViewModel,
     modifier: Modifier = Modifier
 ) {
-    val reviewsflow = vm.getReviews(menuId).collectAsLazyPagingItems()
+    val reviewsFlow = vm.getReviews(menuId).collectAsLazyPagingItems()
 
-    LazyColumn(
+    MenuReviewScreen(
+        reviews = reviewsFlow,
         modifier = modifier.fillMaxSize()
+    )
+}
+
+@Composable
+fun MenuReviewScreen(
+    reviews: LazyPagingItems<Review>,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier
     ) {
         items(
-            reviewsflow.itemCount,
-            key = reviewsflow.itemKey { it.id }
+            reviews.itemCount,
+            key = reviews.itemKey { it.id }
         ) { idx ->
-            val review = reviewsflow[idx]
+            val review = reviews[idx]
             if (review != null) {
                 MenuReviewItem(
                     review.userId.toString(),
@@ -36,24 +47,6 @@ fun MenuReviewRoute(
                     likeCount = review.likedCount
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun MenuReviewScreen(
-    reviews: List<Review>
-) {
-    LazyColumn {
-        items(reviews) { review ->
-            MenuReviewItem(
-                review.userId.toString(),
-                menuRating = review.score.toFloat(),
-                timeText = review.createdAt,
-                reviewText = review.comment,
-                isLiked = review.isLiked,
-                likeCount = review.likedCount
-            )
         }
     }
 }

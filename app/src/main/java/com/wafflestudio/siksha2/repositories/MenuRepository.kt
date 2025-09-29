@@ -4,11 +4,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.db.DailyMenusDao
 import com.wafflestudio.siksha2.models.DailyMenu
+import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
-import com.wafflestudio.siksha2.network.dto.FetchKeywordDistResult
 import com.wafflestudio.siksha2.network.dto.FetchRecommendationReviewCommentsResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewDistributionResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
@@ -70,8 +70,8 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchFestivalDates().map { it.festivalDates }
     }
 
-    suspend fun getKeywordDist(menuId: Long): NetworkResult<FetchKeywordDistResult> {
-        return sikshaApi.fetchKeywordDist(menuId)
+    suspend fun getKeywordDist(menuId: Long): NetworkResult<KeywordDist> {
+        return sikshaApi.fetchKeywordDist(menuId).map { it.toKeywordDist() }
     }
 
     suspend fun isFestivalDate(targetDate: String): NetworkResult<Boolean> {

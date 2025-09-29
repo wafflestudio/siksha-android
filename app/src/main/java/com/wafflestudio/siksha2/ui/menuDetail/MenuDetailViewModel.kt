@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
@@ -44,6 +45,10 @@ class MenuDetailViewModel @Inject constructor(
     private val _reviewDistribution = MutableLiveData<List<Long>>()
     val reviewDistribution: LiveData<List<Long>>
         get() = _reviewDistribution
+
+    private val _keywordDistribution = MutableLiveData<KeywordDist>()
+    val keywordDistribution: LiveData<KeywordDist>
+        get() = _keywordDistribution
 
     private val _imageUriList = MutableLiveData<List<Uri>>()
     val imageUriList: LiveData<List<Uri>>
@@ -132,6 +137,15 @@ class MenuDetailViewModel @Inject constructor(
             when (val response = menuRepository.getReviewDistribution(menuId)) {
                 is NetworkResult.Success -> _reviewDistribution.value = response.body.dist
                 else -> _reviewDistribution.value = emptyList()
+            }
+        }
+    }
+
+    fun refreshKeywordDistribution(menuId: Long) {
+        viewModelScope.launch {
+            when (val response = menuRepository.getKeywordDist(menuId)) {
+                is NetworkResult.Success -> _keywordDistribution.value = response.body
+                else -> _keywordDistribution.value = KeywordDist(listOf(), listOf())
             }
         }
     }
