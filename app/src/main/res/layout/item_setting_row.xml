@@ -45,7 +45,8 @@
         android:id="@+id/check_simple"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_check_orange" />
+        android:layout_gravity="center"
+        android:src="@drawable/ic_check_orange"/>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/switchCompat"

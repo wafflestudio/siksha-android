@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:paddingVertical="14dp"
             android:paddingStart="16dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="18dp"
             app:itemText="메뉴 알림 시간" />
 
     </LinearLayout>

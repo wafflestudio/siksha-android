@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:paddingVertical="14dp"
             android:paddingStart="16dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="18dp"
             app:itemText="아침에 한 번에 받기" />
 
         <View
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:paddingVertical="14dp"
             android:paddingStart="16dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="18dp"
             app:itemText="식사시간마다 받기" />
 
     </LinearLayout>
@@ -97,6 +97,7 @@
 식사시간마다 받기: 아침 · 점심 · 저녁 메뉴를 해당 시간대에 맞춰 나누어 안내드려요. (아침 7:30 / 점심 10:30 / 저녁 16:30)"
         android:textColor="@color/gray_600"
         android:textSize="13sp"
+        android:lineSpacingMultiplier="1.2"
         app:layout_constraintTop_toBottomOf="@id/alarm_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
