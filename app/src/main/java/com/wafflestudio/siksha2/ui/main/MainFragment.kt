@@ -12,12 +12,17 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentMainBinding
+import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
+import com.wafflestudio.siksha2.ui.main.setting.favoriteMenu.FavoriteMenuAlarmDialog
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var stateAdapter: FragmentStateAdapter
+    @Inject
+    lateinit var sikshaPrefs: SikshaPrefObjects
 
     private val vm: MainViewModel by activityViewModels()
 
@@ -34,6 +39,14 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /*
+        if (!sikshaPrefs.favoriteModalShown.getValue()) {
+            FavoriteMenuAlarmDialog().show(parentFragmentManager, "FavoriteMenuAlarm")
+            sikshaPrefs.favoriteModalShown.setValue(true)
+        }
+        */
+        FavoriteMenuAlarmDialog().show(parentFragmentManager, "FavoriteMenuAlarm")
 
         initTab()
     }
