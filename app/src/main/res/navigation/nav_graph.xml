@@ -65,7 +65,7 @@
             app:popExitAnim="@anim/slide_right" />
         <action
             android:id="@+id/action_mainFragment_to_myReviewFragment"
-            app:destination="@id/myReviewFragment" />
+            app:destination="@id/MyReviewFragment" />
 
     </fragment>
 
@@ -245,7 +245,7 @@
             app:argType="long" />
     </fragment>
     <fragment
-        android:id="@+id/myReviewFragment"
+        android:id="@+id/MyReviewFragment"
         android:name="com.wafflestudio.siksha2.ui.menuDetail.review.MyReviewFragment"
         android:label="MyReviewFragment" />
 
