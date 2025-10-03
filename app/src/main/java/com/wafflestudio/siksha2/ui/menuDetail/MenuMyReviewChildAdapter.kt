@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMyReviewBinding
 import com.wafflestudio.siksha2.models.Review
 
-class MenuMyReviewChildAdapter  : ListAdapter<Review, MenuMyReviewChildAdapter.ReviewViewHolder>(DiffCallback) {
+class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.ReviewViewHolder>(DiffCallback) {
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<Review>() {

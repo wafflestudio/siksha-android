@@ -89,7 +89,6 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
-
     fun getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
             config = MenuReviewWithImagePagingSource.Config,

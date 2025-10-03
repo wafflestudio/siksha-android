@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
-class MyReviewFragment: Fragment() {
+class MyReviewFragment : Fragment() {
     private lateinit var binding: FragmentMyReviewBinding
     private val vm: MenuDetailViewModel by activityViewModels()
     private lateinit var reviewsAdapter: MenuMyReviewAdapter
@@ -62,5 +62,4 @@ class MyReviewFragment: Fragment() {
             findNavController().popBackStack()
         }
     }
-
 }
