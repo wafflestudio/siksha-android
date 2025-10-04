@@ -3,7 +3,9 @@
     android:orientation="vertical"
     android:padding="12dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="12dp"
+    android:background="@drawable/bg_review_card">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -16,6 +18,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textSize="18sp"
+            android:textColor="@color/orange_500"
             android:textStyle="bold"/>
 
         <ImageView
@@ -24,6 +27,16 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_arrow_down"/>
     </LinearLayout>
+
+    <View
+        android:id="@+id/topDivider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/orange_500"
+        android:visibility="gone"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reviewRecycler"

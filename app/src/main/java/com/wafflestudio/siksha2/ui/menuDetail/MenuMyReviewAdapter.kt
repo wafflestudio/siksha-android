@@ -2,10 +2,14 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemMyReviewRestaurantBinding
 import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 
@@ -34,8 +38,17 @@ class MenuMyReviewAdapter :
             binding.arrowIcon.rotation = if (isExpanded) 180f else 0f
 
             // 리뷰 어댑터 (Nested RecyclerView)
+            binding.reviewRecycler.layoutManager = LinearLayoutManager(binding.root.context)
             val reviewAdapter = MenuMyReviewChildAdapter()
             binding.reviewRecycler.adapter = reviewAdapter
+
+            if (binding.reviewRecycler.itemDecorationCount == 0) {
+                val divider = DividerItemDecoration(binding.root.context, DividerItemDecoration.VERTICAL)
+                val drawable = ContextCompat.getDrawable(binding.root.context, R.drawable.divider_gray_line)
+                divider.setDrawable(drawable!!)
+                binding.reviewRecycler.addItemDecoration(divider)
+            }
+
             reviewAdapter.submitList(item.reviews)
 
             // 펼치기/접기
@@ -43,6 +56,7 @@ class MenuMyReviewAdapter :
                 isExpanded = !isExpanded
                 binding.arrowIcon.animate().rotation(if (isExpanded) 180f else 0f).start()
                 binding.reviewRecycler.isVisible = isExpanded
+                binding.topDivider.isVisible = isExpanded
             }
 
             // 초기에는 접혀있게
