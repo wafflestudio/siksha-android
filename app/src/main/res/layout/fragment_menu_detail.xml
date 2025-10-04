@@ -55,486 +55,493 @@
 
     </LinearLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tool_bar">
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <LinearLayout
-            android:id="@+id/menu_info_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tool_bar">-->
 
-            <ImageView
-                android:id="@+id/menu_like_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_heart"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toEndOf="@id/menu_stars"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--        <LinearLayout-->
+<!--            android:id="@+id/menu_info_container"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center_horizontal"-->
+<!--            android:orientation="vertical">-->
 
-            <TextView
-                android:id="@+id/menu_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_square_bold"
-                android:textSize="13sp"
-                android:textColor="@color/black"
-                tools:text="좋아요 -개"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:layout_marginTop="6dp"
-                android:layout_marginHorizontal="10dp" />
+<!--            <ImageView-->
+<!--                android:id="@+id/menu_like_button"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:src="@drawable/ic_heart"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                app:layout_constraintStart_toEndOf="@id/menu_stars"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <View
-                android:background="@color/border_primary"
-                android:layout_height="1dp"
-                android:layout_width="match_parent"
-                android:layout_marginTop="18dp"
-                android:layout_marginHorizontal="15dp"
-                />
+<!--            <TextView-->
+<!--                android:id="@+id/menu_like_count"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/nanum_square_bold"-->
+<!--                android:textSize="13sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                tools:text="좋아요 -개"-->
+<!--                android:ellipsize="end"-->
+<!--                android:maxLines="1"-->
+<!--                android:layout_marginTop="6dp"-->
+<!--                android:layout_marginHorizontal="10dp" />-->
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+<!--            <View-->
+<!--                android:background="@color/border_primary"-->
+<!--                android:layout_height="1dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_marginTop="18dp"-->
+<!--                android:layout_marginHorizontal="15dp"-->
+<!--                />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:gravity="center">
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                >-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanum_square_bold"
-                        android:text="@string/menu_detail_review_people_total"
-                        android:textColor="@color/gray_600"
-                        android:textSize="10sp" />
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="14dp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    android:gravity="center">-->
 
-                    <TextView
-                        android:id="@+id/review_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanum_square_bold"
-                        android:textColor="@color/orange_500"
-                        android:textSize="10sp"
-                        tools:text="123" />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:fontFamily="@font/nanum_square_bold"-->
+<!--                        android:text="@string/menu_detail_review_people_total"-->
+<!--                        android:textColor="@color/gray_600"-->
+<!--                        android:textSize="10sp" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanum_square_bold"
-                        android:text="@string/menu_detail_review_people_count"
-                        android:textColor="@color/orange_500"
-                        android:textSize="10sp"
-                        tools:text="명" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/review_count"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:fontFamily="@font/nanum_square_bold"-->
+<!--                        android:textColor="@color/orange_500"-->
+<!--                        android:textSize="10sp"-->
+<!--                        tools:text="123" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nanum_square_bold"
-                        android:text="@string/menu_detail_review_people_has_reviewed"
-                        android:textColor="@color/gray_600"
-                        android:textSize="10sp" />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:fontFamily="@font/nanum_square_bold"-->
+<!--                        android:text="@string/menu_detail_review_people_count"-->
+<!--                        android:textColor="@color/orange_500"-->
+<!--                        android:textSize="10sp"-->
+<!--                        tools:text="명" />-->
 
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:fontFamily="@font/nanum_square_bold"-->
+<!--                        android:text="@string/menu_detail_review_people_has_reviewed"-->
+<!--                        android:textColor="@color/gray_600"-->
+<!--                        android:textSize="10sp" />-->
 
-                <TextView
-                    android:id="@+id/menu_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="37dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"
-                    android:textColor="@color/gray_900"
-                    android:textSize="32sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="4.5" />
+<!--                </LinearLayout>-->
 
-                <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/menu_stars"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintEnd_toEndOf="@id/menu_rating"
-                    app:layout_constraintStart_toStartOf="@id/menu_rating"
-                    app:layout_constraintTop_toBottomOf="@id/menu_rating"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/menu_rating"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="50dp"-->
+<!--                    android:layout_marginTop="37dp"-->
+<!--                    android:fontFamily="@font/nanum_square_extra_bold"-->
+<!--                    android:textColor="@color/gray_900"-->
+<!--                    android:textSize="32sp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    tools:text="4.5" />-->
 
-                <ImageView
-                    android:id="@+id/star_5"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="36dp"
-                    android:src="@drawable/ic_gray_star"
-                    app:layout_constraintStart_toEndOf="@id/menu_rating"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.compose.ui.platform.ComposeView-->
+<!--                    android:id="@+id/menu_stars"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    app:layout_constraintEnd_toEndOf="@id/menu_rating"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/menu_rating"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/menu_rating"/>-->
 
-                <TextView
-                    android:id="@+id/text_rate_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="3dp"
-                    android:fontFamily="@font/nanum_square_extra_bold"
-                    android:text="5"
-                    android:textColor="@color/gray_600"
-                    android:textSize="8sp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_5"
-                    app:layout_constraintEnd_toStartOf="@id/star_5"
-                    app:layout_constraintTop_toTopOf="@id/star_5" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star_5"-->
+<!--                    android:layout_width="8dp"-->
+<!--                    android:layout_height="8dp"-->
+<!--                    android:layout_marginStart="40dp"-->
+<!--                    android:layout_marginTop="36dp"-->
+<!--                    android:src="@drawable/ic_gray_star"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/menu_rating"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginEnd="26dp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_5"
-                    app:layout_constraintStart_toEndOf="@id/star_5"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/star_5">
-                    <ImageView
-                        android:id="@+id/dist_bar_5"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:src="@drawable/frame_dist_right_corner"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="1"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/text_rate_5"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="3dp"-->
+<!--                    android:fontFamily="@font/nanum_square_extra_bold"-->
+<!--                    android:text="5"-->
+<!--                    android:textColor="@color/gray_600"-->
+<!--                    android:textSize="8sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_5"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star_5"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_5" />-->
 
-                <ImageView
-                    android:id="@+id/star_4"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/ic_gray_star"
-                    app:layout_constraintStart_toStartOf="@id/star_5"
-                    app:layout_constraintEnd_toEndOf="@id/star_5"
-                    app:layout_constraintTop_toBottomOf="@id/star_5" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="5dp"-->
+<!--                    android:layout_marginStart="9dp"-->
+<!--                    android:layout_marginEnd="26dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_5"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star_5"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_5">-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/dist_bar_5"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:src="@drawable/frame_dist_right_corner"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintWidth_percent="1"/>-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="3dp"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:text="4"
-                    android:textColor="@color/gray_600"
-                    android:textSize="8sp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_4"
-                    app:layout_constraintEnd_toStartOf="@id/star_4"
-                    app:layout_constraintTop_toTopOf="@id/star_4" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star_4"-->
+<!--                    android:layout_width="8dp"-->
+<!--                    android:layout_height="8dp"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:src="@drawable/ic_gray_star"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/star_5"-->
+<!--                    app:layout_constraintEnd_toEndOf="@id/star_5"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/star_5" />-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginEnd="26dp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_4"
-                    app:layout_constraintStart_toEndOf="@id/star_4"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/star_4">
-                    <ImageView
-                        android:id="@+id/dist_bar_4"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:src="@drawable/frame_dist_right_corner"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="1"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="3dp"-->
+<!--                    android:fontFamily="@font/nanum_square_bold"-->
+<!--                    android:text="4"-->
+<!--                    android:textColor="@color/gray_600"-->
+<!--                    android:textSize="8sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_4"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star_4"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_4" />-->
 
-                <ImageView
-                    android:id="@+id/star_3"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/ic_gray_star"
-                    app:layout_constraintStart_toStartOf="@id/star_5"
-                    app:layout_constraintEnd_toEndOf="@id/star_5"
-                    app:layout_constraintTop_toBottomOf="@id/star_4" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="5dp"-->
+<!--                    android:layout_marginStart="9dp"-->
+<!--                    android:layout_marginEnd="26dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_4"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star_4"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_4">-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/dist_bar_4"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:src="@drawable/frame_dist_right_corner"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintWidth_percent="1"/>-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="3dp"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:text="3"
-                    android:textColor="@color/gray_600"
-                    android:textSize="8sp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_3"
-                    app:layout_constraintEnd_toStartOf="@id/star_3"
-                    app:layout_constraintTop_toTopOf="@id/star_3" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star_3"-->
+<!--                    android:layout_width="8dp"-->
+<!--                    android:layout_height="8dp"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:src="@drawable/ic_gray_star"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/star_5"-->
+<!--                    app:layout_constraintEnd_toEndOf="@id/star_5"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/star_4" />-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginEnd="26dp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_3"
-                    app:layout_constraintStart_toEndOf="@id/star_3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/star_3">
-                    <ImageView
-                        android:id="@+id/dist_bar_3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:src="@drawable/frame_dist_right_corner"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="1"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="3dp"-->
+<!--                    android:fontFamily="@font/nanum_square_bold"-->
+<!--                    android:text="3"-->
+<!--                    android:textColor="@color/gray_600"-->
+<!--                    android:textSize="8sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_3"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star_3"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_3" />-->
 
-                <ImageView
-                    android:id="@+id/star_2"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/ic_gray_star"
-                    app:layout_constraintStart_toStartOf="@id/star_5"
-                    app:layout_constraintEnd_toEndOf="@id/star_5"
-                    app:layout_constraintTop_toBottomOf="@id/star_3" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="5dp"-->
+<!--                    android:layout_marginStart="9dp"-->
+<!--                    android:layout_marginEnd="26dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_3"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star_3"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_3">-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/dist_bar_3"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:src="@drawable/frame_dist_right_corner"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintWidth_percent="1"/>-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="3dp"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:text="2"
-                    android:textColor="@color/gray_600"
-                    android:textSize="8sp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_2"
-                    app:layout_constraintEnd_toStartOf="@id/star_2"
-                    app:layout_constraintTop_toTopOf="@id/star_2" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star_2"-->
+<!--                    android:layout_width="8dp"-->
+<!--                    android:layout_height="8dp"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:src="@drawable/ic_gray_star"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/star_5"-->
+<!--                    app:layout_constraintEnd_toEndOf="@id/star_5"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/star_3" />-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginEnd="26dp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_2"
-                    app:layout_constraintStart_toEndOf="@id/star_2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/star_2">
-                    <ImageView
-                        android:id="@+id/dist_bar_2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:src="@drawable/frame_dist_right_corner"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="1"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="3dp"-->
+<!--                    android:fontFamily="@font/nanum_square_bold"-->
+<!--                    android:text="2"-->
+<!--                    android:textColor="@color/gray_600"-->
+<!--                    android:textSize="8sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_2"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star_2"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_2" />-->
 
-                <ImageView
-                    android:id="@+id/star_1"
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/ic_gray_star"
-                    app:layout_constraintStart_toStartOf="@id/star_5"
-                    app:layout_constraintEnd_toEndOf="@id/star_5"
-                    app:layout_constraintTop_toBottomOf="@id/star_2" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="5dp"-->
+<!--                    android:layout_marginStart="9dp"-->
+<!--                    android:layout_marginEnd="26dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_2"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star_2"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_2">-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/dist_bar_2"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:src="@drawable/frame_dist_right_corner"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintWidth_percent="1"/>-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="3dp"
-                    android:fontFamily="@font/nanum_square_bold"
-                    android:text="1"
-                    android:textColor="@color/gray_600"
-                    android:textSize="8sp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_1"
-                    app:layout_constraintEnd_toStartOf="@id/star_1"
-                    app:layout_constraintTop_toTopOf="@id/star_1" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star_1"-->
+<!--                    android:layout_width="8dp"-->
+<!--                    android:layout_height="8dp"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:src="@drawable/ic_gray_star"-->
+<!--                    app:layout_constraintStart_toStartOf="@id/star_5"-->
+<!--                    app:layout_constraintEnd_toEndOf="@id/star_5"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/star_2" />-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="5dp"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginEnd="26dp"
-                    app:layout_constraintBottom_toBottomOf="@id/star_1"
-                    app:layout_constraintStart_toEndOf="@id/star_1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/star_1">
-                    <ImageView
-                        android:id="@+id/dist_bar_1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:src="@drawable/frame_dist_right_corner"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent="1"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginEnd="3dp"-->
+<!--                    android:fontFamily="@font/nanum_square_bold"-->
+<!--                    android:text="1"-->
+<!--                    android:textColor="@color/gray_600"-->
+<!--                    android:textSize="8sp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_1"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star_1"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_1" />-->
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="5dp"-->
+<!--                    android:layout_marginStart="9dp"-->
+<!--                    android:layout_marginEnd="26dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@id/star_1"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star_1"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@id/star_1">-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/dist_bar_1"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:src="@drawable/frame_dist_right_corner"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintWidth_percent="1"/>-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-            <TextView
-                android:id="@+id/leave_review_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="38dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/frame_small_orange_button"
-                android:fontFamily="@font/nanum_square_extra_bold"
-                android:paddingHorizontal="40dp"
-                android:paddingVertical="8dp"
-                android:text="@string/menu_detail_leave_review_button"
-                android:textColor="@color/text_button"
-                android:textSize="14sp" />
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/gray_100"
-                android:layout_marginTop="16dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/leave_review_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="38dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:background="@drawable/frame_small_orange_button"-->
+<!--                android:fontFamily="@font/nanum_square_extra_bold"-->
+<!--                android:paddingHorizontal="40dp"-->
+<!--                android:paddingVertical="8dp"-->
+<!--                android:text="@string/menu_detail_leave_review_button"-->
+<!--                android:textColor="@color/text_button"-->
+<!--                android:textSize="14sp" />-->
 
-            <LinearLayout
-                android:id="@+id/layout_photo_review"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="10dp"-->
+<!--                android:background="@color/gray_100"-->
+<!--                android:layout_marginTop="16dp" />-->
 
-                <LinearLayout
-                    android:id="@+id/layout_collect_photo_reviews"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/layout_photo_review"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/menu_detail_photo_review_gather"
-                        android:fontFamily="@font/nanum_square_regular"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:layout_marginStart="16dp"/>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/layout_collect_photo_reviews"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:gravity="center">-->
 
-                    <View
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/menu_detail_photo_review_gather"-->
+<!--                        android:fontFamily="@font/nanum_square_regular"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_marginStart="16dp"/>-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_arrow_next"
-                        android:layout_marginEnd="16dp" />
+<!--                    <View-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1" />-->
 
-                </LinearLayout>
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/ic_arrow_next"-->
+<!--                        android:layout_marginEnd="16dp" />-->
 
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="none">
+<!--                </LinearLayout>-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingStart="10dp">
+<!--                <HorizontalScrollView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:scrollbars="none">-->
 
-                        <com.wafflestudio.siksha2.components.ReviewImageView
-                            android:id="@+id/review_image_view_1"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
-                            android:visibility="gone"
-                            app:showDeleteIcon="false"/>
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:paddingStart="10dp">-->
 
-                        <com.wafflestudio.siksha2.components.ReviewImageView
-                            android:id="@+id/review_image_view_2"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
-                            android:visibility="gone"
-                            app:showDeleteIcon="false"/>
+<!--                        <com.wafflestudio.siksha2.components.ReviewImageView-->
+<!--                            android:id="@+id/review_image_view_1"-->
+<!--                            android:layout_width="140dp"-->
+<!--                            android:layout_height="140dp"-->
+<!--                            android:visibility="gone"-->
+<!--                            app:showDeleteIcon="false"/>-->
 
-                        <com.wafflestudio.siksha2.components.ReviewImageView
-                            android:id="@id/review_image_view_3"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
-                            android:visibility="gone"
-                            app:showDeleteIcon="false"/>
+<!--                        <com.wafflestudio.siksha2.components.ReviewImageView-->
+<!--                            android:id="@+id/review_image_view_2"-->
+<!--                            android:layout_width="140dp"-->
+<!--                            android:layout_height="140dp"-->
+<!--                            android:visibility="gone"-->
+<!--                            app:showDeleteIcon="false"/>-->
 
-                    </LinearLayout>
+<!--                        <com.wafflestudio.siksha2.components.ReviewImageView-->
+<!--                            android:id="@id/review_image_view_3"-->
+<!--                            android:layout_width="140dp"-->
+<!--                            android:layout_height="140dp"-->
+<!--                            android:visibility="gone"-->
+<!--                            app:showDeleteIcon="false"/>-->
 
-                </HorizontalScrollView>
+<!--                    </LinearLayout>-->
 
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_collect_reviews"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/menu_detail_review_gather"
-                    android:fontFamily="@font/nanum_square_regular"
-                    android:textSize="18sp"
-                    android:textColor="@color/black"
-                    android:layout_marginStart="16dp"/>
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_next"
-                    android:layout_marginEnd="16dp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/empty_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="36dp"
-                android:fontFamily="@font/nanum_square_light"
-                android:text="@string/menu_detail_no_review"
-                android:textAlignment="center"
-                android:textColor="@color/gray_700"
-                android:visibility="gone" />
+<!--                </HorizontalScrollView>-->
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/review_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:paddingHorizontal="16dp"
-                android:paddingTop="10dp"
-                android:layout_weight="1"
-                android:clipToPadding="true"
-                android:paddingBottom="20dp"
-                android:background="@color/background_primary"
-                tools:listitem="@layout/item_review" />
+<!--            </LinearLayout>-->
 
-        </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:id="@+id/layout_collect_reviews"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:gravity="center">-->
 
-    </androidx.core.widget.NestedScrollView>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/menu_detail_review_gather"-->
+<!--                    android:fontFamily="@font/nanum_square_regular"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:layout_marginStart="16dp"/>-->
+
+<!--                <View-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1" />-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:src="@drawable/ic_arrow_next"-->
+<!--                    android:layout_marginEnd="16dp" />-->
+
+<!--            </LinearLayout>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/empty_list"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="36dp"-->
+<!--                android:fontFamily="@font/nanum_square_light"-->
+<!--                android:text="@string/menu_detail_no_review"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/gray_700"-->
+<!--                android:visibility="gone" />-->
+
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/review_list"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:paddingHorizontal="16dp"-->
+<!--                android:paddingTop="10dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:clipToPadding="true"-->
+<!--                android:paddingBottom="20dp"-->
+<!--                android:background="@color/background_primary"-->
+<!--                tools:listitem="@layout/item_review" />-->
+
+<!--        </LinearLayout>-->
+
+<!--    </androidx.core.widget.NestedScrollView>-->
 
 
     <include

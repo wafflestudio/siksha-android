@@ -23,8 +23,10 @@ import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.ReviewImageView
 import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
+import com.wafflestudio.siksha2.compose.ui.reviews.LeaveReviewRoute
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
@@ -66,6 +68,30 @@ class LeaveReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         vm.refreshUriList()
+
+        binding.composeLayout.setContent {
+            SikshaTheme {
+                LeaveReviewRoute(
+                    keywordTitleList = listOf("맛", "가격", "음식 구성"),
+                    keywordChoiceLists = listOf(
+                        listOf("아주좋아요", "굿", "그저그래요", "별로예요", "최악이에요"),
+                        listOf("아주좋아요", "굿", "그저그래요", "별로예요", "최악이에요"),
+                        listOf("아주좋아요", "굿", "그저그래요", "별로예요", "최악이에요")
+                    ),
+                    vm = vm,
+                    onNavigateUp = {
+                        findNavController().popBackStack()
+                    },
+                    onAddImage = {
+                        requestPermission(onGranted = {
+                            launchGalleryIntent()
+                        })
+                    },
+                    onClickDetails = {},
+                    context = context!!
+                )
+            }
+        }
 
         vm.menu.observe(viewLifecycleOwner) { menu ->
             menu?.let {

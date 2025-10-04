@@ -32,6 +32,10 @@ object NetworkModule {
                         AUTH_TOKEN_HEADER_KEY,
                         sikshaPrefObjects.accessToken.getValue()
                     )
+//                    .addHeader(
+//                        AUTH_HEADER_NEW_KEY,
+//                        sikshaPrefObjects.accessToken.getValue()
+//                    )
                     .build()
                 chain.proceed(newRequest)
             }
@@ -71,4 +75,5 @@ object NetworkModule {
     }
 
     private const val AUTH_TOKEN_HEADER_KEY = "authorization-token"
+    // private const val AUTH_HEADER_NEW_KEY = "Authorization"
 }

@@ -11,7 +11,7 @@ import retrofit2.http.*
 import java.time.LocalDate
 
 interface SikshaApi {
-    @GET("/menus/lo")
+    @GET("/menus")
     suspend fun fetchMenuGroups(
         @Query("start_date") startDate: LocalDate,
         @Query("end_date") endDate: LocalDate
@@ -46,10 +46,10 @@ interface SikshaApi {
         @Query("menu_id") menuId: Long
     ): NetworkResult<FetchKeywordDistResult>
 
-    @GET("/restaurants/")
+    @GET("/restaurants")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
-    @POST("/reviews/")
+    @POST("/reviews")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
     @Multipart
@@ -71,7 +71,7 @@ interface SikshaApi {
     suspend fun reviewUnlike(@Path("review_id") reviewId: Long): NetworkResult<Review>
 
     @POST("/auth/login/kakao")
-    suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): NetworkResult<LoginOAuthResult>
+    suspend fun loginKakao(@Header("Authorization") kakaoToken: String): NetworkResult<LoginOAuthResult>
 
     @POST("/auth/login/google")
     suspend fun loginGoogle(@Header("google-token") googleToken: String): NetworkResult<LoginOAuthResult>
@@ -80,7 +80,7 @@ interface SikshaApi {
     suspend fun deleteAccount()
 
     @POST("/auth/refresh")
-    suspend fun refreshToken(@Header("authorization-token") token: String): NetworkResult<LoginOAuthResult>
+    suspend fun refreshToken(@Header("Authorization") token: String): NetworkResult<LoginOAuthResult>
 
     @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):

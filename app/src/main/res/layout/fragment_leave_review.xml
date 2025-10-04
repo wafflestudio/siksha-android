@@ -9,6 +9,11 @@
     android:orientation="vertical"
     tools:context=".ui.menuDetail.LeaveReviewFragment">
 
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <LinearLayout
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"

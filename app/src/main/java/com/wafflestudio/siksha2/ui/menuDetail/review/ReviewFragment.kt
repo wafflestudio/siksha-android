@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.compose.ui.reviews.MenuReviewRoute
 import com.wafflestudio.siksha2.databinding.FragmentReviewBinding
 import com.wafflestudio.siksha2.ui.SikshaTheme
@@ -35,10 +34,10 @@ class ReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         reviewsAdapter = MenuReviewsAdapter(false, childFragmentManager)
 
-        binding.reviewList.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = reviewsAdapter
-        }
+//        binding.reviewList.apply {
+//            layoutManager = LinearLayoutManager(context)
+//            adapter = reviewsAdapter
+//        }
 
 //        lifecycleScope.launch {
 //            reviewsAdapter.loadStateFlow
