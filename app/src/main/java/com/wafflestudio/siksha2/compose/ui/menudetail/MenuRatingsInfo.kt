@@ -46,7 +46,8 @@ fun MenuRatingsInfo(
         Spacer(Modifier.height(10.dp))
         Text(
             text = stringResource(R.string.menu_detail_review_prefix) + " " + reviewCount.toString() + stringResource(R.string.menu_detail_review_suffix),
-            fontSize = 14.sp
+            fontSize = 14.sp,
+            color = SikshaTheme.colors.Black
         )
     }
 }

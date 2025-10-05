@@ -99,11 +99,11 @@ class LeaveReviewFragment : Fragment() {
                     },
                     onAddImage = {
                         requestPermission(onGranted = {
-                            launchGalleryIntent()
+                            launchPhotoPicker()
                         })
                     },
                     onClickDetails = {},
-                    context = context!!
+                    context = requireContext()
                 )
             }
         }

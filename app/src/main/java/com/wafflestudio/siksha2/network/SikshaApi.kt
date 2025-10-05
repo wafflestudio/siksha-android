@@ -30,7 +30,8 @@ interface SikshaApi {
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
-        @Query("per_page") perPage: Long
+        @Query("per_page") perPage: Long,
+        @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
     @GET("/reviews/filter")
@@ -38,7 +39,8 @@ interface SikshaApi {
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Long,
-        @Query("etc") etc: Boolean = true
+        @Query("etc") etc: Boolean = true,
+        @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
     @GET("/reviews/keywords/dist")

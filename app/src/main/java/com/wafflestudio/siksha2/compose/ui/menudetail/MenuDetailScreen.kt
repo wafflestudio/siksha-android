@@ -103,7 +103,8 @@ fun MenuDetailScreen(
                 Text(
                     text = "찜 ${(menu?.likeCount ?: 0)}개",
                     fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = SikshaTheme.colors.Black
                 )
             }
         }
@@ -173,7 +174,8 @@ fun MenuDetailScreen(
                     text = stringResource(R.string.menu_detail_review_gather),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterStart)
+                    modifier = Modifier.align(Alignment.CenterStart),
+                    color = SikshaTheme.colors.Black
                 )
             }
         }
@@ -212,7 +214,8 @@ fun BriefImageReviews(
             text = stringResource(R.string.menu_detail_photo_review_gather),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.CenterStart),
+            color = SikshaTheme.colors.Black
         )
         Image(
             painter = painterResource(R.drawable.ic_back_arrow),
