@@ -10,7 +10,7 @@ import retrofit2.http.*
 import java.time.LocalDate
 
 interface SikshaApi {
-    @GET("/menus/lo")
+    @GET("/menus")
     suspend fun fetchMenuGroups(
         @Query("start_date") startDate: LocalDate,
         @Query("end_date") endDate: LocalDate
@@ -25,7 +25,7 @@ interface SikshaApi {
     @GET("/menus/festival")
     suspend fun isFestivalDate(@Path(value = "input_date") inputDate: String): NetworkResult<FestivalDateCheckResponse>
 
-    @GET("/reviews/")
+    @GET("/reviews")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
@@ -40,10 +40,10 @@ interface SikshaApi {
         @Query("etc") etc: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
-    @GET("/restaurants/")
+    @GET("/restaurants")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
-    @POST("/reviews/")
+    @POST("/reviews")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
     @Multipart
@@ -56,16 +56,16 @@ interface SikshaApi {
     ): NetworkResult<LeaveReviewResult>
 
     @POST("/auth/login/kakao")
-    suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): NetworkResult<LoginOAuthResult>
+    suspend fun loginKakao(@Header("Authorization") kakaoToken: String): NetworkResult<LoginOAuthResult>
 
     @POST("/auth/login/google")
-    suspend fun loginGoogle(@Header("google-token") googleToken: String): NetworkResult<LoginOAuthResult>
+    suspend fun loginGoogle(@Header("Authorization") googleToken: String): NetworkResult<LoginOAuthResult>
 
-    @DELETE("/auth/")
+    @DELETE("/auth")
     suspend fun deleteAccount()
 
     @POST("/auth/refresh")
-    suspend fun refreshToken(@Header("authorization-token") token: String): NetworkResult<LoginOAuthResult>
+    suspend fun refreshToken(@Header("Authorization") token: String): NetworkResult<LoginOAuthResult>
 
     @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):
@@ -80,11 +80,11 @@ interface SikshaApi {
         @Body req: VocParam
     ): NetworkResult<Unit>
 
-    @GET("/auth/me/image")
+    @GET("/auth/me")
     suspend fun getUserData(): NetworkResult<GetUserDataResult>
 
     @Multipart
-    @PATCH("/auth/me/image/profile")
+    @PATCH("/auth/me/profile")
     suspend fun updateUserData(
         @Part image: MultipartBody.Part?,
         @Part("change_to_default_image") changeToDefaultImage: Boolean,
