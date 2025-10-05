@@ -11,10 +11,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogProfileImageBinding
 
-class ImageBottomDialog(
-    private val onGallerySelected: () -> Unit,
-    private val onDefaultImageSelected: () -> Unit
-) : BottomSheetDialogFragment() {
+class ImageBottomDialog : BottomSheetDialogFragment() {
+
+    interface Listener {
+        fun onGallerySelected()
+        fun onDefaultImageSelected()
+    }
+
+    private val listener: Listener?
+        get() = parentFragment as? Listener ?: activity as? Listener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,12 +29,12 @@ class ImageBottomDialog(
         val binding = DialogProfileImageBinding.inflate(inflater, container, false)
 
         binding.albumRow.setOnClickListener {
-            onGallerySelected()
+            listener?.onGallerySelected()
             dismiss()
         }
 
         binding.defaultImageRow.setOnClickListener {
-            onDefaultImageSelected()
+            listener?.onDefaultImageSelected()
             dismiss()
         }
 

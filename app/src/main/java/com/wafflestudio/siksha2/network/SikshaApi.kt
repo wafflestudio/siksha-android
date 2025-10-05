@@ -26,7 +26,7 @@ interface SikshaApi {
     @GET("/menus/festival")
     suspend fun isFestivalDate(@Path(value = "input_date") inputDate: String): NetworkResult<FestivalDateCheckResponse>
 
-    @GET("/reviews/")
+    @GET("/reviews")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
@@ -74,9 +74,9 @@ interface SikshaApi {
     suspend fun loginKakao(@Header("Authorization") kakaoToken: String): NetworkResult<LoginOAuthResult>
 
     @POST("/auth/login/google")
-    suspend fun loginGoogle(@Header("google-token") googleToken: String): NetworkResult<LoginOAuthResult>
+    suspend fun loginGoogle(@Header("Authorization") googleToken: String): NetworkResult<LoginOAuthResult>
 
-    @DELETE("/auth/")
+    @DELETE("/auth")
     suspend fun deleteAccount()
 
     @POST("/auth/refresh")
@@ -95,11 +95,11 @@ interface SikshaApi {
         @Body req: VocParam
     ): NetworkResult<Unit>
 
-    @GET("/auth/me/image")
+    @GET("/auth/me")
     suspend fun getUserData(): NetworkResult<GetUserDataResult>
 
     @Multipart
-    @PATCH("/auth/me/image/profile")
+    @PATCH("/auth/me/profile")
     suspend fun updateUserData(
         @Part image: MultipartBody.Part?,
         @Part("change_to_default_image") changeToDefaultImage: Boolean,
