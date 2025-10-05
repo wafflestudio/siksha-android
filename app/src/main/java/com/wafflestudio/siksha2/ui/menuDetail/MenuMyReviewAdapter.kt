@@ -2,14 +2,11 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.ItemMyReviewRestaurantBinding
 import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 
@@ -34,6 +31,11 @@ class MenuMyReviewAdapter :
         private var isExpanded = false
 
         fun bind(item: ReviewRestaurant) {
+            if (bindingAdapterPosition == 0) {
+                isExpanded = true
+                binding.topDivider.isVisible = true
+            }
+
             binding.restaurantName.text = item.nameKr
             binding.arrowIcon.rotation = if (isExpanded) 180f else 0f
 
@@ -41,13 +43,6 @@ class MenuMyReviewAdapter :
             binding.reviewRecycler.layoutManager = LinearLayoutManager(binding.root.context)
             val reviewAdapter = MenuMyReviewChildAdapter()
             binding.reviewRecycler.adapter = reviewAdapter
-
-            if (binding.reviewRecycler.itemDecorationCount == 0) {
-                val divider = DividerItemDecoration(binding.root.context, DividerItemDecoration.VERTICAL)
-                val drawable = ContextCompat.getDrawable(binding.root.context, R.drawable.divider_gray_line)
-                divider.setDrawable(drawable!!)
-                binding.reviewRecycler.addItemDecoration(divider)
-            }
 
             reviewAdapter.submitList(item.reviews)
 

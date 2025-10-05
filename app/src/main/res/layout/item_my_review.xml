@@ -4,10 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="12dp"
     android:background="@android:color/white"
     android:layout_marginVertical="6dp"
-    android:layout_marginHorizontal="8dp"
+    android:layout_marginStart="4dp"
     android:clipToOutline="true">
 
     <!-- ✅ 상단 영역 (메뉴명 + 별점 + 날짜) -->
@@ -16,7 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="8dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="12dp"
+        android:background="@drawable/bg_review_header"
         >
 
         <LinearLayout
@@ -25,32 +28,49 @@
             android:orientation="horizontal"
             android:baselineAligned="false">
 
-            <TextView
-                android:id="@+id/menuName"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="쇠고기카레라이스"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="#222222" />
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/menuName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="쇠고기카레라이스"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/nanum_square_extra_bold"
+                    android:textColor="@color/black"
+                    android:lineSpacingExtra="3sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/arrowIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/review_arrow_right"/>
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/reviewDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2024년 4월 11일"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:textColor="@color/gray_600" />
         </LinearLayout>
 
         <!-- 별점 -->
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/stars"
+        <LinearLayout
+            android:id="@+id/stars_container"
             android:layout_width="61dp"
             android:layout_height="10dp"
-            app:layout_constraintStart_toEndOf="@id/profile_icon"
-            app:layout_constraintTop_toBottomOf="@id/id_text"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"/>
     </LinearLayout>
 
     <!-- 리뷰 내용 -->
@@ -77,6 +97,7 @@
             android:layout_height="wrap_content"
             android:text="또 먹고 싶어요"
             android:textSize="12sp"
+            android:textColor="@color/gray_700"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:background="@drawable/bg_review_tag"
@@ -87,6 +108,8 @@
             android:layout_height="wrap_content"
             android:text="가성비 좋아요"
             android:textSize="12sp"
+            android:textColor="@color/gray_700"
+            android:layout_marginStart="4dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:background="@drawable/bg_review_tag"
@@ -97,6 +120,8 @@
             android:layout_height="wrap_content"
             android:text="알찬 편이에요"
             android:textSize="12sp"
+            android:textColor="@color/gray_700"
+            android:layout_marginStart="4dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:background="@drawable/bg_review_tag"/>
@@ -116,7 +141,7 @@
             android:layout_height="wrap_content"
             android:text="삭제하기"
             android:textColor="@color/gray_600"
-            android:textSize="13sp"
+            android:textSize="11sp"
             android:layout_marginEnd="12dp" />
 
         <TextView
@@ -125,6 +150,12 @@
             android:layout_height="wrap_content"
             android:text="수정하기"
             android:textColor="@color/orange_500"
-            android:textSize="13sp" />
+            android:textSize="11sp" />
     </LinearLayout>
+    <View
+        android:id="@+id/bottomDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/gray_300" />
 </LinearLayout>

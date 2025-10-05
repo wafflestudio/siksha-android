@@ -2,12 +2,14 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.unit.dp
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
+import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogDefaultBinding
 import com.wafflestudio.siksha2.databinding.ItemMyReviewBinding
 import com.wafflestudio.siksha2.models.Review
@@ -33,17 +35,14 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
         fun bind(item: Review) {
             binding.reviewContent.text = item.comment ?: "내용 없음"
             binding.reviewDate.text = item.createdAt.toLocalDateTime().toParsedTimeString()
-            binding.stars.setContent {
-                MenuRatingStars(
-                    initialRating = item.score.toFloat() ?: 0.0f,
-                    width = 61.dp,
-                    height = 10.dp
-                )
-            }
+            setRatingStars(binding.starsContainer, item.score.toFloat())
 
             binding.deleteButton.setOnClickListener {
                 showDeleteDialog(binding.root.context)
             }
+
+            val isLast = bindingAdapterPosition == itemCount - 1
+            binding.bottomDivider.visibility = if (isLast) View.GONE else View.VISIBLE
         }
     }
 
@@ -54,6 +53,32 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    private fun setRatingStars(container: LinearLayout, rating: Float, maxStars: Int = 5) {
+        container.removeAllViews() // 기존 별 제거
+        val fullStar = R.drawable.ic_full_star_2
+        val emptyStar = R.drawable.ic_empty_star_2
+
+        // 별 폭과 높이는 container의 높이 기준으로 맞추기
+        val starSize = container.height.takeIf { it > 0 } ?: LinearLayout.LayoutParams.WRAP_CONTENT
+
+        for (i in 1..maxStars) {
+            val imageView = ImageView(container.context).apply {
+                setImageResource(
+                    if (i <= rating) fullStar else emptyStar
+                )
+                layoutParams = LinearLayout.LayoutParams(
+                    0, // width 0 + weight를 주면 자동으로 나눠서 붙음
+                    starSize,
+                    1f // weight 1로 균등 배치
+                ).apply {
+                    marginEnd = 0 // 간격 없음
+                }
+                scaleType = ImageView.ScaleType.FIT_CENTER
+            }
+            container.addView(imageView)
+        }
     }
 
     private fun showDeleteDialog(context: android.content.Context) {
