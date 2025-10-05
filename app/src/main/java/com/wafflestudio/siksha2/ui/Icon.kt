@@ -171,3 +171,39 @@ fun SpeechBubbleIcon(
         contentDescription = ""
     )
 }
+
+@Composable
+fun KeywordTaste(
+    modifier: Modifier = Modifier,
+    sizePx: Int = 36
+) {
+    Image(
+        modifier = modifier.size(sizePx.dp),
+        painter = painterResource(R.drawable.ic_keyword_taste),
+        contentDescription = null
+    )
+}
+
+@Composable
+fun KeywordPrice(
+    modifier: Modifier = Modifier,
+    sizePx: Int = 36
+) {
+    Image(
+        modifier = modifier.size(sizePx.dp),
+        painter = painterResource(R.drawable.ic_keyword_price),
+        contentDescription = null
+    )
+}
+
+@Composable
+fun KeywordFoodComposition(
+    modifier: Modifier = Modifier,
+    sizePx: Int = 36
+) {
+    Image(
+        modifier = modifier.size(sizePx.dp),
+        painter = painterResource(R.drawable.ic_keyword_food_composition),
+        contentDescription = null
+    )
+}

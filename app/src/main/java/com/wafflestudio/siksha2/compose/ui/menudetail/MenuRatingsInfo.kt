@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -27,7 +28,8 @@ fun MenuRatingsInfo(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.defaultMinSize(minWidth = 113.dp, minHeight = 120.dp)
+        modifier = modifier.fillMaxHeight()
+            .defaultMinSize(minWidth = 113.dp, minHeight = 120.dp)
             .border(width = 1.dp, shape = RoundedCornerShape(16.dp), color = SikshaTheme.colors.Gray200),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

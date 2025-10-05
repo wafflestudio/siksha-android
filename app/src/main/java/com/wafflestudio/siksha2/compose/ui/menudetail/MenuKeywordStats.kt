@@ -59,12 +59,12 @@ fun MenuKeywordStats(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        for (i in keywords.indices) {
+        for (i in keywords.ifEmpty { listOf("맛", "가격", "음식구성") }.indices) {
             MenuKeywordStat(
-                keywordString = keywords[i],
-                keywordCount = keywordCounts[i],
+                keywordString = keywords.ifEmpty { listOf("맛", "가격", "음식구성") }[i],
+                keywordCount = keywordCounts.ifEmpty { listOf<Long>(0, 0, 0) }[i],
                 keywordIcon = keywordIcons[i]
             )
         }

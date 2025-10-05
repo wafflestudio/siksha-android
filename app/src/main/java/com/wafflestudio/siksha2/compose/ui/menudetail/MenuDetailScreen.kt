@@ -7,6 +7,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -41,11 +42,13 @@ import com.wafflestudio.siksha2.compose.ui.reviews.MenuReviewItem
 import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
-import com.wafflestudio.siksha2.ui.CancelIcon
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import kotlin.math.min
 import androidx.core.net.toUri
+import com.wafflestudio.siksha2.ui.KeywordFoodComposition
+import com.wafflestudio.siksha2.ui.KeywordPrice
+import com.wafflestudio.siksha2.ui.KeywordTaste
 
 @Composable
 fun MenuDetailRoute(
@@ -120,7 +123,7 @@ fun MenuDetailScreen(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
-                        .height(120.dp)
+                        .height(IntrinsicSize.Min)
                 ) {
                     MenuRatingsInfo(
                         rating = menu?.score?.toFloat() ?: 0f,
@@ -132,9 +135,9 @@ fun MenuDetailScreen(
                         keywordDist.keywords,
                         keywordDist.keywordCounts,
                         keywordIcons = listOf(
-                            { CancelIcon() },
-                            { CancelIcon() },
-                            { CancelIcon() }
+                            { KeywordTaste() },
+                            { KeywordPrice() },
+                            { KeywordFoodComposition() }
                         ),
                         modifier = Modifier.weight(1f)
                             .fillMaxHeight()
