@@ -37,8 +37,9 @@ private fun MenuReviewSingleStar(
     Image(
         painter = painterResource(
             when {
-                flag <= 0 -> R.drawable.ic_full_star_2
-                else -> R.drawable.ic_empty_star_2
+                flag <= 0 -> R.drawable.ic_full_star
+                flag == 1 -> R.drawable.ic_half_star
+                else -> R.drawable.ic_empty_star
             }
         ),
         contentDescription = null,

@@ -39,6 +39,10 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
             binding.deleteButton.setOnClickListener {
                 showDeleteDialog(binding.root.context)
             }
+
+            binding.editButton.setOnClickListener {
+                // Todo : 메뉴 수정 화면으로 넘어가기
+            }
         }
     }
 
@@ -100,6 +104,7 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
 
         dialogBinding.tvPositiveButton.setOnClickListener {
             dialog.dismiss()
+            // Todo : 메뉴 삭제 API 추가
         }
 
         dialogBinding.tvNegativeButton.setOnClickListener {

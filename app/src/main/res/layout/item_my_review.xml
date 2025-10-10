@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@android:color/white"
+    android:background="@color/background_primary"
     android:layout_marginTop="16dp"
     android:layout_marginStart="4dp"
     android:clipToOutline="true">
@@ -95,6 +94,7 @@
         android:layout_marginTop="8dp">
 
         <TextView
+            android:id="@+id/reviewTag1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="또 먹고 싶어요"
@@ -105,6 +105,7 @@
             android:layout_marginEnd="6dp"/>
 
         <TextView
+            android:id="@+id/reviewTag2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="가성비 좋아요"
@@ -117,6 +118,7 @@
             android:layout_marginEnd="6dp"/>
 
         <TextView
+            android:id="@+id/reviewTag3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="알찬 편이에요"
