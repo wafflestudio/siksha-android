@@ -4,7 +4,7 @@
     <solid android:color="@color/background_primary" /> <!-- 하얀색 배경 -->
     <corners android:radius="8dp" /> <!-- 둥근 모서리 -->
     <stroke
-        android:width="0.5dp"
+        android:width="0.75dp"
         android:color="@color/gray_200" /> <!-- 살짝 회색 테두리 (선택사항) -->
     <padding
         android:left="8dp"

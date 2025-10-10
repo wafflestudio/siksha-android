@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/background_primary"
-    android:layout_marginTop="16dp"
-    android:layout_marginStart="4dp"
+    android:layout_marginBottom="16dp"
     android:clipToOutline="true">
 
     <!-- ✅ 상단 영역 (메뉴명 + 별점 + 날짜) -->
@@ -128,6 +127,59 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:background="@drawable/bg_review_tag"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/images"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/reviewImage1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="6dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/reviewImage2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="6dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/reviewImage3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="6dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/reviewImage4"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="6dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/reviewImage5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
     </LinearLayout>
 
     <!-- 하단: 수정 / 삭제 -->

@@ -2,12 +2,14 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogDefaultBinding
 import com.wafflestudio.siksha2.databinding.ItemMyReviewBinding
@@ -31,10 +33,42 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
 
     inner class ReviewViewHolder(private val binding: ItemMyReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private val imageViews by lazy {
+            listOf(
+                binding.reviewImage1,
+                binding.reviewImage2,
+                binding.reviewImage3,
+                binding.reviewImage4,
+                binding.reviewImage5
+            )
+        }
+
         fun bind(item: Review) {
-            binding.reviewContent.text = item.comment ?: "내용 없음"
-            binding.reviewDate.text = item.createdAt.toLocalDateTime().toParsedTimeString()
+            binding.menuName.text = item.nameKr ?: ""
             setRatingStars(binding.starsContainer, item.score.toFloat())
+            binding.reviewDate.text = item.createdAt.toLocalDateTime().toParsedTimeString()
+            binding.reviewContent.text = item.comment ?: "내용 없음"
+
+            // ✅ 키워드 태그
+            val tags = item.keywordReviews.orEmpty()
+            binding.reviewTag1.text = tags.getOrNull(0) ?: ""
+            binding.reviewTag2.text = tags.getOrNull(1) ?: ""
+            binding.reviewTag3.text = tags.getOrNull(2) ?: ""
+
+            // ✅ 이미지
+            val urls = item.etc?.images.orEmpty()
+            imageViews.forEachIndexed { index, imageView ->
+                if (index < urls.size) {
+                    imageView.visibility = View.VISIBLE
+                    Glide.with(imageView.context)
+                        .load(urls[index])
+                        .centerCrop()
+                        .into(imageView)
+                } else {
+                    imageView.visibility = View.GONE
+                }
+            }
 
             binding.deleteButton.setOnClickListener {
                 showDeleteDialog(binding.root.context)

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.databinding.FragmentMyReviewBinding
+import com.wafflestudio.siksha2.models.Etc
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
@@ -78,9 +79,19 @@ class MyReviewFragment : Fragment() {
             userId = 999L,
             score = 4.5,
             comment = "양이 많고 맛있었어요! 재방문 의사 있습니다 😊",
+            etc = Etc(
+                images = listOf(
+                    "https://siksha-dev.s3.ap-northeast-2.amazonaws.com/review-images/menu-94950/user-7501/0.jpeg",
+                    "https://siksha-dev.s3.ap-northeast-2.amazonaws.com/review-images/menu-94950/user-7501/0.jpeg"
+                )
+            ),
+            keywordReviews = listOf("양 많음", "맛있음", "재방문 의사 👍"),
+            likeCount = 12,
+            isLiked = true,
+            nameKr = "등심 돈까스",
+            nameEn = "Pork Cutlet",
             createdAt = now,
-            updatedAt = now,
-            etc = null
+            updatedAt = now
         )
 
         val review2 = Review(
@@ -89,9 +100,18 @@ class MyReviewFragment : Fragment() {
             userId = 999L,
             score = 3.8,
             comment = "맛은 괜찮았지만 조금 짰어요.",
+            etc = Etc(
+                images = listOf(
+                    "https://siksha-dev.s3.ap-northeast-2.amazonaws.com/review-images/menu-94950/user-7501/0.jpeg"
+                )
+            ),
+            keywordReviews = listOf("짠맛", "괜찮음", "재방문 의사 👍"),
+            likeCount = 4,
+            isLiked = false,
+            nameKr = "치킨 가라아게",
+            nameEn = "Chicken Karaage",
             createdAt = now,
-            updatedAt = now,
-            etc = null
+            updatedAt = now
         )
 
         val review3 = Review(
@@ -100,9 +120,20 @@ class MyReviewFragment : Fragment() {
             userId = 999L,
             score = 5.0,
             comment = "완벽한 디저트! 꼭 드셔보세요 🍰",
+            etc = Etc(
+                images = listOf(
+                    "https://siksha-dev.s3.ap-northeast-2.amazonaws.com/review-images/menu-94950/user-7501/0.jpeg",
+                    "https://siksha-dev.s3.ap-northeast-2.amazonaws.com/review-images/menu-94950/user-7501/0.jpeg",
+                    "https://siksha-dev.s3.ap-northeast-2.amazonaws.com/review-images/menu-94950/user-7501/0.jpeg"
+                )
+            ),
+            keywordReviews = listOf("달콤함", "분위기 좋음", "디저트 추천 🍰"),
+            likeCount = 25,
+            isLiked = true,
+            nameKr = "티라미수 케이크",
+            nameEn = "Tiramisu Cake",
             createdAt = now,
-            updatedAt = now,
-            etc = null
+            updatedAt = now
         )
 
         val restaurant1 = ReviewRestaurant(
