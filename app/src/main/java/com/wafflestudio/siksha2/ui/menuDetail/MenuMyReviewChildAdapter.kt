@@ -2,7 +2,6 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -40,9 +39,6 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
             binding.deleteButton.setOnClickListener {
                 showDeleteDialog(binding.root.context)
             }
-
-            val isLast = bindingAdapterPosition == itemCount - 1
-            binding.bottomDivider.visibility = if (isLast) View.GONE else View.VISIBLE
         }
     }
 
@@ -57,23 +53,29 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
 
     private fun setRatingStars(container: LinearLayout, rating: Float, maxStars: Int = 5) {
         container.removeAllViews() // 기존 별 제거
-        val fullStar = R.drawable.ic_full_star_2
-        val emptyStar = R.drawable.ic_empty_star_2
+        val fullStar = R.drawable.ic_full_star
+        val halfStar = R.drawable.ic_half_star
+        val emptyStar = R.drawable.ic_empty_star
 
         // 별 폭과 높이는 container의 높이 기준으로 맞추기
         val starSize = container.height.takeIf { it > 0 } ?: LinearLayout.LayoutParams.WRAP_CONTENT
 
         for (i in 1..maxStars) {
             val imageView = ImageView(container.context).apply {
-                setImageResource(
-                    if (i <= rating) fullStar else emptyStar
-                )
+                val starRes = when {
+                    i <= rating.toInt() -> fullStar // 정수 부분: 꽉 찬 별
+                    i == rating.toInt() + 1 && rating % 1 >= 0.5 -> halfStar // 소수점 0.5 이상이면 반 별
+                    else -> emptyStar // 나머지는 빈 별
+                }
+
+                setImageResource(starRes)
+
                 layoutParams = LinearLayout.LayoutParams(
-                    0, // width 0 + weight를 주면 자동으로 나눠서 붙음
+                    0,
                     starSize,
-                    1f // weight 1로 균등 배치
+                    1f
                 ).apply {
-                    marginEnd = 0 // 간격 없음
+                    marginEnd = 0
                 }
                 scaleType = ImageView.ScaleType.FIT_CENTER
             }
