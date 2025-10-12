@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="40dp"
+    android:layout_marginHorizontal="30dp"
     android:background="@drawable/frame_corner_radius_10">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:id="@+id/dialog_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nanum_square_bold"
+            android:fontFamily="@font/nanum_square_extra_bold"
             android:textColor="@color/black"
             android:textSize="16dp"
             android:gravity="center"

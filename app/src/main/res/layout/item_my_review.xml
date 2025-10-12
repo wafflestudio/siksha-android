@@ -65,7 +65,7 @@
         <LinearLayout
             android:id="@+id/stars_container"
             android:layout_width="61dp"
-            android:layout_height="10dp"
+            android:layout_height="13dp"
             android:orientation="horizontal"
             android:layout_marginTop="4dp"
             android:gravity="center_vertical"/>
@@ -77,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="학교 생활의 낙을 담당하는 맛!! 이거 먹으려고 학교 다닙니다 ㅎㅎ"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="4dp"
         android:lineSpacingExtra="2dp"
