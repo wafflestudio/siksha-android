@@ -61,9 +61,7 @@ class FavoriteMenuFragment : Fragment() {
                     restaurants = restaurants,
                     onClickMenu = { /* 메뉴 클릭 */ },
                     onToggleLikeMenu = { id, liked -> vm.toggleLike(id, liked) },
-                    onRestaurantInfoClicked = { /* 식당 정보 */ },
-                    onToggleFavoriteRestaurant = { /* 식당 즐겨찾기 */ },
-                    onRestaurantShareClicked = { /* 공유 */ }
+                    onToggleFavoriteRestaurant = { /* 식당 즐겨찾기 */ }
                 )
             }
         }

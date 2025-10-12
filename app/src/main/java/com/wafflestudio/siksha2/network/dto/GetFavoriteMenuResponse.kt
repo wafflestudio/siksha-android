@@ -28,7 +28,7 @@ data class FavoriteMenuDto(
     val name_en: String?,
     val price: Int?,
     val etc: List<String>?,
-    val score: Double,
+    val score: Double?,
     val review_cnt: Int?,
     val like_cnt: Int?,
     val is_liked: Boolean,

@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,18 +30,45 @@ import com.wafflestudio.siksha2.compose.ui.dailyrestaurant.RestaurantInfoRow
 import com.wafflestudio.siksha2.network.dto.FavoriteMenuDto
 import com.wafflestudio.siksha2.network.dto.FavoriteRestaurantDto
 import com.wafflestudio.siksha2.ui.SikshaTheme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+
+@Composable
+fun FavoriteRestaurantInfoRow(
+    restaurantName: String?,
+    isFavorite: Boolean,
+    onToggleFavoriteRestaurant: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Text(
+            text = restaurantName ?: "식당 이름 없음",
+            color = SikshaTheme.colors.Black,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+
+        Image(
+            modifier = Modifier
+                .size(20.dp)
+                .clickable { onToggleFavoriteRestaurant() },
+            painter = painterResource(
+                if (isFavorite) R.drawable.ic_favorite_full
+                else R.drawable.ic_favorite_empty
+            ),
+            contentDescription = "즐겨찾기"
+        )
+    }
+}
 
 @Composable
 fun FavoriteMenuRoute(
     restaurants: List<FavoriteRestaurantDto>,
     onClickMenu: (Long) -> Unit,
     onToggleLikeMenu: (Long, Boolean) -> Unit,
-    onRestaurantInfoClicked: (Long) -> Unit,
     onToggleFavoriteRestaurant: (Long) -> Unit,
-    onRestaurantShareClicked: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (restaurants.isNotEmpty()) {
@@ -56,9 +83,7 @@ fun FavoriteMenuRoute(
                     restaurant = restaurant,
                     onClickMenu = onClickMenu,
                     onToggleLikeMenu = onToggleLikeMenu,
-                    onRestaurantInfoClicked = { onRestaurantInfoClicked(restaurant.id) },
-                    onToggleFavoriteRestaurant = { onToggleFavoriteRestaurant(restaurant.id) },
-                    onRestaurantShareClicked = { onRestaurantShareClicked(restaurant.id) }
+                    onToggleFavoriteRestaurant = { onToggleFavoriteRestaurant(restaurant.id) }
                 )
             }
         }
@@ -70,9 +95,7 @@ fun RestaurantMenuFavorite(
     restaurant: FavoriteRestaurantDto,
     onClickMenu: (Long) -> Unit,
     onToggleLikeMenu: (Long, Boolean) -> Unit,
-    onRestaurantInfoClicked: () -> Unit,
-    onToggleFavoriteRestaurant: () -> Unit,
-    onRestaurantShareClicked: () -> Unit
+    onToggleFavoriteRestaurant: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -85,12 +108,10 @@ fun RestaurantMenuFavorite(
             modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
         ) {
-            RestaurantInfoRow(
+            FavoriteRestaurantInfoRow(
                 restaurantName = restaurant.name_kr,
                 isFavorite = false,
-                onRestaurantInfoClicked = onRestaurantInfoClicked,
                 onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
-                onRestaurantShareClicked = onRestaurantShareClicked,
                 modifier = Modifier.weight(1f)
             )
 
@@ -98,9 +119,9 @@ fun RestaurantMenuFavorite(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Price", fontSize = 12.sp, color = SikshaTheme.colors.Gray600)
-                Text("Rate", fontSize = 12.sp, color = SikshaTheme.colors.Gray600)
-                Text("Like", fontSize = 12.sp, color = SikshaTheme.colors.Gray600)
+                Text("Price", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                Text("Rate", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                Text("Like", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
             }
         }
 
