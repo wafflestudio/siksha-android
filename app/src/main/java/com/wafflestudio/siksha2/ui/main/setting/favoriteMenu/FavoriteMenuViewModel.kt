@@ -6,6 +6,7 @@ import com.wafflestudio.siksha2.network.dto.FavoriteMenuDto
 import com.wafflestudio.siksha2.repositories.FavoriteMenuRepository
 import com.wafflestudio.siksha2.network.dto.FavoriteRestaurantDto
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.repositories.MenuRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteMenuViewModel @Inject constructor(
-    private val repository: FavoriteMenuRepository
+    private val repository: FavoriteMenuRepository,
+    private val menuRepository: MenuRepository
 ) : ViewModel() {
 
     private val _restaurants = MutableStateFlow<List<FavoriteRestaurantDto>>(emptyList())
@@ -40,16 +42,24 @@ class FavoriteMenuViewModel @Inject constructor(
 
     fun toggleLike(menuId: Long, currentLiked: Boolean) {
         viewModelScope.launch {
-            _restaurants.value = _restaurants.value.map { restaurant ->
-                restaurant.copy(
-                    menus = restaurant.menus.map { menu ->
-                        if (menu.id == menuId) {
-                            menu.copy(is_liked = !currentLiked)
-                        } else {
-                            menu
+            val response = if (currentLiked) {
+                menuRepository.unlikeMenuById(menuId)
+            } else {
+                menuRepository.likeMenuById(menuId)
+            }
+
+            if (response is NetworkResult.Success) {
+                _restaurants.value = _restaurants.value.map { restaurant ->
+                    restaurant.copy(
+                        menus = restaurant.menus.map { menu ->
+                            if (menu.id == menuId) {
+                                menu.copy(is_liked = !currentLiked)
+                            } else {
+                                menu
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }
@@ -60,7 +70,7 @@ class FavoriteMenuViewModel @Inject constructor(
             FavoriteMenuDto(
                 id = i.toLong(),
                 code = "MENU%03d".format(i),
-                name_kr = "학생회관 메뉴 $i",
+                name_kr = "바지락리조또 & 베사멜소스 한줄에 최대 15자 띄어쓰기기준 밑으로 내려오기",
                 name_en = "Student Menu $i",
                 price = 4000 + i * 300,
                 etc = listOf("한식"),
@@ -75,7 +85,7 @@ class FavoriteMenuViewModel @Inject constructor(
         val mockRestaurant1 = FavoriteRestaurantDto(
             id = 100,
             code = "REST001",
-            name_kr = "학생회관 식당",
+            name_kr = "301동식당>교직원전용식당용식당",
             name_en = "Student Cafeteria",
             addr = "서울대학교 1동",
             lat = 37.459,

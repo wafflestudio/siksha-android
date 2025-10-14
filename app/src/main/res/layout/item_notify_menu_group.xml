@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="12dp"
-    android:layout_marginBottom="17dp"
-    android:background="@drawable/frame_corner_radius_10_border_thick"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/frame_corner_radius_8"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,10 +35,10 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_square_extra_bold"
                     android:singleLine="false"
-                    android:paddingVertical="10dp"
-                    android:paddingStart="16dp"
+                    android:paddingTop="14dp"
+                    android:paddingStart="14dp"
                     android:textColor="@color/black"
-                    android:textSize="15dp"
+                    android:textSize="16dp"
                     tools:text="학생회관 식당" />
 
             </TableRow>
@@ -51,8 +50,10 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginHorizontal="12dp"
+        android:layout_height="1.5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="14dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/frame_splash"
         app:layout_constraintTop_toBottomOf="@id/restaurant_title" />
 
@@ -60,8 +61,7 @@
         android:id="@+id/menu_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="8dp"
         android:nestedScrollingEnabled="false"
         tools:listitem="@layout/item_notify_menu" />
 

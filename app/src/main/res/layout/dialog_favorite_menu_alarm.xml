@@ -8,7 +8,7 @@
     <FrameLayout
         android:id="@+id/dialog_header_image"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="216dp"
         android:background="#F7ECD1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,10 +17,10 @@
         <ImageView
             android:id="@+id/dialog_header_image_screen"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
+            android:layout_height="179dp"
             android:src="@drawable/img_favorite_modal_screen"
-            android:scaleType="centerInside"
-            android:layout_gravity="bottom"/>
+            android:layout_marginTop="37dp"
+            android:layout_marginHorizontal="53dp"/>
     </FrameLayout>
 
     <TextView
@@ -30,9 +30,9 @@
         android:text="찜한 메뉴, 이제는 나올 때마다\n알림으로 받을 수 있어요!"
         android:fontFamily="@font/nanum_square_extra_bold"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:lineSpacingMultiplier="1.2"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="24dp"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toBottomOf="@id/dialog_header_image"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +44,10 @@
         android:layout_height="wrap_content"
         android:text="알림 받을 메뉴는 [설정 > 찜한 메뉴] 탭에서\n언제든 개별적으로 ON/OFF 설정할 수 있어요."
         android:fontFamily="@font/nanum_square_regular"
+        android:textColor="@color/gray_700"
+        android:textSize="12dp"
         android:lineSpacingMultiplier="1.2"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="12dp"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toBottomOf="@id/dialog_title"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toBottomOf="@id/dialog_subtitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,11 +73,13 @@
             android:drawablePadding="6dp"
             android:text="좋아요, 알림을 받을래요."
             android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/black"
+            android:textSize="15dp"
             android:minHeight="0dp"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
             android:includeFontPadding="false"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="12dp" />
 
         <RadioButton
             android:id="@+id/radio_no"
@@ -86,6 +90,8 @@
             android:drawablePadding="6dp"
             android:text="괜찮아요, 알림을 받지 않을래요."
             android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/black"
+            android:textSize="15dp"
             android:minHeight="0dp"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
@@ -98,7 +104,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="20dp"
         android:layout_marginHorizontal="20dp"
         android:weightSum="2"
@@ -118,7 +124,7 @@
             android:backgroundTint="@color/gray_100"
             android:textColor="@color/gray_600"
             android:letterSpacing="-0.01"
-            android:background="@drawable/frame_corner_radius_10"
+            android:background="@drawable/frame_corner_radius_8"
             android:elevation="0dp"
             android:stateListAnimator="@null"
             />
@@ -135,7 +141,7 @@
             android:fontFamily="@font/nanum_square_bold"
             android:backgroundTint="@color/gray_600"
             android:letterSpacing="-0.01"
-            android:background="@drawable/frame_corner_radius_10"
+            android:background="@drawable/frame_corner_radius_8"
             android:elevation="0dp"
             android:stateListAnimator="@null"
             />

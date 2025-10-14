@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toggle_root"
+    android:layout_width="36dp"
+    android:layout_height="22dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@android:color/transparent"
+    android:descendantFocusability="blocksDescendants"
+    android:padding="0dp"
+    android:clipChildren="true"
+    android:clipToPadding="true">
+
+    <ImageView
+        android:id="@+id/bg_inactive"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_toggle_switch_inactive"
+        android:scaleType="fitCenter"
+        android:contentDescription="@null"
+        android:clickable="false"
+        android:focusable="false"
+        android:importantForAccessibility="no"
+        />
+
+    <ImageView
+        android:id="@+id/bg_active"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_toggle_switch_active"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:contentDescription="@null"
+        android:clickable="false"
+        android:focusable="false"
+        android:importantForAccessibility="no"
+        />
+
+    <ImageView
+        android:id="@+id/toggle_knob"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/ic_toggle_switch_knob"
+        android:background="@drawable/ic_toggle_switch_knob_background"
+        android:elevation="2dp"
+        android:translationZ="1dp"
+        android:outlineProvider="background"
+        android:clickable="false"
+        android:focusable="false"
+        android:importantForAccessibility="no"
+        android:contentDescription="@null"
+        />
+
+
+</FrameLayout>

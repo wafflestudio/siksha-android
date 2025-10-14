@@ -5,35 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.wafflestudio.siksha2.databinding.FragmentFavoriteMenuBinding
-import com.wafflestudio.siksha2.ui.SikshaTheme
-import dagger.hilt.android.AndroidEntryPoint
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.wafflestudio.siksha2.databinding.FragmentFavoriteMenuBinding
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
+import com.wafflestudio.siksha2.ui.SikshaTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class FavoriteMenuFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteMenuBinding
     private val vm: FavoriteMenuViewModel by viewModels()
+
     @Inject
     lateinit var sikshaPrefObjects: SikshaPrefObjects
 
@@ -52,7 +43,7 @@ class FavoriteMenuFragment : Fragment() {
         val token = sikshaPrefObjects.accessToken.getValue()
 
         vm.loadFavoriteMenus(token)
-        //vm.loadMockData()
+        // vm.loadMockData()
 
         binding.menuGroupList.setContent {
             SikshaTheme {
@@ -86,4 +77,3 @@ class FavoriteMenuFragment : Fragment() {
         }
     }
 }
-

@@ -2,7 +2,6 @@ package com.wafflestudio.siksha2.ui.main.setting.favoriteMenu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wafflestudio.siksha2.network.dto.FavoriteMenuDto
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.FavoriteMenuRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,11 +47,11 @@ class NotifyMenuViewModel @Inject constructor(
         val mockRestaurants = (1..4).map { r ->
             NotifyMenuGroupUiModel(
                 restaurantId = r.toLong(),
-                restaurantName = "테스트 식당 $r",
+                restaurantName = "학생회관 식당",
                 menus = (1..10).map { i ->
                     NotifyMenuUiModel(
                         id = (r * 10 + i).toLong(),
-                        title = "알림용 메뉴 $r-$i",
+                        title = "바지락리조또 & 베사멜소스 띄어쓰기 기준 밑으로 내려오기",
                         alarm = i % 2 == 0,
                         isChecked = i % 3 == 0
                     )
@@ -81,5 +80,3 @@ class NotifyMenuViewModel @Inject constructor(
         }
     }
 }
-
-

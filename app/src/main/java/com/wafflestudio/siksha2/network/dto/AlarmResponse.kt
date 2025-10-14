@@ -18,4 +18,3 @@ data class AlarmResponse(
     val is_liked: Boolean,
     val alarm: Boolean
 )
-

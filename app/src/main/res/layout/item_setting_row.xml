@@ -48,13 +48,11 @@
         android:layout_gravity="center"
         android:src="@drawable/ic_check_orange"/>
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switchCompat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="20dp"
-        android:padding="0dp"
-        android:scaleX="0.6"
-        android:scaleY="0.6"/>
+    <com.wafflestudio.siksha2.components.ToggleSwitchView
+        android:id="@+id/toggle_switch"
+        android:layout_width="36dp"
+        android:layout_height="22dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="8dp" />
 
 </merge>

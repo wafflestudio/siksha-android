@@ -1,13 +1,11 @@
 package com.wafflestudio.siksha2.ui.main.setting.favoriteMenu
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.wafflestudio.siksha2.databinding.ItemNotifyMenuBinding
 import com.wafflestudio.siksha2.databinding.ItemNotifyMenuGroupBinding
 
 class NotifyMenuAdapter(
@@ -36,7 +34,6 @@ class NotifyMenuAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemNotifyMenuGroupBinding.inflate(inflater, parent, false)
@@ -57,6 +54,3 @@ class NotifyMenuAdapter(
         }
     }
 }
-
-
-

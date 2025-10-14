@@ -16,6 +16,7 @@ import javax.inject.Inject
 class NotifyTimeFragment : Fragment() {
     private lateinit var binding: FragmentNotifyTimeBinding
     private val vm: NotifyMenuViewModel by viewModels()
+
     @Inject
     lateinit var prefs: SikshaPrefObjects
 
@@ -55,5 +56,3 @@ class NotifyTimeFragment : Fragment() {
         }
     }
 }
-
-

@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,12 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.compose.ui.dailyrestaurant.RestaurantInfoRow
 import com.wafflestudio.siksha2.network.dto.FavoriteMenuDto
 import com.wafflestudio.siksha2.network.dto.FavoriteRestaurantDto
 import com.wafflestudio.siksha2.ui.SikshaTheme
@@ -55,8 +57,11 @@ fun FavoriteRestaurantInfoRow(
                 .size(20.dp)
                 .clickable { onToggleFavoriteRestaurant() },
             painter = painterResource(
-                if (isFavorite) R.drawable.ic_favorite_full
-                else R.drawable.ic_favorite_empty
+                if (isFavorite) {
+                    R.drawable.ic_favorite_full
+                } else {
+                    R.drawable.ic_favorite_empty
+                }
             ),
             contentDescription = "즐겨찾기"
         )
@@ -104,28 +109,62 @@ fun RestaurantMenuFavorite(
             .padding(horizontal = 14.dp, vertical = 18.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-        ) {
-            FavoriteRestaurantInfoRow(
-                restaurantName = restaurant.name_kr,
-                isFavorite = false,
-                onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
-                modifier = Modifier.weight(1f)
-            )
+        val restaurantName = restaurant.name_kr ?: "식당 이름 없음"
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(24.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Price", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
-                Text("Rate", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
-                Text("Like", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
-            }
+        val isNameTooLong = remember(restaurantName) {
+            restaurantName.length > 14
         }
 
-        Spacer(modifier = Modifier.height(14.dp))
+        if (isNameTooLong) {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                FavoriteRestaurantInfoRow(
+                    restaurantName = restaurantName,
+                    isFavorite = false,
+                    onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Price", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text("Rate", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text("Like", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                FavoriteRestaurantInfoRow(
+                    restaurantName = restaurantName,
+                    isFavorite = false,
+                    onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
+                    modifier = Modifier.weight(1f)
+                )
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Price", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                    Text("Rate", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                    Text("Like", fontSize = 12.sp, color = SikshaTheme.colors.Orange500)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
         Divider(color = SikshaTheme.colors.Orange500, thickness = 1.5.dp)
         Spacer(modifier = Modifier.height(14.dp))
 
@@ -154,12 +193,28 @@ fun MenuRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
+        val wrappedName = remember(menu.name_kr) {
+            menu.name_kr.chunked(15).joinToString("\n")
+        }
+
+        val formattedPrice = remember(menu.price) {
+            val price = menu.price ?: 0
+            "%,d".format(price)
+        }
+
+        val formattedRate = remember(menu.score) {
+            menu.score?.let { String.format("%.1f", it) } ?: "-"
+        }
+
         Text(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .clickable { onClickMenu() },
-            text = menu.name_kr,
+            text = wrappedName,
             color = SikshaTheme.colors.Black,
-            fontSize = 15.sp
+            fontSize = 15.sp,
+            lineHeight = 20.sp,
+            softWrap = true
         )
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -172,20 +227,28 @@ fun MenuRow(
                 )
             }
             Text(
-                text = "${menu.price ?: 0}원",
+                text = formattedPrice,
                 color = SikshaTheme.colors.Black,
                 fontSize = 14.sp
             )
-            Text(
-                text = "${menu.score ?: 0.0}",
-                color = SikshaTheme.colors.Black,
-                fontSize = 14.sp
-            )
+            Box(
+                modifier = Modifier.width(22.95.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = formattedRate,
+                    color = SikshaTheme.colors.Black,
+                    fontSize = 14.sp
+                )
+            }
             Image(
-                modifier = Modifier.size(24.dp).clickable { onToggleLikeMenu() },
+                modifier = Modifier.size(20.dp).clickable { onToggleLikeMenu() },
                 painter = painterResource(
-                    if (menu.is_liked) R.drawable.ic_heart_filled
-                    else R.drawable.ic_heart_outline
+                    if (menu.is_liked) {
+                        R.drawable.ic_heart_filled
+                    } else {
+                        R.drawable.ic_heart_outline
+                    }
                 ),
                 contentDescription = "메뉴 찜하기"
             )

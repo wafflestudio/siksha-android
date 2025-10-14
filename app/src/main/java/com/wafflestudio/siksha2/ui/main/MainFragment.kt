@@ -21,6 +21,7 @@ import javax.inject.Inject
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var stateAdapter: FragmentStateAdapter
+
     @Inject
     lateinit var sikshaPrefs: SikshaPrefObjects
 

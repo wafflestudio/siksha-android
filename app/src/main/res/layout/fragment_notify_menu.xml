@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_primary">
+    android:background="@color/background_main">
 
     <LinearLayout
         android:id="@+id/tool_bar"
@@ -30,11 +30,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/nanum_square_bold"
+            android:fontFamily="@font/nanum_square_extra_bold"
             android:text="메뉴 알림 설정"
             android:textColor="@color/text_GNB"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/back_button_invisible"
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
         android:background="@drawable/frame_setting_layout"
         android:orientation="vertical"
         android:layout_gravity="center"
@@ -89,34 +89,34 @@
         android:id="@+id/guide_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/nanum_square_bold"
-        android:text="알림 받을 메뉴를 선택하세요"
-        android:textColor="@color/gray_700"
-        android:textSize="15sp"
+        android:text="알림 받을 메뉴를 선택하세요."
+        android:textColor="@color/gray_600"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/alarm_setting"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <FrameLayout
         android:id="@+id/layout_menu_group_container"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
         app:layout_constraintTop_toBottomOf="@id/guide_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/menu_group_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
             android:visibility="visible"
             tools:listitem="@layout/item_notify_menu_group" />
 
