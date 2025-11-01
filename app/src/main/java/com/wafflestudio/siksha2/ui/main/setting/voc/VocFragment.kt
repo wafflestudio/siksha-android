@@ -56,12 +56,19 @@ class VocFragment : Fragment() {
                 it?.length,
                 500
             )
+
+            if (it?.isNotEmpty() == true) {
+                binding.submitButton.isEnabled = true
+            } else {
+                binding.submitButton.isEnabled = false
+            }
         }
 
         binding.closeButton.setOnClickListener {
             findNavController().popBackStack()
         }
 
+        binding.submitButton.isEnabled = false
         binding.submitButton.setOnClickListener {
             lifecycleScope.launch {
                 when (val response = userStatusManager.sendVoc(voc = binding.commentEdit.text.toString(), platform = "Android")) {
