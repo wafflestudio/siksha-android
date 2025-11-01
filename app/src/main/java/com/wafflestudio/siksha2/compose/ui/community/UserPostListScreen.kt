@@ -64,7 +64,7 @@ fun UserPostListScreen(
 
     Column(
         modifier = modifier
-            .background(SikshaTheme.colors.White)
+            .background(SikshaTheme.colors.BackgroundPrimary)
     ) {
         TopBar(
             title = "내가 쓴 글",
