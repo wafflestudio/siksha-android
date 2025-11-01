@@ -162,12 +162,13 @@ fun PostDetailScreenFailed(
             }
         )
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .background(colors.BackgroundPrimary),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = errorMessage,
-                color = colors.Gray400,
+                color = colors.Gray600,
                 fontSize = 12.sp,
                 style = MaterialTheme.typography.body2
             )
