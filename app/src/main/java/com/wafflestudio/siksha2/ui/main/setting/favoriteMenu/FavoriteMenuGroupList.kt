@@ -81,7 +81,7 @@ fun FavoriteMenuRoute(
             modifier = modifier
                 .fillMaxSize()
                 .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(restaurants) { restaurant ->
                 RestaurantMenuFavorite(

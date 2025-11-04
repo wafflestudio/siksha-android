@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="216dp"
         android:background="#F7ECD1"
+        android:foreground="@drawable/gradient_fade_up"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -18,8 +19,8 @@
             android:id="@+id/dialog_header_image_screen"
             android:layout_width="match_parent"
             android:layout_height="179dp"
-            android:src="@drawable/img_favorite_modal_screen"
             android:layout_marginTop="37dp"
+            android:src="@drawable/favorite_modal_screen"
             android:layout_marginHorizontal="53dp"/>
     </FrameLayout>
 
@@ -136,7 +137,7 @@
             android:layout_weight="1"
             android:text="완료"
             android:textSize="16dp"
-            android:textColor="@color/white"
+            android:textColor="@color/text_button"
             android:layout_marginStart="12dp"
             android:fontFamily="@font/nanum_square_bold"
             android:backgroundTint="@color/gray_600"

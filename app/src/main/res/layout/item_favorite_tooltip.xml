@@ -10,6 +10,13 @@
     android:layout_gravity="end"
     android:padding="0dp">
 
+    <ImageView
+        android:layout_width="9dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="110dp"
+        android:src="@drawable/bg_favorite_tooltip_triangle"
+        android:layout_gravity="start"/>
+
     <TextView
         android:id="@+id/text_tooltip"
         android:layout_width="137dp"
@@ -17,14 +24,7 @@
         android:background="@drawable/bg_favorite_tooltip_bubble"
         android:gravity="center"
         android:text="메뉴 알림을 받아보세요!"
-        android:textColor="@android:color/black"
+        android:textColor="@color/gray_700"
         android:textSize="12sp"
-        android:fontFamily="@font/nanum_square_bold"/>
-
-    <ImageView
-        android:layout_width="9dp"
-        android:layout_height="7dp"
-        android:layout_marginStart="100dp"
-        android:src="@drawable/bg_favorite_tooltip_triangle"
-        android:layout_gravity="start"/>
+        android:fontFamily="@font/nanum_square_bold" />
 </LinearLayout>

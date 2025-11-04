@@ -87,4 +87,13 @@ class SikshaPrefObjects @Inject constructor(
             serializer,
             Boolean::class.java
         )
+
+    val favoriteTooltipShown: Preference<Boolean> =
+        Preference(
+            "favoriteTooltipShown",
+            false,
+            sharedPreferences,
+            serializer,
+            Boolean::class.java
+        )
 }

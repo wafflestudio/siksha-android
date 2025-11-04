@@ -48,24 +48,40 @@ class NotifyMenuFragment : Fragment() {
         vm.loadMenus(token)
         // vm.loadMockData()
 
-        lifecycleScope.launchWhenStarted {
-            vm.groups.collect { groups ->
-                adapter.submitList(groups)
-            }
-        }
-
         // 알림 토글 버튼
         binding.alarmToggleRow.setShowToggleSwitch(true)
         binding.alarmToggleRow.setToggleState(false) // TODO: 실제 상태 반영하기
         binding.alarmToggleRow.setArrowIcon(false)
 
-        val b = false
-        binding.menuGroupList.visibility = if (b) View.VISIBLE else View.GONE
+        var alarmEnabled = false // TODO: 실제 상태 반영하기
+
+        lifecycleScope.launchWhenStarted {
+            vm.groups.collect { groups ->
+                adapter.submitList(groups)
+
+                if (alarmEnabled) {
+                    val hasMenus = groups.isNotEmpty()
+                    binding.menuGroupList.visibility = View.VISIBLE
+                    binding.guideText.visibility = if (hasMenus) View.VISIBLE else View.INVISIBLE
+                    binding.noMenuText.visibility = if (hasMenus) View.INVISIBLE else View.VISIBLE
+                }
+            }
+        }
 
         // 토글 이벤트 처리
         binding.alarmToggleRow.setOnToggleClicked { enabled ->
-            binding.guideText.visibility = if (enabled) View.VISIBLE else View.GONE
-            binding.menuGroupList.visibility = if (enabled) View.VISIBLE else View.GONE
+            alarmEnabled = enabled
+
+            if (enabled) {
+                val hasMenus = adapter.currentList.isNotEmpty()
+                binding.menuGroupList.visibility = View.VISIBLE
+                binding.guideText.visibility = if (hasMenus) View.VISIBLE else View.INVISIBLE
+                binding.noMenuText.visibility = if (hasMenus) View.INVISIBLE else View.VISIBLE
+            } else {
+                binding.menuGroupList.visibility = View.GONE
+                binding.guideText.visibility = View.GONE
+                binding.noMenuText.visibility = View.GONE
+            }
         }
 
         // 메뉴 알림 시간

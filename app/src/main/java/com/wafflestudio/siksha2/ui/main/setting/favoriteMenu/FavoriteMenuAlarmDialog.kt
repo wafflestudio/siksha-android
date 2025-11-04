@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.DialogFavoriteMenuAlarmBinding
 
@@ -56,8 +57,9 @@ class FavoriteMenuAlarmDialog : DialogFragment() {
         }
 
         binding.buttonSetting.setOnClickListener {
-            // TODO: 설정 화면 이동 처리
             dismiss()
+            parentFragment?.findNavController()
+                ?.navigate(R.id.action_mainFragment_to_notifyMenuFragment)
         }
     }
 

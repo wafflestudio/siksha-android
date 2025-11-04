@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/nanum_square_extra_bold"
-            android:text="메뉴 알림 설정"
+            android:text="메뉴 알림 시간 설정"
             android:textColor="@color/text_GNB"
             android:textAlignment="center"
             android:textSize="16sp" />

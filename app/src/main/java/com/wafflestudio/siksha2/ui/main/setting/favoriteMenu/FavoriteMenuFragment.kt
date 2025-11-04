@@ -19,6 +19,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.TypefaceSpan
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import com.wafflestudio.siksha2.R
+
 
 @AndroidEntryPoint
 class FavoriteMenuFragment : Fragment() {
@@ -44,6 +52,37 @@ class FavoriteMenuFragment : Fragment() {
 
         vm.loadFavoriteMenus(token)
         // vm.loadMockData()
+
+        // 툴팁
+        val tooltipText = "메뉴 알림을 받아보세요!"
+        val spannable = SpannableString(tooltipText)
+        val start = tooltipText.indexOf("알림")
+        val end = start + 2
+
+        spannable.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.orange_500)),
+            start,
+            end,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(
+            TypefaceSpan(ResourcesCompat.getFont(requireContext(), R.font.nanum_square_extra_bold)!!),
+            start,
+            end,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        binding.favoriteTooltip.textTooltip.text = spannable
+
+        if (!sikshaPrefObjects.favoriteTooltipShown.getValue()) {
+            binding.favoriteTooltip.root.isVisible = true
+            sikshaPrefObjects.favoriteTooltipShown.setValue(true)
+        }
+
+        binding.root.setOnClickListener {
+            if (binding.favoriteTooltip.root.isVisible) {
+                binding.favoriteTooltip.root.isGone = true
+            }
+        }
 
         binding.menuGroupList.setContent {
             SikshaTheme {

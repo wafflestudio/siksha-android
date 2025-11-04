@@ -52,6 +52,7 @@
 
     <color name="element_chip">@color/gray_100</color>
     <color name="element_tooltip">@color/gray_100</color>
+    <color name="element_tooltip2">@color/white</color>
     <color name="element_control">@color/gray_200</color>
 
     <!-- 로그인 관련 -->

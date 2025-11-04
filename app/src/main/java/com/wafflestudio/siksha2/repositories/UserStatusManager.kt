@@ -1,6 +1,7 @@
 package com.wafflestudio.siksha2.repositories
 
 import android.content.Context
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
@@ -32,6 +33,7 @@ class UserStatusManager @Inject constructor(
 ) {
     suspend fun loginWithOAuthToken(provider: OAuthProvider, token: String): NetworkResult<LoginOAuthResult> {
         val tokenWithPrefix = attachBearerPrefix(token)
+        Log.d("UserStatusManager","Login token: $tokenWithPrefix")
         val response = when (provider) {
             OAuthProvider.GOOGLE -> sikshaApi.loginGoogle(tokenWithPrefix)
             OAuthProvider.KAKAO -> sikshaApi.loginKakao(tokenWithPrefix)

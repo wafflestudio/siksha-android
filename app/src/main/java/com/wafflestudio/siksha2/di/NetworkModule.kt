@@ -26,12 +26,29 @@ object NetworkModule {
     @Singleton
     fun provideHttpClient(sikshaPrefObjects: SikshaPrefObjects): OkHttpClient {
         return OkHttpClient.Builder()
+            /*
             .addInterceptor { chain ->
                 val newRequest = chain.request().newBuilder()
                     .header(AUTH_TOKEN_HEADER_KEY, sikshaPrefObjects.accessToken.getValue())
                     .build()
                 chain.proceed(newRequest)
             }
+
+             */
+            .addInterceptor { chain ->
+                val request = chain.request()
+                val builder = request.newBuilder()
+
+                val token = sikshaPrefObjects.accessToken.getValue()
+                val isLoginRequest = request.url.encodedPath.contains("/auth/login")
+
+                if (token.isNotBlank() && !isLoginRequest) {
+                    builder.header("Authorization", token)
+                }
+
+                chain.proceed(builder.build())
+            }
+
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level =

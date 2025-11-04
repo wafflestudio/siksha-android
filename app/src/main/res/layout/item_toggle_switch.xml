@@ -42,7 +42,7 @@
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_gravity="center_vertical|start"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="4dp"
         android:src="@drawable/ic_toggle_switch_knob"
         android:background="@drawable/ic_toggle_switch_knob_background"
         android:elevation="2dp"
