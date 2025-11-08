@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
 import com.wafflestudio.siksha2.ui.SikshaTheme
+import com.wafflestudio.siksha2.utils.toLocalDateTime
+import com.wafflestudio.siksha2.utils.toParsedTimeString
 
 @Composable
 fun MenuReviewItem(
@@ -105,7 +107,7 @@ fun MenuReviewHeader(
             )
         }
         Text(
-            text = timeText,
+            text = timeText.toLocalDateTime().toParsedTimeString(),
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
             color = SikshaTheme.colors.Gray600

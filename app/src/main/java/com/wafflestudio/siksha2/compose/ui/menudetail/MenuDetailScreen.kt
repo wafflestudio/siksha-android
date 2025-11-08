@@ -204,7 +204,8 @@ fun MenuDetailScreen(
                     timeText = review.createdAt,
                     reviewText = review.comment,
                     isLiked = review.isLiked,
-                    likeCount = review.likeCount
+                    likeCount = review.likeCount,
+                    modifier = Modifier.padding(horizontal = 14.dp)
                 )
             }
         }
