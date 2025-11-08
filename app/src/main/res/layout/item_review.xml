@@ -106,7 +106,7 @@
                 app:showDeleteIcon="false" />
 
             <com.wafflestudio.siksha2.components.ReviewImageView
-                android:id="@id/review_image_view_2"
+                android:id="@+id/review_image_view_2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:visibility="gone"

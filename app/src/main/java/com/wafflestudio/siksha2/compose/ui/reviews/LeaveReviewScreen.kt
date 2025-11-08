@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,8 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -45,6 +48,7 @@ import com.wafflestudio.siksha2.ui.CancelIcon
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
+import com.wafflestudio.siksha2.utils.KeyboardUtil.keyboardAsState
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -63,9 +67,11 @@ fun LeaveReviewRoute(
     val menu by vm.menu.observeAsState()
     val rating by vm.reviewRating
     val selectedKeywords by vm.selectedKeywordList.collectAsState()
-    var comment = remember { "" }
+    var comment by remember { mutableStateOf("") }
     val commentHint by vm.commentHint.observeAsState()
     val imageUriList by vm.imageUriList.observeAsState()
+
+    val keyboardState by keyboardAsState()
 
     val scope = rememberCoroutineScope()
 
@@ -84,6 +90,7 @@ fun LeaveReviewRoute(
                 color = SikshaTheme.colors.Gray600
             )
         },
+        isKeyboardOpen = keyboardState,
         imageUriList = imageUriList,
         onNavigateUp = onNavigateUp,
         onSubmitReview = {
@@ -109,6 +116,7 @@ fun LeaveReviewScreen(
     keywordIconList: List<@Composable () -> Unit>,
     comment: String,
     commentPlaceHolder: @Composable () -> Unit,
+    isKeyboardOpen: Boolean,
     imageUriList: List<Uri>?,
     onNavigateUp: () -> Unit,
     onSubmitReview: () -> Unit,
@@ -125,6 +133,7 @@ fun LeaveReviewScreen(
     Column(
         modifier = modifier.fillMaxSize()
             .background(SikshaTheme.colors.BackgroundPrimary)
+            .imePadding()
     ) {
         TopBar(
             title = stringResource(R.string.leave_review_title),
@@ -179,7 +188,9 @@ fun LeaveReviewScreen(
                 MenuRatingStars(
                     initialRating = 5f,
                     changeEnabled = true,
-                    onRatingChange = onRatingChange
+                    onRatingChange = onRatingChange,
+                    width = 150.dp,
+                    height = 25.dp
                 )
                 Spacer(Modifier.height(9.dp))
                 Text(
@@ -200,6 +211,7 @@ fun LeaveReviewScreen(
                     fontWeight = FontWeight.ExtraBold,
                     color = SikshaTheme.colors.Black
                 )
+                Spacer(Modifier.width(5.dp))
                 Text(
                     text = "(필수)",
                     fontSize = 12.sp,
@@ -258,6 +270,7 @@ fun LeaveReviewScreen(
                     fontWeight = FontWeight.ExtraBold,
                     color = SikshaTheme.colors.Black
                 )
+                Spacer(Modifier.width(5.dp))
                 Text(
                     text = "(선택)",
                     fontSize = 12.sp,
@@ -300,6 +313,7 @@ fun LeaveReviewScreen(
                     fontSize = 11.sp,
                     color = SikshaTheme.colors.Gray700,
                     modifier = Modifier.align(Alignment.End)
+                        .padding(end = 11.dp, bottom = 12.dp)
                 )
             }
             Spacer(Modifier.height(8.dp))
@@ -312,24 +326,26 @@ fun LeaveReviewScreen(
             )
         }
 
-        Text(
-            text = stringResource(R.string.leave_review_button),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.ExtraBold,
-            textAlign = TextAlign.Center,
-            color = SikshaTheme.colors.TextButton,
-            modifier = Modifier.fillMaxWidth()
-                .background(SikshaTheme.colors.BackgroundPrimary)
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 45.dp)
-                .background(
-                    color = if (submitEnabled) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray600,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .clickable {
-                    if (submitEnabled) onSubmitReview()
-                }
-                .padding(top = 16.dp, bottom = 15.dp)
-        )
+        if (!isKeyboardOpen) {
+            Text(
+                text = stringResource(R.string.leave_review_button),
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                textAlign = TextAlign.Center,
+                color = SikshaTheme.colors.TextButton,
+                modifier = Modifier.fillMaxWidth()
+                    .background(SikshaTheme.colors.BackgroundPrimary)
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 45.dp)
+                    .background(
+                        color = if (submitEnabled) SikshaTheme.colors.Orange500 else SikshaTheme.colors.Gray600,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clickable {
+                        if (submitEnabled) onSubmitReview()
+                    }
+                    .padding(top = 16.dp, bottom = 15.dp)
+            )
+        }
     }
 }
 

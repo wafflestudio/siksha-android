@@ -7,29 +7,20 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.core.view.forEachIndexed
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.components.ReviewImageView
-import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
 import com.wafflestudio.siksha2.compose.ui.reviews.LeaveReviewRoute
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
-import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.SikshaTheme
-import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
 import kotlinx.coroutines.launch
@@ -108,114 +99,10 @@ class LeaveReviewFragment : Fragment() {
             }
         }
 
-        vm.menu.observe(viewLifecycleOwner) { menu ->
-            menu?.let {
-                binding.menuTitle.text = it.nameKr
-                binding.menuTitleHowAbout.text = when (it.nameKr?.hasFinalConsInKr()) {
-                    true -> getString(R.string.leave_review_how_about_with_bottom)
-                    false -> getString(R.string.leave_review_how_about_wo_bottom)
-                    else -> getString(R.string.leave_review_how_about_wo_bottom)
-                }
-            }
-        }
-
-        vm.commentHint.observe(viewLifecycleOwner) { hint ->
-            binding.commentEdit.hint = hint
-        }
-
-        binding.commentEdit.filters = binding.commentEdit.filters + InputFilter.LengthFilter(150)
-        binding.textCount.text = getString(
-            R.string.leave_review_text_count,
-            0,
-            150
-        )
-
-        binding.commentEdit.addTextChangedListener {
-            binding.textCount.text = getString(
-                R.string.leave_review_text_count,
-                it?.length,
-                150
-            )
-        }
-
         vm.getRecommendationReview(vm.reviewRating.floatValue.toLong())
-        binding.rateText.text = vm.reviewRating.floatValue.toLong().toString()
-        binding.rating.setContent {
-            MenuRatingStars(
-                initialRating = 5f,
-                changeEnabled = true,
-                onRatingChange = { newRating ->
-                    vm.setReviewRating(newRating)
-                    binding.rateText.text = newRating.toLong().toString()
-                    vm.getRecommendationReview(newRating.toLong())
-                },
-                width = 153.dp,
-                height = 25.dp
-            )
-        }
-
-        vm.imageUriList.observe(viewLifecycleOwner) { imageUriList ->
-            binding.imageLayout.forEachIndexed { index, view ->
-                (view as ReviewImageView).run {
-                    if (index < imageUriList.size) {
-                        setImage(imageUriList[index])
-                        visibility = View.VISIBLE
-                        setOnDeleteClickListener(
-                            object : ReviewImageView.OnDeleteClickListener {
-                                override fun onClick() {
-                                    vm.deleteImageUri(index)
-                                }
-                            }
-                        )
-                    } else {
-                        visibility = View.GONE
-                    }
-                }
-            }
-            binding.imageLayout.setVisibleOrGone(imageUriList.isNotEmpty())
-        }
 
         vm.leaveReviewState.observe(viewLifecycleOwner) {
             binding.onLoadingContainer.root.setVisibleOrGone(it == MenuDetailViewModel.ReviewState.COMPRESSING)
-        }
-
-        binding.closeButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
-        binding.submitButton.setOnClickListener {
-            lifecycleScope.launch {
-                val response = vm.leaveReview(
-                    context = requireContext(),
-                    score = vm.reviewRating.floatValue.toDouble(),
-                    comment = binding.commentEdit.text.toString().ifEmpty {
-                        binding.commentEdit.hint.toString()
-                    }
-                )
-                when (response) {
-                    is NetworkResult.Success -> {
-                        // showToast(R.string.leave_review_success.toString())
-                        showToast(getString(R.string.leave_review_success))
-                        findNavController().popBackStack()
-                    }
-                    is NetworkResult.Failure -> {
-                        showToast(response.message)
-                    }
-                    is NetworkResult.NetworkError -> {
-                        showToast(getString(R.string.common_network_error))
-                    }
-                    else -> {
-                        showToast(getString(R.string.common_unknown_error))
-                    }
-                }
-                vm.notifySendReviewEnd()
-            }
-        }
-
-        binding.addImageButton.setOnClickListener {
-            requestPermission(onGranted = {
-                launchPhotoPicker()
-            })
         }
     }
 
