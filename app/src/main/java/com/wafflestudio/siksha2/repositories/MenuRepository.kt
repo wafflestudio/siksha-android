@@ -78,6 +78,7 @@ class MenuRepository @Inject constructor(
         return sikshaApi.isFestivalDate(targetDate).map { it.isFestival }
     }
 
+    fun getReviewsPagingSource(menuId: Long) = MenuReviewPagingSource(sikshaApi, menuId)
     fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
             config = MenuReviewPagingSource.Config,

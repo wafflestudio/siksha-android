@@ -8,7 +8,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
@@ -98,10 +100,8 @@ class MenuDetailViewModel @Inject constructor(
                     _imageCount.value = data.totalCount
                     val urlList = emptyList<String>().toMutableList()
                     for (i in 0 until 3) {
-                        if (i < data.result.size) {
-                            data.result[i].etc?.images?.get(0)?.let {
-                                urlList.add(it)
-                            }
+                        if (i < data.result.size && data.result[i].etc.isNotEmpty()) {
+                            urlList.add(data.result[i].etc[0])
                         }
                     }
                     _imageUrlList.value = urlList
@@ -114,9 +114,10 @@ class MenuDetailViewModel @Inject constructor(
         }
     }
 
-    fun getReviews(menuId: Long): Flow<PagingData<Review>> {
-        return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
-    }
+    fun getReviews(menuId: Long): Flow<PagingData<Review>> = Pager(
+        config = MenuReviewPagingSource.Config,
+        pagingSourceFactory = { menuRepository.getReviewsPagingSource(menuId) }
+    ).flow.cachedIn(viewModelScope)
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {
         return menuRepository.getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId)

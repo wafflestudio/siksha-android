@@ -44,7 +44,7 @@ fun MenuReviewScreen(
                     timeText = review.createdAt,
                     reviewText = review.comment,
                     isLiked = review.isLiked,
-                    likeCount = review.likedCount
+                    likeCount = review.likeCount
                 )
             }
         }

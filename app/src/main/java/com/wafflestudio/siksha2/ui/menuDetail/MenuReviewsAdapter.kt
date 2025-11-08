@@ -33,7 +33,7 @@ class MenuReviewsAdapter constructor(
             date.text = item?.createdAt?.toLocalDateTime()?.toParsedTimeString() ?: "-"
             idText.text = "ID " + item?.userId.toString()
             if (showImage) {
-                item?.etc?.images?.let {
+                item?.etc?.let {
                     if (it.isNotEmpty()) {
                         val imageViewList = listOf(this.reviewImageView1, this.reviewImageView2, this.reviewImageView3)
                         this.reviewImageLayout.setVisibleOrGone(true)

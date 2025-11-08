@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.wafflestudio.siksha2.R
@@ -43,6 +44,10 @@ class MenuDetailFragment : Fragment() {
         vm.refreshImages(args.menuId)
         vm.refreshReviewDistribution(args.menuId)
         vm.refreshKeywordDistribution(args.menuId)
+
+        vm.menu.observe(viewLifecycleOwner) {
+            binding.menuTitle.text = vm.menu.value?.nameKr
+        }
 
         binding.composeLayout.setContent {
             SikshaTheme {

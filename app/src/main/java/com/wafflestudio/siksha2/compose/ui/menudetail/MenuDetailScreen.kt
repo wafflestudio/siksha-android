@@ -21,8 +21,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +51,7 @@ import androidx.core.net.toUri
 import com.wafflestudio.siksha2.ui.KeywordFoodComposition
 import com.wafflestudio.siksha2.ui.KeywordPrice
 import com.wafflestudio.siksha2.ui.KeywordTaste
+import timber.log.Timber
 
 @Composable
 fun MenuDetailRoute(
@@ -87,6 +90,13 @@ fun MenuDetailScreen(
     onNavigateToReviewPhoto: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    LaunchedEffect(reviews) {
+        snapshotFlow { reviews.itemCount }
+            .collect { count ->
+                Timber.d("Item count changed: $count")
+            }
+    }
+
     LazyColumn(
         modifier = modifier
     ) {
@@ -189,12 +199,12 @@ fun MenuDetailScreen(
             val review = reviews[idx]
             if (review != null) {
                 MenuReviewItem(
-                    review.userId.toString(),
+                    userName = review.userId.toString(),
                     menuRating = review.score.toFloat(),
                     timeText = review.createdAt,
                     reviewText = review.comment,
                     isLiked = review.isLiked,
-                    likeCount = review.likedCount
+                    likeCount = review.likeCount
                 )
             }
         }
@@ -239,35 +249,34 @@ fun BriefImageReviews(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         for (i: Int in 1..min(imageReviews.itemCount, 3)) {
-            when (val it = imageReviews.itemSnapshotList.items[i - 1].etc?.images?.get(0)) {
-                null -> Box(
+            if (imageReviews.itemSnapshotList.items[i - 1].etc.isNotEmpty()) {
+                val it = imageReviews.itemSnapshotList.items[i - 1].etc[0]
+                if (i == 3) {
+                    MenuDetailImagesShowMore(
+                        imageUri = it.toUri(),
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(10.dp)),
+                        showMoreCount = imageReviews.itemCount - 2,
+                        onShowMore = {
+                            onNavigateToReviewPhoto()
+                        }
+                    )
+                } else {
+                    MenuReviewImage(
+                        imageUri = it.toUri(),
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
+            } else {
+                Box(
                     modifier = Modifier
                         .size(120.dp)
-                        .background(SikshaTheme.colors.Gray100)
                         .clip(RoundedCornerShape(10.dp))
+                        .background(SikshaTheme.colors.Gray100)
                 )
-
-                else -> {
-                    if (i == 3) {
-                        MenuDetailImagesShowMore(
-                            imageUri = it.toUri(),
-                            modifier = Modifier
-                                .size(120.dp)
-                                .clip(RoundedCornerShape(10.dp)),
-                            showMoreCount = imageReviews.itemCount - 2,
-                            onShowMore = {
-                                onNavigateToReviewPhoto()
-                            }
-                        )
-                    } else {
-                        MenuReviewImage(
-                            imageUri = it.toUri(),
-                            modifier = Modifier
-                                .size(120.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                        )
-                    }
-                }
             }
         }
     }

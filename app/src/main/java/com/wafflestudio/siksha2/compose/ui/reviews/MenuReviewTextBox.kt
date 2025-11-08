@@ -41,7 +41,8 @@ fun MenuReviewTextBox(
             modifier = Modifier.padding(start = 13.dp)
                 .fillMaxWidth()
                 .shadow(
-                    elevation = 3.dp,
+                    elevation = 12.dp,
+                    spotColor = Color(0, 0, 0, 0),
                     shape = RoundedCornerShape(8.dp),
                     clip = true
                 )
