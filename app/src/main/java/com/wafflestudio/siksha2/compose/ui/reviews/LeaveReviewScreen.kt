@@ -82,6 +82,7 @@ fun LeaveReviewRoute(
         keywordTitleList = keywordTitleList,
         keywordChoiceLists = keywordChoiceLists,
         keywordIconList = listOf({ CancelIcon() }, { CancelIcon() }, { CancelIcon() }),
+        selectedKeywords = selectedKeywords,
         comment = comment,
         commentPlaceHolder = {
             Text(
@@ -114,6 +115,7 @@ fun LeaveReviewScreen(
     keywordTitleList: List<String>,
     keywordChoiceLists: List<List<String>>,
     keywordIconList: List<@Composable () -> Unit>,
+    selectedKeywords: List<String>,
     comment: String,
     commentPlaceHolder: @Composable () -> Unit,
     isKeyboardOpen: Boolean,
@@ -241,7 +243,7 @@ fun LeaveReviewScreen(
                     Spacer(Modifier.height(10.dp))
                     LeaveReviewKeywordChips(
                         keywordChoiceLists[idx],
-                        selectedKeyword = "",
+                        selectedKeyword = selectedKeywords[idx],
                         selectKeywordFromList = { keyword ->
                             onSelectKeyword(idx, keyword)
                         }
