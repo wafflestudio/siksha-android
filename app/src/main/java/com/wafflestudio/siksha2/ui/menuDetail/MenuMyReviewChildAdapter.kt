@@ -17,7 +17,11 @@ import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.utils.toLocalDateTime
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 
-class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.ReviewViewHolder>(DiffCallback) {
+class MenuMyReviewChildAdapter(
+    private val onMenuClick: (Review) -> Unit,
+    private val onEditClick: (Review) -> Unit,
+    private val onDeleteClick: (Review) -> Unit
+) : ListAdapter<Review, MenuMyReviewChildAdapter.ReviewViewHolder>(DiffCallback) {
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<Review>() {
@@ -70,12 +74,18 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
                 }
             }
 
+            binding.reviewHeader.setOnClickListener {
+                onMenuClick(item)
+            }
+
             binding.deleteButton.setOnClickListener {
-                showDeleteDialog(binding.root.context)
+                showDeleteDialog(binding.root.context) {
+                    onDeleteClick(item)
+                }
             }
 
             binding.editButton.setOnClickListener {
-                // Todo : 메뉴 수정 화면으로 넘어가기
+                onEditClick(item)
             }
         }
     }
@@ -121,7 +131,7 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
         }
     }
 
-    private fun showDeleteDialog(context: android.content.Context) {
+    private fun showDeleteDialog(context: android.content.Context, onDelete: () -> Unit) {
         val dialogBinding = DialogDefaultBinding.inflate(LayoutInflater.from(context))
 
         val dialog = AlertDialog.Builder(context)
@@ -138,7 +148,7 @@ class MenuMyReviewChildAdapter : ListAdapter<Review, MenuMyReviewChildAdapter.Re
 
         dialogBinding.tvPositiveButton.setOnClickListener {
             dialog.dismiss()
-            // Todo : 메뉴 삭제 API 추가
+            onDelete()
         }
 
         dialogBinding.tvNegativeButton.setOnClickListener {

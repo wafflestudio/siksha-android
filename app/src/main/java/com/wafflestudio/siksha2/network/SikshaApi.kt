@@ -53,17 +53,15 @@ interface SikshaApi {
         @Query("per_page") perPage: Long
     ): NetworkResult<FetchReviewsResult>
 
-    @DELETE("/reviews")
+    @DELETE("/reviews/{review_id}")
     suspend fun deleteReviews(
-        @Query("menu_id") menuId: Long,
-        @Query("page") page: Long,
-        @Query("per_page") perPage: Long
-    ): NetworkResult<FetchReviewsResult>
+        @Path("review_id") reviewId: Long
+    ): Response<Unit?>
 
     @GET("/reviews/me")
     suspend fun fetchMyReviews(
         @Query("page") page: Long,
-        @Query("per_page") perPage: Long
+        @Query("perPage") perPage: Long
     ): NetworkResult<FetchMyReviewsResult>
 
     @Multipart

@@ -6,9 +6,9 @@ import com.wafflestudio.siksha2.models.Review
 
 @JsonClass(generateAdapter = true)
 data class ReviewRestaurant(
-    @Json(name = "restaurant_id") val restaurantId: String,
-    @Json(name = "name_Kr") val nameKr: String,
-    @Json(name = "name_En") val nameEn: String,
+    @Json(name = "restaurant_id") val restaurantId: Long,
+    @Json(name = "name_kr") val nameKr: String?,
+    @Json(name = "name_en") val nameEn: String?,
     @Json(name = "reviews") val reviews: List<Review>
 )
 

@@ -251,6 +251,9 @@
         <action
             android:id="@+id/action_myReviewFragment_to_leaveReviewFragment"
             app:destination="@id/leaveReviewFragment" />
+        <action
+            android:id="@+id/action_myReviewFragment_to_menuDetailFragment"
+            app:destination="@id/menuDetailFragment" />
     </fragment>
 
 

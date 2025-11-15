@@ -66,6 +66,10 @@ class MenuDetailViewModel @Inject constructor(
     val reviewRating: FloatState
         get() = _reviewRating
 
+    private val _deleteResult = MutableLiveData<Boolean>()
+    val deleteResult: LiveData<Boolean>
+        get() = _deleteResult
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -101,6 +105,13 @@ class MenuDetailViewModel @Inject constructor(
                     _networkResultState.value = State.FAILED
                 }
             }
+        }
+    }
+
+    fun deleteReview(id: Long) {
+        viewModelScope.launch {
+            val success = menuRepository.deleteReview(id)
+            _deleteResult.postValue(success)
         }
     }
 

@@ -8,9 +8,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.wafflestudio.siksha2.databinding.ItemMyReviewRestaurantBinding
+import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 
-class MenuMyReviewAdapter :
+class MenuMyReviewAdapter(
+    private val onMenuClick: (Review) -> Unit,
+    private val onEditClick: (Review) -> Unit,
+    private val onDeleteClick: (Review) -> Unit
+) :
     PagingDataAdapter<ReviewRestaurant, MenuMyReviewAdapter.RestaurantViewHolder>(DiffCallback) {
 
     companion object {
@@ -41,7 +46,8 @@ class MenuMyReviewAdapter :
 
             // 리뷰 어댑터 (Nested RecyclerView)
             binding.reviewRecycler.layoutManager = LinearLayoutManager(binding.root.context)
-            val reviewAdapter = MenuMyReviewChildAdapter()
+
+            val reviewAdapter = MenuMyReviewChildAdapter(onMenuClick, onEditClick, onDeleteClick)
             binding.reviewRecycler.adapter = reviewAdapter
 
             reviewAdapter.submitList(item.reviews)

@@ -89,6 +89,11 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
+    suspend fun deleteReview(reviewId: Long): Boolean {
+        val response = sikshaApi.deleteReviews(reviewId)
+        return response.isSuccessful
+    }
+
     fun getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
             config = MenuReviewWithImagePagingSource.Config,
