@@ -1,6 +1,8 @@
 package com.wafflestudio.siksha2.repositories
 
+import android.util.Log
 import com.wafflestudio.siksha2.network.SikshaApi
+import com.wafflestudio.siksha2.network.dto.GetAlarmTypeResponse
 import com.wafflestudio.siksha2.network.dto.GetFavoriteMenusResponse
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import javax.inject.Inject
@@ -17,4 +19,16 @@ class FavoriteMenuRepository @Inject constructor(
 
     suspend fun disableAlarm(token: String, menuId: Long) =
         api.postAlarmOff(menuId, token)
+
+    suspend fun disableAllMenuAlarms(token: String) =
+        api.postAlarmOffAll(token)
+
+    suspend fun setAlarmType(type: String, token: String): NetworkResult<Unit> {
+        val body = mapOf("type" to type)
+        return api.postAlarmType(token, body)
+    }
+
+    suspend fun fetchAlarmType(token: String): NetworkResult<GetAlarmTypeResponse> {
+        return api.getAlarmType(token)
+    }
 }

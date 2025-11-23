@@ -24,7 +24,10 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideHttpClient(sikshaPrefObjects: SikshaPrefObjects): OkHttpClient {
+    fun provideHttpClient(
+        @ApplicationContext context: Context,
+        sikshaPrefObjects: SikshaPrefObjects
+    ): OkHttpClient {
         return OkHttpClient.Builder()
             /*
             .addInterceptor { chain ->
@@ -39,16 +42,18 @@ object NetworkModule {
                 val request = chain.request()
                 val builder = request.newBuilder()
 
-                val token = sikshaPrefObjects.accessToken.getValue()
-                val isLoginRequest = request.url.encodedPath.contains("/auth/login")
+                val path = request.url.encodedPath
+                val isLoginRequest = path.contains("/auth/login")
 
-                if (token.isNotBlank() && !isLoginRequest) {
-                    builder.header("Authorization", token)
+                if (!isLoginRequest) {
+                    val newRequest = builder
+                        .header(AUTH_TOKEN_HEADER_KEY, sikshaPrefObjects.accessToken.getValue())
+                        .build()
+                    chain.proceed(newRequest)
+                } else {
+                    chain.proceed(request)
                 }
-
-                chain.proceed(builder.build())
             }
-
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level =

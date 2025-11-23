@@ -21,6 +21,9 @@ import com.wafflestudio.siksha2.network.dto.core.UserDto
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,6 +46,8 @@ class UserStatusManager @Inject constructor(
                 val accessToken = response.body.accessToken
                 sikshaPrefObjects.oAuthProvider.setValue(provider)
                 sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
+
+                registerFcmTokenAfterLogin(attachBearerPrefix(accessToken))
             }
             else -> { }
         }
@@ -162,4 +167,23 @@ class UserStatusManager @Inject constructor(
         } else {
             "Bearer $token"
         }
+
+    private fun registerFcmTokenAfterLogin(accessToken: String) {
+        val fcmToken = sikshaPrefObjects.fcmToken.getValue()
+        if (fcmToken.isBlank()) {
+            Log.w("UserStatusManager", "FCM token is blank, skipping registration")
+            return
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = sikshaApi.registerUserDevice(
+                    mapOf("fcm_token" to fcmToken),
+                    accessToken
+                )
+            } catch (e: Exception) {
+                Log.e("UserStatusManager", "FCM registration exception", e)
+            }
+        }
+    }
 }

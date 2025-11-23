@@ -1,11 +1,14 @@
 package com.wafflestudio.siksha2.ui.main.setting.favoriteMenu
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +20,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NotifyMenuFragment : Fragment() {
     private lateinit var binding: FragmentNotifyMenuBinding
-    private val vm: NotifyMenuViewModel by viewModels()
+    private val vm: NotifyMenuViewModel by activityViewModels()
 
     @Inject
     lateinit var prefs: SikshaPrefObjects
@@ -48,13 +51,23 @@ class NotifyMenuFragment : Fragment() {
         vm.loadMenus(token)
         // vm.loadMockData()
 
+        var alarmEnabled = prefs.alarmEnabled.getValue()
+
         // 알림 토글 버튼
         binding.alarmToggleRow.setShowToggleSwitch(true)
-        binding.alarmToggleRow.setToggleState(false) // TODO: 실제 상태 반영하기
+        binding.alarmToggleRow.setToggleState(alarmEnabled)
         binding.alarmToggleRow.setArrowIcon(false)
 
-        var alarmEnabled = false // TODO: 실제 상태 반영하기
+        updateMenuListVisibility(alarmEnabled)
 
+        lifecycleScope.launchWhenStarted {
+            vm.groups.collect { groups ->
+                adapter.submitList(groups)
+                updateMenuListVisibility(alarmEnabled)
+            }
+        }
+
+        /*
         lifecycleScope.launchWhenStarted {
             vm.groups.collect { groups ->
                 adapter.submitList(groups)
@@ -68,8 +81,41 @@ class NotifyMenuFragment : Fragment() {
             }
         }
 
+         */
+
         // 토글 이벤트 처리
         binding.alarmToggleRow.setOnToggleClicked { enabled ->
+            if (enabled) {
+                // OS 알림 허용 체크
+                if (!isNotificationEnabled()) {
+                    binding.alarmToggleRow.setToggleState(false)
+                    openNotificationSettings()
+                    return@setOnToggleClicked
+                }
+
+                alarmEnabled = true
+                prefs.alarmEnabled.setValue(true)
+                updateMenuListVisibility(true)
+
+            } else {
+                // OFF → 서버 전체 알림 해제 API 호출
+                alarmEnabled = false
+                prefs.alarmEnabled.setValue(false)
+                vm.disableAllAlarms(token)
+                updateMenuListVisibility(false)
+            }
+        }
+        /*
+        binding.alarmToggleRow.setOnToggleClicked { enabled ->
+            if (enabled) {
+                // OS 알림이 꺼져있으면 설정으로 이동
+                if (!isNotificationEnabled()) {
+                    binding.alarmToggleRow.setToggleState(false) // 원상복귀
+                    openNotificationSettings()
+                    return@setOnToggleClicked
+                }
+            }
+
             alarmEnabled = enabled
 
             if (enabled) {
@@ -84,7 +130,9 @@ class NotifyMenuFragment : Fragment() {
             }
         }
 
-        // 메뉴 알림 시간
+         */
+
+        // 메뉴 알림 시간 화면으로 이동
         binding.alarmTimeRow.setOnClickListener {
             val action = NotifyMenuFragmentDirections.actionNotifyMenuFragmentToNotifyTimeFragment()
             findNavController().navigate(action)
@@ -94,5 +142,32 @@ class NotifyMenuFragment : Fragment() {
         binding.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun isNotificationEnabled(): Boolean {
+        return NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
+    }
+
+    private fun openNotificationSettings() {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+        }
+        startActivity(intent)
+    }
+
+    private fun updateMenuListVisibility(enabled: Boolean) {
+        if (!enabled) {
+            binding.menuGroupList.visibility = View.GONE
+            binding.guideText.visibility = View.GONE
+            binding.noMenuText.visibility = View.GONE
+            return
+        }
+
+        val hasMenus = adapter.currentList.isNotEmpty()
+        binding.menuGroupList.visibility = View.VISIBLE
+        binding.guideText.visibility =
+            if (hasMenus) View.VISIBLE else View.INVISIBLE
+        binding.noMenuText.visibility =
+            if (hasMenus) View.INVISIBLE else View.VISIBLE
     }
 }

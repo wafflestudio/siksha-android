@@ -43,11 +43,15 @@ class MainFragment : Fragment() {
 
         /*
         if (!sikshaPrefs.favoriteModalShown.getValue()) {
-            FavoriteMenuAlarmDialog().show(parentFragmentManager, "FavoriteMenuAlarm")
+            FavoriteMenuAlarmDialog { alarmEnabled ->
+                sikshaPrefs.alarmEnabled.setValue(alarmEnabled)
+            }.show(parentFragmentManager, "FavoriteMenuAlarm")
             sikshaPrefs.favoriteModalShown.setValue(true)
         }
         */
-        FavoriteMenuAlarmDialog().show(parentFragmentManager, "FavoriteMenuAlarm")
+        FavoriteMenuAlarmDialog { alarmEnabled ->
+            sikshaPrefs.alarmEnabled.setValue(alarmEnabled)
+        }.show(parentFragmentManager, "FavoriteMenuAlarm")
 
         initTab()
     }

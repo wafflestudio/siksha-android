@@ -123,6 +123,14 @@
             android:name=".ui.common.ImageViewerActivity"
             android:exported="false"
             android:theme="@style/Theme.Siksha.ImageViewer" />
+
+        <service
+            android:name=".fcm.SikshaFirebaseService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

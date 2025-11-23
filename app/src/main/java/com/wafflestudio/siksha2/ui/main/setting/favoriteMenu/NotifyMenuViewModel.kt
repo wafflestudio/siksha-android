@@ -1,5 +1,6 @@
 package com.wafflestudio.siksha2.ui.main.setting.favoriteMenu
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.network.result.NetworkResult
@@ -62,6 +63,8 @@ class NotifyMenuViewModel @Inject constructor(
     }
 
     fun onMenuChecked(menuId: Long, isChecked: Boolean, token: String) {
+        Log.d("NotifyMenuViewModel", "Toggle menuId=$menuId | isChecked=$isChecked")
+
         _groups.value = _groups.value.map { group ->
             group.copy(
                 menus = group.menus.map { menu ->
@@ -77,6 +80,12 @@ class NotifyMenuViewModel @Inject constructor(
             } else {
                 repository.disableAlarm(token, menuId)
             }
+        }
+    }
+
+    fun disableAllAlarms(token: String) {
+        viewModelScope.launch {
+            repository.disableAllMenuAlarms(token)
         }
     }
 }

@@ -96,4 +96,22 @@ class SikshaPrefObjects @Inject constructor(
             serializer,
             Boolean::class.java
         )
+
+    val fcmToken: Preference<String> =
+        Preference(
+            "fcmToken",
+            "",
+            sharedPreferences,
+            serializer,
+            String::class.java
+        )
+
+    val alarmEnabled: Preference<Boolean> =
+        Preference(
+            "alarmEnabled",
+            false,
+            sharedPreferences,
+            serializer,
+            Boolean::class.java
+        )
 }

@@ -15,7 +15,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NotifyTimeFragment : Fragment() {
     private lateinit var binding: FragmentNotifyTimeBinding
-    private val vm: NotifyMenuViewModel by viewModels()
+    private val vm: NotifyTimeViewModel by viewModels()
 
     @Inject
     lateinit var prefs: SikshaPrefObjects
@@ -36,18 +36,37 @@ class NotifyTimeFragment : Fragment() {
 
         // 알림 토글 버튼
         binding.alarmTimeRow.setArrowIcon(false)
-        binding.alarmTimeRow.setShowCheckSimple(false)
         binding.alarmMorningRow.setArrowIcon(false)
-        binding.alarmMorningRow.setShowCheckSimple(true)
+
+        binding.alarmTimeRow.setShowCheckSimple(false)
+        binding.alarmMorningRow.setShowCheckSimple(false)
+
+        vm.loadAlarmType(token)
+        vm.alarmType.observe(viewLifecycleOwner) { type ->
+            when (type) {
+                "EACH_MEAL" -> {
+                    binding.alarmTimeRow.setShowCheckSimple(true)
+                    binding.alarmMorningRow.setShowCheckSimple(false)
+                }
+                else -> { // DAILY 또는 실패 시
+                    binding.alarmMorningRow.setShowCheckSimple(true)
+                    binding.alarmTimeRow.setShowCheckSimple(false)
+                }
+            }
+        }
 
         binding.alarmTimeRow.setOnClickListener {
             binding.alarmTimeRow.setShowCheckSimple(true)
             binding.alarmMorningRow.setShowCheckSimple(false)
+
+            vm.updateAlarmType("EACH_MEAL", token)
         }
 
         binding.alarmMorningRow.setOnClickListener {
             binding.alarmMorningRow.setShowCheckSimple(true)
             binding.alarmTimeRow.setShowCheckSimple(false)
+
+            vm.updateAlarmType("DAILY", token)
         }
 
         // 뒤로가기 버튼
