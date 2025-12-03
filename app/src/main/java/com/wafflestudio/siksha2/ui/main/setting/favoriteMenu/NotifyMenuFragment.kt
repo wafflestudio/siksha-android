@@ -3,6 +3,7 @@ package com.wafflestudio.siksha2.ui.main.setting.favoriteMenu
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,9 +50,9 @@ class NotifyMenuFragment : Fragment() {
         binding.menuGroupList.adapter = adapter
 
         vm.loadMenus(token)
-        // vm.loadMockData()
 
         var alarmEnabled = prefs.alarmEnabled.getValue()
+        Log.d("NotifyMenuFragment", "alarmEnabled: $alarmEnabled")
 
         // 알림 토글 버튼
         binding.alarmToggleRow.setShowToggleSwitch(true)
@@ -66,22 +67,6 @@ class NotifyMenuFragment : Fragment() {
                 updateMenuListVisibility(alarmEnabled)
             }
         }
-
-        /*
-        lifecycleScope.launchWhenStarted {
-            vm.groups.collect { groups ->
-                adapter.submitList(groups)
-
-                if (alarmEnabled) {
-                    val hasMenus = groups.isNotEmpty()
-                    binding.menuGroupList.visibility = View.VISIBLE
-                    binding.guideText.visibility = if (hasMenus) View.VISIBLE else View.INVISIBLE
-                    binding.noMenuText.visibility = if (hasMenus) View.INVISIBLE else View.VISIBLE
-                }
-            }
-        }
-
-         */
 
         // 토글 이벤트 처리
         binding.alarmToggleRow.setOnToggleClicked { enabled ->
@@ -105,32 +90,6 @@ class NotifyMenuFragment : Fragment() {
                 updateMenuListVisibility(false)
             }
         }
-        /*
-        binding.alarmToggleRow.setOnToggleClicked { enabled ->
-            if (enabled) {
-                // OS 알림이 꺼져있으면 설정으로 이동
-                if (!isNotificationEnabled()) {
-                    binding.alarmToggleRow.setToggleState(false) // 원상복귀
-                    openNotificationSettings()
-                    return@setOnToggleClicked
-                }
-            }
-
-            alarmEnabled = enabled
-
-            if (enabled) {
-                val hasMenus = adapter.currentList.isNotEmpty()
-                binding.menuGroupList.visibility = View.VISIBLE
-                binding.guideText.visibility = if (hasMenus) View.VISIBLE else View.INVISIBLE
-                binding.noMenuText.visibility = if (hasMenus) View.INVISIBLE else View.VISIBLE
-            } else {
-                binding.menuGroupList.visibility = View.GONE
-                binding.guideText.visibility = View.GONE
-                binding.noMenuText.visibility = View.GONE
-            }
-        }
-
-         */
 
         // 메뉴 알림 시간 화면으로 이동
         binding.alarmTimeRow.setOnClickListener {
@@ -164,6 +123,7 @@ class NotifyMenuFragment : Fragment() {
         }
 
         val hasMenus = adapter.currentList.isNotEmpty()
+        Log.d("NotifyMenuFragment", "hasMenus: $hasMenus")
         binding.menuGroupList.visibility = View.VISIBLE
         binding.guideText.visibility =
             if (hasMenus) View.VISIBLE else View.INVISIBLE

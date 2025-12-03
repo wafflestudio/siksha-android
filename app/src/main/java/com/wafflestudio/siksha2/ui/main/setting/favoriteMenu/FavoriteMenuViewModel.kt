@@ -7,6 +7,7 @@ import com.wafflestudio.siksha2.repositories.FavoriteMenuRepository
 import com.wafflestudio.siksha2.network.dto.FavoriteRestaurantDto
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
+import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteMenuViewModel @Inject constructor(
     private val repository: FavoriteMenuRepository,
-    private val menuRepository: MenuRepository
+    private val menuRepository: MenuRepository,
+    private val restaurantRepository: RestaurantRepository
 ) : ViewModel() {
 
     private val _restaurants = MutableStateFlow<List<FavoriteRestaurantDto>>(emptyList())
@@ -61,6 +63,12 @@ class FavoriteMenuViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun toggleRestaurantFavorite(id: Long) {
+        viewModelScope.launch {
+            restaurantRepository.toggleRestaurantFavoriteById(id)
         }
     }
 

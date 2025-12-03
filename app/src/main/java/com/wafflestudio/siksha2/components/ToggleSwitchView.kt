@@ -64,9 +64,15 @@ class ToggleSwitchView @JvmOverloads constructor(
         bgInactive.visibility = if (isActive) GONE else VISIBLE
 
         post {
-            val knobMargin = 3f
-            val maxTravel = width - knob.width - knobMargin * 2
-            val targetX = if (isActive) knobMargin + maxTravel else knobMargin
+            val knobMarginPx = 2f.dp
+
+            val maxTravel = (width - knob.width - knobMarginPx * 2)
+
+            val targetX = if (isActive) {
+                knobMarginPx + maxTravel
+            } else {
+                knobMarginPx
+            }
 
             if (animated) {
                 knob.animate()
@@ -79,4 +85,8 @@ class ToggleSwitchView @JvmOverloads constructor(
             }
         }
     }
+
+    private val Float.dp: Float
+        get() = this * resources.displayMetrics.density
+
 }

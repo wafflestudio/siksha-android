@@ -38,7 +38,7 @@
                     android:paddingTop="14dp"
                     android:paddingStart="14dp"
                     android:textColor="@color/black"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     tools:text="학생회관 식당" />
 
             </TableRow>
@@ -51,7 +51,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginHorizontal="14dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/frame_splash"

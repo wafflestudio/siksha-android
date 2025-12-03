@@ -23,6 +23,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.wafflestudio.siksha2.R
@@ -91,7 +92,9 @@ class FavoriteMenuFragment : Fragment() {
                     restaurants = restaurants,
                     onClickMenu = { /* 메뉴 클릭 */ },
                     onToggleLikeMenu = { id, liked -> vm.toggleLike(id, liked) },
-                    onToggleFavoriteRestaurant = { /* 식당 즐겨찾기 */ }
+                    onToggleFavoriteRestaurant = {
+                        Log.d("FavortieMenuFragment", "favorite restaurant!")
+                        vm.toggleRestaurantFavorite(it) }
                 )
             }
         }
