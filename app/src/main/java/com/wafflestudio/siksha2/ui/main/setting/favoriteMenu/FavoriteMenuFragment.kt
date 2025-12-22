@@ -28,7 +28,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.wafflestudio.siksha2.R
 
-
 @AndroidEntryPoint
 class FavoriteMenuFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteMenuBinding
@@ -94,7 +93,8 @@ class FavoriteMenuFragment : Fragment() {
                     onToggleLikeMenu = { id, liked -> vm.toggleLike(id, liked) },
                     onToggleFavoriteRestaurant = {
                         Log.d("FavortieMenuFragment", "favorite restaurant!")
-                        vm.toggleRestaurantFavorite(it) }
+                        vm.toggleRestaurantFavorite(it)
+                    }
                 )
             }
         }

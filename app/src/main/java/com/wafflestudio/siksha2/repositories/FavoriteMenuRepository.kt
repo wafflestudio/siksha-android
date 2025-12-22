@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha2.repositories
 
-import android.util.Log
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.dto.GetAlarmTypeResponse
 import com.wafflestudio.siksha2.network.dto.GetFavoriteMenusResponse

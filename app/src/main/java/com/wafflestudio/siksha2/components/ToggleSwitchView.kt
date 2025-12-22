@@ -88,5 +88,4 @@ class ToggleSwitchView @JvmOverloads constructor(
 
     private val Float.dp: Float
         get() = this * resources.displayMetrics.density
-
 }

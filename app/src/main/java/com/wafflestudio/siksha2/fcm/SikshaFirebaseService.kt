@@ -26,41 +26,31 @@ class SikshaFirebaseService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // 수신 로그
-        Log.d("FCM", "Notification received: ${remoteMessage.notification}")
+        Log.d("FCM", "notification=${remoteMessage.notification}")
+        Log.d("FCM", "data=${remoteMessage.data}")
 
-        // FCM notification payload 추출
-        val title = remoteMessage.notification?.title ?: ""
-        val body = remoteMessage.notification?.body ?: ""
+        val title = remoteMessage.notification?.title
+            ?: remoteMessage.data["title"]
+            ?: "식샤"
 
-        // 메시지 전체를 로그로도 출력
-        Log.d("FCM", "Title: $title, Body: $body")
+        val body = remoteMessage.notification?.body
+            ?: remoteMessage.data["body"]
+            ?: ""
 
-        // 알림 표시
         val notificationManager =
             getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
-        val channelId = "siksha_channel"
 
-        // Android 8.0 이상은 채널 필요
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val channel = android.app.NotificationChannel(
-                channelId,
-                "Siksha Notifications",
-                android.app.NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val largeIcon = createNotificationLargeIcon()
-
-        val builder = NotificationCompat.Builder(this, channelId)
+        val builder = NotificationCompat.Builder(this, "siksha_channel")
             .setSmallIcon(R.drawable.siksha_rice_bowl)
-            .setLargeIcon(largeIcon)
+            .setLargeIcon(createNotificationLargeIcon())
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
 
-        notificationManager.notify(System.currentTimeMillis().toInt(), builder.build())
+        notificationManager.notify(
+            System.currentTimeMillis().toInt(),
+            builder.build()
+        )
     }
 
     private fun createNotificationLargeIcon(): Bitmap {
@@ -89,5 +79,4 @@ class SikshaFirebaseService : FirebaseMessagingService() {
 
         return bitmap
     }
-
 }

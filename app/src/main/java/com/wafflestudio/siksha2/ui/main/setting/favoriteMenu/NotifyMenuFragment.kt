@@ -3,19 +3,22 @@ package com.wafflestudio.siksha2.ui.main.setting.favoriteMenu
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wafflestudio.siksha2.databinding.FragmentNotifyMenuBinding
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,20 +54,23 @@ class NotifyMenuFragment : Fragment() {
 
         vm.loadMenus(token)
 
-        var alarmEnabled = prefs.alarmEnabled.getValue()
-        Log.d("NotifyMenuFragment", "alarmEnabled: $alarmEnabled")
-
         // 알림 토글 버튼
         binding.alarmToggleRow.setShowToggleSwitch(true)
-        binding.alarmToggleRow.setToggleState(alarmEnabled)
         binding.alarmToggleRow.setArrowIcon(false)
+        vm.setAlarmEnabled(prefs.alarmEnabled.getValue())
 
-        updateMenuListVisibility(alarmEnabled)
-
-        lifecycleScope.launchWhenStarted {
-            vm.groups.collect { groups ->
-                adapter.submitList(groups)
-                updateMenuListVisibility(alarmEnabled)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.groups
+                    .combine(vm.loadState) { groups, loadState -> Pair(groups, loadState) }
+                    .combine(vm.alarmEnabled) { (groups, loadState), alarmEnabled ->
+                        Triple(groups, loadState, alarmEnabled)
+                    }
+                    .collect { (groups, loadState, alarmEnabled) ->
+                        adapter.submitList(groups)
+                        binding.alarmToggleRow.setToggleState(alarmEnabled)
+                        updateMenuListVisibility(alarmEnabled, groups, loadState)
+                    }
             }
         }
 
@@ -78,16 +84,14 @@ class NotifyMenuFragment : Fragment() {
                     return@setOnToggleClicked
                 }
 
-                alarmEnabled = true
+                // TODO: 서버 전체 알림 ON API 호출
+                vm.setAlarmEnabled(enabled)
                 prefs.alarmEnabled.setValue(true)
-                updateMenuListVisibility(true)
-
             } else {
-                // OFF → 서버 전체 알림 해제 API 호출
-                alarmEnabled = false
+                // OFF -> 서버 전체 알림 해제 API 호출
+                vm.setAlarmEnabled(enabled)
                 prefs.alarmEnabled.setValue(false)
                 vm.disableAllAlarms(token)
-                updateMenuListVisibility(false)
             }
         }
 
@@ -114,7 +118,11 @@ class NotifyMenuFragment : Fragment() {
         startActivity(intent)
     }
 
-    private fun updateMenuListVisibility(enabled: Boolean) {
+    private fun updateMenuListVisibility(
+        enabled: Boolean,
+        groups: List<NotifyMenuGroupUiModel>,
+        loadState: MenuLoadState
+    ) {
         if (!enabled) {
             binding.menuGroupList.visibility = View.GONE
             binding.guideText.visibility = View.GONE
@@ -122,12 +130,26 @@ class NotifyMenuFragment : Fragment() {
             return
         }
 
-        val hasMenus = adapter.currentList.isNotEmpty()
-        Log.d("NotifyMenuFragment", "hasMenus: $hasMenus")
-        binding.menuGroupList.visibility = View.VISIBLE
-        binding.guideText.visibility =
-            if (hasMenus) View.VISIBLE else View.INVISIBLE
-        binding.noMenuText.visibility =
-            if (hasMenus) View.INVISIBLE else View.VISIBLE
+        when (loadState) {
+            MenuLoadState.Idle,
+            MenuLoadState.Loading -> {
+                binding.menuGroupList.visibility = View.GONE
+                binding.guideText.visibility = View.GONE
+                binding.noMenuText.visibility = View.GONE
+            }
+
+            MenuLoadState.Loaded -> {
+                val hasMenus = groups.isNotEmpty()
+
+                binding.menuGroupList.visibility =
+                    if (hasMenus) View.VISIBLE else View.GONE
+
+                binding.guideText.visibility =
+                    if (hasMenus) View.VISIBLE else View.GONE
+
+                binding.noMenuText.visibility =
+                    if (hasMenus) View.GONE else View.VISIBLE
+            }
+        }
     }
 }

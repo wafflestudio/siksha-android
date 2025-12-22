@@ -36,7 +36,7 @@ class UserStatusManager @Inject constructor(
 ) {
     suspend fun loginWithOAuthToken(provider: OAuthProvider, token: String): NetworkResult<LoginOAuthResult> {
         val tokenWithPrefix = attachBearerPrefix(token)
-        Log.d("UserStatusManager","Login token: $tokenWithPrefix")
+        Log.d("UserStatusManager", "Login token: $tokenWithPrefix")
         val response = when (provider) {
             OAuthProvider.GOOGLE -> sikshaApi.loginGoogle(tokenWithPrefix)
             OAuthProvider.KAKAO -> sikshaApi.loginKakao(tokenWithPrefix)

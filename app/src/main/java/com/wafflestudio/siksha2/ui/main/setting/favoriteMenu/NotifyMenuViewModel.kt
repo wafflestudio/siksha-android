@@ -11,6 +11,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+sealed interface MenuLoadState {
+    object Idle : MenuLoadState
+    object Loading : MenuLoadState
+    object Loaded : MenuLoadState
+}
+
 @HiltViewModel
 class NotifyMenuViewModel @Inject constructor(
     private val repository: FavoriteMenuRepository
@@ -19,8 +25,21 @@ class NotifyMenuViewModel @Inject constructor(
     private val _groups = MutableStateFlow<List<NotifyMenuGroupUiModel>>(emptyList())
     val groups: StateFlow<List<NotifyMenuGroupUiModel>> = _groups
 
+    private val _loadState =
+        MutableStateFlow<MenuLoadState>(MenuLoadState.Idle)
+    val loadState: StateFlow<MenuLoadState> = _loadState
+
+    private val _alarmEnabled = MutableStateFlow(false)
+    val alarmEnabled: StateFlow<Boolean> = _alarmEnabled
+
+    fun setAlarmEnabled(enabled: Boolean) {
+        _alarmEnabled.value = enabled
+    }
+
     fun loadMenus(token: String) {
         viewModelScope.launch {
+            _loadState.value = MenuLoadState.Loading
+
             when (val result = repository.getFavoriteMenus(token)) {
                 is NetworkResult.Success -> {
                     val uiModels = result.body.result.map { restaurant ->
@@ -41,6 +60,8 @@ class NotifyMenuViewModel @Inject constructor(
                 }
                 else -> _groups.value = emptyList()
             }
+
+            _loadState.value = MenuLoadState.Loaded
         }
     }
 

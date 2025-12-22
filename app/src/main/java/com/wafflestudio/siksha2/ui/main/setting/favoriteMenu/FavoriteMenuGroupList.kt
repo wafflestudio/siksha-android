@@ -190,7 +190,7 @@ fun MenuRow(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         val wrappedName = remember(menu.name_kr) {

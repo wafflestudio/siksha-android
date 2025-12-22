@@ -1,5 +1,8 @@
 package com.wafflestudio.siksha2.ui
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,6 +14,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -47,6 +51,8 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var googleSignInLauncher: ActivityResultLauncher<Unit>
 
     private lateinit var kakaoSignInLauncher: () -> Unit
+
+    private lateinit var notificationPermissionLauncher: ActivityResultLauncher<String>
 
     @Inject
     lateinit var featureChecker: FeatureChecker
@@ -92,14 +98,21 @@ class SplashActivity : AppCompatActivity() {
         binding.kakaoLoginButton.setOnClickListener {
             kakaoSignInLauncher.invoke()
         }
+
+        notificationPermissionLauncher =
+            registerForActivityResult(
+                androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+            ) { _: Boolean ->
+                createNotificationChannel()
+                navigateToMain()
+            }
     }
 
     private fun onOAuthSuccess(provider: OAuthProvider, token: String) {
         lifecycleScope.launch {
             when (val loginResponse = userStatusManager.loginWithOAuthToken(provider, token)) {
                 is NetworkResult.Success -> {
-                    startActivity(Intent(this@SplashActivity, RootActivity::class.java))
-                    finish()
+                    handlePostLoginNotificationSetup()
                 }
                 is NetworkResult.Failure -> {
                     showToast(loginResponse.message)
@@ -212,5 +225,39 @@ class SplashActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    private fun handlePostLoginNotificationSetup() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // 권한 요청 → 응답을 기다림
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                return
+            }
+        }
+
+        createNotificationChannel()
+        navigateToMain()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "siksha_channel",
+                "Siksha Notifications",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun navigateToMain() {
+        startActivity(Intent(this, RootActivity::class.java))
+        finish()
     }
 }

@@ -32,7 +32,6 @@ class InnerMenuAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemNotifyMenuBinding.inflate(inflater, parent, false)
