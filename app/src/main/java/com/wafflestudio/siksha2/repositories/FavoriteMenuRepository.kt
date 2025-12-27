@@ -19,6 +19,9 @@ class FavoriteMenuRepository @Inject constructor(
     suspend fun disableAlarm(token: String, menuId: Long) =
         api.postAlarmOff(menuId, token)
 
+    suspend fun enableAllMenuAlarms(token: String) =
+        api.postAlarmOnAll(token)
+
     suspend fun disableAllMenuAlarms(token: String) =
         api.postAlarmOffAll(token)
 

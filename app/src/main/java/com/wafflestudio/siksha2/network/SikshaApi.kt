@@ -47,6 +47,11 @@ interface SikshaApi {
         @Header("Authorization") token: String
     ): NetworkResult<AlarmResponse>
 
+    @POST("/menus/alarm/on")
+    suspend fun postAlarmOnAll(
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
     @GET("/reviews")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,

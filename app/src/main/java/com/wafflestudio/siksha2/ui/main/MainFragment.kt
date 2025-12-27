@@ -41,17 +41,12 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*
-        if (!sikshaPrefs.favoriteModalShown.getValue()) {
+        if (vm.shouldShowFavoriteModal()) {
             FavoriteMenuAlarmDialog { alarmEnabled ->
-                sikshaPrefs.alarmEnabled.setValue(alarmEnabled)
+                vm.onAlarmPermissionSelected(alarmEnabled)
+                //vm.markFavoriteModalShown()
             }.show(parentFragmentManager, "FavoriteMenuAlarm")
-            sikshaPrefs.favoriteModalShown.setValue(true)
         }
-        */
-        FavoriteMenuAlarmDialog { alarmEnabled ->
-            sikshaPrefs.alarmEnabled.setValue(alarmEnabled)
-        }.show(parentFragmentManager, "FavoriteMenuAlarm")
 
         initTab()
     }

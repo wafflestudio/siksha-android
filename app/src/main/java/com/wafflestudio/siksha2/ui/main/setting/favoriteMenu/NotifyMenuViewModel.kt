@@ -104,6 +104,12 @@ class NotifyMenuViewModel @Inject constructor(
         }
     }
 
+    fun enableAllAlarms(token: String) {
+        viewModelScope.launch {
+            repository.enableAllMenuAlarms(token)
+        }
+    }
+
     fun disableAllAlarms(token: String) {
         viewModelScope.launch {
             repository.disableAllMenuAlarms(token)

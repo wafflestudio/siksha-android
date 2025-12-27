@@ -84,15 +84,15 @@ class NotifyMenuFragment : Fragment() {
                     return@setOnToggleClicked
                 }
 
-                // TODO: 서버 전체 알림 ON API 호출
-                vm.setAlarmEnabled(enabled)
-                prefs.alarmEnabled.setValue(true)
+                // 서버 전체 알림 ON API 호출
+                vm.enableAllAlarms(token)
             } else {
-                // OFF -> 서버 전체 알림 해제 API 호출
-                vm.setAlarmEnabled(enabled)
-                prefs.alarmEnabled.setValue(false)
+                // 서버 전체 알림 OFF API 호출
                 vm.disableAllAlarms(token)
             }
+
+            vm.setAlarmEnabled(enabled)
+            prefs.alarmEnabled.setValue(enabled)
         }
 
         // 메뉴 알림 시간 화면으로 이동
