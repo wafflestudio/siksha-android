@@ -45,7 +45,7 @@ data class RestaurantInfo(
     @Parcelize
     @JsonClass(generateAdapter = true)
     data class Extra(
-        @Json(name = "operating_hours") val operatingHours: OperatingHour
+        @Json(name = "operating_hours") val operatingHours: OperatingHour? = null
     ) : Parcelable
 
     @Parcelize
