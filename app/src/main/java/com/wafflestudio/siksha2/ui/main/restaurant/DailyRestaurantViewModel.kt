@@ -114,7 +114,7 @@ class DailyRestaurantViewModel @Inject constructor(
 
     fun toggleRestaurantFavorite(id: Long) {
         viewModelScope.launch {
-           restaurantRepository.toggleRestaurantFavoriteById(id)
+            restaurantRepository.toggleRestaurantFavoriteById(id)
         }
     }
 

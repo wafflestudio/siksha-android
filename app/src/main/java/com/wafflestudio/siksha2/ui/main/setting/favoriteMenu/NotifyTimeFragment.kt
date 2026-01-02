@@ -44,7 +44,7 @@ class NotifyTimeFragment : Fragment() {
         vm.loadAlarmType(token)
         vm.alarmType.observe(viewLifecycleOwner) { type ->
             when (type) {
-                "EACH_MEAL" -> {
+                "EVERY_MEAL" -> {
                     binding.alarmTimeRow.setShowCheckSimple(true)
                     binding.alarmMorningRow.setShowCheckSimple(false)
                 }
@@ -59,7 +59,7 @@ class NotifyTimeFragment : Fragment() {
             binding.alarmTimeRow.setShowCheckSimple(true)
             binding.alarmMorningRow.setShowCheckSimple(false)
 
-            vm.updateAlarmType("EACH_MEAL", token)
+            vm.updateAlarmType("EVERY_MEAL", token)
         }
 
         binding.alarmMorningRow.setOnClickListener {

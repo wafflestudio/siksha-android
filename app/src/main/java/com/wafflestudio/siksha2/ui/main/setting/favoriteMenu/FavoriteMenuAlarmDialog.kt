@@ -68,7 +68,6 @@ class FavoriteMenuAlarmDialog(
                 Toast.LENGTH_SHORT
             ).show()
 
-
             dismiss()
         }
 

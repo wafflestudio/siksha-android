@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -23,7 +22,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.wafflestudio.siksha2.R
@@ -51,7 +49,6 @@ class FavoriteMenuFragment : Fragment() {
         val token = sikshaPrefObjects.accessToken.getValue()
 
         vm.loadFavoriteMenus(token)
-        // vm.loadMockData()
 
         // 툴팁
         val tooltipText = "메뉴 알림을 받아보세요!"
@@ -86,13 +83,11 @@ class FavoriteMenuFragment : Fragment() {
 
         binding.menuGroupList.setContent {
             SikshaTheme {
-                val restaurants by vm.restaurants.collectAsState()
                 FavoriteMenuRoute(
-                    restaurants = restaurants,
+                    vm = vm,
                     onClickMenu = { /* 메뉴 클릭 */ },
                     onToggleLikeMenu = { id, liked -> vm.toggleLike(id, liked) },
                     onToggleFavoriteRestaurant = {
-                        Log.d("FavortieMenuFragment", "favorite restaurant!")
                         vm.toggleRestaurantFavorite(it)
                     }
                 )

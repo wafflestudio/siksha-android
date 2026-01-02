@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,6 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,44 +54,39 @@ fun FavoriteRestaurantInfoRow(
         )
 
         Image(
-            modifier = Modifier
-                .size(20.dp)
+            modifier = Modifier.size(20.dp)
                 .clickable { onToggleFavoriteRestaurant() },
-            painter = painterResource(
-                if (isFavorite) {
-                    R.drawable.ic_favorite_full
-                } else {
-                    R.drawable.ic_favorite_empty
-                }
-            ),
-            contentDescription = "즐겨찾기"
+            painter = if (isFavorite) painterResource(R.drawable.ic_favorite_full) else painterResource(R.drawable.ic_favorite_empty),
+            contentDescription = "식당 즐겨찾기"
         )
     }
 }
 
 @Composable
 fun FavoriteMenuRoute(
-    restaurants: List<FavoriteRestaurantDto>,
+    vm: FavoriteMenuViewModel,
     onClickMenu: (Long) -> Unit,
     onToggleLikeMenu: (Long, Boolean) -> Unit,
-    onToggleFavoriteRestaurant: (Long) -> Unit,
-    modifier: Modifier = Modifier
+    onToggleFavoriteRestaurant: (Long) -> Unit
 ) {
-    if (restaurants.isNotEmpty()) {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(restaurants) { restaurant ->
-                RestaurantMenuFavorite(
-                    restaurant = restaurant,
-                    onClickMenu = onClickMenu,
-                    onToggleLikeMenu = onToggleLikeMenu,
-                    onToggleFavoriteRestaurant = { onToggleFavoriteRestaurant(restaurant.id) }
-                )
-            }
+    val restaurants by vm.restaurants.collectAsState()
+    val favoriteMap by vm.restaurantFavoriteMap.collectAsState()
+
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(restaurants) { restaurant ->
+            val isFavorite = favoriteMap[restaurant.id] == true
+
+            RestaurantMenuFavorite(
+                restaurant = restaurant,
+                isFavorite = isFavorite,
+                onToggleFavoriteRestaurant = {
+                    vm.toggleRestaurantFavorite(restaurant.id)
+                },
+                onClickMenu = onClickMenu,
+                onToggleLikeMenu = onToggleLikeMenu
+            )
         }
     }
 }
@@ -98,6 +94,7 @@ fun FavoriteMenuRoute(
 @Composable
 fun RestaurantMenuFavorite(
     restaurant: FavoriteRestaurantDto,
+    isFavorite: Boolean,
     onClickMenu: (Long) -> Unit,
     onToggleLikeMenu: (Long, Boolean) -> Unit,
     onToggleFavoriteRestaurant: () -> Unit
@@ -119,7 +116,7 @@ fun RestaurantMenuFavorite(
             Column(modifier = Modifier.fillMaxWidth()) {
                 FavoriteRestaurantInfoRow(
                     restaurantName = restaurantName,
-                    isFavorite = false,
+                    isFavorite = isFavorite,
                     onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -147,7 +144,7 @@ fun RestaurantMenuFavorite(
             ) {
                 FavoriteRestaurantInfoRow(
                     restaurantName = restaurantName,
-                    isFavorite = false,
+                    isFavorite = isFavorite,
                     onToggleFavoriteRestaurant = onToggleFavoriteRestaurant,
                     modifier = Modifier.weight(1f)
                 )

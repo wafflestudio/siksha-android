@@ -44,7 +44,7 @@ class MainFragment : Fragment() {
         if (vm.shouldShowFavoriteModal()) {
             FavoriteMenuAlarmDialog { alarmEnabled ->
                 vm.onAlarmPermissionSelected(alarmEnabled)
-                //vm.markFavoriteModalShown()
+                vm.markFavoriteModalShown()
             }.show(parentFragmentManager, "FavoriteMenuAlarm")
         }
 

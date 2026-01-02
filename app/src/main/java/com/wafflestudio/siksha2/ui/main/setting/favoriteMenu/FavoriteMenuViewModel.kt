@@ -10,7 +10,10 @@ import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +29,17 @@ class FavoriteMenuViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    val restaurantFavoriteMap: StateFlow<Map<Long, Boolean>> =
+        restaurantRepository.getAllRestaurantsFlow()
+            .map { list ->
+                list.associate { it.id to it.isFavorite }
+            }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                emptyMap()
+            )
 
     fun loadFavoriteMenus(token: String) {
         viewModelScope.launch {

@@ -41,8 +41,9 @@ class SikshaFirebaseService : FirebaseMessagingService() {
             getSystemService(NOTIFICATION_SERVICE) as android.app.NotificationManager
 
         val builder = NotificationCompat.Builder(this, "siksha_channel")
-            .setSmallIcon(R.drawable.siksha_rice_bowl)
-            .setLargeIcon(createNotificationLargeIcon())
+            // .setSmallIcon(R.drawable.siksha_rice_bowl)
+            .setSmallIcon(R.drawable.ic_notification)
+            // .setLargeIcon(createNotificationLargeIcon())
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
