@@ -80,9 +80,9 @@ class LeaveReviewFragment : Fragment() {
                 LeaveReviewRoute(
                     keywordTitleList = listOf("맛", "가격", "음식 구성"),
                     keywordChoiceLists = listOf(
-                        listOf("아주좋아요", "굿", "그저그래요", "별로예요", "최악이에요"),
-                        listOf("아주좋아요", "굿", "그저그래요", "별로예요", "최악이에요"),
-                        listOf("아주좋아요", "굿", "그저그래요", "별로예요", "최악이에요")
+                        listOf("또 먹고 싶어요", "생각보다 맛있어요", "무난해요", "아쉬운 맛이에요", "별로예요"),
+                        listOf("혜자스러워요", "가성비 좋아요", "합리적이에요", "약간 비싸요", "너무 비싸요"),
+                        listOf("조화로워요", "알찬 편이에요", "기본적이에요", "다소 단조로워요", "너무 빈약해요")
                     ),
                     vm = vm,
                     onNavigateUp = {

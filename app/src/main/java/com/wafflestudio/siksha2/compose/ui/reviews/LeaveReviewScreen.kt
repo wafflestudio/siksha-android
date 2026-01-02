@@ -44,7 +44,9 @@ import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.components.compose.TopBar
 import com.wafflestudio.siksha2.compose.ui.menudetail.MenuRatingStars
 import com.wafflestudio.siksha2.models.Menu
-import com.wafflestudio.siksha2.ui.CancelIcon
+import com.wafflestudio.siksha2.ui.KeywordFoodComposition
+import com.wafflestudio.siksha2.ui.KeywordPrice
+import com.wafflestudio.siksha2.ui.KeywordTaste
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
@@ -81,13 +83,14 @@ fun LeaveReviewRoute(
         submitEnabled = selectedKeywords.all { it != "" },
         keywordTitleList = keywordTitleList,
         keywordChoiceLists = keywordChoiceLists,
-        keywordIconList = listOf({ CancelIcon() }, { CancelIcon() }, { CancelIcon() }),
+        keywordIconList = listOf({ KeywordTaste() }, { KeywordPrice() }, { KeywordFoodComposition() }),
         selectedKeywords = selectedKeywords,
         comment = comment,
         commentPlaceHolder = {
             Text(
                 text = commentHint ?: "",
                 fontSize = 14.sp,
+                lineHeight = 21.sp,
                 color = SikshaTheme.colors.Gray600
             )
         },
@@ -294,7 +297,7 @@ fun LeaveReviewScreen(
                     modifier = Modifier.fillMaxWidth()
                         .padding(top = 12.dp, start = 14.dp, end = 16.dp),
                     singleLine = false,
-                    textStyle = SikshaTypography.body1.copy(color = SikshaTheme.colors.Black, fontSize = 14.sp),
+                    textStyle = SikshaTypography.body1.copy(color = SikshaTheme.colors.Black, fontSize = 14.sp, lineHeight = 21.sp),
                     cursorBrush = SolidColor(SikshaTheme.colors.Orange500),
                     decorationBox = {
                         Box(

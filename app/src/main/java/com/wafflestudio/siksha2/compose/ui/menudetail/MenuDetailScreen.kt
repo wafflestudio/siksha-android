@@ -130,15 +130,16 @@ fun MenuDetailScreen(
                     .background(SikshaTheme.colors.BackgroundPrimary)
                     .padding(vertical = 32.dp, horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
+
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
-                        .height(IntrinsicSize.Min)
+                        .height(IntrinsicSize.Min),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     MenuRatingsInfo(
                         rating = menu?.score?.toFloat() ?: 0f,
-                        reviewCount = menu?.reviewCount?.toInt() ?: 0,
-                        modifier = Modifier.fillMaxHeight()
+                        reviewCount = menu?.reviewCount?.toInt() ?: 0
                     )
                     Spacer(Modifier.width(12.dp))
                     MenuKeywordStats(
