@@ -128,11 +128,11 @@ class MenuDetailViewModel @Inject constructor(
                     val data = response.body
                     _imageCount.value = data.totalCount
                     val urlList = emptyList<String>().toMutableList()
-//                    for (i in 0 until 3) {
-//                        if (i < data.result.size && data.result[i].etc.isNotEmpty()) {
-//                            urlList.add(data.result[i].etc[0])
-//                        }
-//                    }
+                    for (i in 0 until 3) {
+                        if (i < data.result.size && data.result[i].etc.images?.isNotEmpty() == true) {
+                            urlList.add(data.result[i].etc.images!![0])
+                        }
+                    }
                     _imageUrlList.value = urlList
                 }
                 else -> {

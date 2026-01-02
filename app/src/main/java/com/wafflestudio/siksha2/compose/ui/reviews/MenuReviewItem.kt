@@ -41,21 +41,27 @@ fun MenuReviewItem(
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
+            .padding(bottom = 32.dp)
     ) {
         MenuReviewHeader(userName, menuRating, timeText)
         Spacer(Modifier.height(4.dp))
         Row(
             modifier = Modifier.fillMaxWidth()
-                .padding(start = 16.dp)
+                .padding(start = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (reviewText != null) {
+            if (!reviewText.isNullOrEmpty()) {
                 MenuReviewTextBox(
                     reviewText = reviewText,
                     modifier = Modifier.weight(1f)
                 )
             }
             Spacer(Modifier.width(10.dp))
-            MenuReviewLikeButton(isLiked, likeCount.toInt(), modifier, onToggleLike)
+            MenuReviewLikeButton(
+                isLiked = isLiked,
+                likeCount = likeCount.toInt(),
+                onToggleLike = onToggleLike
+            )
         }
 
         if (keywords.isNotEmpty()) {

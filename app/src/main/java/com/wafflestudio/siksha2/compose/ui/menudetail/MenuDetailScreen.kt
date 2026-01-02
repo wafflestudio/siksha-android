@@ -27,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -34,10 +35,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.wafflestudio.siksha2.R
+import com.wafflestudio.siksha2.compose.ui.reviews.MenuReviewImage
 import com.wafflestudio.siksha2.compose.ui.reviews.MenuReviewItem
 import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
@@ -207,6 +210,8 @@ fun MenuDetailScreen(
                     reviewText = review.comment,
                     isLiked = review.isLiked,
                     likeCount = review.likeCount,
+                    keywords = review.keywordReviews.filter { it != "" },
+                    imageUris = review.etc.images?.map { it.toUri() } ?: listOf(),
                     modifier = Modifier.padding(horizontal = 14.dp)
                 )
             }
@@ -252,35 +257,35 @@ fun BriefImageReviews(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         for (i: Int in 1..min(imageReviews.itemCount, 3)) {
-//            if (imageReviews.itemSnapshotList.items[i - 1].etc.isNotEmpty()) {
-//                val it = imageReviews.itemSnapshotList.items[i - 1].etc[0]
-//                if (i == 3) {
-//                    MenuDetailImagesShowMore(
-//                        imageUri = it.toUri(),
-//                        modifier = Modifier
-//                            .size(120.dp)
-//                            .clip(RoundedCornerShape(10.dp)),
-//                        showMoreCount = imageReviews.itemCount - 2,
-//                        onShowMore = {
-//                            onNavigateToReviewPhoto()
-//                        }
-//                    )
-//                } else {
-//                    MenuReviewImage(
-//                        imageUri = it.toUri(),
-//                        modifier = Modifier
-//                            .size(120.dp)
-//                            .clip(RoundedCornerShape(10.dp))
-//                    )
-//                }
-//            } else {
-//                Box(
-//                    modifier = Modifier
-//                        .size(120.dp)
-//                        .clip(RoundedCornerShape(10.dp))
-//                        .background(SikshaTheme.colors.Gray100)
-//                )
-//            }
+            if (imageReviews.itemSnapshotList.items[i - 1].etc.images?.isNotEmpty() == true) {
+                val it = imageReviews.itemSnapshotList.items[i - 1].etc.images?.get(0)
+                if (i == 3) {
+                    MenuDetailImagesShowMore(
+                        imageUri = it!!.toUri(),
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(10.dp)),
+                        showMoreCount = imageReviews.itemCount - 2,
+                        onShowMore = {
+                            onNavigateToReviewPhoto()
+                        }
+                    )
+                } else {
+                    MenuReviewImage(
+                        imageUri = it!!.toUri(),
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(120.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(SikshaTheme.colors.Gray100)
+                )
+            }
         }
     }
 }
