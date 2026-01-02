@@ -104,9 +104,6 @@ class MenuDetailViewModel @Inject constructor(
     val reviewRating: FloatState
         get() = _reviewRating
 
-    private var currentMenuId: Long? = null
-    private var currentReviewsFlow: Flow<PagingData<Review>>? = null
-
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -250,9 +247,9 @@ class MenuDetailViewModel @Inject constructor(
                 menuRepository.leaveMenuReviewImage(
                     menuId,
                     score.toLong(),
-                    "",
-                    "",
-                    "",
+                    selectedKeywordList.value[0],
+                    selectedKeywordList.value[1],
+                    selectedKeywordList.value[2],
                     commentBody,
                     imageList
                 )
@@ -261,12 +258,13 @@ class MenuDetailViewModel @Inject constructor(
             menuRepository.leaveMenuReview(
                 menuId,
                 score,
-                "",
-                "",
-                "",
+                selectedKeywordList.value[0],
+                selectedKeywordList.value[1],
+                selectedKeywordList.value[2],
                 comment
             )
         }
+        notifySendReviewEnd()
         return response
     }
 

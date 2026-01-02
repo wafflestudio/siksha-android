@@ -59,9 +59,9 @@ interface SikshaApi {
     suspend fun leaveMenuReviewImages(
         @Part("menu_id") menuId: Long,
         @Part("score") score: Long,
-        @Part("taste") taste: String?,
-        @Part("price") price: String?,
-        @Part("food_composition") foodComposition: String?,
+        @Part("taste") taste: String,
+        @Part("price") price: String,
+        @Part("food_composition") foodComposition: String,
         @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
     ): NetworkResult<LeaveReviewResult>

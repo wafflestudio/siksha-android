@@ -116,9 +116,9 @@ class MenuRepository @Inject constructor(
     suspend fun leaveMenuReviewImage(
         menuId: Long,
         score: Long,
-        taste: String?,
-        price: String?,
-        foodComposition: String?,
+        taste: String = "",
+        price: String = "",
+        foodComposition: String = "",
         comment: MultipartBody.Part,
         images: List<MultipartBody.Part>
     ): NetworkResult<LeaveReviewResult> {
