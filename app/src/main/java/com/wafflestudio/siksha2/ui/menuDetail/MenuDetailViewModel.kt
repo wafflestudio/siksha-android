@@ -64,6 +64,14 @@ class MenuDetailViewModel @Inject constructor(
                 ).flow
             }.cachedIn(viewModelScope)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviewPhotoPagingData: Flow<PagingData<Review>> =
+        _menuId.filterNotNull()
+            .distinctUntilChanged()
+            .flatMapLatest { id ->
+                menuRepository.getPagedReviewsOnlyHaveImagesByMenuIdFlow(id)
+            }.cachedIn(viewModelScope)
+
     private val _commentHint = MutableLiveData<String>()
     val commentHint: LiveData<String>
         get() = _commentHint
