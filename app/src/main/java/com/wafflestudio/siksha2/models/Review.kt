@@ -10,7 +10,7 @@ data class Review(
     @Json(name = "user_id") val userId: Long,
     @Json(name = "score") val score: Double,
     @Json(name = "comment") val comment: String?,
-    @Json(name = "etc") val etc: List<String>,
+    @Json(name = "etc") val etc: Etc,
     @Json(name = "keyword_reviews") val keywordReviews: List<String>,
     @Json(name = "like_count") val likeCount: Long,
     @Json(name = "is_liked") val isLiked: Boolean,

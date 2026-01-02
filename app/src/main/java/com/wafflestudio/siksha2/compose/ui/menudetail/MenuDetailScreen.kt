@@ -27,7 +27,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -39,7 +38,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.wafflestudio.siksha2.R
-import com.wafflestudio.siksha2.compose.ui.reviews.MenuReviewImage
 import com.wafflestudio.siksha2.compose.ui.reviews.MenuReviewItem
 import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
@@ -47,7 +45,6 @@ import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import kotlin.math.min
-import androidx.core.net.toUri
 import com.wafflestudio.siksha2.ui.KeywordFoodComposition
 import com.wafflestudio.siksha2.ui.KeywordPrice
 import com.wafflestudio.siksha2.ui.KeywordTaste
@@ -62,8 +59,12 @@ fun MenuDetailRoute(
     onNavigateToReviewPhoto: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    LaunchedEffect(menuId) {
+        vm.setMenuId(menuId)
+    }
+
     val menu by vm.menu.observeAsState()
-    val reviews = vm.getReviews(menuId).collectAsLazyPagingItems()
+    val reviews = vm.reviewPagingData.collectAsLazyPagingItems()
     val imageReviews = vm.getReviewsWithImages(menuId).collectAsLazyPagingItems()
     val keywordDist by vm.keywordDistribution.observeAsState()
 
@@ -251,35 +252,35 @@ fun BriefImageReviews(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         for (i: Int in 1..min(imageReviews.itemCount, 3)) {
-            if (imageReviews.itemSnapshotList.items[i - 1].etc.isNotEmpty()) {
-                val it = imageReviews.itemSnapshotList.items[i - 1].etc[0]
-                if (i == 3) {
-                    MenuDetailImagesShowMore(
-                        imageUri = it.toUri(),
-                        modifier = Modifier
-                            .size(120.dp)
-                            .clip(RoundedCornerShape(10.dp)),
-                        showMoreCount = imageReviews.itemCount - 2,
-                        onShowMore = {
-                            onNavigateToReviewPhoto()
-                        }
-                    )
-                } else {
-                    MenuReviewImage(
-                        imageUri = it.toUri(),
-                        modifier = Modifier
-                            .size(120.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                    )
-                }
-            } else {
-                Box(
-                    modifier = Modifier
-                        .size(120.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(SikshaTheme.colors.Gray100)
-                )
-            }
+//            if (imageReviews.itemSnapshotList.items[i - 1].etc.isNotEmpty()) {
+//                val it = imageReviews.itemSnapshotList.items[i - 1].etc[0]
+//                if (i == 3) {
+//                    MenuDetailImagesShowMore(
+//                        imageUri = it.toUri(),
+//                        modifier = Modifier
+//                            .size(120.dp)
+//                            .clip(RoundedCornerShape(10.dp)),
+//                        showMoreCount = imageReviews.itemCount - 2,
+//                        onShowMore = {
+//                            onNavigateToReviewPhoto()
+//                        }
+//                    )
+//                } else {
+//                    MenuReviewImage(
+//                        imageUri = it.toUri(),
+//                        modifier = Modifier
+//                            .size(120.dp)
+//                            .clip(RoundedCornerShape(10.dp))
+//                    )
+//                }
+//            } else {
+//                Box(
+//                    modifier = Modifier
+//                        .size(120.dp)
+//                        .clip(RoundedCornerShape(10.dp))
+//                        .background(SikshaTheme.colors.Gray100)
+//                )
+//            }
         }
     }
 }

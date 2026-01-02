@@ -20,9 +20,14 @@ import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -37,6 +42,27 @@ class MenuDetailViewModel @Inject constructor(
     private val _menu = MutableLiveData<Menu>()
     val menu: LiveData<Menu>
         get() = _menu
+
+    private val _menuId = MutableStateFlow<Long?>(null)
+    val menuId: StateFlow<Long?> get() = _menuId
+
+    fun setMenuId(newId: Long) {
+        _menuId.value = newId
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviewPagingData: Flow<PagingData<Review>> =
+        _menuId.filterNotNull()
+            .distinctUntilChanged()
+            .flatMapLatest { id ->
+                Timber.d("$id")
+                Pager(
+                    config = MenuReviewPagingSource.Config,
+                    pagingSourceFactory = {
+                        menuRepository.getReviewsPagingSource(id)
+                    }
+                ).flow
+            }.cachedIn(viewModelScope)
 
     private val _commentHint = MutableLiveData<String>()
     val commentHint: LiveData<String>
@@ -78,6 +104,9 @@ class MenuDetailViewModel @Inject constructor(
     val reviewRating: FloatState
         get() = _reviewRating
 
+    private var currentMenuId: Long? = null
+    private var currentReviewsFlow: Flow<PagingData<Review>>? = null
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -99,11 +128,11 @@ class MenuDetailViewModel @Inject constructor(
                     val data = response.body
                     _imageCount.value = data.totalCount
                     val urlList = emptyList<String>().toMutableList()
-                    for (i in 0 until 3) {
-                        if (i < data.result.size && data.result[i].etc.isNotEmpty()) {
-                            urlList.add(data.result[i].etc[0])
-                        }
-                    }
+//                    for (i in 0 until 3) {
+//                        if (i < data.result.size && data.result[i].etc.isNotEmpty()) {
+//                            urlList.add(data.result[i].etc[0])
+//                        }
+//                    }
                     _imageUrlList.value = urlList
                 }
                 else -> {

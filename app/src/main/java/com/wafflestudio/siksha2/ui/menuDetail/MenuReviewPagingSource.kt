@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.SikshaApi
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import timber.log.Timber
 
 class MenuReviewPagingSource(
     private val api: SikshaApi,
@@ -16,13 +17,17 @@ class MenuReviewPagingSource(
         val key = params.key ?: STARTING_PAGE_INDEX
         return when (val response = api.fetchReviews(menuId, key, params.loadSize.toLong())) {
             is NetworkResult.Success -> {
+                Timber.d("pagedata load success")
                 LoadResult.Page(
                     data = response.body.result,
                     prevKey = if (key == 1L) null else key - 1,
                     nextKey = if (response.body.result.isEmpty()) null else if (key == STARTING_PAGE_INDEX) key + params.loadSize / PAGE_LOAD_SIZE else key + 1
                 )
             }
-            else -> LoadResult.Error(RuntimeException(""))
+            else -> {
+                Timber.d("pagedata load error")
+                LoadResult.Error(RuntimeException(""))
+            }
         }
     }
 
