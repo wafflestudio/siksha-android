@@ -39,7 +39,7 @@ interface SikshaApi {
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Long,
-        @Query("etc") etc: Boolean = true,
+        @Query("image") etc: Boolean = true,
         @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
