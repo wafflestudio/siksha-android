@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -29,6 +31,8 @@ class MainFragment : Fragment() {
 
     private var currentTabState = MainTabState.MAIN
 
+    private var pendingShowToast = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,8 +46,27 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (vm.shouldShowFavoriteModal()) {
-            FavoriteMenuAlarmDialog { alarmEnabled ->
-                vm.onAlarmPermissionSelected(alarmEnabled)
+            FavoriteMenuAlarmDialog { alarmEnabledIntent ->
+                val notificationEnabled =
+                    NotificationManagerCompat
+                        .from(requireContext())
+                        .areNotificationsEnabled()
+
+                val actualEnabled =
+                    if (alarmEnabledIntent) notificationEnabled else false
+
+                vm.onAlarmPermissionSelected(actualEnabled)
+
+                // 토스트 출력 시점 조절
+                if (alarmEnabledIntent && !notificationEnabled) {
+                    pendingShowToast = true
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "메뉴 알림 설정이 저장되었습니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 vm.markFavoriteModalShown()
             }.show(parentFragmentManager, "FavoriteMenuAlarm")
         }
@@ -80,5 +103,19 @@ class MainFragment : Fragment() {
         super.onStop()
         vm.setVpState(binding.viewPager.currentItem)
         currentTabState = MainTabState.fromPosition(binding.viewPager.currentItem)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (pendingShowToast) {
+            pendingShowToast = false
+
+            Toast.makeText(
+                requireContext(),
+                "메뉴 알림 설정이 저장되었습니다",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }

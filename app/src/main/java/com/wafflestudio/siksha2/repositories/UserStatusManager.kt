@@ -36,7 +36,6 @@ class UserStatusManager @Inject constructor(
 ) {
     suspend fun loginWithOAuthToken(provider: OAuthProvider, token: String): NetworkResult<LoginOAuthResult> {
         val tokenWithPrefix = attachBearerPrefix(token)
-        Log.d("UserStatusManager", "Login token: $tokenWithPrefix")
         val response = when (provider) {
             OAuthProvider.GOOGLE -> sikshaApi.loginGoogle(tokenWithPrefix)
             OAuthProvider.KAKAO -> sikshaApi.loginKakao(tokenWithPrefix)
@@ -170,10 +169,6 @@ class UserStatusManager @Inject constructor(
 
     private fun registerFcmTokenAfterLogin(accessToken: String) {
         val fcmToken = sikshaPrefObjects.fcmToken.getValue()
-        if (fcmToken.isBlank()) {
-            Log.w("UserStatusManager", "FCM token is blank, skipping registration")
-            return
-        }
 
         CoroutineScope(Dispatchers.IO).launch {
             try {

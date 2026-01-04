@@ -107,6 +107,7 @@ class NotifyMenuViewModel @Inject constructor(
     fun enableAllAlarms(token: String) {
         viewModelScope.launch {
             repository.enableAllMenuAlarms(token)
+            loadMenus(token)
         }
     }
 

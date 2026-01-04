@@ -67,9 +67,18 @@ class NotifyMenuFragment : Fragment() {
                         Triple(groups, loadState, alarmEnabled)
                     }
                     .collect { (groups, loadState, alarmEnabled) ->
-                        adapter.submitList(groups)
                         binding.alarmToggleRow.setToggleState(alarmEnabled)
-                        updateMenuListVisibility(alarmEnabled, groups, loadState)
+
+                        when (loadState) {
+                            MenuLoadState.Loading -> Unit
+
+                            MenuLoadState.Loaded -> {
+                                adapter.submitList(groups)
+                                updateMenuListVisibility(alarmEnabled, groups, loadState)
+                            }
+
+                            MenuLoadState.Idle -> Unit
+                        }
                     }
             }
         }
