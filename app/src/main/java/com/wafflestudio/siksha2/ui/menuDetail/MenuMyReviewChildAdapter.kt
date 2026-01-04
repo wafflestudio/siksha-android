@@ -48,17 +48,30 @@ class MenuMyReviewChildAdapter(
             )
         }
 
+        private val tagViews = listOf(
+            binding.reviewTag1,
+            binding.reviewTag2,
+            binding.reviewTag3
+        )
+
         fun bind(item: Review) {
             binding.menuName.text = item.nameKr ?: ""
             setRatingStars(binding.starsContainer, item.score.toFloat())
             binding.reviewDate.text = item.createdAt.toLocalDateTime().toParsedTimeString()
             binding.reviewContent.text = item.comment ?: "내용 없음"
 
-            // ✅ 키워드 태그
             val tags = item.keywordReviews.orEmpty()
-            binding.reviewTag1.text = tags.getOrNull(0) ?: ""
-            binding.reviewTag2.text = tags.getOrNull(1) ?: ""
-            binding.reviewTag3.text = tags.getOrNull(2) ?: ""
+
+            tagViews.forEachIndexed { index, view ->
+                val text = tags.getOrNull(index)
+
+                if (text.isNullOrBlank()) {
+                    view.visibility = View.GONE
+                } else {
+                    view.text = text
+                    view.visibility = View.VISIBLE
+                }
+            }
 
             // ✅ 이미지
             val urls = item.etc?.images.orEmpty()
