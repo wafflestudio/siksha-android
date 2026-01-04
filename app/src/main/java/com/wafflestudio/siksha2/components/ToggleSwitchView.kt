@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.TouchDelegate
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -29,6 +30,7 @@ class ToggleSwitchView @JvmOverloads constructor(
         bgActive = findViewById(R.id.bg_active)
         bgInactive = findViewById(R.id.bg_inactive)
         knob = findViewById(R.id.toggle_knob)
+        descendantFocusability = FOCUS_BLOCK_DESCENDANTS
 
         post {
             val minTouchSize = (48 * resources.displayMetrics.density).toInt()
@@ -43,6 +45,8 @@ class ToggleSwitchView @JvmOverloads constructor(
             }
         }
 
+        isClickable = true
+        isFocusable = true
         setOnClickListener { toggle() }
         updateAppearance(animated = false)
     }
@@ -88,4 +92,16 @@ class ToggleSwitchView @JvmOverloads constructor(
 
     private val Float.dp: Float
         get() = this * resources.displayMetrics.density
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return super.onTouchEvent(event)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        return super.dispatchTouchEvent(ev)
+    }
+
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        return true
+    }
 }

@@ -1,11 +1,9 @@
 package com.wafflestudio.siksha2.components
 
 import android.content.Context
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.wafflestudio.siksha2.R
@@ -64,8 +62,8 @@ class SettingItemRow : LinearLayout {
     fun setShowToggleSwitch(visible: Boolean) {
         binding.toggleSwitch.setVisibleOrGone(visible)
 
-        isClickable = !visible
-        isFocusable = !visible
+        isClickable = false
+        isFocusable = false
     }
 
     fun setToggleState(active: Boolean) {
@@ -77,23 +75,6 @@ class SettingItemRow : LinearLayout {
             binding.toggleSwitch.toggle()
             listener(binding.toggleSwitch.isActive)
         }
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        val toggle = binding.toggleSwitch
-        if (toggle.visibility == VISIBLE) {
-            val toggleRect = Rect()
-            toggle.getHitRect(toggleRect)
-
-            val localX = ev.x.toInt() + scrollX
-            val localY = ev.y.toInt() + scrollY
-
-            if (toggleRect.contains(localX, localY)) {
-                return toggle.dispatchTouchEvent(ev)
-            }
-        }
-
-        return super.dispatchTouchEvent(ev)
     }
 
     private fun init(attr: AttributeSet?) {
