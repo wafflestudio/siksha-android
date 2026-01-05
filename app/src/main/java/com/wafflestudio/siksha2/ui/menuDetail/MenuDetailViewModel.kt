@@ -70,6 +70,14 @@ class MenuDetailViewModel @Inject constructor(
     val deleteResult: LiveData<Boolean>
         get() = _deleteResult
 
+    private val _editingReview = MutableLiveData<Review?>()
+    val editingReview: LiveData<Review?>
+        get() = _editingReview
+
+    fun setEditingReview(review: Review?) {
+        _editingReview.value = review
+    }
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {

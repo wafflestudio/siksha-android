@@ -50,6 +50,8 @@ class MyReviewFragment : Fragment() {
             },
             onEditClick = { review ->
                 vm.refreshMenu(review.menuId)
+                vm.setEditingReview(review)
+
                 val action = MyReviewFragmentDirections
                     .actionMyReviewFragmentToLeaveReviewFragment()
                 findNavController().navigate(action)

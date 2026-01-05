@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,6 +17,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.forEachIndexed
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -30,7 +32,13 @@ import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.UUID
 
 class LeaveReviewFragment : Fragment() {
     private lateinit var binding: FragmentLeaveReviewBinding
@@ -89,6 +97,31 @@ class LeaveReviewFragment : Fragment() {
                     true -> getString(R.string.leave_review_how_about_with_bottom)
                     false -> getString(R.string.leave_review_how_about_wo_bottom)
                     else -> getString(R.string.leave_review_how_about_wo_bottom)
+                }
+            }
+        }
+
+        vm.editingReview.observe(viewLifecycleOwner) { review ->
+            review ?: return@observe
+
+            // 평점
+            vm.setReviewRating(review.score.toFloat())
+            binding.rateText.text = review.score.toInt().toString()
+
+            // 코멘트 세팅
+            binding.commentEdit.setText(review.comment ?: "")
+
+            // Todo : keyword 세팅, patch api 연결
+
+            // 이미지(url) → Uri 로 변환
+            review.etc?.images?.let { urls ->
+                lifecycleScope.launch {
+                    urls.forEach { url: String ->
+                        val uri: Uri? = downloadToUri(url)
+                        uri?.let { realUri ->
+                            vm.addImageUri(realUri, onFailure = {})
+                        }
+                    }
                 }
             }
         }
@@ -192,6 +225,33 @@ class LeaveReviewFragment : Fragment() {
             })
         }
     }
+
+    private suspend fun downloadToUri(url: String): Uri? =
+        withContext(Dispatchers.IO) {
+            try {
+                val connection = URL(url).openConnection() as HttpURLConnection
+                connection.connect()
+
+                val input = connection.inputStream
+                val file = File(
+                    requireContext().cacheDir,
+                    UUID.randomUUID().toString() + ".jpg"
+                )
+
+                file.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+
+                FileProvider.getUriForFile(
+                    requireContext(),
+                    "${requireContext().packageName}.provider",
+                    file
+                )
+            } catch (e: Exception) {
+                null
+            }
+        }
+
 
     private fun requestPermission(onGranted: () -> Unit) {
         if (Build.VERSION.SDK_INT >= 33) {
