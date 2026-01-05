@@ -17,6 +17,9 @@ import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.ui.menuDetail.MenuMyReviewAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.getValue
 
 class MyReviewFragment : Fragment() {
@@ -39,7 +42,10 @@ class MyReviewFragment : Fragment() {
         // Adapter 초기화
         reviewsAdapter = MenuMyReviewAdapter(
             onMenuClick = { review ->
-                val action = MyReviewFragmentDirections.actionMyReviewFragmentToMenuDetailFragment(review.id, false)
+                val action = MyReviewFragmentDirections.actionMyReviewFragmentToMenuDetailFragment(
+                    review.menuId,
+                    Instant.parse(review.createdAt).atZone(ZoneId.systemDefault()).toLocalDate() == LocalDate.now()
+                )
                 findNavController().navigate(action)
             },
             onEditClick = { review ->
