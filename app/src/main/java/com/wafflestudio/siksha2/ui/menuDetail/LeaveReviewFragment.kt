@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -17,7 +18,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.forEachIndexed
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -38,7 +38,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.UUID
 
 class LeaveReviewFragment : Fragment() {
     private lateinit var binding: FragmentLeaveReviewBinding
@@ -117,9 +116,10 @@ class LeaveReviewFragment : Fragment() {
             review.etc?.images?.let { urls ->
                 lifecycleScope.launch {
                     urls.forEach { url: String ->
-                        val uri: Uri? = downloadToUri(url)
-                        uri?.let { realUri ->
-                            vm.addImageUri(realUri, onFailure = {})
+                        val file = downloadImageToFile(requireContext(), url)
+                        file?.let {
+                            val uri = Uri.fromFile(it)
+                            vm.addImageUri(uri, onFailure = {})
                         }
                     }
                 }
@@ -226,32 +226,31 @@ class LeaveReviewFragment : Fragment() {
         }
     }
 
-    private suspend fun downloadToUri(url: String): Uri? =
-        withContext(Dispatchers.IO) {
-            try {
-                val connection = URL(url).openConnection() as HttpURLConnection
-                connection.connect()
+    suspend fun downloadImageToFile(
+        context: Context,
+        imageUrl: String
+    ): File? = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val url = URL(imageUrl)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.connect()
 
-                val input = connection.inputStream
-                val file = File(
-                    requireContext().cacheDir,
-                    UUID.randomUUID().toString() + ".jpg"
-                )
-
-                file.outputStream().use { output ->
-                    input.copyTo(output)
-                }
-
-                FileProvider.getUriForFile(
-                    requireContext(),
-                    "${requireContext().packageName}.provider",
-                    file
-                )
-            } catch (e: Exception) {
-                null
+            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                return@withContext null
             }
-        }
 
+            val input = connection.inputStream
+            val tempFile = File.createTempFile("review_img_", ".jpg", context.cacheDir)
+
+            tempFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+
+            tempFile
+        } catch (e: Exception) {
+            null
+        }
+    }
 
     private fun requestPermission(onGranted: () -> Unit) {
         if (Build.VERSION.SDK_INT >= 33) {
