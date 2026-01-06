@@ -2,8 +2,10 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -30,7 +32,12 @@ import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.net.HttpURLConnection
+import java.net.URL
 
 class LeaveReviewFragment : Fragment() {
     private lateinit var binding: FragmentLeaveReviewBinding
@@ -89,6 +96,32 @@ class LeaveReviewFragment : Fragment() {
                     true -> getString(R.string.leave_review_how_about_with_bottom)
                     false -> getString(R.string.leave_review_how_about_wo_bottom)
                     else -> getString(R.string.leave_review_how_about_wo_bottom)
+                }
+            }
+        }
+
+        vm.editingReview.observe(viewLifecycleOwner) { review ->
+            review ?: return@observe
+
+            // 평점
+            vm.setReviewRating(review.score.toFloat())
+            binding.rateText.text = review.score.toInt().toString()
+
+            // 코멘트 세팅
+            binding.commentEdit.setText(review.comment ?: "")
+
+            // Todo : keyword 세팅, patch api 연결
+
+            // 이미지(url) → Uri 로 변환
+            review.etc?.images?.let { urls ->
+                lifecycleScope.launch {
+                    urls.forEach { url: String ->
+                        val file = downloadImageToFile(requireContext(), url)
+                        file?.let {
+                            val uri = Uri.fromFile(it)
+                            vm.addImageUri(uri, onFailure = {})
+                        }
+                    }
                 }
             }
         }
@@ -190,6 +223,32 @@ class LeaveReviewFragment : Fragment() {
             requestPermission(onGranted = {
                 launchPhotoPicker()
             })
+        }
+    }
+
+    suspend fun downloadImageToFile(
+        context: Context,
+        imageUrl: String
+    ): File? = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val url = URL(imageUrl)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.connect()
+
+            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                return@withContext null
+            }
+
+            val input = connection.inputStream
+            val tempFile = File.createTempFile("review_img_", ".jpg", context.cacheDir)
+
+            tempFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
+
+            tempFile
+        } catch (e: Exception) {
+            null
         }
     }
 

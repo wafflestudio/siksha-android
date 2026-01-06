@@ -46,6 +46,24 @@ interface SikshaApi {
     @POST("/reviews")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
+    @PATCH("/reviews")
+    suspend fun updateReviews(
+        @Query("menu_id") menuId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Long
+    ): NetworkResult<FetchReviewsResult>
+
+    @DELETE("/reviews/{review_id}")
+    suspend fun deleteReviews(
+        @Path("review_id") reviewId: Long
+    ): Response<Unit?>
+
+    @GET("/reviews/me")
+    suspend fun fetchMyReviews(
+        @Query("page") page: Long,
+        @Query("perPage") perPage: Long
+    ): NetworkResult<FetchMyReviewsResult>
+
     @Multipart
     @POST("/reviews/images")
     suspend fun leaveMenuReviewImages(

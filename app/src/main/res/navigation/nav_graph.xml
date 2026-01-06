@@ -63,6 +63,9 @@
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
             app:popExitAnim="@anim/slide_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_myReviewFragment"
+            app:destination="@id/myReviewFragment" />
 
     </fragment>
 
@@ -240,6 +243,17 @@
         <argument
             android:name="comment_id"
             app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/myReviewFragment"
+        android:name="com.wafflestudio.siksha2.ui.menuDetail.review.MyReviewFragment"
+        android:label="myReviewFragment" >
+        <action
+            android:id="@+id/action_myReviewFragment_to_leaveReviewFragment"
+            app:destination="@id/leaveReviewFragment" />
+        <action
+            android:id="@+id/action_myReviewFragment_to_menuDetailFragment"
+            app:destination="@id/menuDetailFragment" />
     </fragment>
 
 
