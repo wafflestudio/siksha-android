@@ -175,7 +175,7 @@ fun SpeechBubbleIcon(
 @Composable
 fun KeywordTaste(
     modifier: Modifier = Modifier,
-    sizePx: Int = 36
+    sizePx: Int = 24
 ) {
     Image(
         modifier = modifier.size(sizePx.dp),
@@ -187,7 +187,7 @@ fun KeywordTaste(
 @Composable
 fun KeywordPrice(
     modifier: Modifier = Modifier,
-    sizePx: Int = 36
+    sizePx: Int = 24
 ) {
     Image(
         modifier = modifier.size(sizePx.dp),
@@ -199,7 +199,7 @@ fun KeywordPrice(
 @Composable
 fun KeywordFoodComposition(
     modifier: Modifier = Modifier,
-    sizePx: Int = 36
+    sizePx: Int = 24
 ) {
     Image(
         modifier = modifier.size(sizePx.dp),

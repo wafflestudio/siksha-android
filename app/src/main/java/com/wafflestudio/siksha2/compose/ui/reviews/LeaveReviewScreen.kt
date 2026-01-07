@@ -7,6 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -83,7 +85,11 @@ fun LeaveReviewRoute(
         submitEnabled = selectedKeywords.all { it != "" },
         keywordTitleList = keywordTitleList,
         keywordChoiceLists = keywordChoiceLists,
-        keywordIconList = listOf({ KeywordTaste() }, { KeywordPrice() }, { KeywordFoodComposition() }),
+        keywordIconList = listOf(
+            { KeywordTaste(sizePx = 22) },
+            { KeywordPrice(sizePx = 22) },
+            { KeywordFoodComposition(sizePx = 22) }
+        ),
         selectedKeywords = selectedKeywords,
         comment = comment,
         commentPlaceHolder = {
@@ -110,6 +116,7 @@ fun LeaveReviewRoute(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LeaveReviewScreen(
     menu: Menu?,
@@ -163,7 +170,7 @@ fun LeaveReviewScreen(
                     .padding(top = 40.dp, bottom = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row {
+                FlowRow {
                     Text(
                         text = menu?.nameKr ?: "",
                         fontSize = 20.sp,
@@ -177,6 +184,12 @@ fun LeaveReviewScreen(
                                 else -> R.string.leave_review_how_about_wo_bottom
                             }
                         ),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = SikshaTheme.colors.Gray700
+                    )
+                    Text(
+                        text = stringResource(R.string.leave_review_how_about),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = SikshaTheme.colors.Gray700

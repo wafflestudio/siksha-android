@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
@@ -24,11 +25,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -51,8 +55,10 @@ class MenuDetailViewModel @Inject constructor(
         _menuId.value = newId
     }
 
+    private val modifiedReviewCache = MutableStateFlow(mapOf<Long, Review>())
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val reviewPagingData: Flow<PagingData<Review>> =
+    private val _reviewPagingData: Flow<PagingData<Review>> =
         _menuId.filterNotNull()
             .distinctUntilChanged()
             .flatMapLatest { id ->
@@ -64,6 +70,13 @@ class MenuDetailViewModel @Inject constructor(
                     }
                 ).flow
             }.cachedIn(viewModelScope)
+
+    val reviewPagingData =
+        combine(_reviewPagingData, modifiedReviewCache) { pagingData, modifiedReviews ->
+            pagingData.map { review ->
+                modifiedReviews[review.id] ?: review
+            }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, PagingData.empty())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reviewPhotoPagingData: Flow<PagingData<Review>> =
@@ -132,7 +145,9 @@ class MenuDetailViewModel @Inject constructor(
             when (result) {
                 is NetworkResult.Success -> {
                     _menu.value = result.body
+                    modifiedReviewCache.value = emptyMap()
                     _networkResultState.value = State.SUCCESS
+                    refreshKeywordDistribution(menuId)
                 }
                 else -> _networkResultState.value = State.FAILED
             }
@@ -210,7 +225,7 @@ class MenuDetailViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = menuRepository.getKeywordDist(menuId)) {
                 is NetworkResult.Success -> _keywordDistribution.value = response.body
-                else -> _keywordDistribution.value = KeywordDist(listOf(), listOf())
+                else -> _keywordDistribution.value = KeywordDist.Empty
             }
         }
     }
@@ -259,6 +274,28 @@ class MenuDetailViewModel @Inject constructor(
             else -> { }
         }
         return menuUpdateResponse
+    }
+
+    suspend fun toggleReviewLike(review: Review): NetworkResult<Unit> {
+        val reviewUpdateResponse = when (review.isLiked) {
+            true -> menuRepository.unlikeReviewById(review.id)
+            false -> menuRepository.likeReviewById(review.id)
+        }
+        when (reviewUpdateResponse) {
+            is NetworkResult.Success -> {
+                modifiedReviewCache.value = modifiedReviewCache.value.toMutableMap().apply {
+                    put(
+                        review.id,
+                        review.copy(
+                            isLiked = !review.isLiked,
+                            likeCount = if (review.isLiked) review.likeCount - 1 else review.likeCount + 1
+                        )
+                    )
+                }
+            }
+            else -> { }
+        }
+        return reviewUpdateResponse
     }
 
     suspend fun leaveReview(context: Context, score: Double, comment: String): NetworkResult<LeaveReviewResult>? {
