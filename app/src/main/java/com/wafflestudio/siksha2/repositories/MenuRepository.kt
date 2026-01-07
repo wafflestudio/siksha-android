@@ -13,7 +13,9 @@ import com.wafflestudio.siksha2.network.dto.FetchReviewDistributionResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.ui.menuDetail.MenuMyReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -78,6 +80,18 @@ class MenuRepository @Inject constructor(
             config = MenuReviewPagingSource.Config,
             pagingSourceFactory = { MenuReviewPagingSource(sikshaApi, menuId) }
         ).flow
+    }
+
+    fun getMyPagedReviewsByMenuIdFlow(): Flow<PagingData<ReviewRestaurant>> {
+        return Pager(
+            config = MenuMyReviewPagingSource.Config,
+            pagingSourceFactory = { MenuMyReviewPagingSource(sikshaApi) }
+        ).flow
+    }
+
+    suspend fun deleteReview(reviewId: Long): Boolean {
+        val response = sikshaApi.deleteReviews(reviewId)
+        return response.isSuccessful
     }
 
     fun getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {

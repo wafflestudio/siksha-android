@@ -12,6 +12,7 @@ import androidx.paging.PagingData
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
@@ -65,6 +66,18 @@ class MenuDetailViewModel @Inject constructor(
     val reviewRating: FloatState
         get() = _reviewRating
 
+    private val _deleteResult = MutableLiveData<Boolean>()
+    val deleteResult: LiveData<Boolean>
+        get() = _deleteResult
+
+    private val _editingReview = MutableLiveData<Review?>()
+    val editingReview: LiveData<Review?>
+        get() = _editingReview
+
+    fun setEditingReview(review: Review?) {
+        _editingReview.value = review
+    }
+
     fun refreshMenu(menuId: Long) {
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
@@ -103,8 +116,19 @@ class MenuDetailViewModel @Inject constructor(
         }
     }
 
+    fun deleteReview(id: Long) {
+        viewModelScope.launch {
+            val success = menuRepository.deleteReview(id)
+            _deleteResult.postValue(success)
+        }
+    }
+
     fun getReviews(menuId: Long): Flow<PagingData<Review>> {
         return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
+    }
+
+    fun getMyReviews(): Flow<PagingData<ReviewRestaurant>> {
+        return menuRepository.getMyPagedReviewsByMenuIdFlow()
     }
 
     fun getReviewsWithImages(menuId: Long): Flow<PagingData<Review>> {

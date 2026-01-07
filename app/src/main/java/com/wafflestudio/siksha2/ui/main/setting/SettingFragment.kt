@@ -76,6 +76,12 @@ class SettingFragment : Fragment() {
             findNavController().navigate(action)
         }
 
+        binding.myReviewRow.setOnClickListener {
+            val action =
+                MainFragmentDirections.actionMainFragmentToMyReviewFragment()
+            findNavController().navigate(action)
+        }
+
         binding.orderRestaurantRow.setOnClickListener {
             val action =
                 MainFragmentDirections.actionMainFragmentToReorderRestaurantFragment()
