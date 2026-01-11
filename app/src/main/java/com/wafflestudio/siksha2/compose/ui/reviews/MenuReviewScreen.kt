@@ -48,8 +48,8 @@ fun MenuReviewScreen(
                     timeText = review.createdAt,
                     reviewText = review.comment,
                     isLiked = review.isLiked,
-                    likeCount = review.likeCount,
-                    keywords = review.keywordReviews.filter { it != "" },
+                    likeCount = review.likeCount ?: 0L,
+                    keywords = review.keywordReviews.filterNotNull().filter { it.isNotBlank() },
                     imageUris = review.etc.images?.map { it.toUri() } ?: listOf(),
                     modifier = Modifier.padding(start = 16.dp, end = 12.dp)
                 )
