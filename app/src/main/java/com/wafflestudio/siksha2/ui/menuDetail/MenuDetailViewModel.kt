@@ -165,7 +165,7 @@ class MenuDetailViewModel @Inject constructor(
         config = MenuReviewPagingSource.Config,
         pagingSourceFactory = { menuRepository.getReviewsPagingSource(menuId) }
     ).flow.cachedIn(viewModelScope)
-    
+
     fun deleteReview(id: Long) {
         viewModelScope.launch {
             val success = menuRepository.deleteReview(id)
