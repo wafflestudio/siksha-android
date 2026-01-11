@@ -2,6 +2,7 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.network.dto.FestivalDates
 import com.wafflestudio.siksha2.models.Menu
+import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.*
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import okhttp3.MultipartBody
@@ -56,7 +57,8 @@ interface SikshaApi {
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
-        @Query("per_page") perPage: Long
+        @Query("per_page") perPage: Long,
+        @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
     @GET("/reviews/filter")
@@ -64,13 +66,19 @@ interface SikshaApi {
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Long,
-        @Query("etc") etc: Boolean = true
+        @Query("image") etc: Boolean = true,
+        @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
+
+    @GET("/reviews/keywords/dist")
+    suspend fun fetchKeywordDist(
+        @Query("menu_id") menuId: Long
+    ): NetworkResult<FetchKeywordDistResult>
 
     @GET("/restaurants")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
-    @POST("/reviews/")
+    @POST("/reviews")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
     @PATCH("/reviews")
@@ -96,9 +104,18 @@ interface SikshaApi {
     suspend fun leaveMenuReviewImages(
         @Part("menu_id") menuId: Long,
         @Part("score") score: Long,
+        @Part("taste") taste: String,
+        @Part("price") price: String,
+        @Part("food_composition") foodComposition: String,
         @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
     ): NetworkResult<LeaveReviewResult>
+
+    @POST("/reviews/{review_id}/like")
+    suspend fun reviewLike(@Path("review_id") reviewId: Long): NetworkResult<Review>
+
+    @DELETE("/reviews/{review_id}/like")
+    suspend fun reviewUnlike(@Path("review_id") reviewId: Long): NetworkResult<Review>
 
     @POST("/auth/login/kakao")
     suspend fun loginKakao(@Header("Authorization") kakaoToken: String): NetworkResult<LoginOAuthResult>

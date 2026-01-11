@@ -11,7 +11,6 @@ import com.wafflestudio.siksha2.databinding.ItemReviewBinding
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.utils.getInflater
 import com.wafflestudio.siksha2.utils.toLocalDateTime
-import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.toParsedTimeString
 
 class MenuReviewsAdapter constructor(
@@ -32,29 +31,29 @@ class MenuReviewsAdapter constructor(
             reviewText.text = item?.comment
             date.text = item?.createdAt?.toLocalDateTime()?.toParsedTimeString() ?: "-"
             idText.text = "ID " + item?.userId.toString()
-            if (showImage) {
-                item?.etc?.images?.let {
-                    if (it.isNotEmpty()) {
-                        val imageViewList = listOf(this.reviewImageView1, this.reviewImageView2, this.reviewImageView3)
-                        this.reviewImageLayout.setVisibleOrGone(true)
-
-                        for (i in 0 until 3) {
-                            if (i < it.size) {
-                                imageViewList[i].run {
-                                    setImage(it[i])
-                                    fragmentManager?.let {
-                                        setImageClickListener { url ->
-                                            val dialog = ReviewImageDialog.newInstance(url)
-                                            dialog.show(fragmentManager, "review_image_$url")
-                                        }
-                                    }
-                                    setVisibleOrGone(true)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+//            if (showImage) {
+//                item?.etc?.let {
+//                    if (it.isNotEmpty()) {
+//                        val imageViewList = listOf(this.reviewImageView1, this.reviewImageView2, this.reviewImageView3)
+//                        this.reviewImageLayout.setVisibleOrGone(true)
+//
+//                        for (i in 0 until 3) {
+//                            if (i < it.size) {
+//                                imageViewList[i].run {
+//                                    setImage(it[i])
+//                                    fragmentManager?.let {
+//                                        setImageClickListener { url ->
+//                                            val dialog = ReviewImageDialog.newInstance(url)
+//                                            dialog.show(fragmentManager, "review_image_$url")
+//                                        }
+//                                    }
+//                                    setVisibleOrGone(true)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 

@@ -8,7 +8,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
@@ -18,7 +21,14 @@ import com.wafflestudio.siksha2.repositories.MenuRepository
 import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -34,6 +44,35 @@ class MenuDetailViewModel @Inject constructor(
     val menu: LiveData<Menu>
         get() = _menu
 
+    private val _menuId = MutableStateFlow<Long?>(null)
+    val menuId: StateFlow<Long?> get() = _menuId
+
+    fun setMenuId(newId: Long) {
+        _menuId.value = newId
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviewPagingData: Flow<PagingData<Review>> =
+        _menuId.filterNotNull()
+            .distinctUntilChanged()
+            .flatMapLatest { id ->
+                Timber.d("$id")
+                Pager(
+                    config = MenuReviewPagingSource.Config,
+                    pagingSourceFactory = {
+                        menuRepository.getReviewsPagingSource(id)
+                    }
+                ).flow
+            }.cachedIn(viewModelScope)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reviewPhotoPagingData: Flow<PagingData<Review>> =
+        _menuId.filterNotNull()
+            .distinctUntilChanged()
+            .flatMapLatest { id ->
+                menuRepository.getPagedReviewsOnlyHaveImagesByMenuIdFlow(id)
+            }.cachedIn(viewModelScope)
+
     private val _commentHint = MutableLiveData<String>()
     val commentHint: LiveData<String>
         get() = _commentHint
@@ -45,6 +84,14 @@ class MenuDetailViewModel @Inject constructor(
     private val _reviewDistribution = MutableLiveData<List<Long>>()
     val reviewDistribution: LiveData<List<Long>>
         get() = _reviewDistribution
+
+    private val _keywordDistribution = MutableLiveData<KeywordDist>()
+    val keywordDistribution: LiveData<KeywordDist>
+        get() = _keywordDistribution
+
+    private val _selectedKeywordList = MutableStateFlow<List<String>>(listOf("", "", ""))
+    val selectedKeywordList: StateFlow<List<String>>
+        get() = _selectedKeywordList
 
     private val _imageUriList = MutableLiveData<List<Uri>>()
     val imageUriList: LiveData<List<Uri>>
@@ -100,10 +147,8 @@ class MenuDetailViewModel @Inject constructor(
                     _imageCount.value = data.totalCount
                     val urlList = emptyList<String>().toMutableList()
                     for (i in 0 until 3) {
-                        if (i < data.result.size) {
-                            data.result[i].etc?.images?.get(0)?.let {
-                                urlList.add(it)
-                            }
+                        if (i < data.result.size && data.result[i].etc.images?.isNotEmpty() == true) {
+                            urlList.add(data.result[i].etc.images!![0])
                         }
                     }
                     _imageUrlList.value = urlList
@@ -116,15 +161,16 @@ class MenuDetailViewModel @Inject constructor(
         }
     }
 
+    fun getReviews(menuId: Long): Flow<PagingData<Review>> = Pager(
+        config = MenuReviewPagingSource.Config,
+        pagingSourceFactory = { menuRepository.getReviewsPagingSource(menuId) }
+    ).flow.cachedIn(viewModelScope)
+
     fun deleteReview(id: Long) {
         viewModelScope.launch {
             val success = menuRepository.deleteReview(id)
             _deleteResult.postValue(success)
         }
-    }
-
-    fun getReviews(menuId: Long): Flow<PagingData<Review>> {
-        return menuRepository.getPagedReviewsByMenuIdFlow(menuId)
     }
 
     fun getMyReviews(): Flow<PagingData<ReviewRestaurant>> {
@@ -158,6 +204,19 @@ class MenuDetailViewModel @Inject constructor(
                 else -> _reviewDistribution.value = emptyList()
             }
         }
+    }
+
+    fun refreshKeywordDistribution(menuId: Long) {
+        viewModelScope.launch {
+            when (val response = menuRepository.getKeywordDist(menuId)) {
+                is NetworkResult.Success -> _keywordDistribution.value = response.body
+                else -> _keywordDistribution.value = KeywordDist(listOf(), listOf())
+            }
+        }
+    }
+
+    fun selectKeyword(idx: Int, keyword: String) {
+        _selectedKeywordList.value = _selectedKeywordList.value.toMutableList().also { it[idx] = keyword }
     }
 
     fun addImageUri(uri: Uri, onFailure: () -> Unit) {
@@ -217,11 +276,27 @@ class MenuDetailViewModel @Inject constructor(
             }
             val commentBody = MultipartBody.Part.createFormData("comment", comment)
             imageList?.let {
-                menuRepository.leaveMenuReviewImage(menuId, score.toLong(), commentBody, imageList)
+                menuRepository.leaveMenuReviewImage(
+                    menuId,
+                    score.toLong(),
+                    selectedKeywordList.value[0],
+                    selectedKeywordList.value[1],
+                    selectedKeywordList.value[2],
+                    commentBody,
+                    imageList
+                )
             }
         } else {
-            menuRepository.leaveMenuReview(menuId, score, comment)
+            menuRepository.leaveMenuReview(
+                menuId,
+                score,
+                selectedKeywordList.value[0],
+                selectedKeywordList.value[1],
+                selectedKeywordList.value[2],
+                comment
+            )
         }
+        notifySendReviewEnd()
         return response
     }
 
