@@ -26,6 +26,33 @@ interface SikshaApi {
     @GET("/menus/festival")
     suspend fun isFestivalDate(@Path(value = "input_date") inputDate: String): NetworkResult<FestivalDateCheckResponse>
 
+    @GET("/menus/me")
+    suspend fun getFavoriteMenus(
+        @Header("Authorization") token: String
+    ): NetworkResult<GetFavoriteMenusResponse>
+
+    @POST("/menus/{menu_id}/alarm/on")
+    suspend fun postAlarmOn(
+        @Path("menu_id") menuId: Long,
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @POST("/menus/{menu_id}/alarm/off")
+    suspend fun postAlarmOff(
+        @Path("menu_id") menuId: Long,
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @POST("/menus/alarm/off")
+    suspend fun postAlarmOffAll(
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @POST("/menus/alarm/on")
+    suspend fun postAlarmOnAll(
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
     @GET("/reviews")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
@@ -53,6 +80,24 @@ interface SikshaApi {
 
     @POST("/reviews")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
+
+    @PATCH("/reviews")
+    suspend fun updateReviews(
+        @Query("menu_id") menuId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Long
+    ): NetworkResult<FetchReviewsResult>
+
+    @DELETE("/reviews/{review_id}")
+    suspend fun deleteReviews(
+        @Path("review_id") reviewId: Long
+    ): Response<Unit?>
+
+    @GET("/reviews/me")
+    suspend fun fetchMyReviews(
+        @Query("page") page: Long,
+        @Query("perPage") perPage: Long
+    ): NetworkResult<FetchMyReviewsResult>
 
     @Multipart
     @POST("/reviews/images")
@@ -83,6 +128,23 @@ interface SikshaApi {
 
     @POST("/auth/refresh")
     suspend fun refreshToken(@Header("Authorization") token: String): NetworkResult<LoginOAuthResult>
+
+    @POST("/auth/userDevice")
+    suspend fun registerUserDevice(
+        @Body body: Map<String, String>,
+        @Header("Authorization") authorization: String
+    ): Response<Unit>
+
+    @POST("/auth/alarm")
+    suspend fun postAlarmType(
+        @Header("Authorization") token: String,
+        @Body body: Map<String, String>
+    ): NetworkResult<Unit>
+
+    @GET("/auth/alarm")
+    suspend fun getAlarmType(
+        @Header("Authorization") token: String
+    ): NetworkResult<GetAlarmTypeResponse>
 
     @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):

@@ -11,7 +11,6 @@ import com.wafflestudio.siksha2.databinding.ItemSettingRowBinding
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 
 class SettingItemRow : LinearLayout {
-
     private val binding = ItemSettingRowBinding.inflate(LayoutInflater.from(context), this)
     var checked: Boolean = false
         get() = binding.checkbox.isSelected
@@ -54,6 +53,30 @@ class SettingItemRow : LinearLayout {
         invalidate()
     }
 
+    fun setShowCheckSimple(visible: Boolean) {
+        binding.checkSimple.setVisibleOrGone(visible)
+        requestLayout()
+        invalidate()
+    }
+
+    fun setShowToggleSwitch(visible: Boolean) {
+        binding.toggleSwitch.setVisibleOrGone(visible)
+
+        isClickable = false
+        isFocusable = false
+    }
+
+    fun setToggleState(active: Boolean) {
+        binding.toggleSwitch.setActive(active)
+    }
+
+    fun setOnToggleClicked(listener: (Boolean) -> Unit) {
+        binding.toggleSwitch.setOnClickListener {
+            binding.toggleSwitch.toggle()
+            listener(binding.toggleSwitch.isActive)
+        }
+    }
+
     private fun init(attr: AttributeSet?) {
         gravity = Gravity.CENTER_VERTICAL
         orientation = HORIZONTAL
@@ -68,6 +91,9 @@ class SettingItemRow : LinearLayout {
                 setArrowIcon(getBoolean(R.styleable.SettingItem_showArrowIcon, true))
                 setNewIcon(getBoolean(R.styleable.SettingItem_showNewIcon, false))
                 setShowCheckbox(getBoolean(R.styleable.SettingItem_showCheckbox, false))
+                setShowCheckSimple(getBoolean(R.styleable.SettingItem_showCheckSimple, false))
+                setShowToggleSwitch(getBoolean(R.styleable.SettingItem_showToggleSwitch, false))
+
                 binding.settingRowText.text = getString(R.styleable.SettingItem_itemText)
                 binding.settingRowText.setTextColor(context.obtainStyledAttributes(attr, R.styleable.SettingItem).getColor(R.styleable.SettingItem_textColor, ContextCompat.getColor(context, R.color.black)))
             } finally {

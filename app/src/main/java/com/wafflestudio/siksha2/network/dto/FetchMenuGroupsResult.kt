@@ -13,9 +13,9 @@ data class FetchMenuGroupsResult(
     @JsonClass(generateAdapter = true)
     data class DailyMenuGroupResponse(
         @Json(name = "date") val date: String,
-        @Json(name = "br") val breakfast: List<MenuGroup> = listOf(),
-        @Json(name = "lu") val lunch: List<MenuGroup> = listOf(),
-        @Json(name = "dn") val dinner: List<MenuGroup> = listOf()
+        @Json(name = "br") val breakfast: List<MenuGroup> = emptyList(),
+        @Json(name = "lu") val lunch: List<MenuGroup> = emptyList(),
+        @Json(name = "dn") val dinner: List<MenuGroup> = emptyList()
     )
 }
 

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="520dp">
+
+    <FrameLayout
+        android:id="@+id/dialog_header_image"
+        android:layout_width="match_parent"
+        android:layout_height="216dp"
+        android:background="#F7ECD1"
+        android:foreground="@drawable/gradient_fade_up"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/dialog_header_image_screen"
+            android:layout_width="match_parent"
+            android:layout_height="179dp"
+            android:layout_marginTop="37dp"
+            android:src="@drawable/favorite_modal_screen"
+            android:layout_marginHorizontal="53dp"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="찜한 메뉴, 이제는 나올 때마다\n알림으로 받을 수 있어요!"
+        android:fontFamily="@font/nanum_square_extra_bold"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintTop_toBottomOf="@id/dialog_header_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/dialog_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="알림 받을 메뉴는 [설정 > 찜한 메뉴] 탭에서\n언제든 개별적으로 ON/OFF 설정할 수 있어요."
+        android:fontFamily="@font/nanum_square_regular"
+        android:textColor="@color/gray_700"
+        android:textSize="12dp"
+        android:lineSpacingMultiplier="1.2"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintTop_toBottomOf="@id/dialog_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/dialog_radio_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintTop_toBottomOf="@id/dialog_subtitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/radio_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableStart="@drawable/selector_radio_button"
+            android:drawablePadding="6dp"
+            android:text="좋아요, 알림을 받을래요."
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:minHeight="0dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:includeFontPadding="false"
+            android:layout_marginBottom="12dp" />
+
+        <RadioButton
+            android:id="@+id/radio_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableStart="@drawable/selector_radio_button"
+            android:drawablePadding="6dp"
+            android:text="괜찮아요, 알림을 받지 않을래요."
+            android:fontFamily="@font/nanum_square_regular"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:minHeight="0dp"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:includeFontPadding="false"/>
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/button_group"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:weightSum="2"
+        app:layout_constraintTop_toBottomOf="@id/dialog_radio_group"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="직접 설정하기"
+            android:textSize="16dp"
+            android:fontFamily="@font/nanum_square_bold"
+            android:backgroundTint="@color/gray_100"
+            android:textColor="@color/gray_600"
+            android:letterSpacing="-0.01"
+            android:background="@drawable/frame_corner_radius_8"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_done"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="완료"
+            android:textSize="16dp"
+            android:textColor="@color/text_button"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/nanum_square_bold"
+            android:backgroundTint="@color/gray_600"
+            android:letterSpacing="-0.01"
+            android:background="@drawable/frame_corner_radius_8"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

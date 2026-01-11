@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/menu_title_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="70dp"
+        android:background="@color/white"
+        android:fontFamily="@font/nanum_square_regular"
+        android:textColor="@color/black"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/menu_checkbox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="바지락리조또 &amp; 베사멜소스 띄어쓰기 기준 밑으로 내려오기" />
+
+    <ImageView
+        android:id="@+id/menu_checkbox"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/selector_checkbox"
+        android:translationY="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/menu_title_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
