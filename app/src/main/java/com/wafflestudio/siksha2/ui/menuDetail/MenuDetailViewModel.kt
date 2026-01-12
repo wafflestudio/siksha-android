@@ -294,42 +294,79 @@ class MenuDetailViewModel @Inject constructor(
         return menuUpdateResponse
     }
 
-    suspend fun leaveReview(context: Context, score: Double, comment: String): NetworkResult<LeaveReviewResult>? {
-        Timber.d("LeaveReview ${_menu.value?.id}")
+    suspend fun leaveReview(context: Context): NetworkResult<LeaveReviewResult>? {
+        val reviewId = _editingReviewId.value
         val menuId = _menu.value?.id ?: return null
-        Timber.d("not null")
-        val response = if (_imageUriList.value?.isNotEmpty() == true) {
-            context.showToast("이미지 압축 중입니다.")
-            _leaveReviewState.value = ReviewState.COMPRESSING
-            val imageList = _imageUriList.value?.map {
+        val score = reviewRating.floatValue.toLong()
+        val taste = selectedKeywordList.value[0]
+        val price = selectedKeywordList.value[1]
+        val foodComposition = selectedKeywordList.value[2]
+        val comment = comment.value
+
+        val imageParts = _imageUriList.value
+            ?.takeIf { it.isNotEmpty() }
+            ?.map {
                 ImageUtil.getCompressedImage(context, it)
             }?.map { file ->
                 val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                 MultipartBody.Part.createFormData("images", file.name, requestBody)
             }
-            val commentBody = MultipartBody.Part.createFormData("comment", comment)
-            imageList?.let {
+
+        val commentPart = MultipartBody.Part.createFormData("comment", comment)
+
+        val response = if (imageParts != null) {
+            context.showToast("이미지 압축 중입니다.")
+            _leaveReviewState.value = ReviewState.COMPRESSING
+
+            if (reviewId != null) {
+                menuRepository.patchMenuReview(
+                    _editingReviewId.value!!,
+                    menuId,
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    commentPart,
+                    imageParts
+                )
+            } else {
                 menuRepository.leaveMenuReviewImage(
                     menuId,
-                    score.toLong(),
-                    selectedKeywordList.value[0],
-                    selectedKeywordList.value[1],
-                    selectedKeywordList.value[2],
-                    commentBody,
-                    imageList
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    commentPart,
+                    imageParts
                 )
             }
         } else {
-            menuRepository.leaveMenuReview(
-                menuId,
-                score,
-                selectedKeywordList.value[0],
-                selectedKeywordList.value[1],
-                selectedKeywordList.value[2],
-                comment
-            )
+            if (reviewId != null) {
+                menuRepository.patchMenuReview(
+                    _editingReviewId.value!!,
+                    menuId,
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    commentPart,
+                    emptyList()
+                )
+            } else {
+                menuRepository.leaveMenuReview(
+                    menuId,
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    comment
+                )
+            }
         }
+
         notifySendReviewEnd()
+        _editingReviewId.value = null
+
         return response
     }
 

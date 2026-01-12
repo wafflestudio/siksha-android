@@ -96,7 +96,7 @@ fun LeaveReviewRoute(
         imageUriList = imageUriList,
         onNavigateUp = onNavigateUp,
         onSubmitReview = {
-            scope.launch { vm.leaveReview(context, rating.toDouble(), comment) }
+            scope.launch { vm.leaveReview(context) }
         },
         onRatingChange = { rating -> vm.setReviewRating(rating) },
         onSelectKeyword = { idx, keyword -> vm.selectKeyword(idx, keyword) },
