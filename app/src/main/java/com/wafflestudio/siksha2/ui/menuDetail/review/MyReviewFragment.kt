@@ -50,7 +50,7 @@ class MyReviewFragment : Fragment() {
             },
             onEditClick = { review ->
                 vm.refreshMenu(review.menuId)
-                vm.setEditingReview(review)
+                vm.setEditingReview(requireContext(), review)
 
                 val action = MyReviewFragmentDirections
                     .actionMyReviewFragmentToLeaveReviewFragment()
