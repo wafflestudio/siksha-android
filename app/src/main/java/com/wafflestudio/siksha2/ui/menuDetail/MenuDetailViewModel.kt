@@ -25,8 +25,10 @@ import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -118,9 +120,8 @@ class MenuDetailViewModel @Inject constructor(
     val comment: StateFlow<String>
         get() = _comment
 
-    private val _deleteResult = MutableLiveData<Boolean>()
-    val deleteResult: LiveData<Boolean>
-        get() = _deleteResult
+    private val _deleteResult = MutableSharedFlow<Boolean>()
+    val deleteResult = _deleteResult.asSharedFlow()
 
     private val _editingReviewId = MutableStateFlow<Long?>(null)
     val editingReviewId: StateFlow<Long?>
@@ -202,7 +203,7 @@ class MenuDetailViewModel @Inject constructor(
     fun deleteReview(id: Long) {
         viewModelScope.launch {
             val success = menuRepository.deleteReview(id)
-            _deleteResult.postValue(success)
+            _deleteResult.emit(success)
         }
     }
 

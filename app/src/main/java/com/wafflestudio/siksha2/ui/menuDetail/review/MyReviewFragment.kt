@@ -80,12 +80,14 @@ class MyReviewFragment : Fragment() {
             }
         }
 
-        vm.deleteResult.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                Toast.makeText(requireContext(), "삭제 완료", Toast.LENGTH_SHORT).show()
-                reviewsAdapter.refresh()
-            } else {
-                Toast.makeText(requireContext(), "삭제 실패", Toast.LENGTH_SHORT).show()
+        viewLifecycleOwner.lifecycleScope.launch {
+            vm.deleteResult.collect { success ->
+                if (success) {
+                    Toast.makeText(requireContext(), "삭제 완료", Toast.LENGTH_SHORT).show()
+                    reviewsAdapter.refresh()
+                } else {
+                    Toast.makeText(requireContext(), "삭제 실패", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
