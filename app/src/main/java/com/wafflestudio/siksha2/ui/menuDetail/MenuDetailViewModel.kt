@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.FloatState
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,17 +19,19 @@ import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
 import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.MenuRepository
+import com.wafflestudio.siksha2.ui.common.downloadImageToFile
 import com.wafflestudio.siksha2.utils.ImageUtil
 import com.wafflestudio.siksha2.utils.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -113,16 +116,52 @@ class MenuDetailViewModel @Inject constructor(
     val reviewRating: FloatState
         get() = _reviewRating
 
-    private val _deleteResult = MutableLiveData<Boolean>()
-    val deleteResult: LiveData<Boolean>
-        get() = _deleteResult
+    private val _comment = MutableStateFlow("")
+    val comment: StateFlow<String>
+        get() = _comment
 
-    private val _editingReview = MutableLiveData<Review?>()
-    val editingReview: LiveData<Review?>
-        get() = _editingReview
+    private val _deleteResult = MutableSharedFlow<Boolean>()
+    val deleteResult = _deleteResult.asSharedFlow()
 
-    fun setEditingReview(review: Review?) {
-        _editingReview.value = review
+    private val _editingReviewId = MutableStateFlow<Long?>(null)
+    val editingReviewId: StateFlow<Long?>
+        get() = _editingReviewId
+
+    fun setEditingReview(context: Context, review: Review?) {
+        viewModelScope.launch {
+            if (review == null) {
+                _editingReviewId.value = null
+                _reviewRating.floatValue = 5f
+                _selectedKeywordList.value = listOf("", "", "")
+                _comment.value = ""
+                _imageUriList.value = emptyList()
+                return@launch
+            }
+
+            _editingReviewId.value = review.id
+            _reviewRating.floatValue = review.score.toFloat()
+            _selectedKeywordList.value = listOf(
+                review.keywordReviews.getOrNull(0) ?: "",
+                review.keywordReviews.getOrNull(1) ?: "",
+                review.keywordReviews.getOrNull(2) ?: ""
+            )
+            _comment.value = review.comment.orEmpty()
+
+            val imageUris = mutableListOf<Uri>()
+            review.etc.images
+                ?.take(3) // 최대 3장 제한
+                ?.forEach { imageUrl ->
+                    val file = downloadImageToFile(context, imageUrl)
+                    if (file != null) {
+                        imageUris.add(file.toUri())
+                    }
+                }
+            _imageUriList.value = imageUris
+        }
+    }
+
+    fun setComment(text: String) {
+        _comment.value = text
     }
 
     fun refreshMenu(menuId: Long) {
@@ -161,15 +200,10 @@ class MenuDetailViewModel @Inject constructor(
         }
     }
 
-    fun getReviews(menuId: Long): Flow<PagingData<Review>> = Pager(
-        config = MenuReviewPagingSource.Config,
-        pagingSourceFactory = { menuRepository.getReviewsPagingSource(menuId) }
-    ).flow.cachedIn(viewModelScope)
-
     fun deleteReview(id: Long) {
         viewModelScope.launch {
             val success = menuRepository.deleteReview(id)
-            _deleteResult.postValue(success)
+            _deleteResult.emit(success)
         }
     }
 
@@ -261,42 +295,79 @@ class MenuDetailViewModel @Inject constructor(
         return menuUpdateResponse
     }
 
-    suspend fun leaveReview(context: Context, score: Double, comment: String): NetworkResult<LeaveReviewResult>? {
-        Timber.d("LeaveReview ${_menu.value?.id}")
+    suspend fun leaveReview(context: Context): NetworkResult<LeaveReviewResult>? {
+        val reviewId = _editingReviewId.value
         val menuId = _menu.value?.id ?: return null
-        Timber.d("not null")
-        val response = if (_imageUriList.value?.isNotEmpty() == true) {
-            context.showToast("이미지 압축 중입니다.")
-            _leaveReviewState.value = ReviewState.COMPRESSING
-            val imageList = _imageUriList.value?.map {
+        val score = reviewRating.floatValue.toLong()
+        val taste = selectedKeywordList.value[0]
+        val price = selectedKeywordList.value[1]
+        val foodComposition = selectedKeywordList.value[2]
+        val comment = comment.value
+
+        val imageParts = _imageUriList.value
+            ?.takeIf { it.isNotEmpty() }
+            ?.map {
                 ImageUtil.getCompressedImage(context, it)
             }?.map { file ->
                 val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                 MultipartBody.Part.createFormData("images", file.name, requestBody)
             }
-            val commentBody = MultipartBody.Part.createFormData("comment", comment)
-            imageList?.let {
+
+        val commentPart = MultipartBody.Part.createFormData("comment", comment)
+
+        val response = if (imageParts != null) {
+            context.showToast("이미지 압축 중입니다.")
+            _leaveReviewState.value = ReviewState.COMPRESSING
+
+            if (reviewId != null) {
+                menuRepository.patchMenuReview(
+                    _editingReviewId.value!!,
+                    menuId,
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    commentPart,
+                    imageParts
+                )
+            } else {
                 menuRepository.leaveMenuReviewImage(
                     menuId,
-                    score.toLong(),
-                    selectedKeywordList.value[0],
-                    selectedKeywordList.value[1],
-                    selectedKeywordList.value[2],
-                    commentBody,
-                    imageList
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    commentPart,
+                    imageParts
                 )
             }
         } else {
-            menuRepository.leaveMenuReview(
-                menuId,
-                score,
-                selectedKeywordList.value[0],
-                selectedKeywordList.value[1],
-                selectedKeywordList.value[2],
-                comment
-            )
+            if (reviewId != null) {
+                menuRepository.patchMenuReview(
+                    _editingReviewId.value!!,
+                    menuId,
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    commentPart,
+                    emptyList()
+                )
+            } else {
+                menuRepository.leaveMenuReview(
+                    menuId,
+                    score,
+                    taste,
+                    price,
+                    foodComposition,
+                    comment
+                )
+            }
         }
+
         notifySendReviewEnd()
+        _editingReviewId.value = null
+
         return response
     }
 
