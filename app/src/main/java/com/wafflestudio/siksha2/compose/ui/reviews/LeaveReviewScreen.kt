@@ -188,6 +188,7 @@ fun LeaveReviewScreen(
                         fontWeight = FontWeight.Bold,
                         color = SikshaTheme.colors.Gray700
                     )
+                    Spacer(Modifier.width(5.dp))
                     Text(
                         text = stringResource(R.string.leave_review_how_about),
                         fontSize = 20.sp,
