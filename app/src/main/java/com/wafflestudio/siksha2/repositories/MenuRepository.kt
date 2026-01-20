@@ -109,7 +109,7 @@ class MenuRepository @Inject constructor(
 
     suspend fun leaveMenuReview(
         menuId: Long,
-        score: Double,
+        score: Long,
         taste: String?,
         price: String?,
         foodComposition: String?,
@@ -137,6 +137,19 @@ class MenuRepository @Inject constructor(
         images: List<MultipartBody.Part>
     ): NetworkResult<LeaveReviewResult> {
         return sikshaApi.leaveMenuReviewImages(menuId, score, taste, price, foodComposition, comment, images)
+    }
+
+    suspend fun patchMenuReview(
+        reviewId: Long,
+        menuId: Long,
+        score: Long,
+        taste: String = "",
+        price: String = "",
+        foodComposition: String = "",
+        comment: MultipartBody.Part,
+        images: List<MultipartBody.Part>
+    ): NetworkResult<LeaveReviewResult> {
+        return sikshaApi.patchMenuReview(reviewId, menuId, score, taste, price, foodComposition, comment, images)
     }
 
     suspend fun getReviewRecommendationComments(score: Long): NetworkResult<FetchRecommendationReviewCommentsResult> {

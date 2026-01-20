@@ -60,7 +60,7 @@ class MenuMyReviewChildAdapter(
             binding.reviewDate.text = item.createdAt.toLocalDateTime().toParsedTimeString()
             binding.reviewContent.text = item.comment ?: "내용 없음"
 
-            val tags = item.keywordReviews.orEmpty()
+            val tags = item.keywordReviews
 
             tagViews.forEachIndexed { index, view ->
                 val text = tags.getOrNull(index)
