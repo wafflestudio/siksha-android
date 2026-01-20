@@ -338,8 +338,6 @@ class MenuDetailViewModel @Inject constructor(
         return reviewUpdateResponse
     }
 
-    suspend fun leaveReview(context: Context, score: Double, comment: String): NetworkResult<LeaveReviewResult>? {
-        Timber.d("LeaveReview ${_menu.value?.id}")
     suspend fun leaveReview(context: Context): NetworkResult<LeaveReviewResult>? {
         val reviewId = _editingReviewId.value
         val menuId = _menu.value?.id ?: return null
