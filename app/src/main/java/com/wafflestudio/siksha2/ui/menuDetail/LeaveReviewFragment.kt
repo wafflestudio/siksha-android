@@ -105,7 +105,7 @@ class LeaveReviewFragment : Fragment() {
                     onUploadSuccess = { findNavController().navigateUp() },
                     onSubmitReview = { rating, comment ->
                         lifecycleScope.launch {
-                            val leaveReviewResult = vm.leaveReview(requireContext(), rating, comment)
+                            val leaveReviewResult = vm.leaveReview(requireContext())
                             when (leaveReviewResult) {
                                 is NetworkResult.Success -> {}
                                 is NetworkResult.Failure -> showToast(leaveReviewResult.message)

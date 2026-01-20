@@ -225,7 +225,7 @@ fun MenuDetailScreen(
                         reviewText = review.comment,
                         isLiked = review.isLiked,
                         likeCount = review.likeCount,
-                        keywords = review.keywordReviews.filter { it != "" },
+                        keywords = review.keywordReviews.filter { it != "" } as List<String>,
                         onToggleLike = { onToggleLikeReview(review) },
                         imageUris = review.etc.images?.map { it.toUri() } ?: listOf(),
                         modifier = Modifier.padding(horizontal = 14.dp)
