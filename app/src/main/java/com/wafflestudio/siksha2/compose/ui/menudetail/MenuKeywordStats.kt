@@ -35,6 +35,16 @@ fun MenuKeywordStat(
         modifier = modifier.fillMaxWidth()
             .background(color = SikshaTheme.colors.Gray100, shape = RoundedCornerShape(8.dp))
     ) {
+        if (keywordCount > 0) {
+            Box(modifier = Modifier.matchParentSize()) {
+                Box(
+                    modifier = Modifier.fillMaxHeight()
+                        .fillMaxWidth(keywordCount.toFloat() / keywordTotal.toFloat())
+                        .align(Alignment.CenterStart)
+                        .background(color = SikshaTheme.colors.OrangeTint, shape = RoundedCornerShape(8.dp))
+                )
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth()
                 .padding(top = 6.dp, bottom = 6.dp, start = 14.dp, end = 20.dp),
@@ -46,7 +56,7 @@ fun MenuKeywordStat(
                 text = keywordString,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
-                color = SikshaTheme.colors.Gray600,
+                color = if (keywordString in listOf("맛", "가격", "음식구성")) SikshaTheme.colors.Gray600 else SikshaTheme.colors.Gray800,
                 modifier = Modifier.weight(1f)
             )
             Text(
@@ -55,16 +65,6 @@ fun MenuKeywordStat(
                 fontWeight = FontWeight.ExtraBold,
                 color = SikshaTheme.colors.Orange500
             )
-        }
-        if (keywordCount > 0) {
-            Box(modifier = Modifier.matchParentSize()) {
-                Box(
-                    modifier = Modifier.fillMaxHeight()
-                        .fillMaxWidth(keywordCount.toFloat() / keywordTotal.toFloat())
-                        .align(Alignment.CenterStart)
-                        .background(color = SikshaTheme.colors.OrangeTint, shape = RoundedCornerShape(8.dp))
-                )
-            }
         }
     }
 }
@@ -81,9 +81,12 @@ fun MenuKeywordStats(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
+        // TODO: 빈 스트링일 때 처리
         for (i in keywords.ifEmpty { listOf("맛", "가격", "음식구성") }.indices) {
+            var keyword = keywords[i]
+            if (keyword == "") keyword = listOf("맛", "가격", "음식구성")[i]
             MenuKeywordStat(
-                keywordString = keywords.ifEmpty { listOf("맛", "가격", "음식구성") }[i],
+                keywordString = keyword,
                 keywordCount = keywordCounts.ifEmpty { listOf<Long>(0, 0, 0) }[i],
                 keywordTotal = keywordTotals.ifEmpty { listOf<Long>(0, 0, 0) }[i],
                 keywordIcon = keywordIcons[i]
