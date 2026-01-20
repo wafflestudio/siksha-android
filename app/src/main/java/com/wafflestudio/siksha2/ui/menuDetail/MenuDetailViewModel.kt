@@ -57,10 +57,11 @@ class MenuDetailViewModel @Inject constructor(
 
     private val modifiedReviewCache = MutableStateFlow(mapOf<Long, Review>())
 
+    private val refreshTrigger = MutableStateFlow(true)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     private val _reviewPagingData: Flow<PagingData<Review>> =
-        _menuId.filterNotNull()
-            .distinctUntilChanged()
+        combine(_menuId.filterNotNull(), refreshTrigger) { id, _ -> id }
             .flatMapLatest { id ->
                 Timber.d("$id")
                 Pager(
@@ -80,7 +81,7 @@ class MenuDetailViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val reviewPhotoPagingData: Flow<PagingData<Review>> =
-        _menuId.filterNotNull()
+        combine(_menuId.filterNotNull(), refreshTrigger) { id, _ -> id }
             .distinctUntilChanged()
             .flatMapLatest { id ->
                 menuRepository.getPagedReviewsOnlyHaveImagesByMenuIdFlow(id)
@@ -259,6 +260,10 @@ class MenuDetailViewModel @Inject constructor(
     }
 
     fun notifySendReviewEnd() {
+        _leaveReviewState.value = ReviewState.SUCCESS
+    }
+
+    fun notifySendReviewWaiting() {
         _leaveReviewState.value = ReviewState.WAITING
     }
 
@@ -333,7 +338,13 @@ class MenuDetailViewModel @Inject constructor(
                 comment
             )
         }
-        notifySendReviewEnd()
+        when (response) {
+            is NetworkResult.Success -> {
+                notifySendReviewEnd()
+                refreshTrigger.value = !refreshTrigger.value
+            }
+            else -> notifySendReviewWaiting()
+        }
         return response
     }
 
@@ -345,6 +356,7 @@ class MenuDetailViewModel @Inject constructor(
 
     enum class ReviewState {
         WAITING,
-        COMPRESSING
+        COMPRESSING,
+        SUCCESS
     }
 }

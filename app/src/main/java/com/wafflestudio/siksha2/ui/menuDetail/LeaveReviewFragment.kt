@@ -17,10 +17,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.compose.ui.reviews.LeaveReviewRoute
 import com.wafflestudio.siksha2.databinding.FragmentLeaveReviewBinding
+import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
@@ -100,7 +102,17 @@ class LeaveReviewFragment : Fragment() {
                         })
                     },
                     onClickDetails = {},
-                    context = requireContext()
+                    onUploadSuccess = { findNavController().navigateUp() },
+                    onSubmitReview = { rating, comment ->
+                        lifecycleScope.launch {
+                            val leaveReviewResult = vm.leaveReview(requireContext(), rating, comment)
+                            when (leaveReviewResult) {
+                                is NetworkResult.Success -> {}
+                                is NetworkResult.Failure -> showToast(leaveReviewResult.message)
+                                else -> showToast("알 수 없는 오류가 발생했습니다")
+                            }
+                        }
+                    }
                 )
             }
         }

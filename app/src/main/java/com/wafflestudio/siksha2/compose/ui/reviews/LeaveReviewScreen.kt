@@ -1,6 +1,5 @@
 package com.wafflestudio.siksha2.compose.ui.reviews
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,12 +24,12 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +53,6 @@ import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.KeyboardUtil.keyboardAsState
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
@@ -65,7 +63,8 @@ fun LeaveReviewRoute(
     onNavigateUp: () -> Unit,
     onAddImage: () -> Unit,
     onClickDetails: (Uri) -> Unit,
-    context: Context,
+    onSubmitReview: (Double, String) -> Unit,
+    onUploadSuccess: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val menu by vm.menu.observeAsState()
@@ -77,7 +76,12 @@ fun LeaveReviewRoute(
 
     val keyboardState by keyboardAsState()
 
-    val scope = rememberCoroutineScope()
+    val reviewState by vm.leaveReviewState.observeAsState()
+    LaunchedEffect(reviewState) {
+        if (reviewState == MenuDetailViewModel.ReviewState.SUCCESS) {
+            onUploadSuccess()
+        }
+    }
 
     LeaveReviewScreen(
         menu = menu,
@@ -104,7 +108,7 @@ fun LeaveReviewRoute(
         imageUriList = imageUriList,
         onNavigateUp = onNavigateUp,
         onSubmitReview = {
-            scope.launch { vm.leaveReview(context, rating.toDouble(), comment) }
+            onSubmitReview(rating.toDouble(), comment.ifEmpty { commentHint!! })
         },
         onRatingChange = { rating -> vm.setReviewRating(rating) },
         onSelectKeyword = { idx, keyword -> vm.selectKeyword(idx, keyword) },

@@ -83,7 +83,10 @@ fun MenuDetailRoute(
         keywordDist = keywordDist ?: KeywordDist.Empty,
         onToggleLikeMenu = onToggleLikeMenu,
         onToggleLikeReview = onToggleLikeReview,
-        onClickLeaveReview = onClickLeaveReview,
+        onClickLeaveReview = {
+            vm.notifySendReviewWaiting()
+            onClickLeaveReview()
+        },
         onNavigateToReviewPhoto = { menu?.let { onNavigateToReviewPhoto(it.id) } },
         modifier = modifier
     )
