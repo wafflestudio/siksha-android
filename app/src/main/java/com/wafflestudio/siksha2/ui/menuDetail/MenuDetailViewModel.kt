@@ -328,7 +328,7 @@ class MenuDetailViewModel @Inject constructor(
                         review.id,
                         review.copy(
                             isLiked = !review.isLiked,
-                            likeCount = if (review.isLiked) review.likeCount - 1 else review.likeCount + 1
+                            likeCount = if (review.isLiked) review.likeCount?.minus(1) else review.likeCount?.plus(1)
                         )
                     )
                 }

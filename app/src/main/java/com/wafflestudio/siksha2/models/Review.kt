@@ -14,7 +14,7 @@ data class Review(
     @Json(name = "is_liked") val isLiked: Boolean,
     @Json(name = "name_kr") val nameKr: String?,
     @Json(name = "name_en") val nameEn: String?,
-    @Json(name = "like_count") val likeCount: Long,
+    @Json(name = "like_count") val likeCount: Long?,
     @Json(name = "created_at") val createdAt: String,
     @Json(name = "updated_at") val updatedAt: String,
     @Json(name = "etc") val etc: Etc
