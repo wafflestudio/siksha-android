@@ -59,7 +59,7 @@ fun MenuReviewItem(
             Spacer(Modifier.width(10.dp))
             MenuReviewLikeButton(
                 isLiked = isLiked,
-                likeCount = likeCount?.toInt()?:0,
+                likeCount = likeCount?.toInt() ?: 0,
                 onToggleLike = onToggleLike
             )
         }
