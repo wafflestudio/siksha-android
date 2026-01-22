@@ -345,7 +345,7 @@ class MenuDetailViewModel @Inject constructor(
         val taste = selectedKeywordList.value[0]
         val price = selectedKeywordList.value[1]
         val foodComposition = selectedKeywordList.value[2]
-        val comment = comment.value
+        val comment = if (comment.value == "") commentHint.value ?: "" else comment.value
 
         val imageParts = _imageUriList.value
             ?.takeIf { it.isNotEmpty() }
