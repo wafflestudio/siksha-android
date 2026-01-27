@@ -2,7 +2,6 @@ package com.wafflestudio.siksha2.ui.menuDetail
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -26,12 +25,7 @@ import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.utils.setVisibleOrGone
 import com.wafflestudio.siksha2.utils.showToast
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
 
 class LeaveReviewFragment : Fragment() {
     private lateinit var binding: FragmentLeaveReviewBinding
@@ -81,7 +75,9 @@ class LeaveReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vm.refreshUriList()
+        if (vm.editingReviewId.value == null) {
+            vm.refreshUriList()
+        }
 
         binding.composeLayout.setContent {
             SikshaTheme {
@@ -102,7 +98,10 @@ class LeaveReviewFragment : Fragment() {
                         })
                     },
                     onClickDetails = {},
-                    onUploadSuccess = { findNavController().navigateUp() },
+                    onUploadSuccess = {
+                        findNavController().navigateUp()
+                        vm.notifySendReviewWaiting()
+                    },
                     onSubmitReview = { rating, comment ->
                         lifecycleScope.launch {
                             val leaveReviewResult = vm.leaveReview(requireContext())
@@ -121,32 +120,6 @@ class LeaveReviewFragment : Fragment() {
 
         vm.leaveReviewState.observe(viewLifecycleOwner) {
             binding.onLoadingContainer.root.setVisibleOrGone(it == MenuDetailViewModel.ReviewState.COMPRESSING)
-        }
-    }
-
-    suspend fun downloadImageToFile(
-        context: Context,
-        imageUrl: String
-    ): File? = withContext(Dispatchers.IO) {
-        return@withContext try {
-            val url = URL(imageUrl)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connect()
-
-            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                return@withContext null
-            }
-
-            val input = connection.inputStream
-            val tempFile = File.createTempFile("review_img_", ".jpg", context.cacheDir)
-
-            tempFile.outputStream().use { output ->
-                input.copyTo(output)
-            }
-
-            tempFile
-        } catch (e: Exception) {
-            null
         }
     }
 

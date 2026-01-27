@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.FloatState
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.core.net.toUri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -41,7 +41,6 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,7 +66,6 @@ class MenuDetailViewModel @Inject constructor(
     private val _reviewPagingData: Flow<PagingData<Review>> =
         combine(_menuId.filterNotNull(), refreshTrigger) { id, _ -> id }
             .flatMapLatest { id ->
-                Timber.d("$id")
                 Pager(
                     config = MenuReviewPagingSource.Config,
                     pagingSourceFactory = {
@@ -167,8 +165,15 @@ class MenuDetailViewModel @Inject constructor(
                 ?.take(3) // 최대 3장 제한
                 ?.forEach { imageUrl ->
                     val file = downloadImageToFile(context, imageUrl)
+
                     if (file != null) {
-                        imageUris.add(file.toUri())
+                        val contentUri = FileProvider.getUriForFile(
+                            context,
+                            "${context.packageName}.fileprovider",
+                            file
+                        )
+
+                        imageUris.add(contentUri)
                     }
                 }
             _imageUriList.value = imageUris
@@ -183,6 +188,7 @@ class MenuDetailViewModel @Inject constructor(
         _networkResultState.value = State.LOADING
         viewModelScope.launch {
             val result = menuRepository.getMenuById(menuId)
+
             when (result) {
                 is NetworkResult.Success -> {
                     _menu.value = result.body
