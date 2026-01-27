@@ -28,6 +28,11 @@ class ResultCall<T : Any>(
                             this@ResultCall,
                             Response.success(NetworkResult.Success(body))
                         )
+                    } else if (code == 204) {
+                        callback.onResponse(
+                            this@ResultCall,
+                            Response.success(NetworkResult.Success(Unit as T))
+                        )
                     } else {
                         callback.onResponse(
                             this@ResultCall,

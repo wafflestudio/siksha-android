@@ -2,7 +2,6 @@ package com.wafflestudio.siksha2.network
 
 import com.wafflestudio.siksha2.network.dto.FestivalDates
 import com.wafflestudio.siksha2.models.Menu
-import com.wafflestudio.siksha2.models.Review
 import com.wafflestudio.siksha2.network.dto.*
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import okhttp3.MultipartBody
@@ -70,10 +69,10 @@ interface SikshaApi {
         @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
-    @GET("/reviews/keywords/dist")
+    @GET("/reviews/keyword/dist")
     suspend fun fetchKeywordDist(
         @Query("menu_id") menuId: Long
-    ): NetworkResult<FetchKeywordDistResult>
+    ): NetworkResult<KeywordScoreDistributionResponse>
 
     @GET("/restaurants")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
@@ -125,10 +124,10 @@ interface SikshaApi {
     ): NetworkResult<LeaveReviewResult>
 
     @POST("/reviews/{review_id}/like")
-    suspend fun reviewLike(@Path("review_id") reviewId: Long): NetworkResult<Review>
+    suspend fun reviewLike(@Path("review_id") reviewId: Long): NetworkResult<Unit>
 
     @DELETE("/reviews/{review_id}/like")
-    suspend fun reviewUnlike(@Path("review_id") reviewId: Long): NetworkResult<Review>
+    suspend fun reviewUnlike(@Path("review_id") reviewId: Long): NetworkResult<Unit>
 
     @POST("/auth/login/kakao")
     suspend fun loginKakao(@Header("Authorization") kakaoToken: String): NetworkResult<LoginOAuthResult>

@@ -164,12 +164,12 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
     }
 
-    suspend fun likeReviewById(reviewId: Long): NetworkResult<Review> {
+    suspend fun likeReviewById(reviewId: Long): NetworkResult<Unit> {
         return sikshaApi.reviewLike(reviewId)
     }
 
-    suspend fun unlikeReviewById(reviewId: Long): NetworkResult<Review> {
-        return sikshaApi.reviewLike(reviewId)
+    suspend fun unlikeReviewById(reviewId: Long): NetworkResult<Unit> {
+        return sikshaApi.reviewUnlike(reviewId)
     }
 
     suspend fun likeMenuById(menuId: Long): NetworkResult<Menu> {

@@ -1,12 +1,13 @@
 package com.wafflestudio.siksha2.compose.ui.reviews
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -23,10 +24,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +51,6 @@ import com.wafflestudio.siksha2.ui.SikshaTypography
 import com.wafflestudio.siksha2.ui.menuDetail.MenuDetailViewModel
 import com.wafflestudio.siksha2.utils.KeyboardUtil.keyboardAsState
 import com.wafflestudio.siksha2.utils.hasFinalConsInKr
-import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @Composable
@@ -61,7 +61,8 @@ fun LeaveReviewRoute(
     onNavigateUp: () -> Unit,
     onAddImage: () -> Unit,
     onClickDetails: (Uri) -> Unit,
-    context: Context,
+    onSubmitReview: (Double, String) -> Unit,
+    onUploadSuccess: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val menu by vm.menu.observeAsState()
@@ -73,7 +74,12 @@ fun LeaveReviewRoute(
 
     val keyboardState by keyboardAsState()
 
-    val scope = rememberCoroutineScope()
+    val reviewState by vm.leaveReviewState.observeAsState()
+    LaunchedEffect(reviewState) {
+        if (reviewState == MenuDetailViewModel.ReviewState.SUCCESS) {
+            onUploadSuccess()
+        }
+    }
 
     LeaveReviewScreen(
         menu = menu,
@@ -81,7 +87,11 @@ fun LeaveReviewRoute(
         submitEnabled = selectedKeywords.all { it != "" },
         keywordTitleList = keywordTitleList,
         keywordChoiceLists = keywordChoiceLists,
-        keywordIconList = listOf({ KeywordTaste() }, { KeywordPrice() }, { KeywordFoodComposition() }),
+        keywordIconList = listOf(
+            { KeywordTaste(sizePx = 22) },
+            { KeywordPrice(sizePx = 22) },
+            { KeywordFoodComposition(sizePx = 22) }
+        ),
         selectedKeywords = selectedKeywords,
         comment = comment,
         commentPlaceHolder = {
@@ -96,7 +106,7 @@ fun LeaveReviewRoute(
         imageUriList = imageUriList,
         onNavigateUp = onNavigateUp,
         onSubmitReview = {
-            scope.launch { vm.leaveReview(context) }
+            onSubmitReview(rating.toDouble(), comment.ifEmpty { commentHint!! })
         },
         onRatingChange = { rating -> vm.setReviewRating(rating) },
         onSelectKeyword = { idx, keyword -> vm.selectKeyword(idx, keyword) },
@@ -110,6 +120,7 @@ fun LeaveReviewRoute(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun LeaveReviewScreen(
     menu: Menu?,
@@ -163,7 +174,7 @@ fun LeaveReviewScreen(
                     .padding(top = 40.dp, bottom = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row {
+                FlowRow {
                     Text(
                         text = menu?.nameKr ?: "",
                         fontSize = 20.sp,
@@ -177,6 +188,13 @@ fun LeaveReviewScreen(
                                 else -> R.string.leave_review_how_about_wo_bottom
                             }
                         ),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = SikshaTheme.colors.Gray700
+                    )
+                    Spacer(Modifier.width(5.dp))
+                    Text(
+                        text = stringResource(R.string.leave_review_how_about),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = SikshaTheme.colors.Gray700

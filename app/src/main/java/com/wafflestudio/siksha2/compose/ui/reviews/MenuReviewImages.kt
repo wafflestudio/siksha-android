@@ -17,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.wafflestudio.siksha2.ui.AddPostImageIcon
 import com.wafflestudio.siksha2.ui.DeletePostImageIcon
+import com.wafflestudio.siksha2.utils.showImageViewer
 
 @Composable
 fun MenuReviewImage(
@@ -73,14 +75,16 @@ fun MenuReviewImages(
     uris: List<Uri>,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        for (uri in uris) {
+        uris.forEachIndexed { index, uri ->
             MenuReviewImage(
                 imageUri = uri,
-                modifier = Modifier.size(102.dp)
+                modifier = Modifier.size(102.dp),
+                onClick = { context.showImageViewer(uris.map { it.toString() }, index) }
             )
         }
     }

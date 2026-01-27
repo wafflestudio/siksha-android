@@ -33,7 +33,7 @@ fun MenuReviewItem(
     timeText: String,
     reviewText: String?,
     isLiked: Boolean,
-    likeCount: Long,
+    likeCount: Long?,
     modifier: Modifier = Modifier,
     onToggleLike: () -> Unit = {},
     keywords: List<String> = listOf(),
@@ -59,7 +59,7 @@ fun MenuReviewItem(
             Spacer(Modifier.width(10.dp))
             MenuReviewLikeButton(
                 isLiked = isLiked,
-                likeCount = likeCount.toInt(),
+                likeCount = likeCount?.toInt() ?: 0,
                 onToggleLike = onToggleLike
             )
         }

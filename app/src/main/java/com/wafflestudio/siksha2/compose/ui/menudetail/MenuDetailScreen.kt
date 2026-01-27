@@ -30,9 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -51,6 +53,8 @@ import kotlin.math.min
 import com.wafflestudio.siksha2.ui.KeywordFoodComposition
 import com.wafflestudio.siksha2.ui.KeywordPrice
 import com.wafflestudio.siksha2.ui.KeywordTaste
+import com.wafflestudio.siksha2.utils.showImageViewer
+import org.w3c.dom.Text
 import timber.log.Timber
 
 @Composable
@@ -58,6 +62,7 @@ fun MenuDetailRoute(
     menuId: Long,
     vm: MenuDetailViewModel,
     onToggleLikeMenu: () -> Unit,
+    onToggleLikeReview: (Review) -> Unit,
     onClickLeaveReview: () -> Unit,
     onNavigateToReviewPhoto: (Long) -> Unit,
     modifier: Modifier = Modifier
@@ -77,7 +82,11 @@ fun MenuDetailRoute(
         imageReviews = imageReviews,
         keywordDist = keywordDist ?: KeywordDist.Empty,
         onToggleLikeMenu = onToggleLikeMenu,
-        onClickLeaveReview = onClickLeaveReview,
+        onToggleLikeReview = onToggleLikeReview,
+        onClickLeaveReview = {
+            vm.notifySendReviewWaiting()
+            onClickLeaveReview()
+        },
         onNavigateToReviewPhoto = { menu?.let { onNavigateToReviewPhoto(it.id) } },
         modifier = modifier
     )
@@ -90,6 +99,7 @@ fun MenuDetailScreen(
     imageReviews: LazyPagingItems<Review>,
     keywordDist: KeywordDist,
     onToggleLikeMenu: () -> Unit,
+    onToggleLikeReview: (Review) -> Unit,
     onClickLeaveReview: () -> Unit,
     onNavigateToReviewPhoto: () -> Unit,
     modifier: Modifier = Modifier
@@ -102,7 +112,8 @@ fun MenuDetailScreen(
     }
 
     LazyColumn(
-        modifier = modifier
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
             Column(
@@ -149,6 +160,7 @@ fun MenuDetailScreen(
                     MenuKeywordStats(
                         keywordDist.keywords,
                         keywordDist.keywordCounts,
+                        keywordDist.keywordTotals,
                         keywordIcons = listOf(
                             { KeywordTaste() },
                             { KeywordPrice() },
@@ -176,11 +188,13 @@ fun MenuDetailScreen(
         item {
             Spacer(Modifier.height(10.dp).fillMaxWidth().background(SikshaTheme.colors.Gray100))
         }
-        item {
-            BriefImageReviews(
-                imageReviews = imageReviews,
-                onNavigateToReviewPhoto = onNavigateToReviewPhoto
-            )
+        if (imageReviews.itemCount > 0) {
+            item {
+                BriefImageReviews(
+                    imageReviews = imageReviews,
+                    onNavigateToReviewPhoto = onNavigateToReviewPhoto
+                )
+            }
         }
         item {
             Box(
@@ -197,22 +211,35 @@ fun MenuDetailScreen(
                 )
             }
         }
-        items(
-            reviews.itemCount,
-            key = reviews.itemKey { it.id }
-        ) { idx ->
-            val review = reviews[idx]
-            if (review != null) {
-                MenuReviewItem(
-                    userName = review.userId.toString(),
-                    menuRating = review.score.toFloat(),
-                    timeText = review.createdAt,
-                    reviewText = review.comment,
-                    isLiked = review.isLiked,
-                    likeCount = review.likeCount ?: 0L,
-                    keywords = review.keywordReviews.filterNotNull().filter { it.isNotBlank() },
-                    imageUris = review.etc.images?.map { it.toUri() } ?: listOf(),
-                    modifier = Modifier.padding(horizontal = 14.dp)
+        if (reviews.itemCount > 0) {
+            items(
+                reviews.itemCount,
+                key = reviews.itemKey { it.id }
+            ) { idx ->
+                val review = reviews[idx]
+                if (review != null) {
+                    MenuReviewItem(
+                        userName = review.userId.toString(),
+                        menuRating = review.score.toFloat(),
+                        timeText = review.createdAt,
+                        reviewText = review.comment,
+                        isLiked = review.isLiked,
+                        likeCount = review.likeCount,
+                        keywords = review.keywordReviews.filter { it != "" } as List<String>,
+                        onToggleLike = { onToggleLikeReview(review) },
+                        imageUris = review.etc.images?.map { it.toUri() } ?: listOf(),
+                        modifier = Modifier.padding(horizontal = 14.dp)
+                    )
+                }
+            }
+        } else {
+            item {
+                Text(
+                    text = stringResource(R.string.menu_detail_no_review),
+                    fontSize = 15.sp,
+                    color = SikshaTheme.colors.Black,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 30.dp)
                 )
             }
         }
@@ -226,6 +253,7 @@ fun BriefImageReviews(
     modifier: Modifier = Modifier
 ) {
     val imagePreviewScrollState = rememberScrollState()
+    val context = LocalContext.current
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -251,7 +279,7 @@ fun BriefImageReviews(
         )
     }
     Row(
-        modifier = Modifier
+        modifier = Modifier.fillMaxWidth()
             .padding(horizontal = 16.dp)
             .horizontalScroll(imagePreviewScrollState),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -275,7 +303,10 @@ fun BriefImageReviews(
                         imageUri = it!!.toUri(),
                         modifier = Modifier
                             .size(120.dp)
-                            .clip(RoundedCornerShape(10.dp))
+                            .clip(RoundedCornerShape(10.dp)),
+                        onClick = {
+                            context.showImageViewer(listOf(it), 0)
+                        }
                     )
                 }
             } else {

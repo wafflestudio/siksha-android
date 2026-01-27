@@ -66,14 +66,24 @@ class MenuDetailFragment : Fragment() {
                             }
                         }
                     },
-                    onClickLeaveReview = {
-                        if (args.isTodayMenu) {
-                            val action =
-                                MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()
-                            findNavController().navigate(action)
-                        } else {
-                            showToast("오늘 메뉴만 평가할 수 있습니다.")
+                    onToggleLikeReview = {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            when (val response = vm.toggleReviewLike(it)) {
+                                is NetworkResult.Success -> { }
+                                is NetworkResult.Failure -> showToast(response.message)
+                                is NetworkResult.NetworkError -> showToast(getString(R.string.common_network_error))
+                                else -> showToast(getString(R.string.common_unknown_error))
+                            }
                         }
+                    },
+                    onClickLeaveReview = {
+                        // if (args.isTodayMenu) {
+                        val action =
+                            MenuDetailFragmentDirections.actionMenuDetailFragmentToLeaveReviewFragment()
+                        findNavController().navigate(action)
+                        // } else {
+                        // showToast("오늘 메뉴만 평가할 수 있습니다.")
+                        // }
                     },
                     onNavigateToReviewPhoto = {
                         val action =

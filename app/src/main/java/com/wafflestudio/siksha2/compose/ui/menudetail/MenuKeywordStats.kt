@@ -2,9 +2,12 @@ package com.wafflestudio.siksha2.compose.ui.menudetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -24,29 +27,45 @@ import com.wafflestudio.siksha2.ui.SikshaTheme
 fun MenuKeywordStat(
     keywordString: String,
     keywordCount: Long,
+    keywordTotal: Long,
     keywordIcon: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier.background(color = SikshaTheme.colors.Gray100, shape = RoundedCornerShape(8.dp))
-            .padding(top = 6.dp, bottom = 6.dp, start = 14.dp, end = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Box(
+        modifier = modifier.fillMaxWidth()
+            .background(color = SikshaTheme.colors.Gray100, shape = RoundedCornerShape(8.dp))
     ) {
-        keywordIcon()
-        Spacer(Modifier.width(6.dp))
-        Text(
-            text = keywordString,
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Bold,
-            color = SikshaTheme.colors.Gray600,
-            modifier = Modifier.weight(1f)
-        )
-        Text(
-            text = keywordCount.toString(),
-            fontSize = 14.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = SikshaTheme.colors.Orange500
-        )
+        if (keywordCount > 0) {
+            Box(modifier = Modifier.matchParentSize()) {
+                Box(
+                    modifier = Modifier.fillMaxHeight()
+                        .fillMaxWidth(keywordCount.toFloat() / keywordTotal.toFloat())
+                        .align(Alignment.CenterStart)
+                        .background(color = SikshaTheme.colors.OrangeTint, shape = RoundedCornerShape(8.dp))
+                )
+            }
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(top = 6.dp, bottom = 6.dp, start = 14.dp, end = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            keywordIcon()
+            Spacer(Modifier.width(6.dp))
+            Text(
+                text = keywordString,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold,
+                color = if (keywordString in listOf("맛", "가격", "음식구성")) SikshaTheme.colors.Gray600 else SikshaTheme.colors.Gray800,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = keywordCount.toString(),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = SikshaTheme.colors.Orange500
+            )
+        }
     }
 }
 
@@ -54,6 +73,7 @@ fun MenuKeywordStat(
 fun MenuKeywordStats(
     keywords: List<String>,
     keywordCounts: List<Long>,
+    keywordTotals: List<Long>,
     keywordIcons: List<@Composable () -> Unit>,
     modifier: Modifier = Modifier
 ) {
@@ -61,10 +81,14 @@ fun MenuKeywordStats(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
+        // TODO: 빈 스트링일 때 처리
         for (i in keywords.ifEmpty { listOf("맛", "가격", "음식구성") }.indices) {
+            var keyword = keywords[i]
+            if (keyword == "") keyword = listOf("맛", "가격", "음식구성")[i]
             MenuKeywordStat(
-                keywordString = keywords.ifEmpty { listOf("맛", "가격", "음식구성") }[i],
+                keywordString = keyword,
                 keywordCount = keywordCounts.ifEmpty { listOf<Long>(0, 0, 0) }[i],
+                keywordTotal = keywordTotals.ifEmpty { listOf<Long>(0, 0, 0) }[i],
                 keywordIcon = keywordIcons[i]
             )
         }
@@ -76,12 +100,13 @@ fun MenuKeywordStats(
 fun MenuKeywordStatsPreview() {
     MenuKeywordStats(
         keywords = listOf("맛", "가격", "음식구성"),
-        keywordCounts = listOf(12, 3, 1),
+        keywordCounts = listOf(6, 2, 1),
+        keywordTotals = listOf(12, 3, 1),
         keywordIcons = listOf(
             { CancelIcon() },
             { CancelIcon() },
             { CancelIcon() }
         ),
-        modifier = Modifier.height(150.dp)
+        modifier = Modifier.height(300.dp)
     )
 }
