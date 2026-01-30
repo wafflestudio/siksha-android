@@ -145,7 +145,7 @@ fun MenuGroupList(
                 state = listState,
                 contentPadding = PaddingValues(top = toolbarHeight),
                 modifier = Modifier.fillMaxSize()
-                    .padding(start = 8.dp, end = 8.dp, bottom = 17.dp),
+                    .padding(start = 8.dp, end = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(18.dp)
             ) {
                 items(menuGroupList) { menuGroup ->
@@ -174,6 +174,9 @@ fun MenuGroupList(
                             onToggleLikeMenu = onToggleLikeMenu
                         )
                     }
+                }
+                item {
+                    Spacer(Modifier.height(17.dp))
                 }
             }
         } else {
