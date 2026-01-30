@@ -569,7 +569,8 @@ fun PostImages(
             )
         }
         AddPostImageIcon(
-            modifier = Modifier.clickable { onAddImage() }
+            modifier = Modifier.size(106.dp)
+                .clickable { onAddImage() }
         )
     }
 }

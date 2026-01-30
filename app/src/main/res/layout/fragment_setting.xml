@@ -61,7 +61,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/frame_setting_layout"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_gravity="center">
 
         <com.wafflestudio.siksha2.components.SettingItemRow
@@ -70,8 +70,38 @@
             android:layout_height="wrap_content"
             android:paddingVertical="12dp"
             android:paddingStart="16dp"
-            android:paddingEnd="12dp"
+            android:paddingEnd="9dp"
             app:itemText="내가 쓴 글" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_primary"
+            android:layout_marginHorizontal="8dp" />
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/my_review_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="9dp"
+            app:itemText="나의 평가 관리" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_primary"
+            android:layout_marginHorizontal="8dp" />
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/my_favorite_menu_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="9dp"
+            app:itemText="내가 찜한 메뉴" />
 
     </LinearLayout>
 

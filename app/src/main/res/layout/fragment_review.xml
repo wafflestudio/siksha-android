@@ -48,17 +48,24 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/review_list"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/review_compose"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
         android:paddingTop="10dp"
-        android:paddingBottom="20dp"
-        android:visibility="gone"
-        tools:listitem="@layout/item_review" />
+        android:paddingBottom="20dp"/>
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/review_list"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginHorizontal="16dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:clipToPadding="false"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:paddingBottom="20dp"-->
+<!--        android:visibility="gone"-->
+<!--        tools:listitem="@layout/item_review" />-->
 
     <TextView
         android:id="@+id/text_no_reviews"

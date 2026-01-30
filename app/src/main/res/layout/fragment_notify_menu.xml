@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_main">
+
+    <LinearLayout
+        android:id="@+id/tool_bar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/background_GNB"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nanum_square_extra_bold"
+            android:text="메뉴 알림 설정"
+            android:textColor="@color/text_GNB"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/back_button_invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:src="@drawable/ic_back_arrow"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/alarm_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/frame_setting_layout"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/alarm_toggle_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="14dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp"
+            app:itemText="찜한 메뉴 알림 받기" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/border_primary"
+            android:layout_marginHorizontal="16dp" />
+
+        <com.wafflestudio.siksha2.components.SettingItemRow
+            android:id="@+id/alarm_time_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="14dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="18dp"
+            app:itemText="메뉴 알림 시간" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/guide_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/nanum_square_bold"
+        android:text="알림 받을 메뉴를 선택하세요."
+        android:textColor="@color/gray_600"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/alarm_setting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/no_menu_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="251dp"
+        android:fontFamily="@font/nanum_square_bold"
+        android:text="내가 찜한 메뉴가 없어요"
+        android:textColor="@color/gray_600"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@id/alarm_setting"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible" />
+
+    <FrameLayout
+        android:id="@+id/layout_menu_group_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintTop_toBottomOf="@id/guide_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/menu_group_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            android:visibility="invisible"
+            tools:listitem="@layout/item_notify_menu_group" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

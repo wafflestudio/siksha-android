@@ -121,7 +121,7 @@ fun AddPostImageIcon(
     modifier: Modifier = Modifier
 ) {
     Image(
-        modifier = modifier.size(106.dp),
+        modifier = modifier,
         painter = painterResource(R.drawable.ic_add_post_image),
         contentDescription = "add image"
     )
@@ -169,5 +169,41 @@ fun SpeechBubbleIcon(
         painter = painterResource(R.drawable.ic_speech_bubble),
         colorFilter = colorFilter,
         contentDescription = ""
+    )
+}
+
+@Composable
+fun KeywordTaste(
+    modifier: Modifier = Modifier,
+    sizePx: Int = 24
+) {
+    Image(
+        modifier = modifier.size(sizePx.dp),
+        painter = painterResource(R.drawable.ic_keyword_taste),
+        contentDescription = null
+    )
+}
+
+@Composable
+fun KeywordPrice(
+    modifier: Modifier = Modifier,
+    sizePx: Int = 24
+) {
+    Image(
+        modifier = modifier.size(sizePx.dp),
+        painter = painterResource(R.drawable.ic_keyword_price),
+        contentDescription = null
+    )
+}
+
+@Composable
+fun KeywordFoodComposition(
+    modifier: Modifier = Modifier,
+    sizePx: Int = 24
+) {
+    Image(
+        modifier = modifier.size(sizePx.dp),
+        painter = painterResource(R.drawable.ic_keyword_food_composition),
+        contentDescription = null
     )
 }

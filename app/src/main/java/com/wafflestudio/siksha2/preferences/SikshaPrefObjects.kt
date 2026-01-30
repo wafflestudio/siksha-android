@@ -78,4 +78,40 @@ class SikshaPrefObjects @Inject constructor(
             serializer,
             MenuFilterCondition::class.java
         )
+
+    val favoriteModalShown: Preference<Boolean> =
+        Preference(
+            "favoriteModalShown",
+            false,
+            sharedPreferences,
+            serializer,
+            Boolean::class.java
+        )
+
+    val favoriteTooltipShown: Preference<Boolean> =
+        Preference(
+            "favoriteTooltipShown",
+            false,
+            sharedPreferences,
+            serializer,
+            Boolean::class.java
+        )
+
+    val fcmToken: Preference<String> =
+        Preference(
+            "fcmToken",
+            "",
+            sharedPreferences,
+            serializer,
+            String::class.java
+        )
+
+    val alarmEnabled: Preference<Boolean> =
+        Preference(
+            "alarmEnabled",
+            false,
+            sharedPreferences,
+            serializer,
+            Boolean::class.java
+        )
 }

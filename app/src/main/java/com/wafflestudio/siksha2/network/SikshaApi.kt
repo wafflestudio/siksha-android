@@ -10,7 +10,7 @@ import retrofit2.http.*
 import java.time.LocalDate
 
 interface SikshaApi {
-    @GET("/menus/lo")
+    @GET("/menus")
     suspend fun fetchMenuGroups(
         @Query("start_date") startDate: LocalDate,
         @Query("end_date") endDate: LocalDate
@@ -25,11 +25,39 @@ interface SikshaApi {
     @GET("/menus/festival")
     suspend fun isFestivalDate(@Path(value = "input_date") inputDate: String): NetworkResult<FestivalDateCheckResponse>
 
-    @GET("/reviews/")
+    @GET("/menus/me")
+    suspend fun getFavoriteMenus(
+        @Header("Authorization") token: String
+    ): NetworkResult<GetFavoriteMenusResponse>
+
+    @POST("/menus/{menu_id}/alarm/on")
+    suspend fun postAlarmOn(
+        @Path("menu_id") menuId: Long,
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @POST("/menus/{menu_id}/alarm/off")
+    suspend fun postAlarmOff(
+        @Path("menu_id") menuId: Long,
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @POST("/menus/alarm/off")
+    suspend fun postAlarmOffAll(
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @POST("/menus/alarm/on")
+    suspend fun postAlarmOnAll(
+        @Header("Authorization") token: String
+    ): NetworkResult<AlarmResponse>
+
+    @GET("/reviews")
     suspend fun fetchReviews(
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
-        @Query("per_page") perPage: Long
+        @Query("per_page") perPage: Long,
+        @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
     @GET("/reviews/filter")
@@ -37,35 +65,98 @@ interface SikshaApi {
         @Query("menu_id") menuId: Long,
         @Query("page") page: Long,
         @Query("per_page") perPage: Long,
-        @Query("etc") etc: Boolean = true
+        @Query("image") etc: Boolean = true,
+        @Query("is_login") isLogin: Boolean = true
     ): NetworkResult<FetchReviewsResult>
 
-    @GET("/restaurants/")
+    @GET("/reviews/keyword/dist")
+    suspend fun fetchKeywordDist(
+        @Query("menu_id") menuId: Long
+    ): NetworkResult<KeywordScoreDistributionResponse>
+
+    @GET("/restaurants")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
-    @POST("/reviews/")
+    @POST("/reviews")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
+
+    @PATCH("/reviews")
+    suspend fun updateReviews(
+        @Query("menu_id") menuId: Long,
+        @Query("page") page: Long,
+        @Query("per_page") perPage: Long
+    ): NetworkResult<FetchReviewsResult>
+
+    @DELETE("/reviews/{review_id}")
+    suspend fun deleteReviews(
+        @Path("review_id") reviewId: Long
+    ): Response<Unit?>
+
+    @GET("/reviews/me")
+    suspend fun fetchMyReviews(
+        @Query("page") page: Long,
+        @Query("perPage") perPage: Long
+    ): NetworkResult<FetchMyReviewsResult>
 
     @Multipart
     @POST("/reviews/images")
     suspend fun leaveMenuReviewImages(
         @Part("menu_id") menuId: Long,
         @Part("score") score: Long,
+        @Part("taste") taste: String,
+        @Part("price") price: String,
+        @Part("food_composition") foodComposition: String,
         @Part comment: MultipartBody.Part,
         @Part images: List<MultipartBody.Part>
     ): NetworkResult<LeaveReviewResult>
 
+    @Multipart
+    @PATCH("/reviews/{review_id}")
+    suspend fun patchMenuReview(
+        @Path("review_id") reviewId: Long,
+        @Part("menu_id") menuId: Long,
+        @Part("score") score: Long,
+        @Part("taste") taste: String,
+        @Part("price") price: String,
+        @Part("food_composition") foodComposition: String,
+        @Part comment: MultipartBody.Part,
+        @Part images: List<MultipartBody.Part>
+    ): NetworkResult<LeaveReviewResult>
+
+    @POST("/reviews/{review_id}/like")
+    suspend fun reviewLike(@Path("review_id") reviewId: Long): NetworkResult<Unit>
+
+    @DELETE("/reviews/{review_id}/like")
+    suspend fun reviewUnlike(@Path("review_id") reviewId: Long): NetworkResult<Unit>
+
     @POST("/auth/login/kakao")
-    suspend fun loginKakao(@Header("kakao-token") kakaoToken: String): NetworkResult<LoginOAuthResult>
+    suspend fun loginKakao(@Header("Authorization") kakaoToken: String): NetworkResult<LoginOAuthResult>
 
     @POST("/auth/login/google")
-    suspend fun loginGoogle(@Header("google-token") googleToken: String): NetworkResult<LoginOAuthResult>
+    suspend fun loginGoogle(@Header("Authorization") googleToken: String): NetworkResult<LoginOAuthResult>
 
-    @DELETE("/auth/")
+    @DELETE("/auth")
     suspend fun deleteAccount()
 
     @POST("/auth/refresh")
-    suspend fun refreshToken(@Header("authorization-token") token: String): NetworkResult<LoginOAuthResult>
+    suspend fun refreshToken(@Header("Authorization") token: String): NetworkResult<LoginOAuthResult>
+
+    @POST("/auth/userDevice")
+    suspend fun registerUserDevice(
+        @Body body: Map<String, String>,
+        @Header("Authorization") authorization: String
+    ): Response<Unit>
+
+    @POST("/auth/alarm")
+    suspend fun postAlarmType(
+        @Header("Authorization") token: String,
+        @Body body: Map<String, String>
+    ): NetworkResult<Unit>
+
+    @GET("/auth/alarm")
+    suspend fun getAlarmType(
+        @Header("Authorization") token: String
+    ): NetworkResult<GetAlarmTypeResponse>
 
     @GET("/reviews/comments/recommendation")
     suspend fun fetchRecommendationReviewComments(@Query("score") score: Long):
@@ -80,11 +171,11 @@ interface SikshaApi {
         @Body req: VocParam
     ): NetworkResult<Unit>
 
-    @GET("/auth/me/image")
+    @GET("/auth/me")
     suspend fun getUserData(): NetworkResult<GetUserDataResult>
 
     @Multipart
-    @PATCH("/auth/me/image/profile")
+    @PATCH("/auth/me/profile")
     suspend fun updateUserData(
         @Part image: MultipartBody.Part?,
         @Part("change_to_default_image") changeToDefaultImage: Boolean,

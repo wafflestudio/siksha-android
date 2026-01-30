@@ -24,16 +24,35 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideHttpClient(sikshaPrefObjects: SikshaPrefObjects): OkHttpClient {
+    fun provideHttpClient(
+        @ApplicationContext context: Context,
+        sikshaPrefObjects: SikshaPrefObjects
+    ): OkHttpClient {
         return OkHttpClient.Builder()
+            /*
             .addInterceptor { chain ->
                 val newRequest = chain.request().newBuilder()
-                    .addHeader(
-                        AUTH_TOKEN_HEADER_KEY,
-                        sikshaPrefObjects.accessToken.getValue()
-                    )
+                    .header(AUTH_TOKEN_HEADER_KEY, sikshaPrefObjects.accessToken.getValue())
                     .build()
                 chain.proceed(newRequest)
+            }
+
+             */
+            .addInterceptor { chain ->
+                val request = chain.request()
+                val builder = request.newBuilder()
+
+                val path = request.url.encodedPath
+                val isLoginRequest = path.contains("/auth/login")
+
+                if (!isLoginRequest) {
+                    val newRequest = builder
+                        .header(AUTH_TOKEN_HEADER_KEY, sikshaPrefObjects.accessToken.getValue())
+                        .build()
+                    chain.proceed(newRequest)
+                } else {
+                    chain.proceed(request)
+                }
             }
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
@@ -70,5 +89,5 @@ object NetworkModule {
         return retrofit.create(SikshaApi::class.java)
     }
 
-    private const val AUTH_TOKEN_HEADER_KEY = "authorization-token"
+    private const val AUTH_TOKEN_HEADER_KEY = "Authorization"
 }

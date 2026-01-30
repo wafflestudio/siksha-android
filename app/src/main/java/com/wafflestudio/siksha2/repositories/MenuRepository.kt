@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingData
 import com.wafflestudio.siksha2.db.DailyMenusDao
 import com.wafflestudio.siksha2.models.DailyMenu
+import com.wafflestudio.siksha2.models.KeywordDist
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.Review
@@ -13,7 +14,9 @@ import com.wafflestudio.siksha2.network.dto.FetchReviewDistributionResult
 import com.wafflestudio.siksha2.network.dto.FetchReviewsResult
 import com.wafflestudio.siksha2.network.dto.LeaveReviewParam
 import com.wafflestudio.siksha2.network.dto.LeaveReviewResult
+import com.wafflestudio.siksha2.network.dto.ReviewRestaurant
 import com.wafflestudio.siksha2.network.result.NetworkResult
+import com.wafflestudio.siksha2.ui.menuDetail.MenuMyReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewPagingSource
 import com.wafflestudio.siksha2.ui.menuDetail.MenuReviewWithImagePagingSource
 import com.wafflestudio.siksha2.utils.toLocalDate
@@ -69,15 +72,32 @@ class MenuRepository @Inject constructor(
         return sikshaApi.fetchFestivalDates().map { it.festivalDates }
     }
 
+    suspend fun getKeywordDist(menuId: Long): NetworkResult<KeywordDist> {
+        return sikshaApi.fetchKeywordDist(menuId).map { it.toKeywordDist() }
+    }
+
     suspend fun isFestivalDate(targetDate: String): NetworkResult<Boolean> {
         return sikshaApi.isFestivalDate(targetDate).map { it.isFestival }
     }
 
+    fun getReviewsPagingSource(menuId: Long) = MenuReviewPagingSource(sikshaApi, menuId)
     fun getPagedReviewsByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
         return Pager(
             config = MenuReviewPagingSource.Config,
             pagingSourceFactory = { MenuReviewPagingSource(sikshaApi, menuId) }
         ).flow
+    }
+
+    fun getMyPagedReviewsByMenuIdFlow(): Flow<PagingData<ReviewRestaurant>> {
+        return Pager(
+            config = MenuMyReviewPagingSource.Config,
+            pagingSourceFactory = { MenuMyReviewPagingSource(sikshaApi) }
+        ).flow
+    }
+
+    suspend fun deleteReview(reviewId: Long): Boolean {
+        val response = sikshaApi.deleteReviews(reviewId)
+        return response.isSuccessful
     }
 
     fun getPagedReviewsOnlyHaveImagesByMenuIdFlow(menuId: Long): Flow<PagingData<Review>> {
@@ -87,12 +107,49 @@ class MenuRepository @Inject constructor(
         ).flow
     }
 
-    suspend fun leaveMenuReview(menuId: Long, score: Double, comment: String): NetworkResult<LeaveReviewResult> {
-        return sikshaApi.leaveMenuReview(LeaveReviewParam(menuId, score, comment))
+    suspend fun leaveMenuReview(
+        menuId: Long,
+        score: Long,
+        taste: String?,
+        price: String?,
+        foodComposition: String?,
+        comment: String?
+    ): NetworkResult<LeaveReviewResult> {
+        return sikshaApi.leaveMenuReview(
+            LeaveReviewParam(
+                menuId,
+                score,
+                taste,
+                price,
+                foodComposition,
+                comment
+            )
+        )
     }
 
-    suspend fun leaveMenuReviewImage(menuId: Long, score: Long, comment: MultipartBody.Part, images: List<MultipartBody.Part>): NetworkResult<LeaveReviewResult> {
-        return sikshaApi.leaveMenuReviewImages(menuId, score, comment, images)
+    suspend fun leaveMenuReviewImage(
+        menuId: Long,
+        score: Long,
+        taste: String = "",
+        price: String = "",
+        foodComposition: String = "",
+        comment: MultipartBody.Part,
+        images: List<MultipartBody.Part>
+    ): NetworkResult<LeaveReviewResult> {
+        return sikshaApi.leaveMenuReviewImages(menuId, score, taste, price, foodComposition, comment, images)
+    }
+
+    suspend fun patchMenuReview(
+        reviewId: Long,
+        menuId: Long,
+        score: Long,
+        taste: String = "",
+        price: String = "",
+        foodComposition: String = "",
+        comment: MultipartBody.Part,
+        images: List<MultipartBody.Part>
+    ): NetworkResult<LeaveReviewResult> {
+        return sikshaApi.patchMenuReview(reviewId, menuId, score, taste, price, foodComposition, comment, images)
     }
 
     suspend fun getReviewRecommendationComments(score: Long): NetworkResult<FetchRecommendationReviewCommentsResult> {
@@ -105,6 +162,14 @@ class MenuRepository @Inject constructor(
 
     suspend fun getFirstReviewPhotoByMenuId(menuId: Long): NetworkResult<FetchReviewsResult> {
         return sikshaApi.fetchReviewsWithImage(menuId, 1L, 5)
+    }
+
+    suspend fun likeReviewById(reviewId: Long): NetworkResult<Unit> {
+        return sikshaApi.reviewLike(reviewId)
+    }
+
+    suspend fun unlikeReviewById(reviewId: Long): NetworkResult<Unit> {
+        return sikshaApi.reviewUnlike(reviewId)
     }
 
     suspend fun likeMenuById(menuId: Long): NetworkResult<Menu> {

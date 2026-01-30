@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -12,16 +14,24 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.databinding.FragmentMainBinding
+import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
+import com.wafflestudio.siksha2.ui.main.setting.favoriteMenu.FavoriteMenuAlarmDialog
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var stateAdapter: FragmentStateAdapter
 
+    @Inject
+    lateinit var sikshaPrefs: SikshaPrefObjects
+
     private val vm: MainViewModel by activityViewModels()
 
     private var currentTabState = MainTabState.MAIN
+
+    private var pendingShowToast = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +44,32 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (vm.shouldShowFavoriteModal()) {
+            FavoriteMenuAlarmDialog { alarmEnabledIntent ->
+                val notificationEnabled =
+                    NotificationManagerCompat
+                        .from(requireContext())
+                        .areNotificationsEnabled()
+
+                val actualEnabled =
+                    if (alarmEnabledIntent) notificationEnabled else false
+
+                vm.onAlarmPermissionSelected(actualEnabled)
+
+                // 토스트 출력 시점 조절
+                if (alarmEnabledIntent && !notificationEnabled) {
+                    pendingShowToast = true
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "메뉴 알림 설정이 저장되었습니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                vm.markFavoriteModalShown()
+            }.show(parentFragmentManager, "FavoriteMenuAlarm")
+        }
 
         initTab()
     }
@@ -67,5 +103,19 @@ class MainFragment : Fragment() {
         super.onStop()
         vm.setVpState(binding.viewPager.currentItem)
         currentTabState = MainTabState.fromPosition(binding.viewPager.currentItem)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (pendingShowToast) {
+            pendingShowToast = false
+
+            Toast.makeText(
+                requireContext(),
+                "메뉴 알림 설정이 저장되었습니다",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 }
