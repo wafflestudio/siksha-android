@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -107,6 +109,10 @@ class SettingFragment : Fragment() {
         binding.vocRow.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToVocFragment()
             findNavController().navigate(action)
+        }
+
+        context.let {
+            binding.vocRow.findViewById<TextView>(R.id.setting_row_text).setTypeface(ResourcesCompat.getFont(it!!, R.font.nanum_square_bold))
         }
 
         lifecycleScope.launch {

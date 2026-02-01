@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.wafflestudio.siksha2.ui.NavigateUpIcon
 import com.wafflestudio.siksha2.ui.SikshaTheme
 import com.wafflestudio.siksha2.ui.SikshaTypography
@@ -33,6 +34,7 @@ fun TopBar(
             modifier = Modifier.align(Alignment.Center),
             color = SikshaTheme.colors.TextGNB,
             fontWeight = FontWeight.ExtraBold,
+            fontSize = 16.sp,
             style = SikshaTypography.subtitle1
         )
         Box(

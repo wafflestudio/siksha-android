@@ -49,6 +49,7 @@
     <color name="icon_close_bg">@color/gray_500</color>
     <color name="icon_white_icon">@color/black</color>
     <color name="icon_like">@color/gray_500</color>
+    <color name="icon_gray_icon">@color/gray_600</color>
 
     <color name="element_chip">@color/gray_50</color>
     <color name="element_tooltip">@color/gray_400</color>

@@ -35,7 +35,7 @@
             android:text="@string/setting_setting_user_setting"
             android:textColor="@color/text_GNB"
             android:textAlignment="center"
-            android:textSize="20dp" />
+            android:textSize="16sp" />
 
         <!-- textview 양옆 마진 맞추기용 -->
         <ImageView

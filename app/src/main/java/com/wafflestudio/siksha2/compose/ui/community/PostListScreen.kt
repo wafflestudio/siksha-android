@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -25,8 +25,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -240,17 +242,18 @@ fun PostsErrorPlaceHolder(
                 color = SikshaTheme.colors.Gray600,
                 style = SikshaTypography.subtitle1
             )
-            Button(
-                modifier = Modifier.background(SikshaTheme.colors.Orange500),
-                onClick = {
+            Text(
+                modifier = Modifier.background(
+                    SikshaTheme.colors.Orange500,
+                    RoundedCornerShape(8.dp)
+                ).clickable {
                     onClickRetry()
-                }
-            ) {
-                Text(
-                    text = stringResource(R.string.community_retry_button),
-                    color = SikshaTheme.colors.TextButton
-                )
-            }
+                }.padding(vertical = 10.dp, horizontal = 20.dp),
+                text = stringResource(R.string.community_retry_button),
+                color = SikshaTheme.colors.TextButton,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

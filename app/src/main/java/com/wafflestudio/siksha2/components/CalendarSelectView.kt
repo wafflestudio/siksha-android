@@ -215,7 +215,7 @@ class CalendarSelectView : LinearLayout {
                         ) {
                             setBackgroundResource(R.drawable.frame_day_today)
                             setTextColor(ContextCompat.getColor(context, R.color.gray_700))
-                            typeface = ResourcesCompat.getFont(context, R.font.nanum_square_regular)
+                            typeface = ResourcesCompat.getFont(context, R.font.nanum_square_bold)
                         } else {
                             setBackgroundColor(ContextCompat.getColor(context, R.color.transparent))
                             setTextColor(ContextCompat.getColor(context, R.color.gray_700))

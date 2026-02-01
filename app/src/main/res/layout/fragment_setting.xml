@@ -34,10 +34,10 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:textStyle="bold"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:gravity="center"
             android:textColor="@color/gray_900"
-            android:fontFamily="@font/nanum_square_regular"
+            android:fontFamily="@font/nanum_square_bold"
             android:maxLines="1"
             tools:text="닉네임"/>
 
@@ -47,9 +47,9 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:src="@drawable/ic_right_arrow"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_arrow_small"
             android:layout_gravity="center"
             android:layout_marginEnd="18dp" />
 
@@ -118,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="12dp"
-            android:paddingBottom="8dp"
+            android:paddingBottom="12dp"
             android:paddingStart="16dp"
             android:paddingEnd="9dp"
             app:itemText="식당 순서 변경" />
@@ -133,7 +133,7 @@
             android:id="@+id/order_favorite_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="8dp"
+            android:paddingVertical="12dp"
             android:paddingStart="16dp"
             android:paddingEnd="9dp"
             app:itemText="즐겨찾기 식당 순서 변경" />
@@ -148,7 +148,7 @@
             android:id="@+id/show_empty_check_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="8dp"
+            android:paddingVertical="12dp"
             android:paddingStart="16dp"
             android:paddingEnd="9dp"
             app:itemText="메뉴 없는 식당 숨기기"
@@ -167,7 +167,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="9dp"
-            android:paddingTop="8dp"
+            android:paddingTop="12dp"
             android:paddingBottom="12dp"
             app:itemText="계정 관리"
             />
@@ -186,10 +186,9 @@
             android:id="@+id/voc_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="8dp"
+            android:paddingVertical="12dp"
             android:paddingStart="16dp"
             android:paddingEnd="12dp"
-            android:textStyle="bold"
             app:itemText="1:1 문의하기"
             app:textColor="@color/orange_500"
             />

@@ -19,12 +19,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableFloatStateOf
@@ -103,6 +105,17 @@ fun MenuGroupList(
     val toolbarHeight = 60.dp
     val toolbarHeightPx = with(LocalDensity.current) { toolbarHeight.toPx() }
     val toolbarOffsetHeightPx = remember { mutableFloatStateOf(0f) }
+    val listState = rememberLazyListState()
+    val isScrollable by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            layoutInfo.totalItemsCount > 0 &&
+                (
+                    layoutInfo.visibleItemsInfo.firstOrNull()?.index != 0 ||
+                        layoutInfo.visibleItemsInfo.lastOrNull()?.index != layoutInfo.totalItemsCount - 1
+                    )
+        }
+    }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -110,7 +123,7 @@ fun MenuGroupList(
                 val delta = available.y
                 val newOffset = (toolbarOffsetHeightPx.floatValue + delta)
                     .coerceIn(-toolbarHeightPx, 0f)
-                toolbarOffsetHeightPx.floatValue = newOffset
+                toolbarOffsetHeightPx.floatValue = if (isScrollable) newOffset else 0f
                 return Offset.Zero
             }
         }
@@ -129,9 +142,10 @@ fun MenuGroupList(
     ) {
         if (menuGroupList.isNotEmpty()) {
             LazyColumn(
+                state = listState,
                 contentPadding = PaddingValues(top = toolbarHeight),
                 modifier = Modifier.fillMaxSize()
-                    .padding(start = 8.dp, end = 8.dp, bottom = 17.dp),
+                    .padding(start = 8.dp, end = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(18.dp)
             ) {
                 items(menuGroupList) { menuGroup ->
@@ -160,6 +174,9 @@ fun MenuGroupList(
                             onToggleLikeMenu = onToggleLikeMenu
                         )
                     }
+                }
+                item {
+                    Spacer(Modifier.height(17.dp))
                 }
             }
         } else {
