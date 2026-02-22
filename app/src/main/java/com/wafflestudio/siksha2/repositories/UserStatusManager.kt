@@ -6,6 +6,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.Scope
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
 import com.wafflestudio.siksha2.R
 import com.wafflestudio.siksha2.models.User
@@ -21,9 +22,9 @@ import com.wafflestudio.siksha2.network.dto.core.UserDto
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.utils.showToast
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,7 +47,7 @@ class UserStatusManager @Inject constructor(
                 sikshaPrefObjects.oAuthProvider.setValue(provider)
                 sikshaPrefObjects.accessToken.setValue(attachBearerPrefix(accessToken))
 
-                registerFcmTokenAfterLogin(attachBearerPrefix(accessToken))
+                syncFcmTokenIfNeeded(accessToken)
             }
             else -> { }
         }
@@ -167,18 +168,38 @@ class UserStatusManager @Inject constructor(
             "Bearer $token"
         }
 
-    private fun registerFcmTokenAfterLogin(accessToken: String) {
-        val fcmToken = sikshaPrefObjects.fcmToken.getValue()
+    suspend fun syncFcmTokenIfNeeded(accessToken: String? = null) {
+        val bearer = accessToken ?: sikshaPrefObjects.accessToken.getValue()
+        if (bearer.isBlank()) return
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = sikshaApi.registerUserDevice(
-                    mapOf("fcm_token" to fcmToken),
-                    accessToken
+        // 토큰 불러오기
+        val currentToken = try {
+            FirebaseMessaging.getInstance().token.await()
+        } catch (e: Exception) {
+            Log.e("UserStatusManager", "FCM token fetch failed", e)
+            return
+        }
+
+        // prefs에 현재 토큰 저장 (기존 onNewToken으로도 저장되지만 안전하게 동기화)
+        sikshaPrefObjects.fcmToken.setValue(currentToken)
+
+        // 서버 등록 여부 판단
+        val lastRegistered = sikshaPrefObjects.lastRegisteredFcmToken.getValue()
+        val needsRegister = lastRegistered.isBlank() || lastRegistered != currentToken
+        if (!needsRegister) return
+
+        // 서버 등록
+        try {
+            withContext(Dispatchers.IO) {
+                sikshaApi.registerUserDevice(
+                    mapOf("fcm_token" to currentToken),
+                    attachBearerPrefix(bearer)
                 )
-            } catch (e: Exception) {
-                Log.e("UserStatusManager", "FCM registration exception", e)
             }
+            sikshaPrefObjects.lastRegisteredFcmToken.setValue(currentToken)
+            Timber.d("FCM token registered to server: $currentToken")
+        } catch (e: Exception) {
+            Log.e("UserStatusManager", "FCM registration exception", e)
         }
     }
 }

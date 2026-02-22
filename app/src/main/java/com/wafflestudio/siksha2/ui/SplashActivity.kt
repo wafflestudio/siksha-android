@@ -79,6 +79,8 @@ class SplashActivity : AppCompatActivity() {
                 return@launch
             }
 
+            userStatusManager.syncFcmTokenIfNeeded()
+
             // 실험
             delay(250L)
             startActivity(Intent(this@SplashActivity, RootActivity::class.java))
