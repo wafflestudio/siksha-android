@@ -323,6 +323,7 @@ class DailyRestaurantFragment : Fragment() {
                 )
 
                 binding.filterOpen.showCheck(condition.isOpen)
+                binding.filterFavorite.showCheck(condition.favorite)
                 binding.filterReview.showCheck(condition.hasReview)
 
                 binding.filterRating.setFilter(
@@ -372,6 +373,10 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.filterOpen.setOnClickListener {
             vm.toggleOpenFilter()
+        }
+
+        binding.filterFavorite.setOnClickListener {
+            vm.toggleFavoriteFilter()
         }
 
         binding.filterReview.setOnClickListener {

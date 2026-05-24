@@ -70,6 +70,7 @@ class SikshaPrefObjects @Inject constructor(
                 minPrice = 2500f,
                 maxPrice = 10000f,
                 isOpen = false,
+                favorite = false,
                 hasReview = false,
                 minRating = 0f,
                 categories = emptySet()

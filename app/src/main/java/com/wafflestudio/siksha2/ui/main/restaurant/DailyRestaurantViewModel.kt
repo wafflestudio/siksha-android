@@ -199,6 +199,15 @@ class DailyRestaurantViewModel @Inject constructor(
         setMenuFilterCondition(newCondition)
         trackInstantToggle("is_open_now", !currentCondition.isOpen)
     }
+    
+    fun toggleFavoriteFilter(){
+        val currentCondition = _menuFilterCondition.value
+        val newCondition = currentCondition.copy(
+            favorite = !currentCondition.favorite
+        )
+        setMenuFilterCondition(newCondition)
+        trackInstantToggle("is_favorite", !currentCondition.favorite)
+    }
 
     fun toggleReviewFilter() {
         val currentCondition = _menuFilterCondition.value
@@ -345,6 +354,12 @@ class DailyRestaurantViewModel @Inject constructor(
                         newRestaurant
                     }
             }
+            .combine(menuFilterCondition) { menuGroups, condition ->
+                menuGroups.filter { item ->
+                    !condition.favorite || item.isFavorite
+                }
+            }
+
             // 식당 순서, 표시 여부 조정
             .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }
             .combine(if (showOnlyFavorite) favoriteRestaurantOrder else restaurantOrder) { menuGroups, (order) ->
