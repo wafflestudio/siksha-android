@@ -37,7 +37,6 @@ class RootActivity : AppCompatActivity() {
             )
             v.updatePadding(
                 left = insets.left,
-                top = insets.top,
                 bottom = insets.bottom,
                 right = insets.right
             )
