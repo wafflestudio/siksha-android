@@ -3,7 +3,6 @@ package com.wafflestudio.siksha2.ui
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -65,7 +64,7 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             if (checkInternetConnection().not()) {
-                showToast("네트워크 연결이 불안정합니다.")
+                showToast("?�트?�크 ?�결??불안?�합?�다.")
                 delay(1000L)
                 startActivity(Intent(this@SplashActivity, RootActivity::class.java))
                 finish()
@@ -81,14 +80,13 @@ class SplashActivity : AppCompatActivity() {
 
             userStatusManager.syncFcmTokenIfNeeded()
 
-            // 실험
+            // ?�험
             delay(250L)
             startActivity(Intent(this@SplashActivity, RootActivity::class.java))
             finish()
         }
 
         featureChecker.fetchFeaturesConfig()
-        changeAppIcon()
 
         setUpGoogleLogin()
         setUpKakaoLogin()
@@ -131,7 +129,7 @@ class SplashActivity : AppCompatActivity() {
         kakaoSignInLauncher = {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    showToast("카카오 로그인 실패")
+                    showToast("카카??로그???�패")
                     Timber.e(error)
                 } else if (token != null) {
                     onOAuthSuccess(OAuthProvider.KAKAO, token.accessToken)
@@ -169,7 +167,7 @@ class SplashActivity : AppCompatActivity() {
                         onOAuthSuccess(OAuthProvider.GOOGLE, token)
                     }
                 } catch (e: ApiException) {
-                    showToast("구글 로그인 실패")
+                    showToast("구�? 로그???�패")
                     Timber.e(e)
                 }
             }
@@ -189,44 +187,6 @@ class SplashActivity : AppCompatActivity() {
 
     private suspend fun checkLoginStatus(): Boolean {
         return userStatusManager.refreshUserToken()
-    }
-
-    private fun changeAppIcon() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // val mainComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SplashActivity")
-            val normalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaNormal")
-            val festivalIconComponent = ComponentName(this, "com.wafflestudio.siksha2.ui.SikshaFestival")
-
-            if (featureChecker.isFeatureEnabled("festivalFeatureEnabled") &&
-                packageManager.getComponentEnabledSetting(festivalIconComponent) != PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            ) {
-                showToast("축제 아이콘 적용을 위해 앱을 재시작합니다.")
-                packageManager.setComponentEnabledSetting(
-                    festivalIconComponent,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP
-                )
-                packageManager.setComponentEnabledSetting(
-                    normalIconComponent,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP
-                )
-            } else if (!featureChecker.isFeatureEnabled("festivalFeatureEnabled") &&
-                packageManager.getComponentEnabledSetting(normalIconComponent) != PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            ) {
-                showToast("아이콘 변경을 위해 앱을 재시작합니다.")
-                packageManager.setComponentEnabledSetting(
-                    normalIconComponent,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP
-                )
-                packageManager.setComponentEnabledSetting(
-                    festivalIconComponent,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP
-                )
-            }
-        }
     }
 
     private fun handlePostLoginNotificationSetup() {
@@ -262,3 +222,4 @@ class SplashActivity : AppCompatActivity() {
         finish()
     }
 }
+
