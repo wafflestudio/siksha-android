@@ -14,7 +14,7 @@ class MainViewModel @Inject constructor(
     private val sikshaPrefs: SikshaPrefObjects
 ) : ViewModel() {
 
-    private var vpState = 1
+    private var vpState = 0
 
     fun getVpState() = vpState
     fun setVpState(vpState: Int) {
