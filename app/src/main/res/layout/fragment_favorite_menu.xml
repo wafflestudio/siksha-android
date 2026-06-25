@@ -32,8 +32,8 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="12dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nanum_square_extra_bold"
                 android:text="내가 찜한 메뉴"
@@ -45,7 +45,7 @@
                 android:id="@+id/alarm_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="21dp"
                 android:src="@drawable/ic_alarm" />
         </LinearLayout>
 

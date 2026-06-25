@@ -64,7 +64,7 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             if (checkInternetConnection().not()) {
-                showToast("?�트?�크 ?�결??불안?�합?�다.")
+                showToast("?�트?�크 ?�결??불안?�합?�다.")
                 delay(1000L)
                 startActivity(Intent(this@SplashActivity, RootActivity::class.java))
                 finish()
@@ -80,7 +80,7 @@ class SplashActivity : AppCompatActivity() {
 
             userStatusManager.syncFcmTokenIfNeeded()
 
-            // ?�험
+            // ?�험
             delay(250L)
             startActivity(Intent(this@SplashActivity, RootActivity::class.java))
             finish()
@@ -129,7 +129,7 @@ class SplashActivity : AppCompatActivity() {
         kakaoSignInLauncher = {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    showToast("카카??로그???�패")
+                    showToast("카카??로그???�패")
                     Timber.e(error)
                 } else if (token != null) {
                     onOAuthSuccess(OAuthProvider.KAKAO, token.accessToken)
@@ -167,7 +167,7 @@ class SplashActivity : AppCompatActivity() {
                         onOAuthSuccess(OAuthProvider.GOOGLE, token)
                     }
                 } catch (e: ApiException) {
-                    showToast("구�? 로그???�패")
+                    showToast("구�? 로그???�패")
                     Timber.e(e)
                 }
             }
@@ -222,4 +222,3 @@ class SplashActivity : AppCompatActivity() {
         finish()
     }
 }
-
