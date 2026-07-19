@@ -18,6 +18,9 @@ interface RestaurantsDao {
     @Query("SELECT * FROM restaurants WHERE is_favorite")
     suspend fun getFavoriteAll(): List<RestaurantInfo>
 
+    @Query("SELECT * FROM restaurants WHERE visible")
+    suspend fun getHiddenAll(): List<RestaurantInfo>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: List<RestaurantInfo>)
 
@@ -34,6 +37,22 @@ interface RestaurantsDao {
         target?.let {
             val temp = it.copy(isFavorite = it.isFavorite.not())
             insert(listOf(temp))
+        }
+    }
+
+    @Transaction
+    suspend fun setRestaurantFavoriteById(id: Long, isFavorite: Boolean) {
+        val target = getRestaurantById(id)
+        target?.let {
+            insert(listOf(it.copy(isFavorite = isFavorite)))
+        }
+    }
+
+    @Transaction
+    suspend fun setRestaurantVisibleById(id: Long, visible: Boolean) {
+        val target = getRestaurantById(id)
+        target?.let {
+            insert(listOf(it.copy(visible = visible)))
         }
     }
 }

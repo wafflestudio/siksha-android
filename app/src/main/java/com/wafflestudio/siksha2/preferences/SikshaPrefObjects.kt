@@ -34,6 +34,15 @@ class SikshaPrefObjects @Inject constructor(
             RestaurantOrder::class.java
         )
 
+    val hiddenRestaurantsOrder: Preference<RestaurantOrder> =
+        Preference(
+            "hiddenRestaurantsOrder",
+            RestaurantOrder(listOf()),
+            sharedPreferences,
+            serializer,
+            RestaurantOrder::class.java
+        )
+
     val accessToken: Preference<String> =
         Preference(
             "accessToken",
