@@ -44,8 +44,16 @@ class RestaurantRepository @Inject constructor(
 
     suspend fun fetchPersonalRestaurants(): NetworkResult<List<RestaurantInfo>> =
         withContext(Dispatchers.IO) {
-            sikshaApi.fetchPersonalRestaurants().map { response ->
-                response.result.map(PersonalRestaurantDto::toRestaurantInfo)
+            when (val response = sikshaApi.fetchPersonalRestaurants()) {
+                is NetworkResult.Success -> {
+                    val restaurants =
+                        response.body.result.map(PersonalRestaurantDto::toRestaurantInfo)
+                    restaurantsDao.insert(restaurants)
+                    NetworkResult.Success(restaurants)
+                }
+                is NetworkResult.Failure -> response
+                is NetworkResult.NetworkError -> response
+                is NetworkResult.UnknownError -> response
             }
         }
 

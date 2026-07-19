@@ -26,8 +26,14 @@ interface RestaurantsDao {
 
     @Transaction
     suspend fun update(item: List<RestaurantInfo>) {
-        val favoritesId = getFavoriteAll().map { it.id }
-        val result = item.map { it.copy(isFavorite = it.id in favoritesId) }
+        val personalStates = getAll().associateBy { it.id }
+        val result = item.map { restaurant ->
+            val personalState = personalStates[restaurant.id]
+            restaurant.copy(
+                isFavorite = personalState?.isFavorite ?: restaurant.isFavorite,
+                visible = personalState?.visible ?: restaurant.visible
+            )
+        }
         insert(result)
     }
 
