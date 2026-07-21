@@ -323,6 +323,7 @@ class DailyRestaurantFragment : Fragment() {
                 )
 
                 binding.filterOpen.showCheck(condition.isOpen)
+                binding.filterFavorite.showCheck(condition.favorite)
                 binding.filterReview.showCheck(condition.hasReview)
 
                 binding.filterRating.setFilter(
@@ -372,6 +373,10 @@ class DailyRestaurantFragment : Fragment() {
 
         binding.filterOpen.setOnClickListener {
             vm.toggleOpenFilter()
+        }
+
+        binding.filterFavorite.setOnClickListener {
+            vm.toggleFavoriteFilter()
         }
 
         binding.filterReview.setOnClickListener {
@@ -466,8 +471,17 @@ class DailyRestaurantFragment : Fragment() {
                             )
                         findNavController().navigate(action)
                     },
-                    onToggleFavoriteRestaurant = {
-                        vm.toggleRestaurantFavorite(it)
+                    onToggleFavoriteRestaurant = { restaurantId ->
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            when (val response = vm.toggleRestaurantFavorite(restaurantId)) {
+                                is NetworkResult.Success -> Unit
+                                is NetworkResult.Failure -> showToast(response.message)
+                                is NetworkResult.NetworkError ->
+                                    showToast(getString(R.string.common_network_error))
+                                is NetworkResult.UnknownError ->
+                                    showToast(getString(R.string.common_unknown_error))
+                            }
+                        }
                     },
                     setUpFilter = { setUpFilterOptions(it) }
                 )

@@ -55,6 +55,12 @@
                 app:filterText="영업 중" />
 
             <com.wafflestudio.siksha2.components.MenuFilterField
+                android:id = "@+id/filter_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:filterText="즐겨찾기" />
+
+            <com.wafflestudio.siksha2.components.MenuFilterField
                 android:id = "@+id/filter_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
