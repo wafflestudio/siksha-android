@@ -108,6 +108,12 @@ class RestaurantRepository @Inject constructor(
         restaurantsDao.toggleRestaurantFavoriteById(id)
     }
 
+    suspend fun getOrderedRestaurants(): List<RestaurantInfo> {
+        val allRestaurants = restaurantsDao.getAll()
+        val order = restaurantsOrder.getValue().order
+        return alignWithOrder(allRestaurants, order)
+    }
+
     suspend fun getOrderedFavoriteRestaurants(): List<RestaurantInfo> {
         val favoriteRestaurant = restaurantsDao.getFavoriteAll()
         val order = favoriteRestaurantsOrder.getValue().order

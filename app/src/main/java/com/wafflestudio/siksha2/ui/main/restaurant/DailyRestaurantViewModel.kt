@@ -263,7 +263,7 @@ class DailyRestaurantViewModel @Inject constructor(
             }
             // 필터 적용
             .combine(menuFilterCondition) { menuGroups, filterConditions -> Pair(menuGroups, filterConditions) }
-            .combine(allRestaurant) { (menuGroups), allRes ->
+            .combine(allRestaurant) { (menuGroups, filterCondition), allRes ->
                 val dateTime = LocalDateTime.now()
                 val date = dateTime.toLocalDate()
                 val time = dateTime.toLocalTime()
