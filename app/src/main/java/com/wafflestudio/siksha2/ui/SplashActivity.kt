@@ -65,7 +65,7 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             if (checkInternetConnection().not()) {
-                showToast("네트워크 연결이 불안정합니다.")
+                showToast(getString(R.string.common_network_error))
                 delay(1000L)
                 startActivity(Intent(this@SplashActivity, RootActivity::class.java))
                 finish()
@@ -131,7 +131,7 @@ class SplashActivity : AppCompatActivity() {
         kakaoSignInLauncher = {
             val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
                 if (error != null) {
-                    showToast("카카오 로그인 실패")
+                    showToast(getString(R.string.splash_kakao_login_failed))
                     Timber.e(error)
                 } else if (token != null) {
                     onOAuthSuccess(OAuthProvider.KAKAO, token.accessToken)
@@ -169,7 +169,7 @@ class SplashActivity : AppCompatActivity() {
                         onOAuthSuccess(OAuthProvider.GOOGLE, token)
                     }
                 } catch (e: ApiException) {
-                    showToast("구글 로그인 실패")
+                    showToast(getString(R.string.splash_google_login_failed))
                     Timber.e(e)
                 }
             }

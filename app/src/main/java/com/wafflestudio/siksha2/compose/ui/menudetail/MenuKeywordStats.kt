@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.sp
 import com.wafflestudio.siksha2.ui.CancelIcon
 import com.wafflestudio.siksha2.ui.SikshaTheme
 
+private val DefaultKeywords = listOf("맛", "가격", "음식구성")
+
 @Composable
 fun MenuKeywordStat(
     keywordString: String,
@@ -35,11 +37,11 @@ fun MenuKeywordStat(
         modifier = modifier.fillMaxWidth()
             .background(color = SikshaTheme.colors.Gray100, shape = RoundedCornerShape(8.dp))
     ) {
-        if (keywordCount > 0) {
+        if (keywordCount > 0 && keywordTotal > 0) {
             Box(modifier = Modifier.matchParentSize()) {
                 Box(
                     modifier = Modifier.fillMaxHeight()
-                        .fillMaxWidth(keywordCount.toFloat() / keywordTotal.toFloat())
+                        .fillMaxWidth((keywordCount.toFloat() / keywordTotal.toFloat()).coerceIn(0f, 1f))
                         .align(Alignment.CenterStart)
                         .background(color = SikshaTheme.colors.OrangeTint, shape = RoundedCornerShape(8.dp))
                 )
@@ -56,7 +58,7 @@ fun MenuKeywordStat(
                 text = keywordString,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (keywordString in listOf("맛", "가격", "음식구성")) SikshaTheme.colors.Gray600 else SikshaTheme.colors.Gray800,
+                color = if (keywordString in DefaultKeywords) SikshaTheme.colors.Gray600 else SikshaTheme.colors.Gray800,
                 modifier = Modifier.weight(1f)
             )
             Text(
@@ -81,15 +83,16 @@ fun MenuKeywordStats(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        // TODO: 빈 스트링일 때 처리
-        for (i in keywords.ifEmpty { listOf("맛", "가격", "음식구성") }.indices) {
-            var keyword = keywords[i]
-            if (keyword == "") keyword = listOf("맛", "가격", "음식구성")[i]
+        DefaultKeywords.forEachIndexed { i, defaultKeyword ->
+            val keyword = keywords.getOrNull(i)
+                ?.takeIf { it.isNotBlank() }
+                ?: defaultKeyword
+
             MenuKeywordStat(
                 keywordString = keyword,
-                keywordCount = keywordCounts.ifEmpty { listOf<Long>(0, 0, 0) }[i],
-                keywordTotal = keywordTotals.ifEmpty { listOf<Long>(0, 0, 0) }[i],
-                keywordIcon = keywordIcons[i]
+                keywordCount = keywordCounts.getOrElse(i) { 0L },
+                keywordTotal = keywordTotals.getOrElse(i) { 0L },
+                keywordIcon = keywordIcons.getOrElse(i) { { CancelIcon() } }
             )
         }
     }

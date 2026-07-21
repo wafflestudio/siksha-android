@@ -2,9 +2,14 @@ package com.wafflestudio.siksha2.components.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,13 +26,22 @@ import com.wafflestudio.siksha2.ui.SikshaTypography
 fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
+    applySystemTopInset: Boolean = true,
     navigationButton: @Composable () -> Unit = {}
 ) {
+    val insetsModifier = if (applySystemTopInset) {
+        Modifier
+            .windowInsetsPadding(WindowInsets.statusBars.union(WindowInsets.displayCutout))
+    } else {
+        Modifier
+    }
+
     Box(
         modifier = modifier
-            .height(56.dp)
             .fillMaxWidth()
             .background(SikshaTheme.colors.BackgroundGNB)
+            .then(insetsModifier)
+            .height(56.dp)
     ) {
         Text(
             text = title,
