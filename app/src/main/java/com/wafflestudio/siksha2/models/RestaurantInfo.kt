@@ -38,10 +38,10 @@ data class RestaurantInfo(
     @Json(name = "etc")
     var etc: Extra? = null,
     @ColumnInfo(name = "is_favorite")
-    @Transient()
+    @Transient
     var isFavorite: Boolean = false,
     @ColumnInfo(name = "visible")
-    @Transient()
+    @Transient
     var visible: Boolean = true
 ) : Parcelable {
 
