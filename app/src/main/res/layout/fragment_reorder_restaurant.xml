@@ -63,40 +63,24 @@
         android:textAlignment="center"
         android:background="@color/background_secondary"/>
 
-    <FrameLayout
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/empty_order"
+        android:layout_gravity="center"
+        android:fontFamily="@font/nanum_square_regular"
+        android:text="@string/reorder_no_restaurant"
+        android:textColor="@color/gray_900"
+        android:textSize="12dp"
+        android:layout_marginTop="15dp"/>
+
+    <com.woxthebox.draglistview.DragListView
+        android:id="@+id/order_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/empty_order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/nanum_square_regular"
-            android:text="@string/reorder_no_restaurant"
-            android:textColor="@color/gray_900"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-        <com.woxthebox.draglistview.DragListView
-            android:id="@+id/order_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-
-        <include
-            android:id="@+id/on_loading_container"
-            layout="@layout/component_on_loading"
-            android:visibility="gone" />
-
-        <include
-            android:id="@+id/on_error_container"
-            layout="@layout/component_on_error"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
-    </FrameLayout>
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
 
 </LinearLayout>

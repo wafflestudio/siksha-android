@@ -23,7 +23,6 @@ object DatabaseModule {
     fun provideDatabase(@ApplicationContext context: Context, moshi: Moshi): SikshaDatabase {
         return Room.databaseBuilder(context, SikshaDatabase::class.java, "siksha-db")
             .addTypeConverter(SikshaRoomTypeAdapter(moshi))
-            .fallbackToDestructiveMigration()
             .build()
     }
 

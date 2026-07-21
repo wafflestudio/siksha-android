@@ -3,12 +3,6 @@ package com.wafflestudio.siksha2.repositories
 import com.wafflestudio.siksha2.db.RestaurantsDao
 import com.wafflestudio.siksha2.models.RestaurantInfo
 import com.wafflestudio.siksha2.network.SikshaApi
-import com.wafflestudio.siksha2.network.dto.PersonalRestaurantDto
-import com.wafflestudio.siksha2.network.dto.RestaurantLikeRequest
-import com.wafflestudio.siksha2.network.dto.RestaurantLikeResponse
-import com.wafflestudio.siksha2.network.dto.RestaurantOrder
-import com.wafflestudio.siksha2.network.dto.RestaurantVisibleRequest
-import com.wafflestudio.siksha2.network.dto.RestaurantVisibleResponse
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import kotlinx.coroutines.Dispatchers
@@ -41,60 +35,6 @@ class RestaurantRepository @Inject constructor(
             }
         }
     }
-
-    suspend fun fetchPersonalRestaurants(): NetworkResult<List<RestaurantInfo>> =
-        withContext(Dispatchers.IO) {
-            when (val response = sikshaApi.fetchPersonalRestaurants()) {
-                is NetworkResult.Success -> {
-                    val restaurants =
-                        response.body.result.map(PersonalRestaurantDto::toRestaurantInfo)
-                    restaurantsDao.insert(restaurants)
-                    NetworkResult.Success(restaurants)
-                }
-                is NetworkResult.Failure -> response
-                is NetworkResult.NetworkError -> response
-                is NetworkResult.UnknownError -> response
-            }
-        }
-
-    suspend fun setPersonalRestaurantFavoriteById(
-        id: Long,
-        isFavorite: Boolean
-    ): NetworkResult<RestaurantLikeResponse> =
-        withContext(Dispatchers.IO) {
-            val response = sikshaApi.setRestaurantFavorite(
-                restaurantId = id,
-                body = RestaurantLikeRequest(like = isFavorite)
-            )
-            if (response is NetworkResult.Success) {
-                restaurantsDao.setRestaurantFavoriteById(id, response.body.liked)
-            }
-            response
-        }
-
-    suspend fun setPersonalRestaurantVisibleById(
-        id: Long,
-        visible: Boolean
-    ): NetworkResult<RestaurantVisibleResponse> =
-        withContext(Dispatchers.IO) {
-            val response = sikshaApi.setRestaurantVisible(
-                restaurantId = id,
-                body = RestaurantVisibleRequest(visible = visible)
-            )
-            if (response is NetworkResult.Success) {
-                restaurantsDao.setRestaurantVisibleById(id, response.body.visible)
-            }
-            response
-        }
-
-    suspend fun updatePersonalRestaurantOrder(
-        order: List<Long>
-    ): NetworkResult<List<Long>> =
-        withContext(Dispatchers.IO) {
-            sikshaApi.updateRestaurantOrder(RestaurantOrder(order)).map { response ->
-                response.order
-            }
-        }
 
     fun getAllRestaurantsFlow(): Flow<List<RestaurantInfo>> {
         return restaurantsDao.getAllFlow()

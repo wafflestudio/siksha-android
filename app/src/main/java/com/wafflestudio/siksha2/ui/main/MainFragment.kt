@@ -82,7 +82,7 @@ class MainFragment : Fragment() {
             setCurrentItem(currentTabState.ordinal, false)
         }
 
-        val tabIconIds = listOf(R.drawable.ic_tab_main, R.drawable.ic_tab_community, R.drawable.ic_tab_setting)
+        val tabIconIds = listOf(R.drawable.ic_tab_favorite, R.drawable.ic_tab_main, R.drawable.ic_tab_community, R.drawable.ic_tab_setting)
         tabIconIds.forEach { id ->
             val newTab = binding.tabLayout.newTab()
 

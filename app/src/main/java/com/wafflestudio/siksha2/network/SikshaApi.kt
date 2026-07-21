@@ -77,27 +77,6 @@ interface SikshaApi {
     @GET("/restaurants")
     suspend fun fetchRestaurants(): NetworkResult<FetchRestaurantsResult>
 
-    @GET("/restaurants/personal")
-    suspend fun fetchPersonalRestaurants(): NetworkResult<FetchPersonalRestaurantsResult>
-
-    @PATCH("/restaurants/like/{restaurantId}")
-    suspend fun setRestaurantFavorite(
-        @Path("restaurantId") restaurantId: Long,
-        @Body body: RestaurantLikeRequest
-    ): NetworkResult<RestaurantLikeResponse>
-
-    @PATCH("/restaurants/visible/{restaurantId}")
-    suspend fun setRestaurantVisible(
-        @Path("restaurantId") restaurantId: Long,
-        @Body body: RestaurantVisibleRequest
-    ): NetworkResult<RestaurantVisibleResponse>
-
-    @GET("/restaurants/order")
-    suspend fun fetchRestaurantOrder(): NetworkResult<RestaurantOrder>
-
-    @PATCH("/restaurants/order")
-    suspend fun updateRestaurantOrder(@Body body: RestaurantOrder): NetworkResult<RestaurantOrder>
-
     @POST("/reviews")
     suspend fun leaveMenuReview(@Body req: LeaveReviewParam): NetworkResult<LeaveReviewResult>
 
