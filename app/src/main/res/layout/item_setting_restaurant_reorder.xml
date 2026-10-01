@@ -1,32 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginBottom="1dp"
+    android:background="@android:color/transparent"
     android:gravity="center_vertical"
-    android:background="@color/background_main">
+    android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restaurant_name_background"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:background="@color/gray_50">
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:background="@drawable/frame_reorder_restaurant_item"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
 
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/restaurant_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:layout_constraintTop_toTopOf="parent"
+        <!-- 즐겨찾기 별 아이콘 -->
+        <ImageView
+            android:id="@+id/ivFavorite"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_star_off"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_star_on" />
+
+        <!-- 식당 이름 (ComposeView) -->
+        <!-- width를 0dp로 설정하여 남은 공간을 꽉 채우게 함 -->
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/restaurant_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivVisible"
+            app:layout_constraintStart_toEndOf="@id/ivFavorite"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 눈 아이콘 (노출 여부) -->
+        <ImageView
+            android:id="@+id/ivVisible"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_visibility"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_visibility_off" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- 오른쪽 영역: 드래그 핸들 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/reorder_handle_background"
         android:layout_width="wrap_content"
@@ -40,10 +71,10 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="9dp"
             android:src="@drawable/ic_three_lines"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

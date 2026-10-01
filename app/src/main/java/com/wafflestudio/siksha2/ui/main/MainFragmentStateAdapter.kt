@@ -13,7 +13,6 @@ class MainFragmentStateAdapter(mainFragment: MainFragment) : FragmentStateAdapte
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            MainTabState.FAVORITE.ordinal -> DailyRestaurantFragment.newInstance(true)
             MainTabState.MAIN.ordinal -> DailyRestaurantFragment.newInstance(false)
             MainTabState.COMMUNITY.ordinal -> PostListFragment()
             MainTabState.SETTINGS.ordinal -> SettingFragment()

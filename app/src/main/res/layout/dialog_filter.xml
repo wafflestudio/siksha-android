@@ -293,6 +293,60 @@
                     </RadioGroup>
                 </LinearLayout>
 
+                <!-- 즐겨찾기 필터 -->
+                <LinearLayout
+                    android:id="@+id/favorite_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:paddingBottom="20dp">
+
+                    <TextView
+                        android:id="@+id/tv_favorite_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="즐겨찾기"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nanum_square_extra_bold"/>
+
+                    <RadioGroup
+                        android:id="@+id/favoriteGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/toggle_background"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/optionFavoriteAll"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="전체"
+                            android:textColor="@color/black"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:background="@drawable/option_background"
+                            android:fontFamily="@font/nanum_square_bold"/>
+
+                        <RadioButton
+                            android:id="@+id/optionFavorite"
+                            android:layout_width="0dp"
+                            android:layout_height="34dp"
+                            android:layout_weight="1"
+                            android:text="즐겨찾기"
+                            android:textColor="@color/black"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:background="@drawable/option_background"
+                            android:fontFamily="@font/nanum_square_bold"/>
+                    </RadioGroup>
+                </LinearLayout>
+
                 <!-- 리뷰 필터 -->
                 <LinearLayout
                     android:id="@+id/review_section"
@@ -593,4 +647,3 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </FrameLayout>
-

@@ -11,6 +11,7 @@ import com.wafflestudio.siksha2.models.MealsOfDay
 import com.wafflestudio.siksha2.models.Menu
 import com.wafflestudio.siksha2.models.MenuGroup
 import com.wafflestudio.siksha2.models.RestaurantInfo
+import com.wafflestudio.siksha2.network.dto.RestaurantLikeResponse
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.preferences.SikshaPrefObjects
 import com.wafflestudio.siksha2.repositories.MenuRepository
@@ -112,10 +113,13 @@ class DailyRestaurantViewModel @Inject constructor(
         }
     }
 
-    fun toggleRestaurantFavorite(id: Long) {
-        viewModelScope.launch {
-            restaurantRepository.toggleRestaurantFavoriteById(id)
-        }
+    suspend fun toggleRestaurantFavorite(id: Long): NetworkResult<RestaurantLikeResponse> {
+        val restaurant = restaurantRepository.getRestaurantById(id)
+            ?: return NetworkResult.Failure("해당 식당을 찾을 수 없습니다.")
+        return restaurantRepository.setPersonalRestaurantFavoriteById(
+            id = id,
+            isFavorite = !restaurant.isFavorite
+        )
     }
 
     suspend fun toggleMenuLike(id: Long, isCurrentlyLiked: Boolean): NetworkResult<Menu> {
@@ -200,6 +204,15 @@ class DailyRestaurantViewModel @Inject constructor(
         trackInstantToggle("is_open_now", !currentCondition.isOpen)
     }
 
+    fun toggleFavoriteFilter() {
+        val currentCondition = _menuFilterCondition.value
+        val newCondition = currentCondition.copy(
+            favorite = !currentCondition.favorite
+        )
+        setMenuFilterCondition(newCondition)
+        trackInstantToggle("is_favorite", !currentCondition.favorite)
+    }
+
     fun toggleReviewFilter() {
         val currentCondition = _menuFilterCondition.value
         val newCondition = currentCondition.copy(
@@ -259,6 +272,8 @@ class DailyRestaurantViewModel @Inject constructor(
                     menuGroup.copy(
                         isFavorite = allRes.find { menuGroup.id == it.id }?.isFavorite ?: false
                     )
+                }.filter { menuGroup ->
+                    allRes.find { menuGroup.id == it.id }?.visible ?: true
                 }.filter { menuGroup ->
                     val restaurantInfo = allRes.find { menuGroup.id == it.id }
                     val operatingHour = restaurantInfo?.etc?.operatingHours?.let {
@@ -344,6 +359,11 @@ class DailyRestaurantViewModel @Inject constructor(
                         )
                         newRestaurant
                     }
+            }
+            .combine(menuFilterCondition) { menuGroups, condition ->
+                menuGroups.filter { item ->
+                    !condition.favorite || item.isFavorite
+                }
             }
             // 식당 순서, 표시 여부 조정
             .map { it.filter { item -> item.isFavorite || showOnlyFavorite.not() } }

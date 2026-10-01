@@ -108,6 +108,7 @@ class FilterDialogFragment() : DialogFragment() {
         setupPriceSelection()
         setupRatingSelection()
         setupOperatingSelection()
+        setupFavoriteSelection()
         setupReviewSelection()
         setupCategorySelection()
         setupButtons()
@@ -143,6 +144,7 @@ class FilterDialogFragment() : DialogFragment() {
         }
         if (mode == FilterMode.FULL) {
             binding.operatingHoursGroup.check(if (selectedCondition.isOpen) R.id.optionOperating else R.id.optionAll)
+            binding.favoriteGroup.check(if (selectedCondition.favorite) R.id.optionFavorite else R.id.optionFavoriteAll)
             binding.radioGroupReview.check(if (selectedCondition.hasReview) R.id.radio_with_reviews else R.id.radio_all_reviews)
         }
     }
@@ -184,6 +186,13 @@ class FilterDialogFragment() : DialogFragment() {
         binding.operatingHoursGroup.setOnCheckedChangeListener { _, checkedId ->
             val isOpen = checkedId == R.id.optionOperating
             selectedCondition = selectedCondition.copy(isOpen = isOpen)
+        }
+    }
+
+    private fun setupFavoriteSelection() {
+        binding.favoriteGroup.setOnCheckedChangeListener { _, checkedId ->
+            val isFavorite = checkedId == R.id.optionFavorite
+            selectedCondition = selectedCondition.copy(favorite = isFavorite)
         }
     }
 
@@ -320,6 +329,7 @@ class FilterDialogFragment() : DialogFragment() {
                 binding.distanceSection.visibility = View.VISIBLE
                 binding.priceSection.visibility = View.VISIBLE
                 binding.openSection.visibility = View.VISIBLE
+                binding.favoriteSection.visibility = View.VISIBLE
                 binding.reviewSection.visibility = View.VISIBLE
                 binding.ratingSection.visibility = View.VISIBLE
                 // binding.categorySection.visibility = View.VISIBLE
@@ -344,6 +354,7 @@ class FilterDialogFragment() : DialogFragment() {
             binding.tvDistanceLabel,
             binding.tvPriceLabel,
             binding.tvOperatingLabel,
+            binding.tvFavoriteLabel,
             binding.tvReviewLabel,
             binding.tvRatingLabel,
             binding.tvCategoryLabel
@@ -554,6 +565,7 @@ class FilterDialogFragment() : DialogFragment() {
             }
             if (mode == FilterMode.FULL) {
                 put("is_open_now", selectedCondition.isOpen)
+                put("is_favorite", selectedCondition.favorite)
                 put("has_reviews", selectedCondition.hasReview)
             }
         }

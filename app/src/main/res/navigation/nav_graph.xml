@@ -24,7 +24,12 @@
             app:enterAnim="@anim/slide_left"
             app:exitAnim="@anim/wait_anim"
             app:popEnterAnim="@anim/wait_anim"
-            app:popExitAnim="@anim/slide_right" />
+            app:popExitAnim="@anim/slide_right" >
+            <argument
+                android:name="orderArg"
+                android:defaultValue="false"
+                app:argType="boolean" />
+        </action>
         <action
             android:id="@+id/action_mainFragment_to_settingAccountFragment"
             app:destination="@id/settingAccountFragment"
