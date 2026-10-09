@@ -19,16 +19,11 @@
         <package android:name="com.google.android.apps.maps" />
     </queries>
 
-    <queries>
-        <package android:name="com.google.android.apps.maps" />
-    </queries>
-
     <application
         android:name="com.wafflestudio.siksha2.SikshaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Siksha"
@@ -56,11 +51,9 @@
 
         <activity
             android:name="com.wafflestudio.siksha2.ui.RootActivity"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.wafflestudio.siksha2.ui.SplashActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.Siksha.Splash">
             <intent-filter>
