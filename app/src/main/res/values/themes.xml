@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.Siksha.Splash" parent="Theme.Siksha">
         <item name="android:windowBackground">@drawable/frame_splash</item>
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="Theme.Siksha.ImageViewer" parent="Theme.Siksha">
