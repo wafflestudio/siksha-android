@@ -93,7 +93,7 @@
         android:layout_marginHorizontal="16dp"
         android:paddingHorizontal="14dp"
         android:fontFamily="@font/nanum_square_bold"
-        android:text="아침에 한 번에 받기: 당일에 나온 찜한 메뉴를 한 번에 알려드려요. \n식사시간마다 받기: 아침 · 점심 · 저녁 메뉴를 해당 시간대에 맞춰\n나누어 안내드려요. (아침 7:30 / 점심 10:30 / 저녁 16:30)"
+        android:text="아침에 한 번에 받기: 당일에 나온 찜한 메뉴를 한 번에 알려드려요.\n식사시간마다 받기: 아침 · 점심 · 저녁 메뉴를 해당 시간대에 맞춰\n나누어 안내드려요. (아침 7:30 / 점심 10:30 / 저녁 16:30)"
         android:textColor="@color/gray_600"
         android:textSize="12sp"
         android:lineSpacingMultiplier="1.4"
