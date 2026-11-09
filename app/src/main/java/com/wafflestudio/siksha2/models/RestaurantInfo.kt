@@ -39,7 +39,10 @@ data class RestaurantInfo(
     var etc: Extra? = null,
     @ColumnInfo(name = "is_favorite")
     @Transient()
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+    @ColumnInfo(name = "visible")
+    @Transient()
+    var visible: Boolean = true
 ) : Parcelable {
 
     @Parcelize

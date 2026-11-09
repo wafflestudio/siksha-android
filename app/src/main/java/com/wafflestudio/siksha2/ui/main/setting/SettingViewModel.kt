@@ -7,8 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wafflestudio.siksha2.BuildConfig
-import com.wafflestudio.siksha2.models.RestaurantInfo
-import com.wafflestudio.siksha2.models.RestaurantOrder
 import com.wafflestudio.siksha2.models.User
 import com.wafflestudio.siksha2.network.result.NetworkResult
 import com.wafflestudio.siksha2.repositories.RestaurantRepository
@@ -36,7 +34,6 @@ class SettingViewModel @Inject constructor(
 
     val packageVersion: String = BuildConfig.VERSION_NAME
 
-    // profileUrlCache : UserProfile Fragment가 생길 때마다 초기엔 _userData.value?.profileUrl 값으로 초기화, local에서 profile image가 변화가 생기면 저장
     private var profileUrlCache: String? = _userData.value?.profileUrl
 
     private val _settingEvent = MutableSharedFlow<SettingEvent>()
@@ -46,9 +43,12 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = userStatusManager.getUserData()) {
                 is NetworkResult.Success -> _userData.value = response.body
-                is NetworkResult.Failure -> _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
-                is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
-                else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
+                is NetworkResult.Failure ->
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
+                is NetworkResult.NetworkError ->
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(NETWORK_ERROR_MESSAGE))
+                else ->
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(UNKNOWN_ERROR_MESSAGE))
             }
             checkAppVersion()
         }
@@ -60,7 +60,11 @@ class SettingViewModel @Inject constructor(
                 val version = response.body
                 val latestVersion = version.version
                 val minVersion = version.minVersion
-                if (!isValidVersion(latestVersion) || !isValidVersion(minVersion) || !isValidVersion(packageVersion)) {
+                if (
+                    !isValidVersion(latestVersion) ||
+                    !isValidVersion(minVersion) ||
+                    !isValidVersion(packageVersion)
+                ) {
                     _isLatestAppVersion.value = false
                     return
                 }
@@ -68,9 +72,10 @@ class SettingViewModel @Inject constructor(
                 val minVersionCode = versionToLong(minVersion)
                 val packageVersionCode = versionToLong(packageVersion)
 
-                _isLatestAppVersion.value = packageVersionCode in minVersionCode..latestVersionCode
+                _isLatestAppVersion.value =
+                    packageVersionCode in minVersionCode..latestVersionCode
             }
-            else -> { }
+            else -> Unit
         }
     }
 
@@ -84,7 +89,6 @@ class SettingViewModel @Inject constructor(
         return major * 10000 + minor * 100 + patch
     }
 
-    // Check the version has pattern of 3.1.1 or 2.3.4-rc.1
     private fun isValidVersion(version: String): Boolean {
         val verRegex = Regex("^\\d+\\.\\d+\\.\\d+(-rc\\.\\d+)?$")
         return verRegex.matches(version)
@@ -106,22 +110,6 @@ class SettingViewModel @Inject constructor(
         }
     }
 
-    fun updateOrder(order: RestaurantOrder) {
-        restaurantRepository.restaurantsOrder.setValue(order)
-    }
-
-    fun updateFavoriteOrder(order: RestaurantOrder) {
-        restaurantRepository.favoriteRestaurantsOrder.setValue(order)
-    }
-
-    suspend fun getOrderedAllRestaurants(): List<RestaurantInfo> {
-        return restaurantRepository.getOrderedRestaurants()
-    }
-
-    suspend fun getOrderedFavoriteRestaurants(): List<RestaurantInfo> {
-        return restaurantRepository.getOrderedFavoriteRestaurants()
-    }
-
     fun updateImageUri(uri: Uri?) {
         profileUrlCache = uri?.toString()
     }
@@ -135,11 +123,14 @@ class SettingViewModel @Inject constructor(
         return if (currentNickname == nickname) {
             null
         } else {
-            userStatusManager.checkNickname(nickname).map { _ -> nickname }
+            userStatusManager.checkNickname(nickname).map { nickname }
         }
     }
 
-    private suspend fun getImageToUpdate(context: Context, imageChanged: Boolean): MultipartBody.Part? {
+    private suspend fun getImageToUpdate(
+        context: Context,
+        imageChanged: Boolean
+    ): MultipartBody.Part? {
         if (!imageChanged || profileUrlCache == null) return null
 
         return profileUrlCache.let {
@@ -159,20 +150,20 @@ class SettingViewModel @Inject constructor(
             }
 
             val nicknameToUpdate: String?
-            when (val nicknameToUpdateResponse = getNicknameToUpdate(nickname)) {
+            when (val response = getNicknameToUpdate(nickname)) {
                 is NetworkResult.Failure -> {
-                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(nicknameToUpdateResponse.message))
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
                     return@launch
                 }
                 is NetworkResult.NetworkError -> {
-                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(NETWORK_ERROR_MESSAGE))
                     return@launch
                 }
                 is NetworkResult.UnknownError -> {
-                    _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(UNKNOWN_ERROR_MESSAGE))
                     return@launch
                 }
-                is NetworkResult.Success -> { nicknameToUpdate = nicknameToUpdateResponse.body }
+                is NetworkResult.Success -> nicknameToUpdate = response.body
                 else -> nicknameToUpdate = null
             }
             val imageToUpdate = getImageToUpdate(context, imageChanged)
@@ -183,18 +174,30 @@ class SettingViewModel @Inject constructor(
             }
 
             val isDefaultImage = profileUrlCache == null
-            when (val response = userStatusManager.updateUserProfile(nicknameToUpdate, isDefaultImage, imageToUpdate)) {
+            when (
+                val response = userStatusManager.updateUserProfile(
+                    nicknameToUpdate,
+                    isDefaultImage,
+                    imageToUpdate
+                )
+            ) {
                 is NetworkResult.Success -> {
                     _userData.value = response.body
                     _settingEvent.emit(SettingEvent.ChangeProfileSuccess)
                 }
-                is NetworkResult.Failure -> {
+                is NetworkResult.Failure ->
                     _settingEvent.emit(SettingEvent.ChangeProfileFailed(response.message))
-                }
-                is NetworkResult.NetworkError -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("네트워크 연결이 불안정합니다."))
-                else -> _settingEvent.emit(SettingEvent.ChangeProfileFailed("알 수 없는 오류가 발생했습니다."))
+                is NetworkResult.NetworkError ->
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(NETWORK_ERROR_MESSAGE))
+                else ->
+                    _settingEvent.emit(SettingEvent.ChangeProfileFailed(UNKNOWN_ERROR_MESSAGE))
             }
         }
+    }
+
+    private companion object {
+        const val NETWORK_ERROR_MESSAGE = "네트워크 연결이 불안정합니다."
+        const val UNKNOWN_ERROR_MESSAGE = "알 수 없는 오류가 발생했습니다."
     }
 }
 

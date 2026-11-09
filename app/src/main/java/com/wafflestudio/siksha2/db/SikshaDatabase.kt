@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.wafflestudio.siksha2.models.DailyMenu
 import com.wafflestudio.siksha2.models.RestaurantInfo
 
-@Database(entities = [RestaurantInfo::class, DailyMenu::class], version = 1)
+@Database(entities = [RestaurantInfo::class, DailyMenu::class], version = 2)
 @TypeConverters(SikshaRoomTypeAdapter::class)
 abstract class SikshaDatabase : RoomDatabase() {
     abstract fun restaurantDao(): RestaurantsDao
