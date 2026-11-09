@@ -1,14 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Siksha.Splash" parent="Theme.Siksha">
         <item name="android:windowBackground">@drawable/frame_splash</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/background_GNB</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
     <style name="Theme.Siksha.ImageViewer" parent="Theme.Siksha">
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.Siksha" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -20,8 +17,6 @@
         <item name="colorSecondary">@color/orange_500</item>
         <item name="colorSecondaryVariant">@color/pink_500</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/background_GNB</item>
         <!-- Customize your theme here. -->
     </style>
 

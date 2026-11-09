@@ -3,15 +3,15 @@ import java.util.Properties
 import java.io.FileInputStream
 
 plugins {
-    id("com.android.application") version "8.1.4"
-    id("org.jetbrains.kotlin.android") version "1.8.10"
-    id("org.jetbrains.kotlin.plugin.parcelize") version "1.8.10"
-    id("org.jetbrains.kotlin.kapt") version "1.8.10"
-    id("com.google.dagger.hilt.android") version "2.44"
+    id("com.android.application") version "8.10.1"
+    id("org.jetbrains.kotlin.android") version "1.9.0"
+    id("org.jetbrains.kotlin.plugin.parcelize") version "1.9.0"
+    id("org.jetbrains.kotlin.kapt") version "1.9.0"
+    id("com.google.dagger.hilt.android") version "2.47"
     id("com.google.firebase.crashlytics") version "2.9.5"
     id("com.google.gms.google-services") version "4.3.15"
     id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
-    id("androidx.navigation.safeargs") version "2.5.3"
+    id("androidx.navigation.safeargs") version "2.7.4"
     id("com.google.firebase.appdistribution") version "4.0.0"
 }
 
@@ -36,12 +36,12 @@ val versionProps = Properties().apply {
 
 android {
     namespace = "com.wafflestudio.siksha2"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.wafflestudio.siksha2"
         minSdk = 31
-        targetSdk = 35
+        targetSdk = 36
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -104,15 +104,22 @@ android {
         compose = true
     }
 
+    dataBinding {
+        // The project uses XML binding adapters, but not Data Binding KTX APIs.
+        addKtx = false
+    }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.fragment:fragment-ktx:1.7.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
@@ -126,21 +133,20 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
 
     // Moshi
-    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.15.2")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.google.android.gms:play-services-maps:18.1.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
     // AAC Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
 
     // Room
-    implementation("androidx.room:room-runtime:2.5.1")
-    implementation("androidx.room:room-ktx:2.5.1")
-    kapt("androidx.room:room-compiler:2.5.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.47")
